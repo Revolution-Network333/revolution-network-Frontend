@@ -2827,7 +2827,10 @@ print(r.json())</code></pre>
                     <tr>
                         <td><button class="link-btn" data-id="${u.id}">${u.username}</button></td>
                         <td>${u.email || ''}</td>
-                        <td>${u.grade || '-'}</td>
+                        <td>
+                            ${u.grade || '-'}
+                            ${u.cancel_at_period_end ? '<span class="badge badge-warning" title="Annulation planifiée">◷</span>' : ''}
+                        </td>
                         <td>${u.points || 0}</td>
                         <td>${u.referral_count || 0}</td>
                         <td>${u.tasks_completed || 0}</td>
@@ -2933,6 +2936,13 @@ print(r.json())</code></pre>
                 }
                 alert('Bonus appliqué avec succès');
                 closeBonusModal();
+                const ac = document.getElementById('header-api-credits');
+                if (ac) {
+                    fetch(`${API_BASE}/api/enterprise/me`, { headers: { 'Authorization': `Bearer ${token}` }})
+                        .then(r => r.json())
+                        .then(j => { if (j && j.credits) ac.textContent = `API: ${(j.credits.remaining||0).toLocaleString()}`; })
+                        .catch(()=>{});
+                }
             })
             .catch(e => alert('Erreur: ' + e.message));
         }
@@ -4660,7 +4670,8 @@ function initializeShopPage() {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             })
             .then(r => r.json())
-            .then(tickets => {
+            .then(data => {
+                const tickets = Array.isArray(data) ? data : (data && data.tickets) ? data.tickets : [];
                 if (!tickets || tickets.length === 0) {
                     container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#9ca3af;">${t('support.no_tickets')}</div>`;
                     return;
@@ -4668,7 +4679,9 @@ function initializeShopPage() {
                 
                 let html = `<div class="support-list">`;
                 tickets.forEach(t => {
-                    const statusClass = t.status === 'open' ? 'status-open' : 'status-closed';
+                    let statusClass = 'status-closed';
+                    if (t.status === 'open') statusClass = 'status-open';
+                    else if ((t.status||'').toLowerCase().includes('pending')) statusClass = 'status-pending';
                     const date = new Date(t.updated_at).toLocaleString();
                     const subject = (t.subject||'').replace(/'/g, "\\'");
                     
@@ -4821,21 +4834,23 @@ function initializeShopPage() {
                     <div class="chat-view">
                         <div class="chat-messages" id="chat-messages-area"></div>
                         <div class="chat-input-area">
-                             ${t.status === 'open' ? `
-                                <div style="display:flex;gap:8px;">
-                                    <textarea class="chat-input" id="chat-input-text" placeholder="Répondre..." style="flex:1;padding:8px;border-radius:4px;border:1px solid #374151;background:#1f2937;color:white;resize:none;height:40px;"></textarea>
-                                    <label for="chat-file-input" class="profile-btn" style="padding:8px;cursor:pointer;">📷</label>
-                                    <input type="file" id="chat-file-input" accept="image/*" style="display:none;" onchange="if(this.files[0]) sendSupportMessage(this.files[0])">
-                                    <button class="profile-btn primary" onclick="sendSupportMessage()">Envoyer</button>
-                                </div>
-                                <div style="margin-top:8px;text-align:right;">
-                                    <button class="profile-btn" style="background:#ef4444;color:white;" onclick="closeTicket(${t.id})">Fermer le ticket</button>
-                                </div>
-                             ` : `
-                                <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.05);border-radius:8px;">
-                                    Ticket fermé
-                                </div>
-                             `}
+                             ${
+                               t.status !== 'closed' ? `
+                                 <div style="display:flex;gap:8px;">
+                                     <textarea class="chat-input" id="chat-input-text" placeholder="Répondre..." style="flex:1;padding:8px;border-radius:4px;border:1px solid #374151;background:#1f2937;color:white;resize:none;height:40px;"></textarea>
+                                     <label for="chat-file-input" class="profile-btn" style="padding:8px;cursor:pointer;">📷</label>
+                                     <input type="file" id="chat-file-input" accept="image/*" style="display:none;" onchange="if(this.files[0]) sendSupportMessage(this.files[0])">
+                                     <button class="profile-btn primary" onclick="sendSupportMessage()">Envoyer</button>
+                                 </div>
+                                 <div style="margin-top:8px;text-align:right;">
+                                     <button class="profile-btn" style="background:#ef4444;color:white;" onclick="closeTicket(${t.id})">Fermer le ticket</button>
+                                 </div>
+                               ` : `
+                                 <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.05);border-radius:8px;">
+                                     Ticket fermé
+                                 </div>
+                               `
+                             }
                         </div>
                     </div>
                 `;

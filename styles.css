@@ -2327,12 +2327,45 @@ input:checked + .slider:before {
     font-weight: 500;
 }
 
+.badge {
+  display: inline-block;
+  padding: 2px 6px;
+  margin-left: 6px;
+  border-radius: 6px;
+  font-size: 10px;
+  line-height: 1;
+}
+.badge-warning {
+  background: #f59e0b;
+  color: #000;
+}
+
 .ticket-item.active {
     background: rgba(59, 130, 246, 0.1);
     border-left: 3px solid #3b82f6;
 }
     margin-top: 8px;
     cursor: pointer;
+}
+
+.ticket-status {
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+.status-open {
+  background: rgba(34,197,94,0.2);
+  color: #22c55e;
+}
+.status-closed {
+  background: rgba(239,68,68,0.2);
+  color: #ef4444;
+}
+.status-pending,
+.status-pending_admin,
+.status-pending_user {
+  background: rgba(245,158,11,0.2);
+  color: #f59e0b;
 }
 
 .chat-input-area {
