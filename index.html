@@ -123,6 +123,12 @@
                     </svg>
                     <span data-i18n="menu.admin_tasks">Admin Tasks</span>
                 </button>
+                <button id="menu-admin-airdrop" class="menu-item" onclick="setPage('adminAirdrop')" style="display:none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                    <span>Airdrop</span>
+                </button>
                 <button id="menu-wallet" class="menu-item" onclick="setPage('wallet')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="2" y="7" width="20" height="10" rx="2"></rect>
@@ -918,6 +924,7 @@
                     const adminBtn = document.getElementById('menu-admin');
                     const adminShopBtn = document.getElementById('menu-admin-shop');
                     const adminTasksBtn = document.getElementById('menu-admin-tasks');
+                    const adminAirdropBtn = document.getElementById('menu-admin-airdrop');
                     if (enterpriseBtn) {
                         enterpriseBtn.style.display = (role === 'entreprise' || role === 'admin' || uname === 'korn666') ? 'flex' : 'none';
                     }
@@ -929,6 +936,9 @@
                     }
                     if (adminTasksBtn) {
                         adminTasksBtn.style.display = (role === 'admin' || uname === 'korn666') ? 'flex' : 'none';
+                    }
+                    if (adminAirdropBtn) {
+                        adminAirdropBtn.style.display = (role === 'admin' || uname === 'korn666') ? 'flex' : 'none';
                     }
                     const headerLoginBtn = document.getElementById('header-login-btn');
                     if (headerLoginBtn) headerLoginBtn.style.display = 'none';
@@ -1052,6 +1062,11 @@
                 case 'adminTasks':
                     content.innerHTML = getAdminTasksHTML();
                     initializeAdminTasksPage();
+                    applyTranslations();
+                    break;
+                case 'adminAirdrop':
+                    content.innerHTML = getAdminAirdropHTML();
+                    initializeAdminAirdropPage();
                     applyTranslations();
                     break;
             }
@@ -3118,11 +3133,20 @@ function openShopItemModal(itemId) {
         actionButton = `<button class="profile-btn primary" onclick="closeShopItemModal(); openPlansModal();" style="font-size: 0.85em; padding: 8px 12px;">${t('subscription.subscribe')}</button>`;
     } else if (item.type === 'presale') {
         const minQty = Number.isFinite(parseFloat(meta.minQty)) ? parseFloat(meta.minQty) : 50;
-        extraControls = `
-            <div class="profile-field">
-                <label>${t('shop.quantity')}</label>
-                <input type="number" id="buy-qty" step="50" min="${minQty}" value="${minQty}">
-            </div>`;
+        if (meta.isPack) {
+            extraControls = `
+                <div class="profile-field">
+                    <label>Quantité incluse</label>
+                    <input type="text" id="buy-qty" value="${minQty}" disabled style="opacity:0.8;font-weight:bold;">
+                    <div style="font-size:0.8rem;color:#9ca3af;margin-top:4px;">Ce pack contient ${minQty} tokens.</div>
+                </div>`;
+        } else {
+            extraControls = `
+                <div class="profile-field">
+                    <label>${t('shop.quantity')}</label>
+                    <input type="number" id="buy-qty" step="50" min="${minQty}" value="${minQty}">
+                </div>`;
+        }
         actionButton = `<button class="profile-btn primary" id="buy-btn">${t('shop.buy')}</button>`;
     } else if (item.type === 'vpn') {
         actionButton = `<button class="profile-btn primary" id="buy-btn">${t('shop.activate_vpn')}</button>`;
@@ -3491,6 +3515,14 @@ function initializeShopPage() {
                                     <label>Admin only (test)</label>
                                     <select id="shop-admin-only"><option value="0">Non</option><option value="1">Oui</option></select>
                                 </div>
+                                <div>
+                                    <label>Mode Pack (prévente)</label>
+                                    <select id="shop-is-pack"><option value="0">Non</option><option value="1">Oui</option></select>
+                                </div>
+                                <div>
+                                    <label>Montant Tokens Pack</label>
+                                    <input type="number" id="shop-pack-amount" placeholder="500">
+                                </div>
                             </div>
                             <div style="margin-top:16px; text-align:right;">
                                 <button class="profile-btn" id="save-shop-item">Enregistrer</button>
@@ -3505,6 +3537,62 @@ function initializeShopPage() {
         function initializeAdminShopPage() {
             const token = localStorage.getItem('token');
             const tbody = document.querySelector('#admin-shop-table tbody');
+            
+            // Helper to toggle form fields based on type
+            function updateFormVisibility() {
+                const type = document.getElementById('shop-type').value;
+                const isPack = document.getElementById('shop-is-pack').value === '1';
+                
+                const show = (selector, visible) => {
+                    const el = document.querySelector(selector);
+                    if (el) el.closest('div').style.display = visible ? 'block' : 'none';
+                };
+
+                // Defaults: hide all specific fields
+                show('#shop-points', false);
+                show('#shop-payment-link', false);
+                show('#shop-proxy-host', false);
+                show('#shop-proxy-port', false);
+                show('#shop-token-symbol', false);
+                show('#shop-unit-price', false);
+                show('#shop-min-qty', false);
+                show('#shop-max-qty', false);
+                show('#shop-is-pack', false);
+                show('#shop-pack-amount', false);
+                show('#shop-admin-only', true); // Always show
+
+                if (type === 'subscription') {
+                    show('#shop-points', true);
+                    show('#shop-payment-link', true);
+                } else if (type === 'vpn') {
+                    show('#shop-proxy-host', true);
+                    show('#shop-proxy-port', true);
+                } else if (type === 'presale') {
+                    show('#shop-token-symbol', true);
+                    show('#shop-is-pack', true);
+                    if (isPack) {
+                        show('#shop-pack-amount', true);
+                        // Hide unit/qty fields in pack mode to simplify
+                        show('#shop-unit-price', false);
+                        show('#shop-min-qty', false);
+                        show('#shop-max-qty', false);
+                    } else {
+                        show('#shop-pack-amount', false);
+                        show('#shop-unit-price', true);
+                        show('#shop-min-qty', true);
+                        show('#shop-max-qty', true);
+                    }
+                } else if (type === 'node_nft') {
+                     show('#shop-payment-link', true);
+                }
+            }
+
+            // Attach listeners for visibility
+            const typeSelect = document.getElementById('shop-type');
+            const isPackSelect = document.getElementById('shop-is-pack');
+            if (typeSelect) typeSelect.addEventListener('change', updateFormVisibility);
+            if (isPackSelect) isPackSelect.addEventListener('change', updateFormVisibility);
+
             async function apiFetchAuth(url, options = {}) {
                 const t = localStorage.getItem('token');
                 const rt = localStorage.getItem('refreshToken');
@@ -3636,6 +3724,8 @@ function initializeShopPage() {
                 const description = document.getElementById('shop-description');
                 const points = document.getElementById('shop-points');
                 const payment = document.getElementById('shop-payment-link');
+                const isPack = document.getElementById('shop-is-pack');
+                const packAmount = document.getElementById('shop-pack-amount');
                 title.value = tr.querySelector('[data-field="title"]').textContent.trim();
                 type.value = tr.querySelector('select[data-field="type"]').value;
                 price.value = tr.querySelector('[data-field="price"]').textContent.trim();
@@ -3644,15 +3734,25 @@ function initializeShopPage() {
                 description.value = tr.querySelector('[data-field="description"]').textContent.trim();
                 points.value = '';
                 payment.value = '';
+                isPack.value = '0';
+                packAmount.value = '';
                 try {
                     const metaCell = tr.querySelector('[data-field="metadata"]');
                     if (metaCell) {
                         const meta = JSON.parse(metaCell.textContent || '{}');
                         points.value = meta.pointsPerMonth || '';
                         payment.value = meta.paymentLink || '';
+                        document.getElementById('shop-token-symbol').value = meta.tokenSymbol || '';
+                        document.getElementById('shop-unit-price').value = meta.unitPrice || '';
+                        document.getElementById('shop-min-qty').value = meta.minQty || '';
+                        document.getElementById('shop-max-qty').value = meta.maxQty || '';
+                        document.getElementById('shop-admin-only').value = meta.adminOnly ? '1' : '0';
+                        isPack.value = meta.isPack ? '1' : '0';
+                        packAmount.value = meta.packAmount || '';
                     }
                 } catch {}
                 modal.dataset.id = id;
+                updateFormVisibility();
                 modal.classList.add('open');
             }
             function closeEditModal() {
@@ -3663,10 +3763,23 @@ function initializeShopPage() {
                 const token = localStorage.getItem('token');
                 const modal = document.getElementById('shop-edit-modal');
                 const id = modal.dataset.id;
+                const isPackVal = document.getElementById('shop-is-pack').value === '1';
+                const packAmountVal = parseInt(document.getElementById('shop-pack-amount').value || '0');
+                const price = parseFloat(document.getElementById('shop-price').value) || 0;
+                let unitPrice = parseFloat(document.getElementById('shop-unit-price').value || '0');
+                let minQty = parseInt(document.getElementById('shop-min-qty').value || '0');
+                let maxQty = parseInt(document.getElementById('shop-max-qty').value || '0');
+
+                if (isPackVal && packAmountVal > 0) {
+                    minQty = packAmountVal;
+                    maxQty = packAmountVal;
+                    unitPrice = price / packAmountVal;
+                }
+
                 const payload = {
                     title: document.getElementById('shop-title').value,
                     type: document.getElementById('shop-type').value,
-                    price: parseFloat(document.getElementById('shop-price').value) || 0,
+                    price: price,
                     currency: document.getElementById('shop-currency').value || 'EUR',
                     active: document.getElementById('shop-active').value === '1',
                     description: document.getElementById('shop-description').value,
@@ -3677,10 +3790,12 @@ function initializeShopPage() {
                         proxyHost: (document.getElementById('shop-proxy-host').value || '').trim() || undefined,
                         proxyPort: parseInt(document.getElementById('shop-proxy-port').value || '0') || undefined,
                         tokenSymbol: (document.getElementById('shop-token-symbol').value || '').trim() || undefined,
-                        unitPrice: parseFloat(document.getElementById('shop-unit-price').value || '0') || undefined,
-                        minQty: parseInt(document.getElementById('shop-min-qty').value || '0') || undefined,
-                        maxQty: parseInt(document.getElementById('shop-max-qty').value || '0') || undefined,
-                        adminOnly: document.getElementById('shop-admin-only').value === '1' || undefined
+                        unitPrice: unitPrice || undefined,
+                        minQty: minQty || undefined,
+                        maxQty: maxQty || undefined,
+                        adminOnly: document.getElementById('shop-admin-only').value === '1' || undefined,
+                        isPack: isPackVal || undefined,
+                        packAmount: packAmountVal || undefined
                     })
                 };
                 const method = id ? 'PUT' : 'POST';
@@ -3711,6 +3826,7 @@ function initializeShopPage() {
                     else if (id==='shop-active') el.value = '1';
                     else el.value = '';
                 });
+                updateFormVisibility();
                 modal.classList.add('open');
             });
             if (saveBtn) saveBtn.addEventListener('click', saveEditModal);
@@ -3955,8 +4071,8 @@ function initializeShopPage() {
                             <div class="form-grid">
                                 <div><label>${t('wallet.stake.amount')}</label><input type="number" id="stake-amount" min="0" step="0.0001"></div>
                                 <div style="align-self:end"><button class="profile-btn" id="stake-btn">${t('wallet.stake.btn')}</button></div>
-                                <div><label>${t('wallet.withdraw.amount')}</label><input type="number" id="withdraw-amount" min="0" step="0.0001"></div>
-                                <div style="align-self:end"><button class="profile-btn secondary" id="withdraw-btn">${t('wallet.withdraw.btn')}</button></div>
+                                <div><label>${t('wallet.withdraw.amount')}</label><input type="number" id="withdraw-amount" min="0" step="0.0001" disabled placeholder="Indisponible"></div>
+                                <div style="align-self:end"><button class="profile-btn secondary" id="withdraw-btn" disabled style="opacity:0.5;cursor:not-allowed;">${t('wallet.withdraw.btn')}</button></div>
                             </div>
                             <div style="margin-top:12px;">
                                 <button class="profile-btn" id="unstake-btn">${t('wallet.unstake.btn')}</button>
@@ -3995,7 +4111,7 @@ function initializeShopPage() {
                     if (stakeInfo) {
                         if (j.stake) {
                             const rew = j.stake.reward || 0;
-                            stakeInfo.textContent = `${j.stake.principal} ZETA @ ${Math.round(j.stake.apy*100)}% — Récompense: ${rew.toFixed(6)} ZETA`;
+                            stakeInfo.textContent = `${j.stake.principal} ZETA @ ${Number(j.stake.apy*100).toFixed(1).replace('.0','')}% — Récompense: ${rew.toFixed(6)} ZETA`;
                         } else stakeInfo.textContent = 'Aucun';
                     }
                 }).catch(()=>{});
@@ -4093,6 +4209,219 @@ function initializeShopPage() {
             refresh();
             if (window.walletRefreshInterval) { try { clearInterval(window.walletRefreshInterval); } catch {} }
             window.walletRefreshInterval = setInterval(refresh, 5000);
+        }
+        function getAdminAirdropHTML() {
+            return `
+                <div class="page-content">
+                    <div class="page-header">
+                        <h1 class="page-title">Airdrop Allocation</h1>
+                        <div style="display:flex;gap:8px;">
+                            <button class="profile-btn" id="btn-calc-airdrop" title="Score = 0.5*sqrt(spent) + 0.25*pow(pts,0.7) + 0.15*days + 0.1*buys">Calculer Allocation Airdrop</button>
+                            <button class="profile-btn secondary" id="btn-toggle-withdraw" disabled>Chargement...</button>
+                        </div>
+                    </div>
+                    <div class="shop-warning">
+                        ⚠️ <strong>Attention :</strong> Le calcul de l'allocation mettra à jour le score et l'allocation de TOUS les utilisateurs éligibles. 
+                        Cette action est irréversible et sera enregistrée dans les logs.
+                        <br>Formule : <code>Score = (0.5 * √Dépenses) + (0.25 * Points^0.7) + (0.15 * JoursActifs) + (0.10 * Achats)</code>
+                    </div>
+                    
+                    <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                        <input type="text" id="airdrop-search" placeholder="Rechercher par email ou username..." style="padding: 8px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #fff; width: 300px;">
+                        <div style="color: #94a3b8; font-size: 0.9em;" id="airdrop-stats">Chargement...</div>
+                    </div>
+
+                    <table class="data-table" id="airdrop-table">
+                        <thead>
+                            <tr>
+                                <th data-sort="id" style="cursor:pointer">ID ↕</th>
+                                <th data-sort="email" style="cursor:pointer">Utilisateur ↕</th>
+                                <th data-sort="score" style="cursor:pointer">Score Airdrop ↕</th>
+                                <th data-sort="allocation" style="cursor:pointer">Allocation (Tokens) ↕</th>
+                                <th data-sort="spent" style="cursor:pointer">Dépensé (€) ↕</th>
+                                <th data-sort="points" style="cursor:pointer">Points ↕</th>
+                                <th data-sort="days" style="cursor:pointer">Jours Actifs ↕</th>
+                                <th>Dernier Calcul</th>
+                            </tr>
+                        </thead>
+                        <tbody><tr><td colspan="8" style="text-align:center">Chargement...</td></tr></tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function initializeAdminAirdropPage() {
+            const token = localStorage.getItem('token');
+            const tbody = document.querySelector('#airdrop-table tbody');
+            const searchInput = document.getElementById('airdrop-search');
+            const statsDiv = document.getElementById('airdrop-stats');
+            const btnCalc = document.getElementById('btn-calc-airdrop');
+            const btnWithdraw = document.getElementById('btn-toggle-withdraw');
+            
+            let currentSort = 'score';
+            let currentOrder = 'desc';
+            let participantsData = [];
+
+            // 1. Fetch Withdrawal Status
+            fetch(`${API_BASE}/api/admin/settings/withdrawals`, { headers: { 'Authorization': `Bearer ${token}` }})
+                .then(r => r.json())
+                .then(data => {
+                    const enabled = data.enabled === true;
+                    updateWithdrawButton(enabled);
+                })
+                .catch(err => {
+                    console.error(err);
+                    btnWithdraw.textContent = 'Erreur statut';
+                });
+
+            function updateWithdrawButton(enabled) {
+                btnWithdraw.textContent = enabled ? '✅ Retraits Activés' : '⛔ Retraits Désactivés';
+                btnWithdraw.className = enabled ? 'profile-btn' : 'profile-btn secondary'; 
+                if (enabled) {
+                    btnWithdraw.style.backgroundColor = '#22c55e'; // Green
+                    btnWithdraw.title = 'Les retraits sont actuellement autorisés. Cliquez pour désactiver.';
+                } else {
+                    btnWithdraw.style.backgroundColor = ''; 
+                    btnWithdraw.title = 'Les retraits sont bloqués. Cliquez pour activer.';
+                }
+                btnWithdraw.disabled = false;
+                btnWithdraw.dataset.enabled = enabled;
+            }
+
+            // 2. Fetch Participants
+            function loadParticipants() {
+                const search = searchInput.value;
+                const url = `${API_BASE}/api/admin/airdrop/participants?sort_by=${currentSort}&order=${currentOrder}&search=${encodeURIComponent(search)}`;
+                
+                fetch(url, { headers: { 'Authorization': `Bearer ${token}` }})
+                    .then(r => r.json())
+                    .then(data => {
+                        participantsData = data.participants || [];
+                        renderTable(participantsData);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#ef4444">Erreur de chargement</td></tr>`;
+                    });
+            }
+
+            function renderTable(data) {
+                if (data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#9ca3af">Aucun participant trouvé</td></tr>`;
+                    statsDiv.textContent = '0 participants';
+                    return;
+                }
+
+                let totalAlloc = 0;
+                const rows = data.map(u => {
+                    totalAlloc += parseFloat(u.airdrop_allocation || 0);
+                    const lastCalc = u.last_airdrop_calculation ? new Date(u.last_airdrop_calculation).toLocaleString() : '-';
+                    return `
+                        <tr>
+                            <td>${u.id}</td>
+                            <td>
+                                <div>${maskUsername(u.username || 'Inconnu')}</div>
+                                <div style="font-size:0.8em;color:#94a3b8">${maskEmail(u.email)}</div>
+                            </td>
+                            <td style="font-weight:bold;color:#fbbf24">${parseFloat(u.airdrop_score || 0).toFixed(2)}</td>
+                            <td style="font-weight:bold;color:#22c55e">${parseFloat(u.airdrop_allocation || 0).toLocaleString()}</td>
+                            <td>${parseFloat(u.total_spent || 0).toFixed(2)} €</td>
+                            <td>${parseInt(u.total_points || 0).toLocaleString()}</td>
+                            <td>${u.active_days}j</td>
+                            <td style="font-size:0.85em;color:#94a3b8">${lastCalc}</td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                tbody.innerHTML = rows;
+                statsDiv.innerHTML = `${data.length} participants &bull; Total Alloc: ${totalAlloc.toLocaleString()} Tokens`;
+            }
+
+            function maskEmail(email) {
+                if (!email) return '';
+                const [name, domain] = email.split('@');
+                if (!domain) return email;
+                return `${name.substring(0, 2)}***@${domain}`;
+            }
+
+            // Events
+            searchInput.addEventListener('input', () => {
+                // Debounce simple
+                if (window.airdropSearchTimeout) clearTimeout(window.airdropSearchTimeout);
+                window.airdropSearchTimeout = setTimeout(loadParticipants, 500);
+            });
+
+            document.querySelectorAll('#airdrop-table th[data-sort]').forEach(th => {
+                th.addEventListener('click', () => {
+                    const sort = th.dataset.sort;
+                    if (currentSort === sort) {
+                        currentOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        currentSort = sort;
+                        currentOrder = 'desc';
+                    }
+                    loadParticipants();
+                });
+            });
+
+            btnCalc.addEventListener('click', async () => {
+                if (!confirm('Êtes-vous sûr de vouloir recalculer l\\'allocation airdrop pour TOUS les utilisateurs ? Cette opération peut prendre du temps.')) return;
+                
+                btnCalc.disabled = true;
+                btnCalc.textContent = 'Calcul en cours...';
+                
+                try {
+                    const res = await fetch(`${API_BASE}/api/admin/airdrop/calculate`, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    const j = await res.json();
+                    
+                    if (res.ok) {
+                        alert(`Succès ! ${j.message}\\nScore Global: ${j.total_global_score.toFixed(2)}`);
+                        loadParticipants();
+                    } else {
+                        alert('Erreur: ' + (j.error || 'Inconnue'));
+                    }
+                } catch (e) {
+                    alert('Erreur réseau');
+                } finally {
+                    btnCalc.disabled = false;
+                    btnCalc.textContent = 'Calculer Allocation Airdrop';
+                }
+            });
+
+            btnWithdraw.addEventListener('click', async () => {
+                const isEnabled = btnWithdraw.dataset.enabled === 'true';
+                const action = isEnabled ? 'DÉSACTIVER' : 'ACTIVER';
+                if (!confirm(`Voulez-vous vraiment ${action} les retraits pour tous les utilisateurs ?`)) return;
+
+                btnWithdraw.disabled = true;
+                
+                try {
+                    const res = await fetch(`${API_BASE}/api/admin/settings/withdrawals`, {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}` 
+                        },
+                        body: JSON.stringify({ enabled: !isEnabled })
+                    });
+                    const j = await res.json();
+                    
+                    if (res.ok) {
+                        updateWithdrawButton(j.withdrawals_enabled);
+                    } else {
+                        alert('Erreur: ' + (j.error || 'Inconnue'));
+                    }
+                } catch (e) {
+                    alert('Erreur réseau');
+                    btnWithdraw.disabled = false;
+                }
+            });
+
+            // Initial load
+            loadParticipants();
         }
         // Initialize on load
         document.addEventListener('DOMContentLoaded', function() {

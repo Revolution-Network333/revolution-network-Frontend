@@ -269,62 +269,6 @@ input:checked + .slider:before {
   gap: 24px;
 }
 
-.header-user-rank {
-  font-size: 11px;
-}
-
-.rank-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  border-width: 1px;
-  border-style: solid;
-}
-
-.rank-badge-bronze {
-  background: radial-gradient(circle at 30% 0%, #f97316 0%, #451a03 60%, #111827 100%);
-  border-color: rgba(248, 113, 22, 0.6);
-  color: #fed7aa;
-}
-
-.rank-badge-silver {
-  background: radial-gradient(circle at 30% 0%, #e5e7eb 0%, #4b5563 60%, #111827 100%);
-  border-color: rgba(209, 213, 219, 0.8);
-  color: #f9fafb;
-}
-
-.rank-badge-gold {
-  background: radial-gradient(circle at 30% 0%, #facc15 0%, #92400e 60%, #111827 100%);
-  border-color: rgba(250, 204, 21, 0.85);
-  color: #fef9c3;
-}
-
-.rank-badge-platinum {
-  background: radial-gradient(circle at 30% 0%, #a5f3fc 0%, #0f766e 60%, #020617 100%);
-  border-color: rgba(56, 189, 248, 0.9);
-  color: #e0f2fe;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
-}
-
-.rank-badge-diamond {
-  background: radial-gradient(circle at 30% 0%, #e0f2fe 0%, #38bdf8 35%, #1e3a8a 80%);
-  border-color: rgba(129, 140, 248, 0.95);
-  color: #eff6ff;
-  box-shadow: 0 0 16px rgba(129, 140, 248, 0.7), 0 0 32px rgba(56, 189, 248, 0.5);
-}
-
-.page-title-with-rank {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
 .account-status {
   display: flex;
   align-items: center;
