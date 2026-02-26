@@ -2119,3 +2119,301 @@ input:checked + .slider:before {
     grid-template-columns: 1fr;
   }
 }
+
+/* --- Rank Badges Styles --- */
+.header-user-rank,
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-left: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+}
+
+.rank-badge-bronze {
+  background: linear-gradient(135deg, #cd7f32, #8b4513);
+  color: #fff;
+  border-color: #cd7f32;
+  box-shadow: 0 0 10px rgba(205, 127, 50, 0.3);
+}
+
+.rank-badge-silver {
+  background: linear-gradient(135deg, #e0e0e0, #a9a9a9);
+  color: #333;
+  border-color: #c0c0c0;
+  box-shadow: 0 0 10px rgba(192, 192, 192, 0.3);
+}
+
+.rank-badge-gold {
+  background: linear-gradient(135deg, #ffd700, #daa520);
+  color: #fff;
+  border-color: #ffd700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.rank-badge-platinum {
+  background: linear-gradient(135deg, #e5e4e2, #708090);
+  color: #fff;
+  border-color: #e5e4e2;
+  box-shadow: 0 0 15px rgba(229, 228, 226, 0.4);
+}
+
+.rank-badge-diamond {
+  background: linear-gradient(135deg, #b9f2ff, #00bfff);
+  color: #fff;
+  border-color: #00bfff;
+  box-shadow: 0 0 20px rgba(0, 191, 255, 0.5);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+  100% { filter: brightness(1); }
+}
+
+/* --- Support Section --- */
+.support-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 100px);
+    background: rgba(18, 18, 18, 0.8);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.support-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(30, 30, 30, 0.5);
+}
+
+.support-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.ticket-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ticket-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.ticket-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-open { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+.status-closed { background: rgba(107, 114, 128, 0.2); color: #9ca3af; }
+
+.chat-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message {
+    max-width: 70%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    position: relative;
+    word-wrap: break-word;
+}
+
+.message-user {
+    align-self: flex-end;
+    background: #3b82f6;
+    color: white;
+    border-bottom-right-radius: 2px;
+}
+
+.message-admin {
+    align-self: flex-start;
+    background: #374151;
+    color: #e5e7eb;
+    border-bottom-left-radius: 2px;
+}
+
+.message-image {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-top: 8px;
+    cursor: pointer;
+}
+
+.admin-support-layout {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+}
+
+.admin-ticket-list {
+    width: 300px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.admin-ticket-detail {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.admin-user-info-panel {
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    font-size: 0.9rem;
+}
+
+.admin-user-info-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-user-info-label {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-bottom: 4px;
+}
+
+.admin-user-info-value {
+    color: #e5e7eb;
+    font-weight: 500;
+}
+
+.ticket-item.active {
+    background: rgba(59, 130, 246, 0.1);
+    border-left: 3px solid #3b82f6;
+}
+    margin-top: 8px;
+    cursor: pointer;
+}
+
+.chat-input-area {
+    padding: 16px;
+    background: rgba(30, 30, 30, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.chat-input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    resize: none;
+    height: 44px;
+    line-height: 22px;
+}
+
+.chat-attach-btn {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: color 0.2s;
+}
+
+.chat-attach-btn:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.chat-send-btn {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.admin-support-layout {
+    display: flex;
+    height: calc(100vh - 100px);
+    gap: 16px;
+}
+
+.ticket-list-panel {
+    width: 300px;
+    background: rgba(18, 18, 18, 0.8);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-panel {
+    flex: 1;
+    background: rgba(18, 18, 18, 0.8);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.user-details-panel {
+    width: 280px;
+    background: rgba(18, 18, 18, 0.8);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 16px;
+    display: none; /* Hidden by default */
+}
+
+.user-details-panel.visible {
+    display: block;
+}

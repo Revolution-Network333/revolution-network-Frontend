@@ -129,12 +129,24 @@
                     </svg>
                     <span>Airdrop</span>
                 </button>
+                <button id="menu-admin-support" class="menu-item" onclick="setPage('adminSupport')" style="display:none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span data-i18n="menu.admin_support">Admin Support</span>
+                </button>
                 <button id="menu-wallet" class="menu-item" onclick="setPage('wallet')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="2" y="7" width="20" height="10" rx="2"></rect>
                         <circle cx="17" cy="12" r="2"></circle>
                     </svg>
                     <span data-i18n="menu.wallet">Wallet</span>
+                </button>
+                <button id="menu-support" class="menu-item" onclick="setPage('support')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                    </svg>
+                    <span data-i18n="menu.support">Support</span>
                 </button>
             </div>
 
@@ -243,7 +255,20 @@
                 'menu.admin': 'Admin',
                 'menu.admin_shop': 'Admin Shop',
                 'menu.admin_tasks': 'Admin Tasks',
+                'menu.admin_support': 'Admin Support',
                 'menu.wallet': 'Wallet',
+                'menu.support': 'Support',
+                'support.title': 'Support',
+                'support.create': 'Nouveau Ticket',
+                'support.placeholder': 'Écrivez votre message...',
+                'support.send': 'Envoyer',
+                'support.no_tickets': 'Aucun ticket.',
+                'support.subject': 'Sujet',
+                'support.status': 'Statut',
+                'support.last_update': 'Dernière màj',
+                'support.admin.title': 'Gestion Support',
+                'support.user_details': 'Détails Utilisateur',
+                'support.user_since': 'Membre depuis',
                 'sidebar.follow': 'SUIVEZ-NOUS',
                 'social.twitter': 'X(Twitter)',
                 'social.discord': 'Discord',
@@ -408,7 +433,20 @@
                 'menu.admin': 'Admin',
                 'menu.admin_shop': 'Admin Shop',
                 'menu.admin_tasks': 'Admin Tasks',
+                'menu.admin_support': 'Admin Support',
                 'menu.wallet': 'Wallet',
+                'menu.support': 'Support',
+                'support.title': 'Support',
+                'support.create': 'New Ticket',
+                'support.placeholder': 'Type your message...',
+                'support.send': 'Send',
+                'support.no_tickets': 'No tickets.',
+                'support.subject': 'Subject',
+                'support.status': 'Status',
+                'support.last_update': 'Last update',
+                'support.admin.title': 'Support Management',
+                'support.user_details': 'User Details',
+                'support.user_since': 'Member since',
                 'sidebar.follow': 'FOLLOW US',
                 'social.twitter': 'X(Twitter)',
                 'social.discord': 'Discord',
@@ -573,7 +611,20 @@
                 'menu.admin': 'Admin',
                 'menu.admin_shop': 'Admin Shop',
                 'menu.admin_tasks': 'Admin Tasks',
+                'menu.admin_support': 'Admin Support',
                 'menu.wallet': 'Cartera',
+                'menu.support': 'Soporte',
+                'support.title': 'Soporte',
+                'support.create': 'Nuevo Ticket',
+                'support.placeholder': 'Escribe tu mensaje...',
+                'support.send': 'Enviar',
+                'support.no_tickets': 'Ningún ticket.',
+                'support.subject': 'Asunto',
+                'support.status': 'Estado',
+                'support.last_update': 'Última act.',
+                'support.admin.title': 'Gestión Soporte',
+                'support.user_details': 'Detalles Usuario',
+                'support.user_since': 'Miembro desde',
                 'sidebar.follow': 'SÍGUENOS',
                 'social.twitter': 'X(Twitter)',
                 'social.discord': 'Discord',
@@ -818,6 +869,8 @@
             const headerLogoutBtn = document.getElementById('header-logout-btn');
             const userAvatar = document.querySelector('.user-avatar');
             const headerRankBadge = document.getElementById('header-rank-badge');
+            const supportBtn = document.getElementById('menu-support');
+            const adminSupportBtn = document.getElementById('menu-admin-support');
 
             if (!token) {
                 if (accountStatus) accountStatus.style.display = 'none';
@@ -829,6 +882,8 @@
                 if (headerRankBadge) headerRankBadge.style.display = 'none';
                 if (headerLogoutBtn) headerLogoutBtn.style.display = 'none';
                 if (userAvatar) userAvatar.style.display = 'none';
+                if (supportBtn) supportBtn.style.display = 'none';
+                if (adminSupportBtn) adminSupportBtn.style.display = 'none';
                 const headerLoginBtn = document.getElementById('header-login-btn');
                 if (headerLoginBtn) headerLoginBtn.style.display = 'inline-flex';
                 return;
@@ -925,6 +980,15 @@
                     const adminShopBtn = document.getElementById('menu-admin-shop');
                     const adminTasksBtn = document.getElementById('menu-admin-tasks');
                     const adminAirdropBtn = document.getElementById('menu-admin-airdrop');
+                    
+                    // Utilisation des variables définies au début de refreshHeader
+                    if (supportBtn) {
+                        supportBtn.style.display = 'flex';
+                    }
+                    if (adminSupportBtn) {
+                        adminSupportBtn.style.display = (role === 'admin' || uname === 'korn666') ? 'flex' : 'none';
+                    }
+                    
                     if (enterpriseBtn) {
                         enterpriseBtn.style.display = (role === 'entreprise' || role === 'admin' || uname === 'korn666') ? 'flex' : 'none';
                     }
@@ -1067,6 +1131,16 @@
                 case 'adminAirdrop':
                     content.innerHTML = getAdminAirdropHTML();
                     initializeAdminAirdropPage();
+                    applyTranslations();
+                    break;
+                case 'support':
+                    content.innerHTML = getSupportHTML();
+                    initializeSupportPage();
+                    applyTranslations();
+                    break;
+                case 'adminSupport':
+                    content.innerHTML = getAdminSupportHTML();
+                    initializeAdminSupportPage();
                     applyTranslations();
                     break;
             }
@@ -2684,8 +2758,7 @@ print(r.json())</code></pre>
                                 <th>Points</th>
                                 <th>Referrals</th>
                                 <th>Tasks</th>
-                                <th>Heures Actives</th>
-                                <th>Score Airdrop</th>
+                                <th>Jours Actifs</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -2696,6 +2769,34 @@ print(r.json())</code></pre>
                             <div id="user-detail-body"></div>
                             <div style="margin-top:16px; text-align:right;">
                                 <button class="profile-btn" id="close-user-detail">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Bonus Modal -->
+                    <div class="modal" id="bonus-modal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="section-title">Appliquer Bonus</h2>
+                                <button class="close-btn" onclick="closeBonusModal()">&times;</button>
+                            </div>
+                            <div class="form-grid">
+                                <input type="hidden" id="bonus-user-id">
+                                <div>
+                                    <label>Type de Bonus</label>
+                                    <select id="bonus-type">
+                                        <option value="node_passive">Node Passif (NFT)</option>
+                                        <option value="crypto">Crypto (ZETA)</option>
+                                        <option value="points_api">Points API</option>
+                                        <option value="points_leaderboard">Points Leaderboard</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Quantité</label>
+                                    <input type="number" id="bonus-amount" min="1" step="0.0001">
+                                </div>
+                                <div style="grid-column:1/-1;text-align:right;margin-top:16px;">
+                                     <button class="profile-btn" onclick="saveBonus()">Appliquer</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2717,13 +2818,12 @@ print(r.json())</code></pre>
                         <td>${u.points || 0}</td>
                         <td>${u.referral_count || 0}</td>
                         <td>${u.tasks_completed || 0}</td>
-                        <td>${u.active_hours || 0}</td>
-                        <td>${u.final_airdrop_score || 0}</td>
+                        <td>${u.active_days || 0}</td>
                         <td>
-                            <button class="profile-btn" data-action="reset" data-id="${u.id}">Réinitialiser crédits</button>
                             <button class="profile-btn" data-action="override" data-id="${u.id}">Forcer rang</button>
-                            <button class="profile-btn" data-action="ban-ip" data-id="${u.id}">Bannir IP</button>
                             <button class="profile-btn" data-action="delete" data-id="${u.id}">Supprimer compte</button>
+                            <button class="profile-btn" data-action="cancel-sub" data-id="${u.id}">Supprimé l'abonnement</button>
+                            <button class="profile-btn" data-action="bonus" data-id="${u.id}">Appliqué bonus</button>
                         </td>
                     </tr>
                 `).join('');
@@ -2735,22 +2835,7 @@ print(r.json())</code></pre>
                     b.addEventListener('click', () => {
                         const action = b.getAttribute('data-action');
                         const id = b.getAttribute('data-id');
-                        if (action === 'reset') {
-                            apiFetchAuth(`${API_BASE}/api/admin/users/${id}/reset-credits`, { method: 'POST' })
-                              .then(async r => {
-                                  let data = {};
-                                  try { data = await r.json(); } catch {}
-                                  if (!r.ok) throw new Error(data.error || 'Erreur serveur');
-                                  return data;
-                              })
-                              .then(() => {
-                                  alert('Crédits réinitialisés');
-                                  initializeAdminLeaderboardPage();
-                              })
-                              .catch(err => {
-                                  alert('Erreur lors de la réinitialisation des crédits: ' + (err.message || err));
-                              });
-                        } else if (action === 'override') {
+                         if (action === 'override') {
                             const grade = prompt('Nouveau rang (Bronze/Silver/Gold/Platinum/Diamond) :');
                             if (grade) {
                                 fetch(`${API_BASE}/api/admin/users/${id}/override-grade`, { method: 'POST', headers: { 'Content-Type':'application/json','Authorization': `Bearer ${token}` }, body: JSON.stringify({ grade }) })
@@ -2766,23 +2851,6 @@ print(r.json())</code></pre>
                                     })
                                     .catch(err => {
                                         alert('Erreur lors de la mise à jour du rang: ' + (err.message || err));
-                                    });
-                            }
-                        } else if (action === 'ban-ip') {
-                            if (confirm("Bannir l'adresse IP la plus récente de cet utilisateur ?")) {
-                                fetch(`${API_BASE}/api/admin/users/${id}/ban-ip`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}` } })
-                                    .then(async r => {
-                                        let data = {};
-                                        try { data = await r.json(); } catch {}
-                                        if (!r.ok) throw new Error(data.error || 'Erreur serveur');
-                                        return data;
-                                    })
-                                    .then(data => {
-                                        alert('IP bannie et compte bloqué' + (data && data.ip ? ` (${data.ip})` : ''));
-                                        initializeAdminLeaderboardPage();
-                                    })
-                                    .catch(err => {
-                                        alert('Erreur lors du bannissement IP: ' + (err.message || err));
                                     });
                             }
                         } else if (action === 'delete') {
@@ -2802,6 +2870,20 @@ print(r.json())</code></pre>
                                         alert('Erreur lors de la suppression du compte: ' + (err.message || err));
                                     });
                             }
+                        } else if (action === 'cancel-sub') {
+                             if (confirm("Supprimer l'abonnement de cet utilisateur (les avantages resteront jusqu'à la fin de la période) ?")) {
+                                fetch(`${API_BASE}/api/admin/users/${id}/cancel-subscription`, { 
+                                    method: 'POST',
+                                    headers: { 'Authorization': `Bearer ${token}` }
+                                })
+                                .then(async r => {
+                                    if (!r.ok) throw new Error('Erreur');
+                                    alert('Abonnement annulé avec succès.');
+                                })
+                                .catch(() => alert('Erreur lors de l\'annulation'));
+                             }
+                        } else if (action === 'bonus') {
+                            openBonusModal(id);
                         }
                     });
                 });
@@ -2810,6 +2892,36 @@ print(r.json())</code></pre>
                     document.getElementById('user-detail-modal').classList.remove('open');
                 });
             }).catch(() => {});
+        }
+
+        window.openBonusModal = function(userId) {
+            document.getElementById('bonus-user-id').value = userId;
+            document.getElementById('bonus-amount').value = '';
+            document.getElementById('bonus-modal').classList.add('open');
+        }
+        window.closeBonusModal = function() {
+            document.getElementById('bonus-modal').classList.remove('open');
+        }
+        window.saveBonus = function() {
+            const userId = document.getElementById('bonus-user-id').value;
+            const type = document.getElementById('bonus-type').value;
+            const amount = document.getElementById('bonus-amount').value;
+            const token = localStorage.getItem('token');
+            
+            fetch(`${API_BASE}/api/admin/users/${userId}/bonus`, { 
+                method: 'POST', 
+                headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` }, 
+                body: JSON.stringify({ type, amount }) 
+            })
+            .then(async r => {
+                if (!r.ok) {
+                    const j = await r.json().catch(()=>{});
+                    throw new Error(j.error || 'Erreur');
+                }
+                alert('Bonus appliqué avec succès');
+                closeBonusModal();
+            })
+            .catch(e => alert('Erreur: ' + e.message));
         }
 
         function showUserDetail(id) {
@@ -3188,6 +3300,14 @@ function openShopItemModal(itemId) {
             }
             if (item.type === 'presale' || item.type === 'node_nft') {
                 if (!link) { alert('Lien de paiement indisponible'); return; }
+                
+                // Append client_reference_id if user is logged in
+                const uid = window.currentUserId || (token ? JSON.parse(atob(token.split('.')[1])).userId : null);
+                if (uid) {
+                    const separator = link.includes('?') ? '&' : '?';
+                    link += `${separator}client_reference_id=${uid}`;
+                }
+
                 try {
                     const a = document.createElement('a');
                     a.href = link;
@@ -4073,8 +4193,9 @@ function initializeShopPage() {
                             <div class="form-grid">
                                 <div><label>${t('wallet.stake.amount')}</label><input type="number" id="stake-amount" min="0" step="0.0001"></div>
                                 <div style="align-self:end"><button class="profile-btn" id="stake-btn">${t('wallet.stake.btn')}</button></div>
-                                <div><label>${t('wallet.withdraw.amount')}</label><input type="number" id="withdraw-amount" min="0" step="0.0001" disabled placeholder="Indisponible"></div>
-                                <div style="align-self:end"><button class="profile-btn secondary" id="withdraw-btn" disabled style="opacity:0.5;cursor:not-allowed;">${t('wallet.withdraw.btn')}</button></div>
+                                <div><label>${t('wallet.withdraw.amount')}</label><input type="number" id="withdraw-amount" min="0" step="0.0001" placeholder="Montant"></div>
+                            <div><label>Adresse Solana</label><input type="text" id="withdraw-address" placeholder="Votre adresse Solana"></div>
+                            <div style="align-self:end"><button class="profile-btn secondary" id="withdraw-btn">${t('wallet.withdraw.btn')}</button></div>
                             </div>
                             <div style="margin-top:12px;">
                                 <button class="profile-btn" id="unstake-btn">${t('wallet.unstake.btn')}</button>
@@ -4459,6 +4580,377 @@ function initializeShopPage() {
                 initializeReferralsPage();
             }
         }, 5000);
+        /* --- Support System Logic (Unified) --- */
+        function getSupportHTML() {
+            return `
+                <div class="page-content">
+                    <div class="page-header">
+                        <h1 class="page-title" data-i18n="support.title">Support</h1>
+                        <button class="profile-btn primary" id="btn-new-ticket" data-i18n="support.create">Nouveau Ticket</button>
+                    </div>
+                    <div class="support-container" id="support-view-container">
+                        <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#9ca3af;">Chargement...</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getAdminSupportHTML() {
+            return `
+                <div class="page-content" style="height: calc(100vh - 80px); display: flex; flex-direction: column;">
+                    <div class="page-header" style="flex-shrink: 0;">
+                        <h1 class="page-title">Gestion Support</h1>
+                        <button class="profile-btn" onclick="loadAdminTickets()">Actualiser</button>
+                    </div>
+                    <div class="support-container" style="flex: 1; overflow: hidden;">
+                        <div class="admin-support-layout">
+                            <div class="admin-ticket-list" id="admin-ticket-list">
+                                <div style="padding:16px;color:#9ca3af;">Chargement...</div>
+                            </div>
+                            <div class="admin-ticket-detail" id="admin-ticket-detail">
+                                <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#9ca3af;">Sélectionnez un ticket</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        let currentSupportTicketId = null;
+        let supportPollInterval = null;
+
+        function initializeSupportPage() {
+            if (supportPollInterval) clearInterval(supportPollInterval);
+            loadUserTickets();
+            const btn = document.getElementById('btn-new-ticket');
+            if(btn) btn.addEventListener('click', () => {
+                const subject = prompt(t('support.subject') + '?');
+                if (subject) createTicket(subject);
+            });
+        }
+
+        function initializeAdminSupportPage() {
+            if (supportPollInterval) clearInterval(supportPollInterval);
+            loadAdminTickets();
+        }
+
+        // --- User Functions ---
+
+        function loadUserTickets() {
+            const container = document.getElementById('support-view-container');
+            if(!container) return;
+            
+            fetch(`${API_BASE}/api/support/tickets`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+            })
+            .then(r => r.json())
+            .then(tickets => {
+                if (!tickets || tickets.length === 0) {
+                    container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#9ca3af;">${t('support.no_tickets')}</div>`;
+                    return;
+                }
+                
+                let html = `<div class="support-list">`;
+                tickets.forEach(t => {
+                    const statusClass = t.status === 'open' ? 'status-open' : 'status-closed';
+                    const date = new Date(t.updated_at).toLocaleString();
+                    const subject = (t.subject||'').replace(/'/g, "\\'");
+                    
+                    html += `
+                        <div class="ticket-item" onclick="openUserTicket('${t.id}', '${subject}')">
+                            <div>
+                                <div style="font-weight:600;margin-bottom:4px;">${t.subject}</div>
+                                <div style="font-size:0.8rem;color:#9ca3af;">${date}</div>
+                            </div>
+                            <div class="ticket-status ${statusClass}">${t.status}</div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                container.innerHTML = html;
+            })
+            .catch(err => {
+                console.error(err);
+                container.innerHTML = `<div style="padding:16px;color:#ef4444;">Erreur de chargement.</div>`;
+            });
+        }
+
+        function createTicket(subject) {
+            fetch(`${API_BASE}/api/support/tickets`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` 
+                },
+                body: JSON.stringify({ subject, message: subject, priority: 'medium' })
+            })
+            .then(r => r.json())
+            .then(ticket => {
+                openUserTicket(ticket.id, subject);
+            })
+            .catch(err => alert('Erreur création ticket'));
+        }
+
+        function openUserTicket(ticketId, subject) {
+            currentSupportTicketId = ticketId;
+            const container = document.getElementById('support-view-container');
+            if(!container) return;
+
+            container.innerHTML = `
+                <div class="support-header">
+                    <button class="profile-btn" onclick="loadUserTickets()" style="padding:4px 8px;margin-right:10px;">←</button>
+                    <div style="font-weight:600;">${subject}</div>
+                    <div></div>
+                </div>
+                <div class="chat-view">
+                    <div class="chat-messages" id="chat-messages-area"></div>
+                    <div class="chat-input-area">
+                        <input type="file" id="chat-file-input" style="display:none" accept="image/*">
+                        <button class="chat-attach-btn" onclick="document.getElementById('chat-file-input').click()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                            </svg>
+                        </button>
+                        <textarea class="chat-input" id="chat-input-text" placeholder="${t('support.placeholder')}"></textarea>
+                        <button class="chat-send-btn" onclick="sendSupportMessage()">${t('support.send')}</button>
+                    </div>
+                </div>
+            `;
+            setupChatListeners(ticketId);
+        }
+
+        // --- Admin Functions ---
+
+        function loadAdminTickets() {
+            const list = document.getElementById('admin-ticket-list');
+            if (!list) return;
+            
+            fetch(`${API_BASE}/api/support/admin/tickets`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+            })
+            .then(r => r.json())
+            .then(data => {
+                const tickets = data.tickets || [];
+                if (tickets.length === 0) {
+                    list.innerHTML = '<div style="padding:16px;color:#9ca3af;">Aucun ticket.</div>';
+                    return;
+                }
+                
+                list.innerHTML = tickets.map(t => `
+                    <div class="ticket-item ${t.status === 'closed' ? 'closed' : ''}" data-id="${t.id}" onclick="openAdminTicket(${t.id})">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                            <span style="font-weight:600;color:#fff;">${t.subject || 'Sans titre'}</span>
+                            <span class="ticket-status status-${t.status}">${t.status}</span>
+                        </div>
+                        <div style="font-size:0.8rem;color:#9ca3af;margin-bottom:4px;">
+                            User: ${t.username}
+                        </div>
+                        <div style="font-size:0.75rem;color:#6b7280;">
+                            ${new Date(t.updated_at).toLocaleString()}
+                        </div>
+                    </div>
+                `).join('');
+            })
+            .catch(err => {
+                console.error(err);
+                list.innerHTML = '<div style="padding:16px;color:#ef4444;">Erreur chargement.</div>';
+            });
+        }
+
+        function openAdminTicket(id) {
+            currentSupportTicketId = id;
+            if (supportPollInterval) clearInterval(supportPollInterval);
+
+            const detail = document.getElementById('admin-ticket-detail');
+            if (!detail) return;
+
+            detail.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#9ca3af;">Chargement...</div>';
+
+            fetch(`${API_BASE}/api/support/tickets/${id}`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+            })
+            .then(r => r.json())
+            .then(data => {
+                const t = data.ticket;
+                
+                // Highlight active item
+                document.querySelectorAll('.ticket-item').forEach(el => {
+                    el.classList.remove('active');
+                    if(el.dataset.id == id) el.classList.add('active');
+                });
+
+                const userSince = t.user_since ? new Date(t.user_since).toLocaleDateString() : 'N/A';
+                const rank = t.rank ? t.rank.toUpperCase() : 'USER';
+                
+                const html = `
+                    <div class="admin-user-info-panel">
+                        <div class="admin-user-info-item">
+                            <span class="admin-user-info-label">Utilisateur</span>
+                            <span class="admin-user-info-value">${t.username}</span>
+                        </div>
+                        <div class="admin-user-info-item">
+                            <span class="admin-user-info-label">Email</span>
+                            <span class="admin-user-info-value">${t.email}</span>
+                        </div>
+                        <div class="admin-user-info-item">
+                            <span class="admin-user-info-label">Rang</span>
+                            <span class="admin-user-info-value" style="color:#ffd700;">${rank}</span>
+                        </div>
+                        <div class="admin-user-info-item">
+                            <span class="admin-user-info-label">Membre depuis</span>
+                            <span class="admin-user-info-value">${userSince}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-view">
+                        <div class="chat-messages" id="chat-messages-area"></div>
+                        <div class="chat-input-area">
+                             ${t.status === 'open' ? `
+                                <div style="display:flex;gap:8px;">
+                                    <textarea class="chat-input" id="chat-input-text" placeholder="Répondre..." style="flex:1;padding:8px;border-radius:4px;border:1px solid #374151;background:#1f2937;color:white;resize:none;height:40px;"></textarea>
+                                    <label for="chat-file-input" class="profile-btn" style="padding:8px;cursor:pointer;">📷</label>
+                                    <input type="file" id="chat-file-input" accept="image/*" style="display:none;" onchange="if(this.files[0]) sendSupportMessage(this.files[0])">
+                                    <button class="profile-btn primary" onclick="sendSupportMessage()">Envoyer</button>
+                                </div>
+                                <div style="margin-top:8px;text-align:right;">
+                                    <button class="profile-btn" style="background:#ef4444;color:white;" onclick="closeTicket(${t.id})">Fermer le ticket</button>
+                                </div>
+                             ` : `
+                                <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.05);border-radius:8px;">
+                                    Ticket fermé
+                                </div>
+                             `}
+                        </div>
+                    </div>
+                `;
+                
+                detail.innerHTML = html;
+                
+                setupChatListeners(id);
+            })
+            .catch(err => {
+                console.error(err);
+                detail.innerHTML = '<div style="padding:16px;color:#ef4444;">Erreur chargement détails.</div>';
+            });
+        }
+
+        // --- Shared Chat Functions ---
+
+        function setupChatListeners(ticketId) {
+            const fileInput = document.getElementById('chat-file-input');
+            if (fileInput) {
+                fileInput.onchange = () => {
+                    if (fileInput.files.length > 0) sendSupportMessage(fileInput.files[0]);
+                };
+            }
+
+            const textInput = document.getElementById('chat-input-text');
+            if (textInput) {
+                textInput.onkeypress = (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendSupportMessage();
+                    }
+                };
+            }
+
+            loadMessages(ticketId);
+            if (supportPollInterval) clearInterval(supportPollInterval);
+            supportPollInterval = setInterval(() => loadMessages(ticketId), 3000);
+        }
+
+        function loadMessages(ticketId) {
+            if (currentSupportTicketId != ticketId) return; // Note: loose equality for string/int match
+            
+            fetch(`${API_BASE}/api/support/tickets/${ticketId}`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+            })
+            .then(r => r.json())
+            .then(data => {
+                const area = document.getElementById('chat-messages-area');
+                if (!area) return;
+                
+                const isAtBottom = area.scrollHeight - area.scrollTop <= area.clientHeight + 100;
+                
+                area.innerHTML = (data.messages || []).map(m => {
+                    const myId = window.currentUserId; // Need to ensure this is set globally or fetch from token
+                    // Alternative: Check sender_role vs current user role, but simpler to check ID if available.
+                    // If window.currentUserId is not set, we might have display issues.
+                    // Fallback: If I am 'admin' and sender_role is 'admin', it's me.
+                    // But if I am 'user' and sender_role is 'user', it's me.
+                    // Better: Decoded token payload usually has ID.
+                    
+                    let isMe = false;
+                    try {
+                        const payload = JSON.parse(atob(localStorage.getItem('token').split('.')[1]));
+                        if(payload.userId == m.sender_id) isMe = true;
+                    } catch(e) {}
+
+                    let content = `<div style="white-space:pre-wrap;">${m.message || ''}</div>`;
+                    if (m.attachment_url || m.image_url) {
+                        const url = m.attachment_url || m.image_url;
+                        content += `<img src="${API_BASE}${url}" class="message-image" onclick="window.open(this.src, '_blank')">`;
+                    }
+                    
+                    return `<div class="message ${isMe ? 'message-user' : 'message-admin'}">
+                        <div style="font-size:0.7rem;opacity:0.7;margin-bottom:2px;">${m.sender_role} - ${new Date(m.created_at).toLocaleTimeString()}</div>
+                        ${content}
+                    </div>`;
+                }).join('');
+
+                if (isAtBottom) area.scrollTop = area.scrollHeight;
+            })
+            .catch(err => console.error(err));
+        }
+
+        function sendSupportMessage(file = null) {
+            const textInput = document.getElementById('chat-input-text');
+            const message = textInput ? textInput.value.trim() : '';
+            
+            if (!message && !file) return;
+
+            const formData = new FormData();
+            if (message) formData.append('message', message);
+            if (file) formData.append('image', file);
+
+            fetch(`${API_BASE}/api/support/tickets/${currentSupportTicketId}/messages`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                body: formData
+            })
+            .then(r => r.json())
+            .then(() => {
+                if (textInput) textInput.value = '';
+                if (document.getElementById('chat-file-input')) document.getElementById('chat-file-input').value = '';
+                loadMessages(currentSupportTicketId);
+            })
+            .catch(err => alert('Erreur envoi message'));
+        }
+
+        function closeTicket(id) {
+            if (!confirm('Voulez-vous vraiment fermer ce ticket ?')) return;
+            
+            fetch(`${API_BASE}/api/support/tickets/${id}/close`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+            })
+            .then(r => r.json())
+            .then(() => {
+                // If we are in Admin view
+                const adminList = document.getElementById('admin-ticket-list');
+                if(adminList) {
+                    loadAdminTickets();
+                    openAdminTicket(id);
+                } else {
+                    // User view
+                    loadUserTickets();
+                    // Maybe go back to list?
+                    openUserTicket(id, 'Ticket'); // Refresh view
+                }
+            })
+            .catch(err => alert('Erreur fermeture ticket'));
+        }
+
     </script>
 </body>
 </html>
