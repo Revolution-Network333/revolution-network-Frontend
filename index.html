@@ -3124,6 +3124,17 @@ print(r.json())</code></pre>
                                 <button id="btn-open-extensions" class="profile-btn primary">${t('download.install')}</button>
                                 <button id="btn-howto" class="profile-btn">${t('download.guide')}</button>
                             </div>
+                            <div class="section-info-bubble" style="margin-top:10px;">
+                                <div style="font-weight:600;margin-bottom:6px;">Procédure recommandée (ZIP)</div>
+                                <ol class="points-examples" style="margin:0;">
+                                    <li>Cliquez “Lancer l’installation” pour télécharger l’archive ZIP.</li>
+                                    <li>Décompressez l’archive sur votre ordinateur.</li>
+                                    <li>Ouvrez chrome://extensions et activez le Mode développeur.</li>
+                                    <li>Cliquez “Charger l’extension non empaquetée”.</li>
+                                    <li>Sélectionnez le dossier “chrome-extension” décompressé.</li>
+                                    <li>Dans le popup de l’extension, connectez‑vous puis appuyez sur ▶.</li>
+                                </ol>
+                            </div>
                         </div>
                         <div class="api-card">
                             <h3>${t('download.tutorial.title')}</h3>
@@ -3158,23 +3169,16 @@ print(r.json())</code></pre>
             const btnExt = document.getElementById('btn-open-extensions');
             const btnHow = document.getElementById('btn-howto');
             if (btnExt) btnExt.addEventListener('click', async () => {
-                const localRar = 'chrome-extension.rar';
-                const localCrx = 'chrome-extension.crx';
                 const apiZip = `${API_BASE}/api/download/extension`;
                 const ghZip = 'https://github.com/Azurus333/Revolution-Network/archive/refs/heads/main.zip';
                 async function headOk(url) { try { const r = await fetch(url, { method: 'HEAD' }); return r.ok; } catch { return false; } }
                 let url = '';
-                if (await headOk(localRar)) url = localRar;
-                else if (await headOk(localCrx)) url = localCrx;
-                else if (await headOk(apiZip)) url = apiZip;
+                if (await headOk(apiZip)) url = apiZip;
                 else url = ghZip;
                 try {
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = url.endsWith('.rar') ? 'chrome-extension.rar'
-                               : url.endsWith('.crx') ? 'chrome-extension.crx'
-                               : url.endsWith('.zip') ? 'revolution-chrome-extension.zip'
-                               : '';
+                    a.download = 'revolution-chrome-extension.zip';
                     a.style.display = 'none';
                     document.body.appendChild(a);
                     a.click();
