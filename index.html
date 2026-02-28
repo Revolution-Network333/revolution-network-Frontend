@@ -1064,22 +1064,6 @@
             })
             .catch(error => {
                 console.error('Erreur:', error);
-                const headerLoginBtn = document.getElementById('header-login-btn');
-                const accountStatus = document.querySelector('.account-status');
-                const totalPoints = document.querySelector('.total-points');
-                const headerLogoutBtn = document.getElementById('header-logout-btn');
-                const userAvatar = document.querySelector('.user-avatar');
-                if (accountStatus) accountStatus.style.display = 'none';
-                if (totalPoints) totalPoints.style.display = 'none';
-                const walletBal = document.querySelector('.wallet-balance');
-                if (walletBal) walletBal.style.display = 'none';
-                const apiCred = document.querySelector('.api-credits');
-                if (apiCred) apiCred.style.display = 'none';
-                if (headerLogoutBtn) headerLogoutBtn.style.display = 'none';
-                if (userAvatar) userAvatar.style.display = 'none';
-                const headerRankBadge = document.getElementById('header-rank-badge');
-                if (headerRankBadge) headerRankBadge.style.display = 'none';
-                if (headerLoginBtn) headerLoginBtn.style.display = 'inline-flex';
             });
         }
 
