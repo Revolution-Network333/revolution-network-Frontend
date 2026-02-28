@@ -223,6 +223,10 @@
     </div>
 
     <script>
+        document.documentElement.classList.add('preload');
+        window.addEventListener('load', function() {
+            document.documentElement.classList.remove('preload');
+        });
         const isLocalHost = (
             location.hostname === 'localhost' ||
             location.hostname === '127.0.0.1' ||
@@ -3206,17 +3210,24 @@ print(r.json())</code></pre>
             const btnHow = document.getElementById('btn-howto');
             if (btnExt) btnExt.addEventListener('click', async () => {
                 const apiZip = `${API_BASE}/api/download/extension`;
-                const url = apiZip;
+                const ghZip = 'https://github.com/Azurus333/Revolution-Network/archive/refs/heads/main.zip';
                 try {
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'revolution-chrome-extension.zip';
-                    a.style.display = 'none';
-                    document.body.appendChild(a);
-                    a.click();
-                    setTimeout(()=>{ try { document.body.removeChild(a); } catch {} }, 0);
+                    const chk = await fetch(`${apiZip}?check=1`, { method: 'GET' });
+                    if (chk && (chk.status === 204 || chk.ok)) {
+                        const a = document.createElement('a');
+                        a.href = apiZip;
+                        a.download = 'revolution-chrome-extension.zip';
+                        a.style.display = 'none';
+                        document.body.appendChild(a);
+                        a.click();
+                        setTimeout(()=>{ try { document.body.removeChild(a); } catch {} }, 0);
+                    } else {
+                        alert('Archive de l’extension non disponible via API pour le moment. Un téléchargement fallback du code source va s’ouvrir. Après extraction, utilisez le dossier "chrome-extension".');
+                        window.open(ghZip, '_blank');
+                    }
                 } catch {
-                    try { window.open(url, '_self'); } catch {}
+                    alert('Archive de l’extension non disponible. Ouverture du fallback (repo complet).');
+                    try { window.open(ghZip, '_blank'); } catch {}
                 }
                 setTimeout(()=>{ try { window.open('chrome://extensions/', '_blank'); } catch {} }, 500);
             });

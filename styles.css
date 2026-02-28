@@ -2181,6 +2181,12 @@ input:checked + .slider:before {
   100% { filter: brightness(1); }
 }
 
+/* Reduce flicker on initial load */
+.preload * {
+  animation: none !important;
+  transition: none !important;
+}
+
 /* --- Support Section --- */
 .support-container {
     display: flex;
