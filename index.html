@@ -2859,11 +2859,14 @@ print(r.json())</code></pre>
                         <td>${u.referral_count || 0}</td>
                         <td>${u.tasks_completed || 0}</td>
                         <td>${u.active_days || 0}</td>
-                        <td>
-                            <button class="profile-btn" data-action="override" data-id="${u.id}">Forcer rang</button>
-                            <button class="profile-btn" data-action="delete" data-id="${u.id}">Supprimer compte</button>
-                            <button class="profile-btn" data-action="cancel-sub" data-id="${u.id}">Supprimé l'abonnement</button>
-                            <button class="profile-btn" data-action="bonus" data-id="${u.id}">Appliqué bonus</button>
+                        <td class="admin-actions-cell">
+                            <div class="admin-actions">
+                                <button class="chip-btn" data-action="override" data-id="${u.id}">Rang</button>
+                                <button class="chip-btn warning" data-action="cancel-sub" data-id="${u.id}">Suppr. abo</button>
+                                <button class="chip-btn primary" data-action="bonus" data-id="${u.id}">Bonus</button>
+                                <button class="chip-btn" data-action="edit-points" data-id="${u.id}">Modif points</button>
+                                <button class="chip-btn danger" data-action="delete" data-id="${u.id}">Supprimer</button>
+                            </div>
                         </td>
                     </tr>
                 `).join('');
@@ -2871,7 +2874,7 @@ print(r.json())</code></pre>
                 tbody.querySelectorAll('button.link-btn').forEach(b => {
                     b.addEventListener('click', () => showUserDetail(b.getAttribute('data-id')));
                 });
-                tbody.querySelectorAll('button.profile-btn').forEach(b => {
+                tbody.querySelectorAll('button[data-action]').forEach(b => {
                     b.addEventListener('click', () => {
                         const action = b.getAttribute('data-action');
                         const id = b.getAttribute('data-id');
@@ -2909,7 +2912,7 @@ print(r.json())</code></pre>
                                     .catch(err => {
                                         alert('Erreur lors de la suppression du compte: ' + (err.message || err));
                                     });
-                            }
+                             }
                         } else if (action === 'cancel-sub') {
                              if (confirm("Supprimer l'abonnement de cet utilisateur (les avantages resteront jusqu'à la fin de la période) ?")) {
                                 fetch(`${API_BASE}/api/admin/users/${id}/cancel-subscription`, { 
@@ -2924,6 +2927,32 @@ print(r.json())</code></pre>
                              }
                         } else if (action === 'bonus') {
                             openBonusModal(id);
+                        } else if (action === 'edit-points') {
+                            const curCell = b.closest('tr')?.querySelector('td:nth-child(6)');
+                            const current = curCell ? parseFloat(curCell.textContent.replace(/[^0-9.-]/g,'')) : null;
+                            const v = prompt(`Nouveau total de points${current!=null?` (actuel: ${current})`:''} :`);
+                            if (v !== null && v.trim() !== '') {
+                                const newPoints = parseFloat(v);
+                                if (!Number.isNaN(newPoints)) {
+                                    b.disabled = true;
+                                    fetch(`${API_BASE}/api/admin/users/${id}/set-points`, { 
+                                        method: 'POST',
+                                        headers: { 'Content-Type':'application/json','Authorization': `Bearer ${token}` }, 
+                                        body: JSON.stringify({ points: newPoints })
+                                    })
+                                    .then(async r => {
+                                        const j = await r.json().catch(()=>({}));
+                                        if (!r.ok) throw new Error(j.error || 'Erreur serveur');
+                                        return j;
+                                    })
+                                    .then(() => {
+                                        alert('Points mis à jour');
+                                        initializeAdminLeaderboardPage();
+                                    })
+                                    .catch(err => alert(err.message || String(err)))
+                                    .finally(() => { b.disabled = false; });
+                                }
+                            }
                         }
                     });
                 });
@@ -2947,7 +2976,8 @@ print(r.json())</code></pre>
             const type = document.getElementById('bonus-type').value;
             const amount = document.getElementById('bonus-amount').value;
             const token = localStorage.getItem('token');
-            
+            const btn = document.querySelector('#bonus-modal .modal-content button.profile-btn');
+            if (btn) btn.disabled = true;
             fetch(`${API_BASE}/api/admin/users/${userId}/bonus`, { 
                 method: 'POST', 
                 headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` }, 
@@ -2975,6 +3005,7 @@ print(r.json())</code></pre>
                     }
                 }
             })
+            .finally(()=>{ if (btn) btn.disabled = false; })
             .catch(e => alert('Erreur: ' + e.message));
         }
 
