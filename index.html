@@ -2189,7 +2189,9 @@
                                     </div>
                                     <div style="margin-top:16px; width:100%; border-top:1px solid #1f2937; padding-top:16px;">
                                         <h3 style="margin-bottom:8px;">Double sécurité (Google Authenticator)</h3>
-                                        <div id="twofa-info" class="section-info-bubble">Activez Google Authenticator pour sécuriser votre compte. Scannez le QR puis entrez le code.</div>
+                                        <div id="twofa-info" class="section-info-bubble" style="background:#1e293b;padding:12px;border-radius:8px;border:1px solid #334155;margin-bottom:12px;font-size:0.95em;color:#cbd5e1;line-height:1.5;">
+                                            La double authentification (2FA) renforce la sécurité de votre compte. En utilisant une application comme Google Authenticator, vous générez un code unique toutes les 30 secondes, requis pour vous connecter. Cela protège votre compte même si votre mot de passe est compromis. Scannez le QR code ci-dessous avec l'application pour commencer.
+                                        </div>
                                         <div id="twofa-status" style="margin:8px 0;color:#94a3b8;">Statut: chargement...</div>
                                         <div id="twofa-setup" style="display:none;margin:8px 0;">
                                             <img id="twofa-qr" alt="QR 2FA" style="width:180px;height:180px;image-rendering:pixelated;border:1px solid #334155;border-radius:6px;">
@@ -2288,14 +2290,20 @@
             load2faStatus();
             let currentSecret = null;
             if (twofaStart) twofaStart.addEventListener('click', () => {
-                fetch(`${API_BASE}/api/auth/2fa/setup`, { headers: { 'Authorization': `Bearer ${token}` }})
+                fetch(`${API_BASE}/api/auth/2fa/setup`, { 
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
                  .then(async r => {
                     let j = null; let ok = r.ok;
                     try { j = await r.json(); } catch { j = null; }
                     return { ok, j };
                  })
                  .then(({ ok, j }) => {
-                    if (!ok || !j) { alert('Erreur 2FA: serveur'); return; }
+                    if (!ok || !j) { 
+                        alert('Erreur 2FA: ' + (j && (j.details || j.error) ? (j.details || j.error) : 'serveur')); 
+                        return; 
+                    }
                     let secret = j.secret || '';
                     let otpauth = j.otpauth || j.qrCodeUrl || j.otpauth_url || '';
                     if (!secret && otpauth) {
