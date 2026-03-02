@@ -2193,6 +2193,13 @@
                                         <div id="twofa-status" style="margin:8px 0;color:#94a3b8;">Statut: chargement...</div>
                                         <div id="twofa-setup" style="display:none;margin:8px 0;">
                                             <img id="twofa-qr" alt="QR 2FA" style="width:180px;height:180px;image-rendering:pixelated;border:1px solid #334155;border-radius:6px;">
+                                            <div id="twofa-manual" style="margin-top:8px;color:#9ca3af;display:none;">
+                                                Si le QR ne s’affiche pas, entrez ce secret dans l’application:
+                                                <div style="margin-top:6px;">
+                                                    <span id="twofa-secret" style="font-family:ui-monospace,Menlo,monospace;font-size:.95em;background:#0b1220;border:1px solid #334155;padding:4px 8px;border-radius:6px;display:inline-block;"></span>
+                                                    <button type="button" id="twofa-copy-secret" class="profile-btn" style="margin-left:8px;">Copier</button>
+                                                </div>
+                                            </div>
                                             <div class="profile-field" style="margin-top:8px;">
                                                 <label>Code (6 chiffres)</label>
                                                 <input type="text" id="twofa-code" placeholder="123456" inputmode="numeric" pattern="\\d{6}">
@@ -2238,6 +2245,9 @@
             const twofaQr = document.getElementById('twofa-qr');
             const twofaEnable = document.getElementById('twofa-enable-btn');
             const twofaDisable = document.getElementById('twofa-disable-btn');
+            const twofaManual = document.getElementById('twofa-manual');
+            const twofaSecretEl = document.getElementById('twofa-secret');
+            const twofaCopySecret = document.getElementById('twofa-copy-secret');
 
             // Charger les données du profil
             fetch(`${API_BASE}/api/user/profile`, {
@@ -2283,10 +2293,16 @@
                  .then(j => {
                     currentSecret = j.secret;
                     const otpauth = j.otpauth || j.qrCodeUrl || j.otpauth_url;
+                    if (twofaSecretEl) twofaSecretEl.textContent = currentSecret || '';
+                    if (twofaManual) twofaManual.style.display = '';
                     if (twofaQr && otpauth) {
+                        // Chaîne de fallbacks: Google Charts -> QuickChart -> QRServer
                         twofaQr.onerror = () => {
-                            twofaQr.onerror = null;
-                            twofaQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(otpauth)}`;
+                            twofaQr.onerror = () => {
+                                twofaQr.onerror = () => {};
+                                twofaQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(otpauth)}`;
+                            };
+                            twofaQr.src = `https://quickchart.io/qr?size=200&text=${encodeURIComponent(otpauth)}`;
                         };
                         twofaQr.src = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(otpauth)}`;
                     }
@@ -2294,6 +2310,17 @@
                  })
                  .catch(()=> alert('Erreur 2FA'));
             });
+            if (twofaCopySecret && twofaSecretEl) {
+                twofaCopySecret.addEventListener('click', ()=>{
+                    try {
+                        const s = twofaSecretEl.textContent || '';
+                        navigator.clipboard.writeText(s).then(()=> {
+                            twofaCopySecret.textContent = 'Copié';
+                            setTimeout(()=> twofaCopySecret.textContent='Copier', 1200);
+                        });
+                    } catch {}
+                });
+            }
             if (twofaEnable) twofaEnable.addEventListener('click', () => {
                 const codeEl = document.getElementById('twofa-code');
                 const code = codeEl ? codeEl.value.trim() : '';
