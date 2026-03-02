@@ -934,15 +934,15 @@
             if (accountStatus) accountStatus.style.display = 'flex';
             if (totalPoints) totalPoints.style.display = 'inline-flex';
             const headerTotalPoints = document.getElementById('header-total-points');
-            if (headerTotalPoints) headerTotalPoints.textContent = 'Total: ...';
+            // Garder la valeur actuelle jusqu'à nouvelle donnée (évite flicker)
             const walletBal = document.querySelector('.wallet-balance');
-            if (walletBal) walletBal.style.display = 'inline-flex';
+            if (walletBal && walletBal.style.display !== 'inline-flex') walletBal.style.display = 'inline-flex';
             const headerWalletBalance = document.getElementById('header-wallet-balance');
-            if (headerWalletBalance) headerWalletBalance.textContent = 'ZETA: ...';
+            // Ne pas remplacer par des points de suspension
             const apiCred = document.querySelector('.api-credits');
-            if (apiCred) apiCred.style.display = 'inline-flex';
+            if (apiCred && apiCred.style.display !== 'inline-flex') apiCred.style.display = 'inline-flex';
             const headerApiCredits = document.getElementById('header-api-credits');
-            if (headerApiCredits) headerApiCredits.textContent = 'API: ...';
+            // Pas d'espace réservé ici non plus
             if (headerLogoutBtn) headerLogoutBtn.style.display = 'inline-flex';
 
             fetch(`${API_BASE}/api/user/profile`, {
@@ -2686,7 +2686,7 @@ print(r.json())</code></pre>
                         const id = btn.getAttribute('data-id');
                         try { if (url) window.open(url, '_blank'); } catch {}
                         const timerEl = document.getElementById(`task-timer-${id}`);
-                        let s = 60;
+                        let s = 30;
                         timerEl.textContent = `${s}s`;
                         const iv = setInterval(() => {
                             s--; timerEl.textContent = `${s}s`;

@@ -2492,3 +2492,13 @@ input:checked + .slider:before {
   border-color: #f59e0b;
   color: #f59e0b;
 }
+
+/* Stabilise l'entête (évite les sauts lors de l'actualisation) */
+.total-points { min-width: 140px; }
+.wallet-balance { min-width: 150px; }
+.api-credits { min-width: 110px; }
+
+/* Évite un flash lors de mises à jour de texte */
+.total-points, .wallet-balance, .api-credits {
+  transition: none !important;
+}
