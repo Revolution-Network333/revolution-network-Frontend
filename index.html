@@ -2282,8 +2282,14 @@
                  .then(r => r.json())
                  .then(j => {
                     currentSecret = j.secret;
-                    const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(j.otpauth)}`;
-                    if (twofaQr) twofaQr.src = qrUrl;
+                    const otpauth = j.otpauth || j.qrCodeUrl || j.otpauth_url;
+                    if (twofaQr && otpauth) {
+                        twofaQr.onerror = () => {
+                            twofaQr.onerror = null;
+                            twofaQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(otpauth)}`;
+                        };
+                        twofaQr.src = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(otpauth)}`;
+                    }
                     if (twofaSetup) twofaSetup.style.display = '';
                  })
                  .catch(()=> alert('Erreur 2FA'));
@@ -2722,7 +2728,8 @@ print(r.json())</code></pre>
                 const typeLabels = {
                     x_follow: t('tasks.type.x_follow'),
                     x_like: t('tasks.type.x_like'),
-                    telegram_join: t('tasks.type.telegram_join')
+                    telegram_join: t('tasks.type.telegram_join'),
+                    twofa_enable: 'Validé 2FA'
                 };
                 const items = (data.tasks || []).map(task => {
                     const typeLabel = typeLabels[task.type] || (task.type || '');
@@ -2740,7 +2747,7 @@ print(r.json())</code></pre>
                             </div>
                         </div>
                         <div class="task-actions">
-                            <button class="profile-btn" data-url="${task.link_url}" data-id="${task.id}">${t('tasks.validate')}</button>
+                            <button class="profile-btn" data-url="${task.link_url}" data-id="${task.id}" data-type="${task.type}">${t('tasks.validate')}</button>
                             <div class="task-timer" id="task-timer-${task.id}"></div>
                         </div>
                     </div>`;
@@ -2796,6 +2803,36 @@ print(r.json())</code></pre>
                     btn.addEventListener('click', () => {
                         const url = btn.getAttribute('data-url');
                         const id = btn.getAttribute('data-id');
+                        const type = btn.getAttribute('data-type') || '';
+                        if (type === 'twofa_enable') {
+                            if (!token) { alert('Connectez-vous pour valider.'); return; }
+                            const timerEl = document.getElementById(`task-timer-${id}`);
+                            timerEl.textContent = 'Vérification 2FA…';
+                            fetch(`${API_BASE}/api/auth/2fa/status`, { headers: { 'Authorization': `Bearer ${token}` }})
+                              .then(r=>r.json()).then(j=>{
+                                if (!j || !j.enabled) {
+                                    timerEl.textContent = '2FA non activé';
+                                    alert('Activez la 2FA dans votre Profil pour valider cette task.');
+                                    return;
+                                }
+                                fetch(`${API_BASE}/api/user/tasks/approve`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                                    body: JSON.stringify({ taskId: id })
+                                }).then(async (r) => {
+                                    let ok = r.ok; let jj = null; try { jj = await r.json(); } catch {}
+                                    if (!ok || (jj && jj.error)) { timerEl.textContent = t('tasks.error'); return; }
+                                    timerEl.textContent = t('tasks.validated');
+                                    btn.textContent = t('tasks.validated');
+                                    btn.style.backgroundColor = '#14532d';
+                                    btn.style.borderColor = '#14532d';
+                                    btn.style.cursor = 'default';
+                                    btn.disabled = true;
+                                    try { refreshHeader(); } catch {}
+                                }).catch(()=>{ timerEl.textContent = t('tasks.error'); });
+                              }).catch(()=>{ timerEl.textContent = t('tasks.error'); });
+                            return;
+                        }
                         try { if (url) window.open(url, '_blank'); } catch {}
                         const timerEl = document.getElementById(`task-timer-${id}`);
                         let s = 30;
@@ -2975,7 +3012,6 @@ print(r.json())</code></pre>
                             <div class="admin-actions">
                                 <button class="chip-btn" data-action="override" data-id="${u.id}">Rang</button>
                                 <button class="chip-btn warning" data-action="cancel-sub" data-id="${u.id}">Suppr. abo</button>
-                                <button class="chip-btn" data-action="validate-2fa" data-id="${u.id}">Validé 2FA</button>
                                 <button class="chip-btn primary" data-action="bonus" data-id="${u.id}">Bonus</button>
                                 <button class="chip-btn" data-action="edit-points" data-id="${u.id}">Modif points</button>
                                 <button class="chip-btn danger" data-action="delete" data-id="${u.id}">Supprimer</button>
@@ -3040,22 +3076,6 @@ print(r.json())</code></pre>
                              }
                         } else if (action === 'bonus') {
                             openBonusModal(id);
-                        } else if (action === 'validate-2fa') {
-                            if (confirm("Valider la double sécurité pour cet utilisateur ?")) {
-                                fetch(`${API_BASE}/api/admin/users/${id}/2fa-validate`, {
-                                    method: 'POST',
-                                    headers: { 'Authorization': `Bearer ${token}` }
-                                })
-                                .then(async r => {
-                                    const j = await r.json().catch(()=>({}));
-                                    if (!r.ok) throw new Error(j.error || 'Erreur');
-                                    return j;
-                                })
-                                .then(() => {
-                                    alert('2FA validé pour cet utilisateur');
-                                })
-                                .catch(e => alert('Erreur: ' + (e.message || 'inconnue')));
-                            }
                         } else if (action === 'edit-points') {
                             const curCell = b.closest('tr')?.querySelector('td:nth-child(6)');
                             const current = curCell ? parseFloat(curCell.textContent.replace(/[^0-9.-]/g,'')) : null;
@@ -4213,10 +4233,11 @@ function initializeShopPage() {
                                 <div><label>Titre</label><input id="task-title" type="text"></div>
                                 <div>
                                     <label>Type</label>
-                                    <select id="task-type">
+                                <select id="task-type">
                                         <option value="x_follow">X Follow</option>
                                         <option value="x_like">X Like</option>
-                                        <option value="telegram_join">Telegram Join</option>
+                                    <option value="telegram_join">Telegram Join</option>
+                                    <option value="twofa_enable">Validé 2FA</option>
                                     </select>
                                 </div>
                                 <div><label>Points</label><input id="task-points" type="number" step="1"></div>
@@ -4285,6 +4306,7 @@ function initializeShopPage() {
                                     <option value="x_follow" ${t.type==='x_follow'?'selected':''}>X Follow</option>
                                     <option value="x_like" ${t.type==='x_like'?'selected':''}>X Like</option>
                                     <option value="telegram_join" ${t.type==='telegram_join'?'selected':''}>Telegram Join</option>
+                                    <option value="twofa_enable" ${t.type==='twofa_enable'?'selected':''}>Validé 2FA</option>
                                 </select>
                             </td>
                             <td contenteditable="true" data-field="reward_points">${t.reward_points||0}</td>
