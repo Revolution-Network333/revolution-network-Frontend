@@ -4560,15 +4560,30 @@ function initializeShopPage() {
                 try {
                     const res = await fetch(`${API_BASE}/api/admin/airdrop/calculate`, {
                         method: 'POST',
-                        headers: { 'Authorization': `Bearer ${token}` }
+                        headers: { 
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
                     });
-                    const j = await res.json();
+                    let j = null;
+                    let raw = '';
+                    try { j = await res.json(); } catch { try { raw = await res.text(); } catch {} }
                     
                     if (res.ok) {
-                        alert(`Succès ! ${j.message}\nScore Global: ${j.total_global_score.toFixed(2)}`);
+                        const msg = (j && j.message) ? j.message : 'Calcul terminé';
+                        const total = (j && typeof j.total_global_score === 'number') ? j.total_global_score : null;
+                        alert(total !== null ? `Succès ! ${msg}\nScore Global: ${total.toFixed(2)}` : `Succès ! ${msg}`);
                         loadParticipants();
                     } else {
-                        alert('Erreur: ' + (j.error || 'Inconnue'));
+                        const code = res.status;
+                        const errMsg = (j && j.error) ? j.error : (raw || 'Inconnue');
+                        if (code === 401 || code === 403) {
+                            alert('Accès non autorisé. Veuillez vous reconnecter avec un compte administrateur.');
+                        } else if (code === 400 && /total global score is zero/i.test(errMsg)) {
+                            alert("Aucun utilisateur éligible ou données insuffisantes pour le calcul.\nAssurez‑vous qu’il existe des points, des dépenses ou des achats, puis réessayez.");
+                        } else {
+                            alert(`Erreur (${code}) : ${errMsg}`);
+                        }
                     }
                 } catch (e) {
                     alert('Erreur réseau');
