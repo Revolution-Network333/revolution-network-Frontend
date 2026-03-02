@@ -2289,14 +2289,29 @@
             let currentSecret = null;
             if (twofaStart) twofaStart.addEventListener('click', () => {
                 fetch(`${API_BASE}/api/auth/2fa/setup`, { headers: { 'Authorization': `Bearer ${token}` }})
-                 .then(r => r.json())
-                 .then(j => {
-                    currentSecret = j.secret;
-                    const otpauth = j.otpauth || j.qrCodeUrl || j.otpauth_url;
-                    if (twofaSecretEl) twofaSecretEl.textContent = currentSecret || '';
+                 .then(async r => {
+                    let j = null; let ok = r.ok;
+                    try { j = await r.json(); } catch { j = null; }
+                    return { ok, j };
+                 })
+                 .then(({ ok, j }) => {
+                    if (!ok || !j) { alert('Erreur 2FA: serveur'); return; }
+                    let secret = j.secret || '';
+                    let otpauth = j.otpauth || j.qrCodeUrl || j.otpauth_url || '';
+                    if (!secret && otpauth) {
+                        const m = /secret=([A-Z2-7]+=*)/i.exec(otpauth);
+                        if (m && m[1]) secret = m[1];
+                    }
+                    if (!otpauth && secret) {
+                        const name = (document.getElementById('username')?.value || 'user').trim();
+                        const label = encodeURIComponent(`Revolution Network:${name}`);
+                        const issuer = encodeURIComponent('Revolution Network');
+                        otpauth = `otpauth://totp/${label}?secret=${encodeURIComponent(secret)}&issuer=${issuer}`;
+                    }
+                    currentSecret = secret || null;
+                    if (twofaSecretEl) twofaSecretEl.textContent = currentSecret || '(secret indisponible)';
                     if (twofaManual) twofaManual.style.display = '';
                     if (twofaQr && otpauth) {
-                        // Chaîne de fallbacks: Google Charts -> QuickChart -> QRServer
                         twofaQr.onerror = () => {
                             twofaQr.onerror = () => {
                                 twofaQr.onerror = () => {};
