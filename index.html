@@ -5136,19 +5136,21 @@ function initializeShopPage() {
         }
 
         function createTicket(subject) {
+            const fd = new FormData();
+            fd.append('subject', subject);
+            fd.append('message', subject);
+            fd.append('priority', 'medium');
             fetch(`${API_BASE}/api/support/tickets`, {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}` 
-                },
-                body: JSON.stringify({ subject, message: subject, priority: 'medium' })
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                body: fd
             })
             .then(r => r.json())
             .then(ticket => {
-                openUserTicket(ticket.id, subject);
+                if (ticket && ticket.id) openUserTicket(ticket.id, subject);
+                else alert('Erreur création ticket');
             })
-            .catch(err => alert('Erreur création ticket'));
+            .catch(() => alert('Erreur création ticket'));
         }
 
         function openUserTicket(ticketId, subject) {
@@ -5435,6 +5437,487 @@ function initializeShopPage() {
             })
             .catch(err => alert('Erreur fermeture ticket'));
         }
+
+        function initFaqChatWidget() {
+            if (document.getElementById('faq-bubble-btn')) return;
+            const btn = document.createElement('button');
+            btn.id = 'faq-bubble-btn';
+            btn.className = 'faq-bubble-btn';
+            btn.setAttribute('aria-label', 'FAQ');
+            btn.innerHTML = `
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
+                  <path d="M8 9h8"></path>
+                  <path d="M8 13h5"></path>
+                </svg>
+            `;
+
+            const panel = document.createElement('div');
+            panel.id = 'faq-chat-panel';
+            panel.className = 'faq-chat-panel';
+            panel.innerHTML = `
+              <div class="faq-chat-header">
+                <div class="faq-chat-title">
+                  <strong>FAQ / Support</strong>
+                  <span>Réponses instantanées + ticket</span>
+                </div>
+                <div class="faq-chat-controls">
+                  <select id="faq-chat-lang">
+                    <option value="fr">FR</option>
+                    <option value="en">EN</option>
+                  </select>
+                  <button class="faq-chat-close" id="faq-chat-close">✕</button>
+                </div>
+              </div>
+              <div class="faq-chat-body" id="faq-chat-body"></div>
+              <div class="faq-quick-actions" id="faq-quick-actions"></div>
+              <div class="faq-chat-input">
+                <textarea id="faq-chat-input" placeholder="Pose ta question…"></textarea>
+                <button class="faq-chat-send" id="faq-chat-send">➤</button>
+              </div>
+            `;
+
+            document.body.appendChild(panel);
+            document.body.appendChild(btn);
+
+            const storedLang = localStorage.getItem('faq_chat_lang') || 'fr';
+            const langSel = document.getElementById('faq-chat-lang');
+            if (langSel) langSel.value = (storedLang === 'en') ? 'en' : 'fr';
+
+            const state = {
+                lastUserQuestion: '',
+                lastMatchConfidence: 0
+            };
+
+            const faqs = {
+                fr: [
+                    {
+                        id: 'about',
+                        triggers: ['c est quoi', "c'est quoi", 'révolution network', 'projet', 'plateforme', 'concept', 'but', 'objectif'],
+                        question: "C’est quoi Révolution Network ?",
+                        answer:
+`Révolution Network est une plateforme qui te permet de participer à un réseau P2P (peer-to-peer) basé sur WebRTC, tout en gagnant des points utilisés pour le classement et la phase d’airdrop.
+
+Ce que tu fais concrètement :
+- Tu crées un compte et tu te connectes au dashboard.
+- Tu participes (activité régulière, sessions, engagement).
+- Tu complètes des tasks et tu peux parrainer d’autres utilisateurs.
+
+Le but : construire une communauté active et récompenser l’engagement réel, pas seulement “l’inscription”.`
+                    },
+                    {
+                        id: 'points',
+                        triggers: ['points', 'gagner', 'comment gagner', 'récompense', 'rewards', 'earn', 'reward'],
+                        question: 'Comment gagner des points ?',
+                        answer:
+`Tu peux gagner des points via plusieurs leviers :
+
+1) Activité / sessions
+- Être actif régulièrement et maintenir des sessions augmente ton total.
+
+2) Tasks (missions)
+- Certaines actions (réseaux sociaux, participation, preuves) donnent des points.
+- Selon la task, elle peut aussi ajouter un bonus en % côté airdrop/boosts (quand c’est activé/validé).
+
+3) Parrainage
+- Si tes filleuls deviennent actifs, tu peux recevoir des points bonus (et ça augmente ton total).`
+                    },
+                    {
+                        id: 'optimize_airdrop',
+                        triggers: ['bien placé', 'bien place', 'augmenter score', 'booster', 'optimiser', 'maximiser', 'meilleur score', 'top airdrop'],
+                        question: "Comment être bien placé pour l’airdrop ?",
+                        answer:
+`Pour être bien placé, pense “régularité + engagement + preuve” :
+
+1) Sois actif souvent (jours actifs)
+- Le score prend en compte l’ancienneté/présence : se connecter tôt et rester actif aide beaucoup.
+
+2) Monte en points (mais intelligemment)
+- Activité + rewards + auto-mining (si tu y as accès) = progression continue.
+- Les tasks validées ajoutent des points (et parfois un bonus en %).
+
+3) Fais valider les tasks
+- Un task “fait” mais non approuvé ne sert pas pareil qu’un task approuvé : vise la validation.
+
+4) Prévente / achats confirmés
+- Les achats “paid” améliorent le score via montant dépensé + nombre d’achats.
+- Donc acheter en prévente (si tu le souhaites) peut donner un avantage mesurable.
+
+5) Parrainage (qualité > quantité)
+- Un ou deux filleuls actifs valent mieux que 50 comptes “morts”.
+
+6) Reste clean
+- Les comptes bannis/inactifs ne sont pas favorisés dans les classements publics.`
+                    },
+                    {
+                        id: 'ranks',
+                        triggers: ['rank', 'rang', 'bronze', 'silver', 'gold', 'platinum', 'diamond', 'grade'],
+                        question: "Ranks (Bronze/Silver/Gold/Platinum/Diamond) : ça signifie quoi ?",
+                        answer:
+`Les ranks sont un repère de progression basé surtout sur tes points (et parfois le parrainage).
+
+Seuils actuels (indicatifs) :
+- Bronze : par défaut.
+- Silver : ≥ 5 000 points ou ≥ 1 parrain actif.
+- Gold : ≥ 25 000 points.
+- Platinum : ≥ 100 000 points.
+- Diamond : ≥ 500 000 points.
+
+Le rank ne remplace pas l’airdrop score, mais il reflète ton engagement global.`
+                    },
+                    {
+                        id: 'airdrop',
+                        triggers: ['airdrop', 'allocation', 'classement', 'ranking', 'score', 'leaderboard', 'rank'],
+                        question: "Comment fonctionne le classement / l’airdrop ?",
+                        answer:
+`Le serveur calcule un score d’airdrop, puis l’allocation est répartie proportionnellement à ce score.
+
+Dans la formule actuelle, le score dépend surtout de :
+- Montant dépensé (achats confirmés “paid”) : plus tu participes financièrement, plus ça pèse (racine carrée).
+- Points : ils comptent avec une puissance (points^0.7), donc monter en points aide, mais avec un effet d’équilibrage.
+- Jours actifs (ancienneté/présence) : être là tôt et rester actif augmente ton score.
+- Nombre d’achats “paid” : la participation à l’écosystème compte aussi.
+
+Donc : activité + points + ancienneté + achats confirmés = meilleur positionnement pour la phase d’airdrop.`
+                    },
+                    {
+                        id: 'auto_mining',
+                        triggers: ['auto mining', 'auto-mining', 'minage auto', 'minage automatique', 'passif', 'passive mining'],
+                        question: "Auto-mining : c’est quoi et ça sert à quoi ?",
+                        answer:
+`L’auto-mining est une option (entitlement) qui crédite régulièrement des points quand tu es éligible.
+
+À retenir :
+- C’est pensé pour récompenser les utilisateurs qui veulent une progression continue.
+- Les tasks approuvées peuvent ajouter un bonus en % qui augmente ce taux.
+
+Résultat : plus tu participes (tasks + activité), plus ton rendement peut être optimisé, et ton total de points augmente (ce qui aide aussi pour le score d’airdrop).`
+                    },
+                    {
+                        id: 'node_nft',
+                        triggers: ['node nft', 'nft node', 'node', 'nœud nft', 'noeud', 'minage passif'],
+                        question: "Node / Node NFT : quel avantage ?",
+                        answer:
+`Le Node (ou Node NFT selon la formule) donne un accès à du minage passif et/ou des avantages d’entitlements.
+
+En général :
+- Tu peux générer des points de façon régulière sans dépendre uniquement de l’activité “live”.
+- Les bonus de tasks (en %) peuvent aussi s’appliquer, donc faire des tasks reste utile même en passif.
+
+Pour être sûr de ton statut, regarde tes entitlements/avantages dans l’app et ton historique de rewards.`
+                    },
+                    {
+                        id: 'presale',
+                        triggers: ['prévente', 'presale', 'acheter', 'token', 'ath', 'aether', 'pack', 'boutique'],
+                        question: "La prévente (presale) donne un avantage ?",
+                        answer:
+`Oui, parce qu’un achat confirmé (“paid”) influence directement le score d’airdrop via :
+- le montant dépensé,
+- et le nombre d’achats.
+
+Workflow :
+- Tu passes commande → état “pending_payment”.
+- Stripe confirme le paiement → état “paid”.
+- À partir de là, la commande compte dans les métriques et l’achat est livré.
+
+En plus, acheter en prévente te positionne tôt et soutient le lancement, ce qui est cohérent avec un airdrop orienté “engagement”.`
+                    },
+                    {
+                        id: 'extension',
+                        triggers: ['extension', 'chrome', 'node', 'nœud', 'miner', 'minage', 'webrtc', 'installer'],
+                        question: "Comment participer concrètement (extension / nœud) ?",
+                        answer:
+`Pour participer :
+- Crée un compte puis connecte-toi.
+- Installe l’extension Chrome (si tu l’utilises) et connecte-la à ton compte.
+- Laisse ton activité tourner de façon régulière.
+
+Astuce : la régularité est plus rentable que “un gros rush”, car les jours actifs et l’engagement dans le temps comptent.`
+                    },
+                    {
+                        id: 'payments',
+                        triggers: ['paiement', 'stripe', 'payment', 'achat', 'commande', 'facture', 'pending', 'paid'],
+                        question: "Paiement : pourquoi je ne reçois pas l’achat immédiatement ?",
+                        answer:
+`La livraison se fait uniquement après confirmation réelle du paiement.
+
+Schéma actuel :
+- Commande créée en “pending_payment”.
+- Confirmation côté Stripe (webhook).
+- Passage en “paid” et livraison automatique.
+
+C’est une sécurité : ça évite qu’un échec/annulation laisse une commande “gratuite”.`
+                    },
+                    {
+                        id: 'referral',
+                        triggers: ['parrainage', 'referral', 'code', 'filleul', 'inviter'],
+                        question: "Parrainage : comment ça marche ?",
+                        answer:
+`Tu as un code de parrainage dans ton profil.
+
+Quand quelqu’un s’inscrit via ton code :
+- tu peux obtenir des bonus (souvent sous forme de points),
+- et si la personne devient active, ça renforce ton gain indirectement via ton total de points.`
+                    },
+                    {
+                        id: 'security',
+                        triggers: ['sécurité', 'privacy', 'vie privée', 'risque', 'danger', 'ip', 'safe'],
+                        question: "Sécurité / vie privée : qu’est-ce qui est partagé ?",
+                        answer:
+`Le projet repose sur un réseau P2P (WebRTC). Comme tout système P2P, garde de bonnes pratiques :
+- évite d’exposer des données sensibles,
+- utilise des environnements propres,
+- et si tu actives des fonctions type proxy/VPN, assure-toi de comprendre ce que ça implique.
+
+Si tu veux une réponse précise adaptée à ton cas, crée un ticket support avec ton contexte (OS, extension, objectif).`
+                    }
+                ],
+                en: [
+                    {
+                        id: 'about',
+                        triggers: ['what is', 'revolution network', 'project', 'platform', 'purpose'],
+                        question: "What is Révolution Network?",
+                        answer:
+`Révolution Network is a WebRTC-based P2P platform where you contribute (activity, participation) and earn points used for ranking and airdrop phases.
+
+You can earn by staying active, completing tasks, and inviting others (referrals).`
+                    },
+                    {
+                        id: 'airdrop',
+                        triggers: ['airdrop', 'ranking', 'leaderboard', 'allocation', 'score'],
+                        question: "How does the airdrop ranking work?",
+                        answer:
+`The backend calculates an airdrop score and distributes allocation proportionally.
+
+Current score signals include:
+- total paid spend (sqrt),
+- points (pow(points, 0.7)),
+- account active days,
+- number of paid purchases.`
+                    },
+                    {
+                        id: 'presale',
+                        triggers: ['presale', 'buy', 'token', 'ath', 'aether'],
+                        question: "Does presale help for airdrop?",
+                        answer:
+`A paid presale purchase can improve the score inputs (paid spend + purchase count). Payments must be confirmed before delivery.`
+                    },
+                    {
+                        id: 'support',
+                        triggers: ['support', 'ticket', 'help', 'issue'],
+                        question: "How to contact support?",
+                        answer:
+`If the FAQ doesn’t solve it, you can create a support ticket and the team can reply inside the Support page.`
+                    },
+                    {
+                        id: 'optimize_airdrop',
+                        triggers: ['how to rank', 'improve score', 'boost airdrop', 'maximize', 'best score'],
+                        question: "How to be well positioned for the airdrop?",
+                        answer:
+`Focus on consistent participation:
+
+- Stay active over time (active days matter).
+- Grow points (activity + approved tasks + optional auto-mining).
+- Paid purchases can improve score inputs (paid spend + purchase count).
+- Bring real users (referrals) who actually become active.`
+                    }
+                ]
+            };
+
+            const normalize = (s) => String(s || '').toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9\s]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            const getLang = () => {
+                const v = (document.getElementById('faq-chat-lang')?.value || 'fr');
+                return v === 'en' ? 'en' : 'fr';
+            };
+
+            const addMsg = (role, text) => {
+                const body = document.getElementById('faq-chat-body');
+                if (!body) return;
+                const row = document.createElement('div');
+                row.className = `faq-chat-msg ${role}`;
+                const bubble = document.createElement('div');
+                bubble.className = 'faq-chat-bubble';
+                bubble.textContent = text;
+                row.appendChild(bubble);
+                body.appendChild(row);
+                body.scrollTop = body.scrollHeight;
+            };
+
+            const addBotWithSupport = (text, showSupportBtn) => {
+                const body = document.getElementById('faq-chat-body');
+                if (!body) return;
+                const row = document.createElement('div');
+                row.className = 'faq-chat-msg bot';
+                const bubble = document.createElement('div');
+                bubble.className = 'faq-chat-bubble';
+                bubble.textContent = text;
+                row.appendChild(bubble);
+                body.appendChild(row);
+                if (showSupportBtn) {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'faq-chat-msg bot';
+                    const b = document.createElement('button');
+                    b.className = 'faq-support-btn';
+                    b.textContent = (getLang() === 'en') ? 'Create a support ticket' : 'Créer un ticket support';
+                    b.onclick = () => {
+                        const token = localStorage.getItem('token');
+                        if (!token) {
+                            try { openLoginPanel(); } catch {}
+                            return;
+                        }
+                        const fd = new FormData();
+                        const lang = getLang();
+                        const subject = `${lang.toUpperCase()} - FAQ: ${state.lastUserQuestion || 'Question'}`;
+                        const page = (typeof currentPage !== 'undefined') ? currentPage : '';
+                        const msg = `Langue: ${lang}\n\nQuestion:\n${state.lastUserQuestion || ''}\n\nContexte:\nPage: ${page}`;
+                        fd.append('subject', subject);
+                        fd.append('message', msg);
+                        fd.append('priority', 'medium');
+                        fetch(`${API_BASE}/api/support/tickets`, {
+                            method: 'POST',
+                            headers: { 'Authorization': `Bearer ${token}` },
+                            body: fd
+                        })
+                        .then(r => r.json())
+                        .then((j) => {
+                            if (j && j.id) {
+                                try { setPage('support'); } catch {}
+                                setTimeout(() => { try { openUserTicket(j.id, subject); } catch {} }, 400);
+                                closeFaqPanel();
+                            } else {
+                                addMsg('bot', (getLang()==='en') ? 'Ticket creation failed. Open the Support page.' : 'Création du ticket impossible. Ouvre la page Support.');
+                            }
+                        })
+                        .catch(() => addMsg('bot', (getLang()==='en') ? 'Ticket creation failed. Open the Support page.' : 'Création du ticket impossible. Ouvre la page Support.'));
+                    };
+                    const bubble2 = document.createElement('div');
+                    bubble2.style.maxWidth = '85%';
+                    bubble2.appendChild(b);
+                    wrap.appendChild(bubble2);
+                    body.appendChild(wrap);
+                    body.scrollTop = body.scrollHeight;
+                }
+                body.scrollTop = body.scrollHeight;
+            };
+
+            const matchFaq = (lang, text) => {
+                const q = normalize(text);
+                if (!q) return null;
+                const items = faqs[lang] || faqs.fr;
+                let best = null;
+                let bestScore = 0;
+                for (const it of items) {
+                    let score = 0;
+                    for (const trig of (it.triggers || [])) {
+                        const t = normalize(trig);
+                        if (!t) continue;
+                        if (q.includes(t)) score += 3;
+                        else {
+                            const parts = t.split(' ').filter(Boolean);
+                            let local = 0;
+                            for (const p of parts) if (p.length >= 3 && q.includes(p)) local += 1;
+                            score += local;
+                        }
+                    }
+                    if (score > bestScore) {
+                        bestScore = score;
+                        best = it;
+                    }
+                }
+                const confidence = Math.min(1, bestScore / 8);
+                return best ? { item: best, confidence } : null;
+            };
+
+            const setQuickActions = () => {
+                const qa = document.getElementById('faq-quick-actions');
+                if (!qa) return;
+                const lang = getLang();
+                const pills = (lang === 'en')
+                    ? ['Airdrop', 'Points', 'Presale', 'Extension', 'Payments', 'Support']
+                    : ['Airdrop', 'Points', 'Prévente', 'Extension', 'Paiements', 'Support'];
+                qa.innerHTML = '';
+                pills.forEach((label) => {
+                    const b = document.createElement('button');
+                    b.className = 'faq-pill';
+                    b.textContent = label;
+                    b.onclick = () => handleFaqSend(label);
+                    qa.appendChild(b);
+                });
+            };
+
+            const openFaqPanel = () => {
+                panel.classList.add('open');
+                setQuickActions();
+                const body = document.getElementById('faq-chat-body');
+                if (body && body.childElementCount === 0) {
+                    addBotWithSupport(getLang()==='en'
+                        ? "Ask a common question. If it doesn’t match the FAQ, create a support ticket."
+                        : "Pose une question courante. Si la FAQ ne suffit pas, crée un ticket support.", false);
+                }
+                setTimeout(() => {
+                    const input = document.getElementById('faq-chat-input');
+                    try { input && input.focus(); } catch {}
+                }, 50);
+            };
+            const closeFaqPanel = () => panel.classList.remove('open');
+
+            const handleFaqSend = (textOverride = '') => {
+                const input = document.getElementById('faq-chat-input');
+                const text = textOverride || (input ? input.value.trim() : '');
+                if (!text) return;
+                if (input) input.value = '';
+                state.lastUserQuestion = text;
+                addMsg('user', text);
+
+                const lang = getLang();
+                const m = matchFaq(lang, text);
+                if (m && m.item && m.confidence >= 0.35) {
+                    state.lastMatchConfidence = m.confidence;
+                    addBotWithSupport(m.item.answer, false);
+                    return;
+                }
+
+                state.lastMatchConfidence = m ? m.confidence : 0;
+                addBotWithSupport(
+                    (lang === 'en')
+                        ? "I couldn't find an exact FAQ match. Create a support ticket and the team will reply."
+                        : "Je n’ai pas trouvé une réponse FAQ exacte. Crée un ticket support et l’équipe répondra.",
+                    true
+                );
+            };
+
+            btn.addEventListener('click', () => {
+                if (panel.classList.contains('open')) closeFaqPanel();
+                else openFaqPanel();
+            });
+            document.getElementById('faq-chat-close')?.addEventListener('click', closeFaqPanel);
+
+            langSel?.addEventListener('change', () => {
+                localStorage.setItem('faq_chat_lang', getLang());
+                setQuickActions();
+            });
+
+            document.getElementById('faq-chat-send')?.addEventListener('click', () => handleFaqSend());
+            document.getElementById('faq-chat-input')?.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleFaqSend();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && panel.classList.contains('open')) closeFaqPanel();
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            try { initFaqChatWidget(); } catch {}
+        });
 
     </script>
 </body>
