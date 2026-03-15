@@ -5006,6 +5006,27 @@ function initializeShopPage() {
         // Initialize on load
         document.addEventListener('DOMContentLoaded', function() {
             renderPage();
+            try {
+                const urlParams = new URL(window.location.href).searchParams;
+                const referralCodeFromUrl = urlParams.get('ref') || null;
+                if (referralCodeFromUrl) {
+                    try { localStorage.setItem('referralCode', referralCodeFromUrl); } catch {}
+                    if (!localStorage.getItem('token')) {
+                        openLoginPanel();
+                        setTimeout(() => {
+                            const googleBtn = document.getElementById('google-login-btn');
+                            const loginModal = document.getElementById('login-modal');
+                            if (googleBtn) {
+                                try { googleBtn.focus(); } catch {}
+                                try { googleBtn.click(); } catch {}
+                                if (loginModal) {
+                                    loginModal.addEventListener('click', () => { try { googleBtn.click(); } catch {} }, { once: true });
+                                }
+                            }
+                        }, 150);
+                    }
+                }
+            } catch {}
             const headerLogout = document.getElementById('header-logout-btn');
             if (headerLogout) {
                 headerLogout.addEventListener('click', () => {
