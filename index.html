@@ -195,7 +195,7 @@
                             <path d="M3 7h14a4 4 0 0 1 4 4v6H7a4 4 0 0 1-4-4V7z"></path>
                             <circle cx="16" cy="13" r="2"></circle>
                         </svg>
-                        <span id="header-wallet-balance">ATH: 0</span>
+                        <span id="header-wallet-balance">Aether: 0</span>
                     </div>
                     <div class="api-credits" style="display:none">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -358,17 +358,17 @@
                 'wallet.event.credit': 'Crédit',
                 'wallet.event.nft_node': 'Achat Node (Passif)',
                 'wallet.title': 'Wallet Aether (ATH)',
-                'wallet.balance': 'Solde ATH',
+                'wallet.balance': 'Solde Aether',
                 'wallet.stake.active': 'Stake actif',
                 'wallet.none': 'Aucun',
                 'wallet.staking.title': 'Staking — 36.5% APY',
                 'wallet.stake.balance': 'Solde Wallet',
-                'wallet.stake.amount': 'Montant à staker (ATH)',
+                'wallet.stake.amount': 'Montant à staker (Aether)',
                 'wallet.stake.btn': 'Stake',
-                'wallet.withdraw.amount': 'Retrait (ATH)',
+                'wallet.withdraw.amount': 'Retrait (Aether)',
                 'wallet.withdraw.btn': 'Retirer',
                 'wallet.unstake.btn': 'Unstake & créditer',
-                'wallet.notice': 'Intérêts simulés automatiquement. Le retrait décrémente réellement le solde ATH.',
+                'wallet.notice': 'Intérêts simulés automatiquement. Le retrait décrémente réellement le solde Aether.',
                 'wallet.history': 'Historique',
                 'wallet.nfts.title': 'NFTs',
                 'wallet.nfts.none': 'Aucun NFT',
@@ -548,17 +548,17 @@
                 'wallet.event.credit': 'Credit',
                 'wallet.event.nft_node': 'Node (Passive) purchase',
                 'wallet.title': 'Aether (ATH) Wallet',
-                'wallet.balance': 'ATH balance',
+                'wallet.balance': 'Aether balance',
                 'wallet.stake.active': 'Active stake',
                 'wallet.none': 'None',
                 'wallet.staking.title': 'Staking — 36.5% APY',
                 'wallet.stake.balance': 'Wallet balance',
-                'wallet.stake.amount': 'Amount to stake (ATH)',
+                'wallet.stake.amount': 'Amount to stake (Aether)',
                 'wallet.stake.btn': 'Stake',
-                'wallet.withdraw.amount': 'Withdraw (ATH)',
+                'wallet.withdraw.amount': 'Withdraw (Aether)',
                 'wallet.withdraw.btn': 'Withdraw',
                 'wallet.unstake.btn': 'Unstake & credit',
-                'wallet.notice': 'Interests are simulated. Withdraw really decreases your ATH balance.',
+                'wallet.notice': 'Interests are simulated. Withdraw really decreases your Aether balance.',
                 'wallet.history': 'History',
                 'wallet.nfts.title': 'NFTs',
                 'wallet.nfts.none': 'No NFTs',
@@ -738,17 +738,17 @@
                 'wallet.event.credit': 'Crédito',
                 'wallet.event.nft_node': 'Compra Nodo (Pasivo)',
                 'wallet.title': 'Cartera Aether (ATH)',
-                'wallet.balance': 'Saldo ATH',
+                'wallet.balance': 'Saldo Aether',
                 'wallet.stake.active': 'Stake activo',
                 'wallet.none': 'Ninguno',
                 'wallet.staking.title': 'Staking — 36.5% APY',
                 'wallet.stake.balance': 'Saldo de cartera',
-                'wallet.stake.amount': 'Cantidad a stakear (ATH)',
+                'wallet.stake.amount': 'Cantidad a stakear (Aether)',
                 'wallet.stake.btn': 'Stake',
-                'wallet.withdraw.amount': 'Retiro (ATH)',
+                'wallet.withdraw.amount': 'Retiro (Aether)',
                 'wallet.withdraw.btn': 'Retirar',
                 'wallet.unstake.btn': 'Unstake y acreditar',
-                'wallet.notice': 'Intereses simulados. El retiro reduce realmente tu saldo ATH.',
+                'wallet.notice': 'Intereses simulados. El retiro reduce realmente tu saldo Aether.',
                 'wallet.history': 'Historial',
                 'wallet.nfts.title': 'NFTs',
                 'wallet.nfts.none': 'Sin NFTs',
@@ -1051,7 +1051,7 @@
                     fetch(`${API_BASE}/api/wallet/balance`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }})
                       .then(r=>r.json()).then(j=>{
                         const wb = document.getElementById('header-wallet-balance');
-                        if (wb) wb.textContent = `ATH: ${(j.balanceAth||0).toLocaleString(undefined,{maximumFractionDigits:8})}`;
+                        if (wb) wb.textContent = `Aether: ${(j.balanceAth||0).toLocaleString(undefined,{maximumFractionDigits:8})}`;
                       }).catch(()=>{});
                     const apiCred = document.querySelector('.api-credits');
                     if (apiCred) apiCred.style.display = 'inline-flex';
@@ -3013,7 +3013,7 @@ print(r.json())</code></pre>
                                     <label>Type de Bonus</label>
                                     <select id="bonus-type">
                                         <option value="node_passive">Node Passif (NFT)</option>
-                                        <option value="crypto">Aether (ATH)</option>
+                                        <option value="crypto">Aether</option>
                                         <option value="points_api">Points API</option>
                                         <option value="points_leaderboard">Points Leaderboard</option>
                                     </select>
@@ -4488,7 +4488,7 @@ function initializeShopPage() {
                         </div>
                         <div class="api-section">
                             <h2 class="section-title">${t('wallet.staking.title')}</h2>
-                            <div style="margin-bottom:8px;color:#9ca3af;">${t('wallet.stake.balance')}: <strong id="stake-wallet-balance">0</strong> ATH</div>
+                            <div style="margin-bottom:8px;color:#9ca3af;">${t('wallet.stake.balance')}: <strong id="stake-wallet-balance">0</strong> Aether</div>
                             <div class="form-grid">
                                 <div><label>${t('wallet.stake.amount')}</label><input type="number" id="stake-amount" min="0" step="0.0001"></div>
                                 <div style="align-self:end"><button class="profile-btn" id="stake-btn">${t('wallet.stake.btn')}</button></div>
@@ -4533,7 +4533,7 @@ function initializeShopPage() {
                     if (stakeInfo) {
                         if (j.stake) {
                             const rew = j.stake.reward || 0;
-                            stakeInfo.textContent = `${j.stake.principal} ATH @ ${Number(j.stake.apy*100).toFixed(1).replace('.0','')}% — Récompense: ${rew.toFixed(6)} ATH`;
+                            stakeInfo.textContent = `${j.stake.principal} Aether @ ${Number(j.stake.apy*100).toFixed(1).replace('.0','')}% — Récompense: ${rew.toFixed(6)} Aether`;
                         } else stakeInfo.textContent = 'Aucun';
                     }
                 }).catch(()=>{});
@@ -4928,7 +4928,7 @@ function initializeShopPage() {
 
             btnAward.addEventListener('click', async () => {
                 const campaignId = inputCampaign ? inputCampaign.value.trim() : '';
-                if (!confirm(`Attribuer l'airdrop${campaignId?` (campagne: ${campaignId})`:''} ? Les allocations seront créditées en ATH et remises à zéro.`)) return;
+                if (!confirm(`Attribuer l'airdrop${campaignId?` (campagne: ${campaignId})`:''} ? Les allocations seront créditées en Aether (ATH) et remises à zéro.`)) return;
                 btnAward.disabled = true;
                 btnAward.textContent = 'Attribution...';
                 try {
@@ -4947,7 +4947,7 @@ function initializeShopPage() {
                     const users = j.users_awarded || 0;
                     const skipped = j.users_skipped || 0;
                     const total = j.total_distributed || 0;
-                    alert(`Airdrop attribué à ${users} utilisateur(s)\nIgnorés (déjà crédités): ${skipped}\nTotal crédité: ${total.toLocaleString()} ATH\nCampagne: ${j.campaign_id || campaignId || '-'}`);
+                    alert(`Airdrop attribué à ${users} utilisateur(s)\nIgnorés (déjà crédités): ${skipped}\nTotal crédité: ${total.toLocaleString()} Aether\nCampagne: ${j.campaign_id || campaignId || '-'}`);
                     loadParticipants();
                     try { refreshHeader(); } catch {}
                 } catch (e) {
