@@ -2043,11 +2043,166 @@ input:checked + .slider:before {
   margin-bottom: 32px;
 }
 
+.profile-container {
+  display: grid;
+  gap: 16px;
+}
+
 .profile-card {
   background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
   border: 1px solid #374151;
   border-radius: 16px;
   padding: 24px;
+}
+
+.profile-highlights {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.profile-highlight {
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.profile-highlight-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.profile-highlight-value {
+  margin-top: 6px;
+  font-size: 22px;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.profile-highlight-sub {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-highlight-sub-sep {
+  opacity: 0.5;
+}
+
+.rank-progress-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.rank-progress-meta {
+  font-size: 12px;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.rank-progress-bar {
+  margin-top: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.12);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  overflow: hidden;
+}
+
+.rank-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #10b981 0%, #22c55e 100%);
+  border-radius: 999px;
+  transition: width 0.35s ease;
+}
+
+.rank-progress-markers {
+  position: relative;
+  height: 30px;
+  margin-top: 10px;
+}
+
+.rank-marker {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.rank-marker::before {
+  content: "";
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  margin: 0 auto 6px;
+  background: rgba(148, 163, 184, 0.35);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.rank-marker span {
+  font-size: 11px;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.profile-top-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.profile-top-actions .profile-btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.profile-subsections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.profile-section-card {
+  background: rgba(2, 6, 23, 0.25);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.profile-section-title {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #e5e7eb;
+}
+
+.profile-info-bubble {
+  background: #1e293b;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  margin-bottom: 12px;
+  font-size: 0.95em;
+  color: #cbd5e1;
+  line-height: 1.5;
 }
 
 .profile-header {
@@ -2156,6 +2311,16 @@ input:checked + .slider:before {
 
 .profile-btn.danger:hover {
   background: rgba(239, 68, 68, 0.2);
+}
+
+@media (max-width: 900px) {
+  .profile-highlights {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-subsections {
+    grid-template-columns: 1fr;
+  }
 }
 
 .achievements-card {

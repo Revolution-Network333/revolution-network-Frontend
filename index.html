@@ -317,10 +317,16 @@
                 'profile.solana': 'Adresse Solana',
                 'profile.save': 'Enregistrer',
                 'profile.logout': 'Se déconnecter',
+                'profile.referrals.total': 'Parrainages',
+                'profile.referrals.active': 'Actifs',
+                'profile.rank.progress': 'Progression de rang',
+                'profile.rank.next': 'Prochain rang:',
+                'profile.rank.max': 'Rang maximum',
                 'profile.password.title': 'Définir / modifier le mot de passe',
                 'profile.password.new': 'Nouveau mot de passe',
                 'profile.password.confirm': 'Confirmer',
                 'profile.password.save': 'Enregistrer le mot de passe',
+                'profile.2fa.title': 'Double sécurité (Google Authenticator)',
                 'profile.achievements': 'Accomplissements',
                 'enterprise.title': 'API Entreprise',
                 'enterprise.intro': 'Présentation',
@@ -507,10 +513,16 @@
                 'profile.solana': 'Solana address',
                 'profile.save': 'Save',
                 'profile.logout': 'Log out',
+                'profile.referrals.total': 'Referrals',
+                'profile.referrals.active': 'Active',
+                'profile.rank.progress': 'Rank progress',
+                'profile.rank.next': 'Next rank:',
+                'profile.rank.max': 'Max rank',
                 'profile.password.title': 'Set / change password',
                 'profile.password.new': 'New password',
                 'profile.password.confirm': 'Confirm',
                 'profile.password.save': 'Save password',
+                'profile.2fa.title': 'Two-factor security (Google Authenticator)',
                 'profile.achievements': 'Achievements',
                 'enterprise.title': 'Enterprise API',
                 'enterprise.intro': 'Overview',
@@ -697,10 +709,16 @@
                 'profile.solana': 'Dirección Solana',
                 'profile.save': 'Guardar',
                 'profile.logout': 'Cerrar sesión',
+                'profile.referrals.total': 'Referidos',
+                'profile.referrals.active': 'Activos',
+                'profile.rank.progress': 'Progreso de rango',
+                'profile.rank.next': 'Siguiente rango:',
+                'profile.rank.max': 'Rango máximo',
                 'profile.password.title': 'Definir / cambiar contraseña',
                 'profile.password.new': 'Nueva contraseña',
                 'profile.password.confirm': 'Confirmar',
                 'profile.password.save': 'Guardar contraseña',
+                'profile.2fa.title': 'Doble seguridad (Google Authenticator)',
                 'profile.achievements': 'Logros',
                 'enterprise.title': 'API Empresa',
                 'enterprise.intro': 'Presentación',
@@ -2143,6 +2161,34 @@
                     <div class="profile-container">
                     <div class="profile-card">
                             <form id="profile-form">
+                                <div class="profile-highlights">
+                                    <div class="profile-highlight">
+                                        <div class="profile-highlight-label">${t('profile.referrals.total')}</div>
+                                        <div class="profile-highlight-value" id="profile-referrals-count">—</div>
+                                        <div class="profile-highlight-sub">
+                                            <span>${t('profile.referrals.active')}</span>
+                                            <span class="profile-highlight-sub-sep">•</span>
+                                            <span id="profile-active-referrals-count">—</span>
+                                        </div>
+                                    </div>
+                                    <div class="profile-highlight profile-rank-highlight">
+                                        <div class="rank-progress-header">
+                                            <div class="profile-highlight-label">${t('profile.rank.progress')}</div>
+                                            <div class="rank-progress-meta" id="rank-progress-meta">—</div>
+                                        </div>
+                                        <div class="rank-progress-bar">
+                                            <div class="rank-progress-fill" id="rank-progress-fill"></div>
+                                        </div>
+                                        <div class="rank-progress-markers" id="rank-progress-markers">
+                                            <div class="rank-marker" data-rank="Bronze"><span>Bronze</span></div>
+                                            <div class="rank-marker" data-rank="Silver"><span>Silver</span></div>
+                                            <div class="rank-marker" data-rank="Gold"><span>Gold</span></div>
+                                            <div class="rank-marker" data-rank="Platinum"><span>Platinum</span></div>
+                                            <div class="rank-marker" data-rank="Diamond"><span>Diamond</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="profile-info-section">
                                     <div class="profile-field">
                                         <label for="username">${t('profile.username')}</label>
@@ -2158,7 +2204,7 @@
                                     </div>
                                 </div>
 
-                                <div class="profile-actions">
+                                <div class="profile-top-actions">
                                     <button type="submit" class="profile-btn primary">
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
@@ -2175,8 +2221,11 @@
                                         </svg>
                                         ${t('profile.logout')}
                                     </button>
-                                    <div style="margin-top:16px; width:100%; border-top:1px solid #1f2937; padding-top:16px;">
-                                        <h3 style="margin-bottom:8px;">${t('profile.password.title')}</h3>
+                                </div>
+
+                                <div class="profile-subsections">
+                                    <div class="profile-section-card">
+                                        <h3 class="profile-section-title">${t('profile.password.title')}</h3>
                                         <div class="profile-field">
                                             <label for="new-password">${t('profile.password.new')}</label>
                                             <input type="password" id="new-password">
@@ -2187,9 +2236,10 @@
                                         </div>
                                         <button type="button" id="set-password-btn" class="profile-btn">${t('profile.password.save')}</button>
                                     </div>
-                                    <div style="margin-top:16px; width:100%; border-top:1px solid #1f2937; padding-top:16px;">
-                                        <h3 style="margin-bottom:8px;">Double sécurité (Google Authenticator)</h3>
-                                        <div id="twofa-info" class="section-info-bubble" style="background:#1e293b;padding:12px;border-radius:8px;border:1px solid #334155;margin-bottom:12px;font-size:0.95em;color:#cbd5e1;line-height:1.5;">
+
+                                    <div class="profile-section-card">
+                                        <h3 class="profile-section-title">${t('profile.2fa.title')}</h3>
+                                        <div id="twofa-info" class="section-info-bubble profile-info-bubble">
                                             La double authentification (2FA) renforce la sécurité de votre compte. En utilisant une application comme Google Authenticator, vous générez un code unique toutes les 30 secondes, requis pour vous connecter. Cela protège votre compte même si votre mot de passe est compromis. Scannez le QR code ci-dessous avec l'application pour commencer.
                                         </div>
                                         <div id="twofa-status" style="margin:8px 0;color:#94a3b8;">Statut: chargement...</div>
@@ -2213,7 +2263,6 @@
                                             <button type="button" id="twofa-disable-btn" class="profile-btn danger" style="display:none;">Désactiver 2FA</button>
                                         </div>
                                     </div>
-                                </div>
                             </form>
                         </div>
 
@@ -2239,6 +2288,11 @@
             const logoutBtn = document.getElementById('logout-btn');
             const setPasswordBtn = document.getElementById('set-password-btn');
             const profileRankBadge = document.getElementById('profile-rank-badge');
+            const profileReferralsCount = document.getElementById('profile-referrals-count');
+            const profileActiveReferralsCount = document.getElementById('profile-active-referrals-count');
+            const rankProgressFill = document.getElementById('rank-progress-fill');
+            const rankProgressMeta = document.getElementById('rank-progress-meta');
+            const rankProgressMarkers = document.getElementById('rank-progress-markers');
             const newPasswordInput = document.getElementById('new-password');
             const confirmPasswordInput = document.getElementById('confirm-password');
             const twofaStatus = document.getElementById('twofa-status');
@@ -2250,6 +2304,49 @@
             const twofaManual = document.getElementById('twofa-manual');
             const twofaSecretEl = document.getElementById('twofa-secret');
             const twofaCopySecret = document.getElementById('twofa-copy-secret');
+
+            function formatPoints(n) {
+                const v = Number(n || 0);
+                if (!Number.isFinite(v)) return '0';
+                try { return v.toLocaleString(currentLocale || 'fr-FR'); } catch { return String(v); }
+            }
+
+            function updateRankProgress(totalPoints) {
+                const maxPoints = 500000;
+                const points = Math.max(0, Number(totalPoints || 0));
+                const pct = Math.max(0, Math.min(100, (points / maxPoints) * 100));
+                if (rankProgressFill) rankProgressFill.style.width = `${pct}%`;
+
+                const thresholds = [
+                    { name: 'Bronze', points: 0 },
+                    { name: 'Silver', points: 5000 },
+                    { name: 'Gold', points: 25000 },
+                    { name: 'Platinum', points: 100000 },
+                    { name: 'Diamond', points: 500000 }
+                ];
+
+                if (rankProgressMarkers) {
+                    rankProgressMarkers.querySelectorAll('.rank-marker').forEach(el => {
+                        const r = el.getAttribute('data-rank') || '';
+                        const th = thresholds.find(x => x.name === r);
+                        if (!th) return;
+                        const left = Math.max(0, Math.min(100, (th.points / maxPoints) * 100));
+                        el.style.left = `${left}%`;
+                        if (left <= 1) el.style.transform = 'translateX(0%)';
+                        else if (left >= 99) el.style.transform = 'translateX(-100%)';
+                        else el.style.transform = 'translateX(-50%)';
+                    });
+                }
+
+                const next = thresholds.find(x => x.points > points) || null;
+                if (rankProgressMeta) {
+                    if (next) {
+                        rankProgressMeta.textContent = `${formatPoints(points)} pts • ${t('profile.rank.next')} ${next.name} @ ${formatPoints(next.points)} pts`;
+                    } else {
+                        rankProgressMeta.textContent = `${formatPoints(points)} pts • ${t('profile.rank.max')}`;
+                    }
+                }
+            }
 
             // Charger les données du profil
             fetch(`${API_BASE}/api/user/profile`, {
@@ -2272,7 +2369,23 @@
                         else if (rank === 'diamond') profileRankBadge.classList.add('rank-badge-diamond');
                         profileRankBadge.style.display = 'inline-flex';
                     }
+                    updateRankProgress(data.user.total_points);
                 }
+            });
+
+            fetch(`${API_BASE}/api/user/referrals/stats`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            .then(r => r.json())
+            .then(j => {
+                const total = (j && typeof j.totalReferrals === 'number') ? j.totalReferrals : null;
+                const active = (j && typeof j.activeReferrals === 'number') ? j.activeReferrals : null;
+                if (profileReferralsCount) profileReferralsCount.textContent = total === null ? '—' : String(total);
+                if (profileActiveReferralsCount) profileActiveReferralsCount.textContent = active === null ? '—' : String(active);
+            })
+            .catch(() => {
+                if (profileReferralsCount) profileReferralsCount.textContent = '—';
+                if (profileActiveReferralsCount) profileActiveReferralsCount.textContent = '—';
             });
 
             function load2faStatus() {
