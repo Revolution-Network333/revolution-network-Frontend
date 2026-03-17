@@ -311,6 +311,11 @@
                 'rewards.bonus': 'Bonus',
                 'rewards.table.date': 'Date',
                 'rewards.table.total': 'Total',
+                'common.copy': 'Copier',
+                'common.copied': 'Copié !',
+                'common.error': 'Erreur',
+                'common.edit': 'Modifier',
+                'common.close': 'Fermer',
                 'profile.title': 'Profil',
                 'profile.username': "Nom d'utilisateur",
                 'profile.email': 'Email',
@@ -322,19 +327,61 @@
                 'profile.rank.progress': 'Progression de rang',
                 'profile.rank.next': 'Prochain rang:',
                 'profile.rank.max': 'Rang maximum',
+                'profile.2fa.info': "La double authentification (2FA) renforce la sécurité de votre compte. En utilisant une application comme Google Authenticator, vous générez un code unique toutes les 30 secondes, requis pour vous connecter. Cela protège votre compte même si votre mot de passe est compromis. Scannez le QR code ci-dessous avec l'application pour commencer.",
+                'profile.2fa.status': 'Statut',
+                'profile.2fa.loading': 'chargement...',
+                'profile.2fa.enabled': 'activé',
+                'profile.2fa.disabled': 'désactivé',
+                'profile.2fa.unknown': 'inconnu',
+                'profile.2fa.enable': 'Activer 2FA',
+                'profile.2fa.disable': 'Désactiver 2FA',
+                'profile.2fa.start': 'Activer Google Authenticator',
+                'profile.2fa.code_label': 'Code (6 chiffres)',
+                'profile.2fa.qr_fallback': "Si le QR ne s’affiche pas, entrez ce secret dans l’application:",
+                'profile.2fa.prompt': 'Entrez le code Google Authenticator (6 chiffres)',
+                'profile.2fa.invalid_code': 'Code 2FA invalide',
+                'profile.2fa.verify_error': 'Erreur de vérification 2FA',
+                'profile.2fa.server_error': 'Erreur serveur',
+                'profile.2fa.error': 'Erreur 2FA',
+                'profile.2fa.enabled_success': '2FA activé',
+                'profile.2fa.secret_unavailable': '(secret indisponible)',
+                'profile.2fa.disable_prompt': 'Entrez votre code 2FA pour désactiver',
+                'profile.2fa.disabled_success': '2FA désactivé',
+                'profile.update_success': 'Profil mis à jour avec succès!',
+                'profile.update_error_prefix': 'Erreur: ',
                 'profile.password.title': 'Définir / modifier le mot de passe',
                 'profile.password.new': 'Nouveau mot de passe',
                 'profile.password.confirm': 'Confirmer',
                 'profile.password.save': 'Enregistrer le mot de passe',
                 'profile.2fa.title': 'Double sécurité (Google Authenticator)',
                 'profile.achievements': 'Accomplissements',
+                'referrals.title': 'Parrainages',
+                'referrals.stats.total': 'Total parrainés',
+                'referrals.stats.points': 'Points gagnés',
+                'referrals.stats.active': 'Actifs',
+                'referrals.link.title': 'Votre lien de parrainage',
+                'referrals.list.title': 'Vos parrainés',
+                'referrals.joined': 'Inscrit le',
+                'referrals.status.active': 'Actif',
+                'referrals.status.inactive': 'Inactif',
+                'referrals.copied': 'Copié !',
+                'referrals.update_prompt': 'Entrez votre nouveau code de parrainage (4-20 caractères) :',
+                'referrals.updated_success': 'Code mis à jour !',
+                'referrals.update_error_prefix': 'Erreur : ',
+                'shop.points': 'points',
+                'shop.per_minute': '/ minute',
+                'shop.from': 'à partir de',
                 'enterprise.title': 'API Entreprise',
                 'enterprise.intro': 'Présentation',
                 'enterprise.tutorial': 'Tutoriel d’intégration',
+                'enterprise.subscriptions.title': 'Abonnements Entreprise (Système de Points)',
+                'enterprise.topup.title': 'Achat de points supplémentaires (top-up)',
                 'shop.title': 'Boutique',
                 'shop.warning.banner': '⚠️ 90% des bénéfices du shop sont reversés au marketcap de la crypto pour renforcer le projet.',
+                'shop.empty': 'Aucune annonce pour le moment',
                 'shop.item.details.title': "Détails de l'article",
                 'shop.plans.title': 'Choisir un forfait',
+                'shop.plans.empty': 'Aucun abonnement disponible pour le moment',
                 'shop.example.costs': '🧠 Exemple de coût en points (simple)',
                 'shop.example.info': 'ⓘ Info: valeurs indicatives selon complexité',
                 'shop.activate_vpn': 'Activer le VPN',
@@ -347,6 +394,39 @@
                 'shop.payment.unavailable': 'Lien de paiement indisponible',
                 'shop.payment.unavailable_plan': 'Lien de paiement indisponible pour ce plan. Contactez le support.',
                 'shop.payment.opened': 'Paiement ouvert dans un nouvel onglet',
+                'shop.payment.not_configured': 'Paiement Stripe non configuré côté serveur (checkoutUrl manquant).',
+                'shop.order.created_pending': 'Commande créée — paiement en attente de confirmation.',
+                'shop.order.saved': 'Demande enregistrée.',
+                'shop.order.opened_pending': 'Paiement ouvert — commande créée (en attente de confirmation).',
+                'shop.buy.unavailable': 'Achat impossible',
+                'shop.plan.quote_price': 'Sur devis',
+                'shop.plan.default_name': 'Plan',
+                'shop.plan.period': 'par mois',
+                'shop.plan.points_per_month': 'points / mois',
+                'shop.plan.tag.recommended': 'Recommandé',
+                'shop.plan.tag.best_value': 'Best Value',
+                'shop.plan.tag.custom': 'Custom',
+                'shop.plan.recommended_suffix': ' (recommandé)',
+                'shop.plan.button.request_quote': 'Demander un devis',
+                'shop.plan.button.subscribe': 'S’abonner',
+                'shop.plan.display.basic': '🟦 BASIC',
+                'shop.plan.display.pro_recommended': '🟪 PRO (recommandé)',
+                'shop.plan.display.business': '🟧 BUSINESS',
+                'shop.plan.feature.basic.1': 'Accès API',
+                'shop.plan.feature.basic.2': 'Dashboard entreprise',
+                'shop.plan.feature.basic.3': 'Support standard',
+                'shop.plan.feature.pro.1': 'Priorité plus rapide',
+                'shop.plan.feature.pro.2': 'Accès jobs avancés',
+                'shop.plan.feature.pro.3': 'Support rapide',
+                'shop.plan.feature.business.1': 'Priorité haute',
+                'shop.plan.feature.business.2': 'Meilleure vitesse d’exécution',
+                'shop.plan.feature.business.3': 'Support VIP',
+                'shop.plan.feature.business.4': 'Export rapports',
+                'shop.plan.feature.enterprise.1': 'Infrastructure dédiée',
+                'shop.plan.feature.enterprise.2': 'SLA garanti 99.9%',
+                'shop.plan.feature.enterprise.3': 'Support 24/7 dédié',
+                'shop.plan.feature.enterprise.4': 'Intégration sur mesure',
+                'shop.plan.feature.enterprise.5': 'Volume illimité',
                 'shop.cost.image_compress': 'Compression image',
                 'shop.cost.http_get': 'HTTP GET (simple)',
                 'shop.cost.content_check': 'Content check',
@@ -507,6 +587,11 @@
                 'rewards.bonus': 'Bonus',
                 'rewards.table.date': 'Date',
                 'rewards.table.total': 'Total',
+                'common.copy': 'Copy',
+                'common.copied': 'Copied!',
+                'common.error': 'Error',
+                'common.edit': 'Edit',
+                'common.close': 'Close',
                 'profile.title': 'Profile',
                 'profile.username': 'Username',
                 'profile.email': 'Email',
@@ -518,19 +603,61 @@
                 'profile.rank.progress': 'Rank progress',
                 'profile.rank.next': 'Next rank:',
                 'profile.rank.max': 'Max rank',
+                'profile.2fa.info': 'Two-factor authentication (2FA) improves your account security. Using an app like Google Authenticator, you generate a new 6-digit code every 30 seconds, required to sign in. This protects your account even if your password is compromised. Scan the QR code below with the app to get started.',
+                'profile.2fa.status': 'Status',
+                'profile.2fa.loading': 'loading...',
+                'profile.2fa.enabled': 'enabled',
+                'profile.2fa.disabled': 'disabled',
+                'profile.2fa.unknown': 'unknown',
+                'profile.2fa.enable': 'Enable 2FA',
+                'profile.2fa.disable': 'Disable 2FA',
+                'profile.2fa.start': 'Enable Google Authenticator',
+                'profile.2fa.code_label': 'Code (6 digits)',
+                'profile.2fa.qr_fallback': "If the QR code doesn't show, enter this secret in the app:",
+                'profile.2fa.prompt': 'Enter your Google Authenticator code (6 digits)',
+                'profile.2fa.invalid_code': 'Invalid 2FA code',
+                'profile.2fa.verify_error': '2FA verification error',
+                'profile.2fa.server_error': 'Server error',
+                'profile.2fa.error': '2FA error',
+                'profile.2fa.enabled_success': '2FA enabled',
+                'profile.2fa.secret_unavailable': '(secret unavailable)',
+                'profile.2fa.disable_prompt': 'Enter your 2FA code to disable',
+                'profile.2fa.disabled_success': '2FA disabled',
+                'profile.update_success': 'Profile updated successfully!',
+                'profile.update_error_prefix': 'Error: ',
                 'profile.password.title': 'Set / change password',
                 'profile.password.new': 'New password',
                 'profile.password.confirm': 'Confirm',
                 'profile.password.save': 'Save password',
                 'profile.2fa.title': 'Two-factor security (Google Authenticator)',
                 'profile.achievements': 'Achievements',
+                'referrals.title': 'Referrals',
+                'referrals.stats.total': 'Total referred',
+                'referrals.stats.points': 'Points earned',
+                'referrals.stats.active': 'Active',
+                'referrals.link.title': 'Your referral link',
+                'referrals.list.title': 'Your referrals',
+                'referrals.joined': 'Joined on',
+                'referrals.status.active': 'Active',
+                'referrals.status.inactive': 'Inactive',
+                'referrals.copied': 'Copied!',
+                'referrals.update_prompt': 'Enter your new referral code (4-20 characters):',
+                'referrals.updated_success': 'Code updated!',
+                'referrals.update_error_prefix': 'Error: ',
+                'shop.points': 'points',
+                'shop.per_minute': '/ min',
+                'shop.from': 'from',
                 'enterprise.title': 'Enterprise API',
                 'enterprise.intro': 'Overview',
                 'enterprise.tutorial': 'Integration tutorial',
+                'enterprise.subscriptions.title': 'Enterprise subscriptions (Points system)',
+                'enterprise.topup.title': 'Buy extra points (top-up)',
                 'shop.title': 'Shop',
                 'shop.warning.banner': '⚠️ 90% of shop profit is reinvested to strengthen the project.',
+                'shop.empty': 'No items available right now',
                 'shop.item.details.title': 'Item details',
                 'shop.plans.title': 'Choose a plan',
+                'shop.plans.empty': 'No subscriptions available right now',
                 'shop.example.costs': '🧠 Example point costs (simple)',
                 'shop.example.info': 'ⓘ Info: indicative values by complexity',
                 'shop.activate_vpn': 'Enable VPN',
@@ -543,6 +670,39 @@
                 'shop.payment.unavailable': 'Payment link unavailable',
                 'shop.payment.unavailable_plan': 'Payment link unavailable for this plan. Contact support.',
                 'shop.payment.opened': 'Payment opened in a new tab',
+                'shop.payment.not_configured': 'Stripe payment is not configured on the server (missing checkoutUrl).',
+                'shop.order.created_pending': 'Order created — payment pending confirmation.',
+                'shop.order.saved': 'Request saved.',
+                'shop.order.opened_pending': 'Payment opened — order created (pending confirmation).',
+                'shop.buy.unavailable': 'Purchase unavailable',
+                'shop.plan.quote_price': 'Quote',
+                'shop.plan.default_name': 'Plan',
+                'shop.plan.period': 'per month',
+                'shop.plan.points_per_month': 'points / month',
+                'shop.plan.tag.recommended': 'Recommended',
+                'shop.plan.tag.best_value': 'Best Value',
+                'shop.plan.tag.custom': 'Custom',
+                'shop.plan.recommended_suffix': ' (recommended)',
+                'shop.plan.button.request_quote': 'Request a quote',
+                'shop.plan.button.subscribe': 'Subscribe',
+                'shop.plan.display.basic': '🟦 BASIC',
+                'shop.plan.display.pro_recommended': '🟪 PRO (recommended)',
+                'shop.plan.display.business': '🟧 BUSINESS',
+                'shop.plan.feature.basic.1': 'API access',
+                'shop.plan.feature.basic.2': 'Enterprise dashboard',
+                'shop.plan.feature.basic.3': 'Standard support',
+                'shop.plan.feature.pro.1': 'Faster priority',
+                'shop.plan.feature.pro.2': 'Advanced jobs access',
+                'shop.plan.feature.pro.3': 'Fast support',
+                'shop.plan.feature.business.1': 'High priority',
+                'shop.plan.feature.business.2': 'Best execution speed',
+                'shop.plan.feature.business.3': 'VIP support',
+                'shop.plan.feature.business.4': 'Report export',
+                'shop.plan.feature.enterprise.1': 'Dedicated infrastructure',
+                'shop.plan.feature.enterprise.2': '99.9% SLA guaranteed',
+                'shop.plan.feature.enterprise.3': 'Dedicated 24/7 support',
+                'shop.plan.feature.enterprise.4': 'Custom integration',
+                'shop.plan.feature.enterprise.5': 'Unlimited volume',
                 'shop.cost.image_compress': 'Image compression',
                 'shop.cost.http_get': 'HTTP GET (simple)',
                 'shop.cost.content_check': 'Content check',
@@ -703,6 +863,11 @@
                 'rewards.bonus': 'Bonus',
                 'rewards.table.date': 'Fecha',
                 'rewards.table.total': 'Total',
+                'common.copy': 'Copiar',
+                'common.copied': '¡Copiado!',
+                'common.error': 'Error',
+                'common.edit': 'Editar',
+                'common.close': 'Cerrar',
                 'profile.title': 'Perfil',
                 'profile.username': 'Nombre de usuario',
                 'profile.email': 'Correo',
@@ -714,19 +879,61 @@
                 'profile.rank.progress': 'Progreso de rango',
                 'profile.rank.next': 'Siguiente rango:',
                 'profile.rank.max': 'Rango máximo',
+                'profile.2fa.info': 'La autenticación de dos factores (2FA) refuerza la seguridad de tu cuenta. Con una app como Google Authenticator, generas un código de 6 dígitos cada 30 segundos, requerido para iniciar sesión. Esto protege tu cuenta incluso si tu contraseña se ve comprometida. Escanea el QR de abajo con la app para empezar.',
+                'profile.2fa.status': 'Estado',
+                'profile.2fa.loading': 'cargando...',
+                'profile.2fa.enabled': 'activado',
+                'profile.2fa.disabled': 'desactivado',
+                'profile.2fa.unknown': 'desconocido',
+                'profile.2fa.enable': 'Activar 2FA',
+                'profile.2fa.disable': 'Desactivar 2FA',
+                'profile.2fa.start': 'Activar Google Authenticator',
+                'profile.2fa.code_label': 'Código (6 dígitos)',
+                'profile.2fa.qr_fallback': 'Si el QR no se muestra, introduce este secreto en la app:',
+                'profile.2fa.prompt': 'Introduce el código de Google Authenticator (6 dígitos)',
+                'profile.2fa.invalid_code': 'Código 2FA inválido',
+                'profile.2fa.verify_error': 'Error de verificación 2FA',
+                'profile.2fa.server_error': 'Error del servidor',
+                'profile.2fa.error': 'Error 2FA',
+                'profile.2fa.enabled_success': '2FA activado',
+                'profile.2fa.secret_unavailable': '(secreto no disponible)',
+                'profile.2fa.disable_prompt': 'Introduce tu código 2FA para desactivar',
+                'profile.2fa.disabled_success': '2FA desactivado',
+                'profile.update_success': '¡Perfil actualizado con éxito!',
+                'profile.update_error_prefix': 'Error: ',
                 'profile.password.title': 'Definir / cambiar contraseña',
                 'profile.password.new': 'Nueva contraseña',
                 'profile.password.confirm': 'Confirmar',
                 'profile.password.save': 'Guardar contraseña',
                 'profile.2fa.title': 'Doble seguridad (Google Authenticator)',
                 'profile.achievements': 'Logros',
+                'referrals.title': 'Referidos',
+                'referrals.stats.total': 'Total referidos',
+                'referrals.stats.points': 'Puntos ganados',
+                'referrals.stats.active': 'Activos',
+                'referrals.link.title': 'Tu enlace de referidos',
+                'referrals.list.title': 'Tus referidos',
+                'referrals.joined': 'Registrado el',
+                'referrals.status.active': 'Activo',
+                'referrals.status.inactive': 'Inactivo',
+                'referrals.copied': '¡Copiado!',
+                'referrals.update_prompt': 'Introduce tu nuevo código de referidos (4-20 caracteres):',
+                'referrals.updated_success': '¡Código actualizado!',
+                'referrals.update_error_prefix': 'Error: ',
+                'shop.points': 'puntos',
+                'shop.per_minute': '/ minuto',
+                'shop.from': 'a partir de',
                 'enterprise.title': 'API Empresa',
                 'enterprise.intro': 'Presentación',
                 'enterprise.tutorial': 'Tutorial de integración',
+                'enterprise.subscriptions.title': 'Suscripciones de empresa (Sistema de puntos)',
+                'enterprise.topup.title': 'Comprar puntos extra (top-up)',
                 'shop.title': 'Tienda',
                 'shop.warning.banner': '⚠️ El 90% del beneficio de la tienda se reinvierte para fortalecer el proyecto.',
+                'shop.empty': 'No hay artículos disponibles por el momento',
                 'shop.item.details.title': 'Detalles del artículo',
                 'shop.plans.title': 'Elegir plan',
+                'shop.plans.empty': 'No hay suscripciones disponibles por el momento',
                 'shop.example.costs': '🧠 Ejemplo de costos en puntos (simple)',
                 'shop.example.info': 'ⓘ Info: valores indicativos según complejidad',
                 'shop.activate_vpn': 'Activar VPN',
@@ -739,6 +946,39 @@
                 'shop.payment.unavailable': 'Enlace de pago no disponible',
                 'shop.payment.unavailable_plan': 'Enlace de pago no disponible para este plan. Contacta soporte.',
                 'shop.payment.opened': 'Pago abierto en una nueva pestaña',
+                'shop.payment.not_configured': 'El pago de Stripe no está configurado en el servidor (falta checkoutUrl).',
+                'shop.order.created_pending': 'Pedido creado — pago pendiente de confirmación.',
+                'shop.order.saved': 'Solicitud registrada.',
+                'shop.order.opened_pending': 'Pago abierto — pedido creado (pendiente de confirmación).',
+                'shop.buy.unavailable': 'Compra no disponible',
+                'shop.plan.quote_price': 'Presupuesto',
+                'shop.plan.default_name': 'Plan',
+                'shop.plan.period': 'por mes',
+                'shop.plan.points_per_month': 'puntos / mes',
+                'shop.plan.tag.recommended': 'Recomendado',
+                'shop.plan.tag.best_value': 'Mejor opción',
+                'shop.plan.tag.custom': 'A medida',
+                'shop.plan.recommended_suffix': ' (recomendado)',
+                'shop.plan.button.request_quote': 'Solicitar presupuesto',
+                'shop.plan.button.subscribe': 'Suscribirse',
+                'shop.plan.display.basic': '🟦 BASIC',
+                'shop.plan.display.pro_recommended': '🟪 PRO (recomendado)',
+                'shop.plan.display.business': '🟧 BUSINESS',
+                'shop.plan.feature.basic.1': 'Acceso a la API',
+                'shop.plan.feature.basic.2': 'Panel de empresa',
+                'shop.plan.feature.basic.3': 'Soporte estándar',
+                'shop.plan.feature.pro.1': 'Prioridad más rápida',
+                'shop.plan.feature.pro.2': 'Acceso a trabajos avanzados',
+                'shop.plan.feature.pro.3': 'Soporte rápido',
+                'shop.plan.feature.business.1': 'Prioridad alta',
+                'shop.plan.feature.business.2': 'Mejor velocidad de ejecución',
+                'shop.plan.feature.business.3': 'Soporte VIP',
+                'shop.plan.feature.business.4': 'Exportación de informes',
+                'shop.plan.feature.enterprise.1': 'Infraestructura dedicada',
+                'shop.plan.feature.enterprise.2': 'SLA 99.9% garantizado',
+                'shop.plan.feature.enterprise.3': 'Soporte dedicado 24/7',
+                'shop.plan.feature.enterprise.4': 'Integración a medida',
+                'shop.plan.feature.enterprise.5': 'Volumen ilimitado',
                 'shop.cost.image_compress': 'Compresión de imagen',
                 'shop.cost.http_get': 'HTTP GET (simple)',
                 'shop.cost.content_check': 'Verificación de contenido',
@@ -1267,12 +1507,12 @@
                         return { ok: res.ok, data };
                     } catch {
                         const text = await res.text();
-                        return { ok: res.ok, data: { error: text || 'Erreur serveur' } };
+                        return { ok: res.ok, data: { error: text || t('profile.2fa.server_error') } };
                     }
                 })
                 .then(({ ok, data }) => {
                     if (ok && data.needs2fa && data.twofaToken) {
-                        const code = prompt('Entrez le code Google Authenticator (6 chiffres)');
+                        const code = prompt(t('profile.2fa.prompt'));
                         if (!code) return;
                         fetch(`${API_BASE}/api/auth/2fa/verify`, {
                             method: 'POST',
@@ -1291,10 +1531,10 @@
                                 const lm = document.getElementById('login-modal');
                                 if (lm) lm.classList.remove('open');
                             } else {
-                                alert(j.error || 'Code 2FA invalide');
+                                alert(j.error || t('profile.2fa.invalid_code'));
                             }
                         })
-                        .catch(() => alert('Erreur de vérification 2FA'));
+                        .catch(() => alert(t('profile.2fa.verify_error')));
                     } else if (ok && data.token) {
                         localStorage.setItem('token', data.token);
                         if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
@@ -2027,7 +2267,7 @@
             // Extraire le code s'il y a déjà une URL, sinon c'est le code brut que l'utilisateur tape
             let currentCode = input.dataset.code || '';
             
-            const newCode = prompt("Entrez votre nouveau code de parrainage (4-20 caractères) :", currentCode);
+            const newCode = prompt(t('referrals.update_prompt'), currentCode);
             if (!newCode || newCode === currentCode) return;
 
             const token = localStorage.getItem('token');
@@ -2042,27 +2282,12 @@
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    alert('Code mis à jour !');
+                    alert(t('referrals.updated_success'));
                     initializeReferralsPage(); // Recharger
                 } else {
-                    alert('Erreur : ' + data.error);
+                    alert(t('referrals.update_error_prefix') + data.error);
                 }
             });
-        }
-
-        function copyReferralLink() {
-            const input = document.querySelector('.referral-input');
-            if (!input || !input.value) return;
-            
-            input.select();
-            document.execCommand('copy');
-            
-            const btn = document.querySelector('.copy-btn');
-            const originalText = btn.textContent;
-            btn.textContent = 'Copié !';
-            setTimeout(() => {
-                btn.textContent = originalText;
-            }, 2000);
         }
 
         function getReferralsHTML() {
@@ -2075,11 +2300,11 @@
                         <div class="referral-avatar">${initials}</div>
                         <div class="referral-info">
                             <div class="referral-name">${ref.name}</div>
-                            <div class="referral-joined">Inscrit le ${ref.joined}</div>
+                            <div class="referral-joined">${t('referrals.joined')} ${ref.joined}</div>
                         </div>
                         <div class="referral-points">${ref.points} pts</div>
                         <div class="referral-status ${ref.status}">
-                            ${ref.status === 'active' ? 'Actif' : 'Inactif'}
+                            ${ref.status === 'active' ? t('referrals.status.active') : t('referrals.status.inactive')}
                         </div>
                     </div>
                 `;
@@ -2088,7 +2313,7 @@
             return `
                 <div class="page-content">
                     <div class="page-header">
-                        <h1 class="page-title">Parrainages</h1>
+                        <h1 class="page-title">${t('referrals.title')}</h1>
                     </div>
 
                     <div class="referral-stats-grid">
@@ -2101,7 +2326,7 @@
                             </svg>
                             <div class="referral-stat-info">
                                 <div class="referral-stat-value">0</div>
-                                <div class="referral-stat-label">Total parrainés</div>
+                                <div class="referral-stat-label">${t('referrals.stats.total')}</div>
                             </div>
                         </div>
                         <div class="referral-stat">
@@ -2111,7 +2336,7 @@
                             </svg>
                             <div class="referral-stat-info">
                                 <div class="referral-stat-value">0</div>
-                                <div class="referral-stat-label">Points gagnés</div>
+                                <div class="referral-stat-label">${t('referrals.stats.points')}</div>
                             </div>
                         </div>
                         <div class="referral-stat">
@@ -2120,13 +2345,13 @@
                             </svg>
                             <div class="referral-stat-info">
                                 <div class="referral-stat-value">0</div>
-                                <div class="referral-stat-label">Actifs</div>
+                                <div class="referral-stat-label">${t('referrals.stats.active')}</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="referral-link-section">
-                        <h3>Votre lien de parrainage</h3>
+                        <h3>${t('referrals.link.title')}</h3>
                         <div class="referral-link-box">
                             <input
                                 type="text"
@@ -2134,13 +2359,13 @@
                                 class="referral-input"
                                 id="referral-code-input"
                             />
-                            <button class="copy-btn" onclick="copyReferralLink()">Copier</button>
-                            <button class="profile-btn-secondary" onclick="updateReferralCode()" style="margin-left: 10px;">Modifier</button>
+                            <button class="copy-btn" onclick="copyReferralLink()">${t('common.copy')}</button>
+                            <button class="profile-btn-secondary" onclick="updateReferralCode()" style="margin-left: 10px;">${t('common.edit')}</button>
                         </div>
                     </div>
 
                     <div class="referrals-list">
-                        <h3>Vos parrainés</h3>
+                        <h3>${t('referrals.list.title')}</h3>
                         ${referralsList}
                     </div>
                 </div>
@@ -2240,27 +2465,27 @@
                                     <div class="profile-section-card">
                                         <h3 class="profile-section-title">${t('profile.2fa.title')}</h3>
                                         <div id="twofa-info" class="section-info-bubble profile-info-bubble">
-                                            La double authentification (2FA) renforce la sécurité de votre compte. En utilisant une application comme Google Authenticator, vous générez un code unique toutes les 30 secondes, requis pour vous connecter. Cela protège votre compte même si votre mot de passe est compromis. Scannez le QR code ci-dessous avec l'application pour commencer.
+                                            ${t('profile.2fa.info')}
                                         </div>
-                                        <div id="twofa-status" style="margin:8px 0;color:#94a3b8;">Statut: chargement...</div>
+                                        <div id="twofa-status" style="margin:8px 0;color:#94a3b8;">${t('profile.2fa.status')}: ${t('profile.2fa.loading')}</div>
                                         <div id="twofa-setup" style="display:none;margin:8px 0;">
                                             <img id="twofa-qr" alt="QR 2FA" style="width:180px;height:180px;image-rendering:pixelated;border:1px solid #334155;border-radius:6px;">
                                             <div id="twofa-manual" style="margin-top:8px;color:#9ca3af;display:none;">
-                                                Si le QR ne s’affiche pas, entrez ce secret dans l’application:
+                                                ${t('profile.2fa.qr_fallback')}
                                                 <div style="margin-top:6px;">
                                                     <span id="twofa-secret" style="font-family:ui-monospace,Menlo,monospace;font-size:.95em;background:#0b1220;border:1px solid #334155;padding:4px 8px;border-radius:6px;display:inline-block;"></span>
-                                                    <button type="button" id="twofa-copy-secret" class="profile-btn" style="margin-left:8px;">Copier</button>
+                                                    <button type="button" id="twofa-copy-secret" class="profile-btn" style="margin-left:8px;">${t('common.copy')}</button>
                                                 </div>
                                             </div>
                                             <div class="profile-field" style="margin-top:8px;">
-                                                <label>Code (6 chiffres)</label>
+                                                <label>${t('profile.2fa.code_label')}</label>
                                                 <input type="text" id="twofa-code" placeholder="123456" inputmode="numeric" pattern="\\d{6}">
                                             </div>
-                                            <button type="button" id="twofa-enable-btn" class="profile-btn primary">Activer 2FA</button>
+                                            <button type="button" id="twofa-enable-btn" class="profile-btn primary">${t('profile.2fa.enable')}</button>
                                         </div>
                                         <div id="twofa-actions" style="display:flex;gap:8px;margin-top:8px;">
-                                            <button type="button" id="twofa-start-btn" class="profile-btn">Activer Google Authenticator</button>
-                                            <button type="button" id="twofa-disable-btn" class="profile-btn danger" style="display:none;">Désactiver 2FA</button>
+                                            <button type="button" id="twofa-start-btn" class="profile-btn">${t('profile.2fa.start')}</button>
+                                            <button type="button" id="twofa-disable-btn" class="profile-btn danger" style="display:none;">${t('profile.2fa.disable')}</button>
                                         </div>
                                     </div>
                             </form>
@@ -2403,12 +2628,12 @@
                   .then(r => r.json())
                   .then(j => {
                     const enabled = !!j.enabled;
-                    if (twofaStatus) twofaStatus.textContent = `Statut: ${enabled ? 'activé' : 'désactivé'}`;
+                    if (twofaStatus) twofaStatus.textContent = `${t('profile.2fa.status')}: ${enabled ? t('profile.2fa.enabled') : t('profile.2fa.disabled')}`;
                     if (twofaDisable) twofaDisable.style.display = enabled ? '' : 'none';
                     if (twofaStart) twofaStart.style.display = enabled ? 'none' : '';
                     if (enabled && twofaSetup) twofaSetup.style.display = 'none';
                   })
-                  .catch(()=>{ if (twofaStatus) twofaStatus.textContent = 'Statut: inconnu'; });
+                  .catch(()=>{ if (twofaStatus) twofaStatus.textContent = `${t('profile.2fa.status')}: ${t('profile.2fa.unknown')}`; });
             }
             load2faStatus();
             let currentSecret = null;
@@ -2424,7 +2649,7 @@
                  })
                  .then(({ ok, j }) => {
                     if (!ok || !j) { 
-                        alert('Erreur 2FA: ' + (j && (j.details || j.error) ? (j.details || j.error) : 'serveur')); 
+                        alert(`${t('profile.2fa.error')}: ` + (j && (j.details || j.error) ? (j.details || j.error) : t('profile.2fa.server_error'))); 
                         return; 
                     }
                     let secret = j.secret || '';
@@ -2440,7 +2665,7 @@
                         otpauth = `otpauth://totp/${label}?secret=${encodeURIComponent(secret)}&issuer=${issuer}`;
                     }
                     currentSecret = secret || null;
-                    if (twofaSecretEl) twofaSecretEl.textContent = currentSecret || '(secret indisponible)';
+                    if (twofaSecretEl) twofaSecretEl.textContent = currentSecret || t('profile.2fa.secret_unavailable');
                     if (twofaManual) twofaManual.style.display = '';
                     if (twofaQr && otpauth) {
                         twofaQr.onerror = () => {
@@ -2454,15 +2679,15 @@
                     }
                     if (twofaSetup) twofaSetup.style.display = '';
                  })
-                 .catch(()=> alert('Erreur 2FA'));
+                 .catch(()=> alert(t('profile.2fa.error')));
             });
             if (twofaCopySecret && twofaSecretEl) {
                 twofaCopySecret.addEventListener('click', ()=>{
                     try {
                         const s = twofaSecretEl.textContent || '';
                         navigator.clipboard.writeText(s).then(()=> {
-                            twofaCopySecret.textContent = 'Copié';
-                            setTimeout(()=> twofaCopySecret.textContent='Copier', 1200);
+                            twofaCopySecret.textContent = t('common.copied');
+                            setTimeout(()=> twofaCopySecret.textContent = t('common.copy'), 1200);
                         });
                     } catch {}
                 });
@@ -2478,17 +2703,17 @@
                 .then(r => r.json().then(j => ({ ok: r.ok, j })))
                 .then(({ ok, j }) => {
                     if (ok) {
-                        alert('2FA activé');
+                        alert(t('profile.2fa.enabled_success'));
                         load2faStatus();
                         if (twofaSetup) twofaSetup.style.display = 'none';
                     } else {
-                        alert(j.error || 'Code invalide');
+                        alert(j.error || t('profile.2fa.invalid_code'));
                     }
                 })
-                .catch(()=> alert('Erreur serveur'));
+                .catch(()=> alert(t('profile.2fa.server_error')));
             });
             if (twofaDisable) twofaDisable.addEventListener('click', () => {
-                const code = prompt('Entrez votre code 2FA pour désactiver');
+                const code = prompt(t('profile.2fa.disable_prompt'));
                 if (!code) return;
                 fetch(`${API_BASE}/api/auth/2fa/disable`, {
                     method: 'POST',
@@ -2498,13 +2723,13 @@
                 .then(r => r.json().then(j => ({ ok: r.ok, j })))
                 .then(({ ok, j }) => {
                     if (ok) {
-                        alert('2FA désactivé');
+                        alert(t('profile.2fa.disabled_success'));
                         load2faStatus();
                     } else {
-                        alert(j.error || 'Erreur');
+                        alert(j.error || t('profile.2fa.error'));
                     }
                 })
-                .catch(()=> alert('Erreur serveur'));
+                .catch(()=> alert(t('profile.2fa.server_error')));
             });
 
             // Gérer la soumission du formulaire
@@ -2523,9 +2748,9 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        alert('Profil mis à jour avec succès!');
+                        alert(t('profile.update_success'));
                     } else {
-                        alert('Erreur: ' + data.error);
+                        alert(t('profile.update_error_prefix') + data.error);
                     }
                 });
             });
@@ -2559,12 +2784,14 @@
         // Copy referral link function
         function copyReferralLink() {
             const input = document.querySelector('.referral-input');
+            if (!input || !input.value) return;
             input.select();
             document.execCommand('copy');
 
-            const btn = event.target;
+            const btn = (typeof event !== 'undefined' && event && event.target) ? event.target : document.querySelector('.copy-btn');
+            if (!btn) return;
             const originalText = btn.textContent;
-            btn.textContent = 'Copié!';
+            btn.textContent = t('referrals.copied');
             setTimeout(() => {
                 btn.textContent = originalText;
             }, 2000);
@@ -2750,7 +2977,7 @@ print(r.json())</code></pre>
                         await navigator.clipboard.writeText(data.fullKey);
                         const k = document.getElementById('api-key-value');
                         if (k && data.apiKeyMasked) k.textContent = data.apiKeyMasked;
-                        copyBtn.textContent = 'Copié';
+                        copyBtn.textContent = t('common.copied');
                         const prevBg = copyBtn.style.backgroundColor;
                         copyBtn.style.backgroundColor = '#22c55e';
                         setTimeout(() => { copyBtn.textContent = originalText; copyBtn.style.backgroundColor = prevBg; }, 1200);
@@ -2759,7 +2986,7 @@ print(r.json())</code></pre>
                     }
                 }).catch(() => {
                     const prevBg = copyBtn.style.backgroundColor;
-                    copyBtn.textContent = 'Erreur';
+                    copyBtn.textContent = t('common.error');
                     copyBtn.style.backgroundColor = '#ef4444';
                     setTimeout(() => { copyBtn.textContent = originalText; copyBtn.style.backgroundColor = prevBg; }, 1200);
                 });
@@ -2795,7 +3022,7 @@ print(r.json())</code></pre>
                     initializeEnterpriseApiPage();
                 }).catch(() => {
                     const prevBg = regenBtn.style.backgroundColor;
-                    regenBtn.textContent = 'Erreur';
+                    regenBtn.textContent = t('common.error');
                     regenBtn.style.backgroundColor = '#ef4444';
                     setTimeout(() => { regenBtn.textContent = originalText; regenBtn.style.backgroundColor = prevBg; }, 1200);
                 });
@@ -2803,16 +3030,23 @@ print(r.json())</code></pre>
         }
 
         function getEnterpriseSubscriptionModalHTML(plans) {
+            function formatPrice(v, currency) {
+                try {
+                    const num = parseFloat(v);
+                    if (!isFinite(num)) return `${v} ${currency || 'EUR'}`;
+                    return new Intl.NumberFormat(currentLocale, { style: 'currency', currency: (currency || 'EUR') }).format(num).replace(/\u00A0/g,' ');
+                } catch { return `${v} ${currency || 'EUR'}`; }
+            }
             const planCards = (plans || []).map(p => {
-                const priceLabel = (p.price == null) ? 'Sur devis' : `${p.price} ${p.currency}`;
-                const points = p.pointsPerMonth ? `${p.pointsPerMonth} points / mois` : '';
-                const name = p.name || 'Plan';
-                const recommended = /pro/i.test(name) ? ' (recommandé)' : '';
-                const btnLabel = (p.price == null) ? 'Demander un devis' : 'S’abonner';
+                const priceLabel = (p.price == null) ? t('shop.plan.quote_price') : formatPrice(p.price, p.currency || 'EUR');
+                const points = p.pointsPerMonth ? `${Number(p.pointsPerMonth).toLocaleString(currentLocale)} ${t('shop.plan.points_per_month')}` : '';
+                const name = p.name || t('shop.plan.default_name');
+                const recommended = /pro/i.test(name) ? t('shop.plan.recommended_suffix') : '';
+                const btnLabel = (p.price == null) ? t('shop.plan.button.request_quote') : t('shop.plan.button.subscribe');
                 const features = (() => {
-                    if (/basic|standard/i.test(name)) return ['Accès API', 'Dashboard entreprise', 'Support standard'];
-                    if (/pro/i.test(name)) return ['Priorité plus rapide', 'Accès jobs avancés', 'Support rapide'];
-                    if (/business|entreprise/i.test(name)) return ['Priorité haute', 'Meilleure vitesse d’exécution', 'Support VIP', 'Export rapports'];
+                    if (/basic|standard/i.test(name)) return [t('shop.plan.feature.basic.1'), t('shop.plan.feature.basic.2'), t('shop.plan.feature.basic.3')];
+                    if (/pro/i.test(name)) return [t('shop.plan.feature.pro.1'), t('shop.plan.feature.pro.2'), t('shop.plan.feature.pro.3')];
+                    if (/business|entreprise/i.test(name)) return [t('shop.plan.feature.business.1'), t('shop.plan.feature.business.2'), t('shop.plan.feature.business.3'), t('shop.plan.feature.business.4')];
                     return [];
                 })();
                 const link = p.paymentLink || '';
@@ -2832,27 +3066,27 @@ print(r.json())</code></pre>
                 <div id="subscription-modal" class="modal-overlay">
                     <div class="modal">
                         <div class="modal-header">
-                            <h3>Abonnements Entreprise (Système de Points)</h3>
-                            <button id="subscription-close" class="profile-btn">Fermer</button>
+                            <h3>${t('enterprise.subscriptions.title')}</h3>
+                            <button id="subscription-close" class="profile-btn">${t('common.close')}</button>
                         </div>
                         <div class="modal-content">
                             <div class="plans-grid">
                                 ${planCards}
                             </div>
                             <div class="topup-section">
-                                <h4>Achat de points supplémentaires (top-up)</h4>
+                                <h4>${t('enterprise.topup.title')}</h4>
                                 <div class="topup-grid">
-                                    <div class="topup-item">10€ = 15 000 points</div>
-                                    <div class="topup-item">50€ = 90 000 points</div>
-                                    <div class="topup-item">100€ = 200 000 points</div>
+                                    <div class="topup-item">10€ = 15 000 ${t('shop.points')}</div>
+                                    <div class="topup-item">50€ = 90 000 ${t('shop.points')}</div>
+                                    <div class="topup-item">100€ = 200 000 ${t('shop.points')}</div>
                                 </div>
-                                <h4>Exemple de coût en points</h4>
+                                <h4>${t('shop.example.costs')}</h4>
                                 <ul class="points-examples">
-                                    <li>Compression image : 10 points</li>
-                                    <li>Conversion audio : 200 points / minute</li>
-                                    <li>Encodage vidéo : 500 points / minute</li>
-                                    <li>OCR / PDF : 300 points</li>
-                                    <li>Data job : à partir de 1000 points</li>
+                                    <li>${t('shop.cost.image_compress')} : 10 ${t('shop.points')}</li>
+                                    <li>${t('shop.cost.audio_convert')} : 200 ${t('shop.points')} ${t('shop.per_minute')}</li>
+                                    <li>${t('shop.cost.video_encode')} : 500 ${t('shop.points')} ${t('shop.per_minute')}</li>
+                                    <li>${t('shop.cost.ocr_pdf')} : 300 ${t('shop.points')}</li>
+                                    <li>${t('shop.cost.data_job')} : ${t('shop.from')} 1000 ${t('shop.points')}</li>
                                 </ul>
                             </div>
                         </div>
@@ -3413,57 +3647,57 @@ print(r.json())</code></pre>
                                 <div class="cost-item">
                                     <span class="cost-icon">🖼️</span>
                                     <span class="cost-label">${t('shop.cost.image_compress')}</span>
-                                    <span class="cost-value">10 points</span>
+                                    <span class="cost-value">10 ${t('shop.points')}</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">🔍</span>
                                     <span class="cost-label">${t('shop.cost.http_get')}</span>
-                                    <span class="cost-value">5 points</span>
+                                    <span class="cost-value">5 ${t('shop.points')}</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">🧪</span>
                                     <span class="cost-label">${t('shop.cost.content_check')}</span>
-                                    <span class="cost-value">20 points</span>
+                                    <span class="cost-value">20 ${t('shop.points')}</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">📈</span>
                                     <span class="cost-label">${t('shop.cost.csv_stats')}</span>
-                                    <span class="cost-value">30 points</span>
+                                    <span class="cost-value">30 ${t('shop.points')}</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">🎵</span>
                                     <span class="cost-label">${t('shop.cost.audio_convert')}</span>
-                                    <span class="cost-value">200 points / minute</span>
+                                    <span class="cost-value">200 ${t('shop.points')} ${t('shop.per_minute')}</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">🎥</span>
                                     <span class="cost-label">${t('shop.cost.video_encode')}</span>
-                                    <span class="cost-value">500 points / minute</span>
+                                    <span class="cost-value">500 ${t('shop.points')} ${t('shop.per_minute')}</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">📄</span>
                                     <span class="cost-label">${t('shop.cost.ocr_pdf')}</span>
-                                    <span class="cost-value">300 points</span>
+                                    <span class="cost-value">300 ${t('shop.points')}</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">📊</span>
                                     <span class="cost-label">${t('shop.cost.data_job')}</span>
-                                    <span class="cost-value">à partir de 1000 points</span>
+                                    <span class="cost-value">${t('shop.from')} 1000 ${t('shop.points')}</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">📝</span>
                                     <span class="cost-label">${t('shop.cost.text_transform')}</span>
-                                    <span class="cost-value">5 points</span>
+                                    <span class="cost-value">5 ${t('shop.points')}</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">📄</span>
                                     <span class="cost-label">${t('shop.cost.text_template')}</span>
-                                    <span class="cost-value">10 points</span>
+                                    <span class="cost-value">10 ${t('shop.points')}</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">⚙️</span>
                                     <span class="cost-label">${t('shop.cost.code_js')}</span>
-                                    <span class="cost-value">50 points</span>
+                                    <span class="cost-value">50 ${t('shop.points')}</span>
                                 </div>
                             </div>
                         </div>
@@ -3755,11 +3989,11 @@ function openShopItemModal(itemId) {
                     }
                     try { window.open(url, '_blank', 'noopener,noreferrer'); } catch {}
                 } else if (j.requiresPayment) {
-                    alert('Paiement Stripe non configuré côté serveur (checkoutUrl manquant).');
+                    alert(t('shop.payment.not_configured'));
                 }
                 try {
                     const banner = document.createElement('div');
-                    banner.textContent = (j.requiresPayment && j.order) ? 'Commande créée — paiement en attente de confirmation.' : 'Demande enregistrée.';
+                    banner.textContent = (j.requiresPayment && j.order) ? t('shop.order.created_pending') : t('shop.order.saved');
                     banner.style = 'position:fixed;top:12px;right:12px;background:#111827;color:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:9999;font-size:.9rem;';
                     document.body.appendChild(banner);
                     setTimeout(()=>{ try { document.body.removeChild(banner); } catch {} }, 3500);
@@ -3805,7 +4039,7 @@ function handlePresaleBuy(itemId) {
         body: JSON.stringify({ qty })
     }).then(async (r) => {
         const j = await r.json().catch(()=>({}));
-        if (!r.ok || j.error) { alert(j.error || 'Achat impossible'); return; }
+        if (!r.ok || j.error) { alert(j.error || t('shop.buy.unavailable')); return; }
         if (j.checkoutUrl) {
             try { window.open(j.checkoutUrl, '_blank', 'noopener,noreferrer'); } catch {}
         } else if (fallbackLink && j.requiresPayment) {
@@ -3817,11 +4051,11 @@ function handlePresaleBuy(itemId) {
             }
             try { window.open(url, '_blank', 'noopener,noreferrer'); } catch {}
         } else if (j.requiresPayment) {
-            alert('Paiement Stripe non configuré côté serveur (checkoutUrl manquant).');
+            alert(t('shop.payment.not_configured'));
         }
         try {
             const banner = document.createElement('div');
-            banner.textContent = (j.requiresPayment && j.order) ? 'Paiement ouvert — commande créée (en attente de confirmation).' : t('shop.payment.opened');
+            banner.textContent = (j.requiresPayment && j.order) ? t('shop.order.opened_pending') : t('shop.payment.opened');
             banner.style = 'position:fixed;top:12px;right:12px;background:#111827;color:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:9999;font-size:.9rem;';
             document.body.appendChild(banner);
             setTimeout(()=>{ try { document.body.removeChild(banner); } catch {} }, 3500);
@@ -3866,7 +4100,7 @@ function initializeShopPage() {
                 </div>
             `;
             }).join('');
-            list.innerHTML = itemsHtml || '<p style="color:#9ca3af;">Aucune annonce pour le moment</p>';
+            list.innerHTML = itemsHtml || `<p style="color:#9ca3af;">${t('shop.empty')}</p>`;
         };
         render(currentShopItems);
         if (!currentShopItems.length) {
@@ -3893,29 +4127,25 @@ function initializeShopPage() {
                 const cards = plans.map(p => {
                     const isEnterprise = /enterprise/i.test(p.name);
                     const priceLabel = (() => {
-                        if (p.price == null) return 'Sur devis';
-                        const n = Number(p.price);
-                        if (!isNaN(n)) {
-                            return `${n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
-                        }
-                        return `${p.price} €`;
+                        if (p.price == null) return t('shop.plan.quote_price');
+                        return formatPrice(p.price, 'EUR');
                     })();
-                    const points = p.pointsPerMonth ? `🎁 ${p.pointsPerMonth.toLocaleString()} points / mois` : '';
-                    const name = p.name || 'Plan';
+                    const points = p.pointsPerMonth ? `🎁 ${Number(p.pointsPerMonth).toLocaleString(currentLocale)} ${t('shop.plan.points_per_month')}` : '';
+                    const name = p.name || t('shop.plan.default_name');
                     const isPro = /pro/i.test(name);
                     
                     let recommendedTag = '';
-                    if (isPro) recommendedTag = '<div class="plan-tag">Recommandé</div>';
-                    if (/business/i.test(name)) recommendedTag = '<div class="plan-tag">Best Value</div>';
-                    if (isEnterprise) recommendedTag = '<div class="plan-tag special">Custom</div>';
+                    if (isPro) recommendedTag = `<div class="plan-tag">${t('shop.plan.tag.recommended')}</div>`;
+                    if (/business/i.test(name)) recommendedTag = `<div class="plan-tag">${t('shop.plan.tag.best_value')}</div>`;
+                    if (isEnterprise) recommendedTag = `<div class="plan-tag special">${t('shop.plan.tag.custom')}</div>`;
 
-                    const btnLabel = (p.price == null) ? 'Demander un devis' : 'S’abonner';
+                    const btnLabel = (p.price == null) ? t('shop.plan.button.request_quote') : t('shop.plan.button.subscribe');
                     
                     const features = (() => {
-                        if (/basic/i.test(name)) return ['Accès API', 'Dashboard entreprise', 'Support standard'];
-                        if (/pro/i.test(name)) return ['Priorité plus rapide', 'Accès jobs avancés', 'Support rapide'];
-                        if (/business/i.test(name)) return ['Priorité haute', 'Meilleure vitesse d’exécution', 'Support VIP', 'Export rapports'];
-                        if (isEnterprise) return ['Infrastructure dédiée', 'SLA garanti 99.9%', 'Support 24/7 dédié', 'Intégration sur mesure', 'Volume illimité'];
+                        if (/basic/i.test(name)) return [t('shop.plan.feature.basic.1'), t('shop.plan.feature.basic.2'), t('shop.plan.feature.basic.3')];
+                        if (/pro/i.test(name)) return [t('shop.plan.feature.pro.1'), t('shop.plan.feature.pro.2'), t('shop.plan.feature.pro.3')];
+                        if (/business/i.test(name)) return [t('shop.plan.feature.business.1'), t('shop.plan.feature.business.2'), t('shop.plan.feature.business.3'), t('shop.plan.feature.business.4')];
+                        if (isEnterprise) return [t('shop.plan.feature.enterprise.1'), t('shop.plan.feature.enterprise.2'), t('shop.plan.feature.enterprise.3'), t('shop.plan.feature.enterprise.4'), t('shop.plan.feature.enterprise.5')];
                         return p.description ? p.description.split(', ') : [];
                     })();
 
@@ -3931,13 +4161,13 @@ function initializeShopPage() {
                     
                     const buttonHTML = `<button class="profile-btn ${isPro || isEnterprise ? 'primary' : ''}" data-link="${link}" style="font-size:0.85em;padding:8px 12px;width:auto;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${btnLabel}</button>`;
 
-                    const displayName = isBasic ? '🟦 BASIC' : (isProPlan ? '🟪 PRO (recommandé)' : (isBusinessPlan ? '🟧 BUSINESS' : name));
+                    const displayName = isBasic ? t('shop.plan.display.basic') : (isProPlan ? t('shop.plan.display.pro_recommended') : (isBusinessPlan ? t('shop.plan.display.business') : name));
                     return `
                         <div class="plan-card ${isPro ? 'recommended' : ''} ${isEnterprise ? 'enterprise' : ''}">
                             ${recommendedTag}
                             <div class="plan-name">${displayName}</div>
                             <div class="plan-price">${priceLabel}</div>
-                            <div class="plan-period">par mois</div>
+                            <div class="plan-period">${t('shop.plan.period')}</div>
                             ${points ? `<div class="plan-points">${points}</div>` : ''}
                             <div class="plan-points-badge">${points || ''}</div>
                             <ul class="plan-features">
@@ -3948,7 +4178,7 @@ function initializeShopPage() {
                     `;
                 }).join('');
 
-                subs.innerHTML = cards || '<p style="color:#9ca3af;">Aucun abonnement disponible pour le moment</p>';
+                subs.innerHTML = cards || `<p style="color:#9ca3af;">${t('shop.plans.empty')}</p>`;
                 
                 document.querySelectorAll('#shop-subscriptions .plan-card button').forEach(btn => {
                     btn.addEventListener('click', () => {
@@ -4471,7 +4701,7 @@ function initializeShopPage() {
                         const j = await r.json().catch(()=>({}));
                         repairBtn.textContent = (j && j.repaired) ? 'Schéma réparé' : 'Terminé';
                     } catch (e) {
-                        repairBtn.textContent = 'Erreur';
+                        repairBtn.textContent = t('common.error');
                     } finally {
                         setTimeout(()=>{
                             repairBtn.textContent = originalText;
