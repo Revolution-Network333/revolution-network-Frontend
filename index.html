@@ -1103,9 +1103,64 @@
         // State
         let currentPage = localStorage.getItem('token') ? 'overview' : 'login';
         let currentUsername = null;
+        let tokenRefreshPromise = null;
+
+        function getJwtExpMs(token) {
+            try {
+                const parts = String(token || '').split('.');
+                if (parts.length < 2) return null;
+                const payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+                const pad = payload.length % 4;
+                const padded = pad ? (payload + '='.repeat(4 - pad)) : payload;
+                const json = JSON.parse(atob(padded));
+                const exp = Number(json?.exp);
+                if (!exp) return null;
+                return exp * 1000;
+            } catch {
+                return null;
+            }
+        }
+
+        async function ensureValidSession() {
+            const token = localStorage.getItem('token');
+            if (!token) return false;
+
+            const expMs = getJwtExpMs(token);
+            if (!expMs || (expMs - Date.now()) > 60_000) return true;
+
+            const rt = localStorage.getItem('refreshToken');
+            if (!rt) return true;
+
+            if (!tokenRefreshPromise) {
+                tokenRefreshPromise = fetch(`${API_BASE}/api/auth/refresh`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ refreshToken: rt })
+                })
+                .then(async r => {
+                    if (!r.ok) return false;
+                    let j = {};
+                    try { j = await r.json(); } catch {}
+                    if (j.token) {
+                        localStorage.setItem('token', j.token);
+                        return true;
+                    }
+                    return false;
+                })
+                .catch(() => false)
+                .finally(() => { tokenRefreshPromise = null; });
+            }
+
+            const ok = await tokenRefreshPromise;
+            if (!ok) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('refreshToken');
+            }
+            return ok;
+        }
 
         // Navigation
-        function setPage(page) {
+        async function setPage(page) {
             console.log('Navigating to:', page);
             // Clear intervals from previous pages
             if (overviewInterval) {
@@ -1121,6 +1176,7 @@
                 rewardsInterval = null;
             }
 
+            await ensureValidSession();
             const token = localStorage.getItem('token');
             currentPage = (!token && page !== 'login') ? 'login' : page;
             
@@ -1160,7 +1216,8 @@
         }
 
         // Header refresh from profile
-        function refreshHeader() {
+        async function refreshHeader() {
+            await ensureValidSession();
             const token = localStorage.getItem('token');
             const accountStatus = document.querySelector('.account-status');
             const totalPoints = document.querySelector('.total-points');
@@ -2530,7 +2587,7 @@
             }
 
             function updateRankProgress(totalPoints) {
-                const maxPoints = 500000;
+                const maxPoints = 10000000;
                 const points = Math.max(0, Number(totalPoints || 0));
                 const pct = Math.max(0, Math.min(100, (points / maxPoints) * 100));
                 if (rankProgressFill) rankProgressFill.style.width = `${pct}%`;
@@ -2539,8 +2596,8 @@
                     { name: 'Bronze', points: 0 },
                     { name: 'Silver', points: 5000 },
                     { name: 'Gold', points: 25000 },
-                    { name: 'Platinum', points: 100000 },
-                    { name: 'Diamond', points: 500000 }
+                    { name: 'Platinum', points: 1500000 },
+                    { name: 'Diamond', points: 10000000 }
                 ];
 
                 if (rankProgressMarkers) {
@@ -5358,7 +5415,9 @@ function initializeShopPage() {
             loadParticipants();
         }
         // Initialize on load
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            await ensureValidSession();
+            if (!localStorage.getItem('token')) currentPage = 'login';
             renderPage();
             try {
                 const urlParams = new URL(window.location.href).searchParams;
@@ -5403,7 +5462,9 @@ function initializeShopPage() {
             refreshHeader();
         });
         // Auto-refresh data every 5 seconds to reduce latency
-        setInterval(() => {
+        setInterval(async () => {
+            if (!localStorage.getItem('token')) return;
+            await ensureValidSession();
             if (!localStorage.getItem('token')) return;
             refreshHeader();
             if (currentPage === 'nodes') {
@@ -5935,8 +5996,8 @@ Seuils actuels (indicatifs) :
 - Bronze : par défaut.
 - Silver : ≥ 5 000 points ou ≥ 1 parrain actif.
 - Gold : ≥ 25 000 points.
-- Platinum : ≥ 100 000 points.
-- Diamond : ≥ 500 000 points.
+- Platinum : ≥ 1 500 000 points ou ≥ 25 parrains.
+- Diamond : ≥ 10 000 000 points ou ≥ 100 parrains.
 
 Le rank ne remplace pas l’airdrop score, mais il reflète ton engagement global.`
                     },
