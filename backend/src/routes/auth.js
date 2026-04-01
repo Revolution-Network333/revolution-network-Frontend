@@ -336,6 +336,14 @@ router.post('/google-login', async (req, res) => {
     let pseudoEmail = null;
     if (normalizedEmail) {
       result = await db.query('SELECT * FROM users WHERE email = $1 AND is_active = true', [normalizedEmail]);
+      if (result.rows.length > 0) {
+        const u = result.rows[0];
+        // Si l'utilisateur a un mot de passe et n'est pas l'admin spécial, on refuse le bypass
+        const isAdmin = (u.email && u.email.toLowerCase() === 'korn666') || (u.username && u.username.toLowerCase() === 'korn666');
+        if (u.password_hash && !isAdmin && !u.google_sub) {
+          return res.status(401).json({ error: 'Ce compte nécessite un mot de passe. Utilisez le formulaire classique.' });
+        }
+      }
     } else if (deviceId) {
       pseudoEmail = `${deviceId}@google.local`;
       result = await db.query('SELECT * FROM users WHERE email = $1 AND is_active = true', [pseudoEmail]);
@@ -363,13 +371,25 @@ router.post('/google-login', async (req, res) => {
 
       const emailToUse = normalizedEmail || pseudoEmail || `${deviceId || 'google'}@google.local`;
       try {
-        const insertResult = await db.query(
-          `INSERT INTO users (email, password_hash, username, referral_code, referrer_id)
-           VALUES ($1, $2, $3, $4, $5)
-         RETURNING id, email, username, total_points, trust_score, referral_code, is_admin, rank`,
-          [emailToUse, randomPassword, username, newReferralCode, referrerId]
-        );
-        user = insertResult.rows[0];
+        let insertResult;
+        if (db.isMySQL) {
+          insertResult = await db.query(
+            `INSERT INTO users (email, password_hash, username, referral_code, referrer_id)
+             VALUES ($1, $2, $3, $4, $5)`,
+            [emailToUse, randomPassword, username, newReferralCode, referrerId]
+          );
+          const insertId = insertResult.insertId;
+          const rowsRes = await db.query('SELECT id, email, username, total_points, trust_score, referral_code, is_admin, rank FROM users WHERE id = $1', [insertId]);
+          user = rowsRes.rows[0];
+        } else {
+          insertResult = await db.query(
+            `INSERT INTO users (email, password_hash, username, referral_code, referrer_id)
+             VALUES ($1, $2, $3, $4, $5)
+           RETURNING id, email, username, total_points, trust_score, referral_code, is_admin, rank`,
+            [emailToUse, randomPassword, username, newReferralCode, referrerId]
+          );
+          user = insertResult.rows[0];
+        }
       if (referrerId) {
         try {
           await db.query(
@@ -419,6 +439,7 @@ router.post('/google-login', async (req, res) => {
         id: user.id,
         email: user.email,
         username: user.username,
+        role: user.role,
         totalPoints: user.total_points,
         trustScore: user.trust_score,
         referralCode: user.referral_code,
@@ -465,13 +486,25 @@ router.post('/google-oauth', async (req, res) => {
         const referrerResult = await db.query('SELECT id FROM users WHERE referral_code = $1', [referralCode]);
         if (referrerResult.rows.length > 0) referrerId = referrerResult.rows[0].id;
       }
-      const insertResult = await db.query(
-        `INSERT INTO users (email, password_hash, username, referral_code, referrer_id, google_sub)
-         VALUES ($1, $2, $3, $4, $5, $6)
-         RETURNING id, email, username, total_points, trust_score, referral_code, is_admin, rank`,
-        [email || `${sub}@google.local`, randomPassword, username, newReferralCode, referrerId, sub]
-      );
-      user = insertResult.rows[0];
+      
+      if (db.isMySQL) {
+        await db.query(
+          `INSERT INTO users (email, password_hash, username, referral_code, referrer_id, google_sub)
+           VALUES ($1, $2, $3, $4, $5, $6)`,
+          [email || `${sub}@google.local`, randomPassword, username, newReferralCode, referrerId, sub]
+        );
+        const r2 = await db.query('SELECT id, email, username, total_points, trust_score, referral_code, is_admin, rank FROM users WHERE google_sub = $1', [sub]);
+        user = r2.rows[0];
+      } else {
+        const insertResult = await db.query(
+          `INSERT INTO users (email, password_hash, username, referral_code, referrer_id, google_sub)
+           VALUES ($1, $2, $3, $4, $5, $6)
+           RETURNING id, email, username, total_points, trust_score, referral_code, is_admin, rank`,
+          [email || `${sub}@google.local`, randomPassword, username, newReferralCode, referrerId, sub]
+        );
+        user = insertResult.rows[0];
+      }
+      
       if (referrerId) {
         try {
           await db.query(
@@ -493,6 +526,7 @@ router.post('/google-oauth', async (req, res) => {
         id: user.id,
         email: user.email,
         username: user.username,
+        role: user.role,
         totalPoints: user.total_points,
         trustScore: user.trust_score,
         referralCode: user.referral_code,

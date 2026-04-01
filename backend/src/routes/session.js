@@ -122,41 +122,21 @@ router.post('/create', authenticateToken, async (req, res) => {
     const sessionToken = uuidv4();
     const nodeName = generateNodeName();
     
-    let session;
-    if (db.isMySQL) {
-      const result = await db.query(
-        `INSERT INTO sessions (user_id, session_token, ip_address, user_agent, name)
-         VALUES ($1, $2, $3, $4, $5)`,
-        [userId, sessionToken, ipAddress, userAgent, nodeName]
-      );
-      const insertId = result.insertId;
-      const row = await db.query('SELECT id, session_token, start_time, name FROM sessions WHERE id = $1', [insertId]);
-      session = row.rows[0];
-    } else {
-      const result = await db.query(
-        `INSERT INTO sessions (user_id, session_token, ip_address, user_agent, name)
-         VALUES ($1, $2, $3, $4, $5)
-         RETURNING id, session_token, start_time, name`,
-        [userId, sessionToken, ipAddress, userAgent, nodeName]
-      );
-      session = result.rows[0];
-    }
+    const result = await db.query(
+      `INSERT INTO sessions (user_id, session_token, ip_address, user_agent, name)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id, session_token, start_time, name`,
+      [userId, sessionToken, ipAddress, userAgent, nodeName]
+    );
+    
+    const session = result.rows[0];
     
     res.status(201).json({
       sessionId: session.id,
       sessionToken: session.session_token,
       startTime: session.start_time,
       name: session.name,
-      webrtcConfig: {
-        iceServers: [
-          { urls: config.webrtc.stunServer },
-          ...(config.webrtc.turnServer ? [{
-            urls: config.webrtc.turnServer,
-            username: config.webrtc.turnUsername,
-            credential: config.webrtc.turnPassword,
-          }] : []),
-        ],
-      },
+      isActive: true
     });
     
   } catch (error) {

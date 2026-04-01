@@ -506,6 +506,11 @@ async function ensureSqliteMigrations() {
         await run("ALTER TABLE wallets RENAME COLUMN balance_zeta TO balance_ath");
       }
     } catch {}
+    try {
+      const sInfo = await db.query("PRAGMA table_info('sessions')");
+      const sCols = (sInfo.rows || []).map(r => r.name);
+      if (!sCols.includes('name')) await run("ALTER TABLE sessions ADD COLUMN name TEXT");
+    } catch {}
     console.log('✅ SQLite migrations ensured for users table');
   } catch (e) {
     console.error('SQLite migration error:', e);
@@ -817,6 +822,10 @@ async function ensurePostgresSchema() {
       await checkTable('wallet_events');
       const c = await client.query("SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='sessions' AND column_name='name'");
       console.log(`${c.rows.length ? '✅' : '❌'} Colonne sessions.name ${c.rows.length ? 'présente' : 'absente'}`);
+      if (!c.rows.length) {
+        await client.query("ALTER TABLE sessions ADD COLUMN name TEXT");
+        console.log('✅ Colonne sessions.name ajoutée');
+      }
     } finally {
       client.release();
     }
@@ -878,6 +887,13 @@ async function ensureMySqlSchema() {
         KEY idx_sessions_active (is_active),
         CONSTRAINT fk_sessions_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+
+      try {
+        await client.query("ALTER TABLE sessions ADD COLUMN name VARCHAR(255) AFTER user_id");
+        console.log('✅ MySQL sessions.name column added');
+      } catch (_) {
+        // Column likely already exists
+      }
 
       await client.query(`CREATE TABLE IF NOT EXISTS referrals (
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,

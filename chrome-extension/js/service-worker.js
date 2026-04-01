@@ -70,7 +70,7 @@ async function fetchWithAuth(url, init = {}, retry = true) {
   if (currentToken) headers['Authorization'] = `Bearer ${currentToken}`;
   const opts = Object.assign({}, init, { headers });
   let res = await fetch(url, opts);
-  if (res.status === 401 && retry) {
+  if ((res.status === 401 || res.status === 403) && retry) {
     const newToken = await tryRefreshToken();
     if (newToken) {
       const retryHeaders = Object.assign({}, headers, { 'Authorization': `Bearer ${newToken}` });

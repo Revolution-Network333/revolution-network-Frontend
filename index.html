@@ -1640,9 +1640,55 @@
                                     },
                                     auto_select: true,
                                 });
-                                google.accounts.id.prompt();
-                            } catch {
-                                alert('Google Identity indisponible');
+                                google.accounts.id.prompt((notification) => {
+                                    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                                        console.log('Google prompt not displayed, offering email fallback');
+                                        const email = prompt("La connexion Google automatique a échoué (Origin Mismatch). Entrez votre adresse email Google pour vous connecter :");
+                                        if (email && email.includes('@')) {
+                                            fetch(`${API_BASE}/api/auth/google-login`, {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify({ email: email.trim() })
+                                            })
+                                            .then(res => res.json())
+                                            .then(data => {
+                                                if (data.token) {
+                                                    localStorage.setItem('token', data.token);
+                                                    if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
+                                                    currentPage = 'overview';
+                                                    renderPage();
+                                                    refreshHeader();
+                                                } else {
+                                                    alert(data.error || 'Connexion Google impossible');
+                                                }
+                                            })
+                                            .catch(() => alert('Erreur de connexion au serveur'));
+                                        }
+                                    }
+                                });
+                            } catch (e) {
+                                console.error('GIS Error:', e);
+                                const email = prompt("Google Identity indisponible. Entrez votre adresse email Google pour vous connecter :");
+                                if (email && email.includes('@')) {
+                                    fetch(`${API_BASE}/api/auth/google-login`, {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ email: email.trim() })
+                                    })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        if (data.token) {
+                                            localStorage.setItem('token', data.token);
+                                            if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
+                                            currentPage = 'overview';
+                                            renderPage();
+                                            refreshHeader();
+                                        } else {
+                                            alert(data.error || 'Connexion Google impossible');
+                                        }
+                                    })
+                                    .catch(() => alert('Erreur de connexion au serveur'));
+                                }
                             }
                         };
                         document.head.appendChild(s);
