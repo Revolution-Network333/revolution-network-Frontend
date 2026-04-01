@@ -919,7 +919,7 @@ async function ensureMySqlSchema() {
       await client.query(`CREATE TABLE IF NOT EXISTS jobs (
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
         user_id BIGINT UNSIGNED NOT NULL,
-        type TEXT NOT NULL,
+        type VARCHAR(50) NOT NULL,
         status VARCHAR(50) NOT NULL DEFAULT 'queued',
         params_json TEXT,
         payload JSON,
@@ -964,9 +964,9 @@ async function ensureMySqlSchema() {
 
       await client.query(`CREATE TABLE IF NOT EXISTS shop_items (
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-        title TEXT NOT NULL,
+        title VARCHAR(255) NOT NULL,
         description TEXT,
-        type TEXT NOT NULL,
+        type VARCHAR(50) NOT NULL,
         price DOUBLE NOT NULL,
         currency VARCHAR(10) DEFAULT 'EUR',
         active BOOLEAN DEFAULT TRUE,
