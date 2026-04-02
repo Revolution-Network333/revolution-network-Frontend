@@ -210,8 +210,8 @@ router.post('/login', async (req, res) => {
            [email, hash, 'korn666', 'admin']
         );
         const fetched = await db.query(
-          'SELECT * FROM users WHERE (email = $1 OR username = $2) AND is_active = true',
-          [email, email]
+          'SELECT * FROM users WHERE (LOWER(email) = LOWER($1) OR LOWER(username) = LOWER($1))',
+          [email]
         );
         result.rows = fetched.rows;
       } else {

@@ -105,6 +105,7 @@ async function startMiningSession(token) {
 async function stopMiningSession() {
   addLog('Stopping mining...');
   isActive = false;
+  miningRunning = false;
   const token = store.get('token');
   if (sessionId && token) {
     try {
@@ -112,8 +113,10 @@ async function stopMiningSession() {
     } catch (e) { console.error(e); }
   }
   sessionId = null;
+  sessionPoints = 0;
   store.set('isActive', false);
   store.set('sessionId', null);
+  store.set('sessionPoints', 0);
   addLog('Session ended.');
 }
 
