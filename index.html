@@ -305,6 +305,7 @@
                 'common.copy': 'Copier',
                 'common.copied': 'Copié !',
                 'common.error': 'Erreur',
+                'common.error_loading': 'Erreur lors du chargement.',
                 'common.edit': 'Modifier',
                 'common.close': 'Fermer',
                 'profile.title': 'Profil',
@@ -352,6 +353,7 @@
                 'referrals.stats.active': 'Actifs',
                 'referrals.link.title': 'Votre lien de parrainage',
                 'referrals.list.title': 'Vos parrainés',
+                'referrals.list.empty': 'Aucun parrainage pour le moment.',
                 'referrals.joined': 'Inscrit le',
                 'referrals.status.active': 'Actif',
                 'referrals.status.inactive': 'Inactif',
@@ -581,6 +583,7 @@
                 'common.copy': 'Copy',
                 'common.copied': 'Copied!',
                 'common.error': 'Error',
+                'common.error_loading': 'Error loading.',
                 'common.edit': 'Edit',
                 'common.close': 'Close',
                 'profile.title': 'Profile',
@@ -628,6 +631,7 @@
                 'referrals.stats.active': 'Active',
                 'referrals.link.title': 'Your referral link',
                 'referrals.list.title': 'Your referrals',
+                'referrals.list.empty': 'No referrals yet.',
                 'referrals.joined': 'Joined on',
                 'referrals.status.active': 'Active',
                 'referrals.status.inactive': 'Inactive',
@@ -857,6 +861,7 @@
                 'common.copy': 'Copiar',
                 'common.copied': '¡Copiado!',
                 'common.error': 'Error',
+                'common.error_loading': 'Error al cargar.',
                 'common.edit': 'Editar',
                 'common.close': 'Cerrar',
                 'profile.title': 'Perfil',
@@ -904,6 +909,7 @@
                 'referrals.stats.active': 'Activos',
                 'referrals.link.title': 'Tu enlace de referidos',
                 'referrals.list.title': 'Tus referidos',
+                'referrals.list.empty': 'Sin referidos por el momento.',
                 'referrals.joined': 'Registrado el',
                 'referrals.status.active': 'Activo',
                 'referrals.status.inactive': 'Inactivo',
@@ -2338,7 +2344,7 @@
                     const url = new URL(window.location.href);
                     url.searchParams.set('ref', data.user.referral_code);
                     const referralLink = url.toString();
-                    const input = document.querySelector('.referral-input');
+                    const input = document.getElementById('referral-code-input');
                     if (input) {
                         input.value = referralLink;
                         input.dataset.code = data.user.referral_code;
@@ -2352,19 +2358,55 @@
             })
             .then(res => res.json())
             .then(stats => {
-                const vals = document.querySelectorAll('.referral-stat-value');
-                if (vals[0]) vals[0].textContent = stats.totalReferrals || 0;
-                if (vals[1]) vals[1].textContent = Math.floor(stats.referralBonusPoints || 0);
-                if (vals[2]) vals[2].textContent = stats.activeReferrals || 0;
+                const totalCount = document.getElementById('referral-total-count');
+                const totalPoints = document.getElementById('referral-total-points');
+                const activeCount = document.getElementById('referral-active-count');
+                if (totalCount) totalCount.textContent = stats.totalReferrals || 0;
+                if (totalPoints) totalPoints.textContent = Math.floor(stats.referralBonusPoints || 0);
+                if (activeCount) activeCount.textContent = stats.activeReferrals || 0;
             })
             .catch(()=>{});
+
+            fetch(`${API_BASE}/api/user/referrals`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById('referrals-container');
+                if (!container) return;
+
+                if (!data.referrals || data.referrals.length === 0) {
+                    container.innerHTML = `<div class="empty-list-glass">${t('referrals.list.empty')}</div>`;
+                    return;
+                }
+
+                const listHTML = data.referrals.map(ref => `
+                    <div class="referral-item-glass">
+                        <div class="referral-info">
+                            <span class="referral-username">${maskUsername(ref.username)}</span>
+                            <span class="referral-date">${new Date(ref.created_at).toLocaleDateString()}</span>
+                        </div>
+                        <div class="referral-stats">
+                            <span class="referral-points">${Math.floor(ref.total_points || 0)} pts</span>
+                            <span class="referral-status ${ref.is_active ? 'active' : 'inactive'}">
+                                ${ref.is_active ? t('referrals.status.active') : t('referrals.status.inactive')}
+                            </span>
+                        </div>
+                    </div>
+                `).join('');
+                container.innerHTML = listHTML;
+            })
+            .catch(err => {
+                const container = document.getElementById('referrals-container');
+                if (container) container.innerHTML = `<div class="error-text">${t('common.error_loading')}</div>`;
+            });
         }
 
         function updateReferralCode() {
-            const input = document.querySelector('.referral-input');
-            const currentLink = input.value;
+            const input = document.getElementById('referral-code-input');
+            const currentLink = input ? input.value : '';
             // Extraire le code s'il y a déjà une URL, sinon c'est le code brut que l'utilisateur tape
-            let currentCode = input.dataset.code || '';
+            let currentCode = input ? (input.dataset.code || '') : '';
             
             const newCode = prompt(t('referrals.update_prompt'), currentCode);
             if (!newCode || newCode === currentCode) return;
@@ -2448,7 +2490,7 @@
                             <div class="link-container-glass">
                                 <input type="text" value="" class="referral-input-futuristic" id="referral-code-input" readonly />
                                 <div class="button-group">
-                                    <button class="neon-button primary" onclick="copyReferralLink()">${t('common.copy')}</button>
+                                    <button class="neon-button primary copy-btn" onclick="copyReferralLink(event)">${t('common.copy')}</button>
                                     <button class="neon-button secondary" onclick="updateReferralCode()">${t('common.edit')}</button>
                                 </div>
                             </div>
@@ -2901,13 +2943,13 @@
         }
 
         // Copy referral link function
-        function copyReferralLink() {
-            const input = document.querySelector('.referral-input');
+        function copyReferralLink(event) {
+            const input = document.getElementById('referral-code-input');
             if (!input || !input.value) return;
             input.select();
             document.execCommand('copy');
 
-            const btn = (typeof event !== 'undefined' && event && event.target) ? event.target : document.querySelector('.copy-btn');
+            const btn = (event && event.target) ? event.target : document.querySelector('.copy-btn');
             if (!btn) return;
             const originalText = btn.textContent;
             btn.textContent = t('referrals.copied');
