@@ -38,14 +38,14 @@ router.post('/buy/:id', authenticateToken, async (req, res) => {
                     qty INTEGER DEFAULT 1,
                     unit_price REAL NOT NULL,
                     total_price REAL NOT NULL,
-                    status TEXT DEFAULT 'created',
+                    status VARCHAR(50) DEFAULT 'created',
                     metadata TEXT,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )`);
                 await db.query(`CREATE TABLE IF NOT EXISTS user_entitlements (
                     id SERIAL PRIMARY KEY,
                     user_id INTEGER NOT NULL,
-                    feature TEXT NOT NULL,
+                    feature VARCHAR(100) NOT NULL,
                     active BOOLEAN DEFAULT TRUE,
                     metadata TEXT,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -84,10 +84,20 @@ router.post('/buy/:id', authenticateToken, async (req, res) => {
             const amountCents = Math.round((parseFloat(totalAmount) || 0) * 100);
             if (!Number.isFinite(amountCents) || amountCents <= 0) return null;
             const cur = String(currency || 'EUR').toLowerCase();
+            
+            // Stripe doesn't accept emails without a dot in the domain (like admin@local)
+            const isValidForStripe = (email) => {
+                if (!email) return false;
+                const parts = email.split('@');
+                if (parts.length !== 2) return false;
+                const domain = parts[1];
+                return domain.includes('.') && domain.length > 3;
+            };
+
             const session = await stripe.checkout.sessions.create({
                 mode: 'payment',
                 client_reference_id: String(orderRow.id),
-                customer_email: userEmail || undefined,
+                customer_email: isValidForStripe(userEmail) ? userEmail : undefined,
                 metadata: {
                     order_id: String(orderRow.id),
                     user_id: String(userId),

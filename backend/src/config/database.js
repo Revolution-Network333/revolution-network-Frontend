@@ -81,6 +81,9 @@ const rewriteForMySql = (sql) => {
   s = s.replace(/\bJSONB\b/gi, 'JSON');
   s = s.replace(/\bSERIAL\b/gi, 'BIGINT UNSIGNED AUTO_INCREMENT');
   s = s.replace(/\bTIMESTAMP\b/gi, 'DATETIME');
+  
+  // MySQL doesn't allow DEFAULT on TEXT/BLOB/JSON columns. Convert to VARCHAR(255) if it has a default.
+  s = s.replace(/\bTEXT\s+DEFAULT\s+(['"][^'"]*['"])/gi, 'VARCHAR(255) DEFAULT $1');
 
   if (/\bON\s+CONFLICT\b/i.test(s)) {
     const doNothing = s.match(/\bON\s+CONFLICT\b[\s\S]*?\bDO\s+NOTHING\b/i);

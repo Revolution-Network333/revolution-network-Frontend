@@ -593,7 +593,7 @@ async function ensurePostgresSchema() {
           qty INTEGER DEFAULT 1,
           unit_price REAL NOT NULL,
           total_price REAL NOT NULL,
-          status TEXT DEFAULT 'created',
+          status VARCHAR(50) DEFAULT 'created',
           metadata TEXT,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
@@ -602,7 +602,7 @@ async function ensurePostgresSchema() {
           id SERIAL PRIMARY KEY,
           user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
           type TEXT NOT NULL,
-          status TEXT NOT NULL DEFAULT 'queued',
+          status VARCHAR(50) NOT NULL DEFAULT 'queued',
           params_json TEXT,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -735,7 +735,7 @@ async function ensurePostgresSchema() {
           id SERIAL PRIMARY KEY,
           user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
           task_id INTEGER NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
-          status TEXT DEFAULT 'not_started',
+          status VARCHAR(50) DEFAULT 'not_started',
           timestamp_started TIMESTAMP,
           timestamp_approved TIMESTAMP,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -747,8 +747,8 @@ async function ensurePostgresSchema() {
           id SERIAL PRIMARY KEY,
           user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
           subject TEXT,
-          status TEXT DEFAULT 'open',
-          priority TEXT DEFAULT 'medium',
+          status VARCHAR(50) DEFAULT 'open',
+          priority VARCHAR(50) DEFAULT 'medium',
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
