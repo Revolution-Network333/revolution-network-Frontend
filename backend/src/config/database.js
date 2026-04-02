@@ -119,6 +119,78 @@ const getParamValuesForClause = (clauseSql, params) => {
   });
 };
 
+const simulateQuery = async (executor, sql, params = []) => {
+  let returningInfo = parseReturning(sql);
+  if (!returningInfo) {
+    const upper = String(sql || '').toUpperCase();
+    const retIdx = upper.lastIndexOf(' RETURNING ');
+    if (retIdx !== -1) {
+      returningInfo = {
+        returning: String(sql).slice(retIdx + 11).trim(),
+        baseSql: String(sql).slice(0, retIdx).trim()
+      };
+    }
+  }
+
+  if (returningInfo) {
+    const { baseSql, returning } = returningInfo;
+    const cols = returning === '*' ? '*' : returning;
+    
+    if (/^\s*INSERT\b/i.test(baseSql)) {
+      const tableMatch = baseSql.match(/^\s*INSERT\s+INTO\s+([`"\w.]+)/i);
+      const table = tableMatch ? tableMatch[1] : null;
+      const { sql: translatedSql, params: translatedParams } = translatePgParamsToMySql(baseSql, params);
+      const normalized = rewriteForMySql(translatedSql);
+      const [result] = await executor.query(normalized, translatedParams);
+      const insertId = result?.insertId;
+      if (!table || !insertId) return { rows: [{ id: insertId }], rowCount: result?.affectedRows || 0 };
+      if (cols.trim().toLowerCase() === 'id') return { rows: [{ id: insertId }], rowCount: 1 };
+      const [rows] = await executor.query(`SELECT ${cols} FROM ${table} WHERE id = ?`, [insertId]);
+      return { rows: rows || [], rowCount: Array.isArray(rows) ? rows.length : 0 };
+    }
+    
+    if (/^\s*UPDATE\b/i.test(baseSql)) {
+      const tableMatch = baseSql.match(/^\s*UPDATE\s+([`"\w.]+)/i);
+      const table = tableMatch ? tableMatch[1] : null;
+      const whereClause = extractWhereForReturning(baseSql);
+      const { sql: translatedSql, params: translatedParams } = translatePgParamsToMySql(baseSql, params);
+      const normalized = rewriteForMySql(translatedSql);
+      const [result] = await executor.query(normalized, translatedParams);
+      if (!table || !whereClause) return { rows: [], rowCount: result?.affectedRows || 0 };
+      const whereParamValues = getParamValuesForClause(whereClause, params);
+      const { sql: selSql, params: selParams } = translatePgParamsToMySql(`SELECT ${cols} FROM ${table} WHERE ${whereClause}`, whereParamValues);
+      const [rows] = await executor.query(selSql, selParams);
+      return { rows: rows || [], rowCount: Array.isArray(rows) ? rows.length : 0 };
+    }
+
+    if (/^\s*DELETE\b/i.test(baseSql)) {
+      const tableMatch = baseSql.match(/^\s*DELETE\s+FROM\s+([`"\w.]+)/i);
+      const table = tableMatch ? tableMatch[1] : null;
+      const whereClause = extractWhereForReturning(baseSql);
+      if (table && whereClause) {
+        const whereParamValues = getParamValuesForClause(whereClause, params);
+        const { sql: selSql, params: selParams } = translatePgParamsToMySql(`SELECT ${cols} FROM ${table} WHERE ${whereClause}`, whereParamValues);
+        const [rowsToReturn] = await executor.query(selSql, selParams);
+        const { sql: translatedSql, params: translatedParams } = translatePgParamsToMySql(baseSql, params);
+        const normalized = rewriteForMySql(translatedSql);
+        const [result] = await executor.query(normalized, translatedParams);
+        return { rows: rowsToReturn || [], rowCount: result?.affectedRows || 0 };
+      }
+    }
+  }
+
+  const { sql: translatedSql, params: translatedParams } = translatePgParamsToMySql(sql, params);
+  const normalized = rewriteForMySql(translatedSql);
+  try {
+    const [rowsOrResult] = await executor.query(normalized, translatedParams);
+    if (Array.isArray(rowsOrResult)) return { rows: rowsOrResult, rowCount: rowsOrResult.length };
+    return { rows: rowsOrResult?.insertId ? [{ id: rowsOrResult.insertId }] : [], rowCount: rowsOrResult?.affectedRows || 0 };
+  } catch (err) {
+    if (err.errno === 1060 || err.errno === 1061) return { rows: [], rowCount: 0 };
+    throw err;
+  }
+};
+
 // --- DATABASE INITIALIZATION ---
 
 let db;
@@ -171,61 +243,12 @@ if (sqliteForced || (!connectionString && !shouldUseMySql())) {
     enableKeepAlive: true,
   });
 
-  const query = async (sql, params = []) => {
-    let returningInfo = parseReturning(sql);
-    if (!returningInfo) {
-      const upper = String(sql || '').toUpperCase();
-      const retIdx = upper.lastIndexOf(' RETURNING ');
-      if (retIdx !== -1) {
-        returningInfo = {
-          returning: String(sql).slice(retIdx + 11).trim(),
-          baseSql: String(sql).slice(0, retIdx).trim()
-        };
-      }
-    }
-
-    if (returningInfo) {
-      const { baseSql, returning } = returningInfo;
-      if (/^\s*INSERT\b/i.test(baseSql)) {
-        const tableMatch = baseSql.match(/^\s*INSERT\s+INTO\s+([`"\w.]+)/i);
-        const table = tableMatch ? tableMatch[1] : null;
-        const { sql: translatedSql, params: translatedParams } = translatePgParamsToMySql(baseSql, params);
-        const normalized = rewriteForMySql(translatedSql);
-        const [result] = await pool.query(normalized, translatedParams);
-        const insertId = result?.insertId;
-        if (!table || !insertId) return { rows: [{ id: insertId }], rowCount: result?.affectedRows || 0 };
-        const cols = returning === '*' ? '*' : returning;
-        if (cols.trim().toLowerCase() === 'id') return { rows: [{ id: insertId }], rowCount: 1 };
-        const [rows] = await pool.query(`SELECT ${cols} FROM ${table} WHERE id = ?`, [insertId]);
-        return { rows: rows || [], rowCount: Array.isArray(rows) ? rows.length : 0 };
-      }
-      // UPDATE and DELETE logic follows similar pattern...
-    }
-
-    const { sql: translatedSql, params: translatedParams } = translatePgParamsToMySql(sql, params);
-    const normalized = rewriteForMySql(translatedSql);
-    try {
-      const [rowsOrResult] = await pool.query(normalized, translatedParams);
-      if (Array.isArray(rowsOrResult)) return { rows: rowsOrResult, rowCount: rowsOrResult.length };
-      return { rows: rowsOrResult?.insertId ? [{ id: rowsOrResult.insertId }] : [], rowCount: rowsOrResult?.affectedRows || 0 };
-    } catch (err) {
-      if (err.errno === 1060 || err.errno === 1061) return { rows: [], rowCount: 0 };
-      throw err;
-    }
-  };
-
   db = {
-    query,
+    query: (sql, params) => simulateQuery(pool, sql, params),
     getClient: async () => {
       const conn = await pool.getConnection();
       return {
-        query: async (sql, params) => {
-          const { sql: translatedSql, params: translatedParams } = translatePgParamsToMySql(sql, params);
-          const normalized = rewriteForMySql(translatedSql);
-          const [rowsOrResult] = await conn.query(normalized, translatedParams);
-          if (Array.isArray(rowsOrResult)) return { rows: rowsOrResult, rowCount: rowsOrResult.length };
-          return { rows: rowsOrResult?.insertId ? [{ id: rowsOrResult.insertId }] : [], rowCount: rowsOrResult?.affectedRows || 0 };
-        },
+        query: (sql, params) => simulateQuery(conn, sql, params),
         release: () => conn.release(),
       };
     },

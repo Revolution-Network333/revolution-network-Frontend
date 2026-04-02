@@ -789,8 +789,7 @@
                 'register.email': 'Email',
                 'register.password': 'Password (min 8)',
                 'register.submit': 'Create my account',
-                'register.back': 'Back to sign in'
-            },
+                'register.back': 'Back to sign in',
                 'overview.total': 'Total:',
                 'overview.connected': 'Connected:',
                 'overview.chart.title': 'Reward Statistics',
@@ -2730,11 +2729,7 @@
                             <div class="link-container-glass">
                                 <input type="text" value="" class="referral-input-futuristic" id="referral-code-input" readonly />
                                 <div class="button-group">
-<<<<<<< HEAD
-                                    <button class="neon-button primary" onclick="copyReferralLink()">${t('common.copy')}</button>
-=======
                                     <button class="neon-button primary copy-btn" onclick="copyReferralLink(event)">${t('common.copy')}</button>
->>>>>>> 65920322d88f868a5a160a03d4af9b6769aebba7
                                     <button class="neon-button secondary" onclick="updateReferralCode()">${t('common.edit')}</button>
                                 </div>
                             </div>
@@ -4167,7 +4162,7 @@ print(r.json())</code></pre>
             const btnExe = document.getElementById('btn-download-exe');
             const btnHow = document.getElementById('btn-howto');
             if (btnExe) btnExe.addEventListener('click', () => {
-                const exeUrl = 'https://mega.nz/file/ayoSRA6b#wsSwJEfh5cyUiLOd8yGsA9W3nAeX-u2-0-Xai_W1lHc';
+                const exeUrl = t('download.mega_link');
                 window.open(exeUrl, '_blank');
             });
             if (btnHow) btnHow.addEventListener('click', () => {
