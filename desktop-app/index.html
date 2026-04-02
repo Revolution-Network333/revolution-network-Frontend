@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revolution Network Node</title>
+  <link rel="stylesheet" href="css/popup.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="assets/logo.jpg" alt="Logo" class="logo">
+      <h1>Revolution Network</h1>
+    </div>
+
+    <div id="loginSection" class="section">
+      <h2>Account Sign In</h2>
+      <button id="loginBtn" class="btn btn-primary" style="width:100%;">Sign in via website</button>
+      <p class="error" id="errorMsg"></p>
+      <a href="https://revolution-network.fr/" target="_blank" class="btn-link" style="text-align:center;">Open website</a>
+    </div>
+
+    <div id="dashboardSection" class="section hidden">
+      <div class="dashboard-grid">
+        <div class="stats-card">
+          <h3>Node Status</h3>
+          <div class="status-indicator">
+            <span id="statusDot" class="dot"></span>
+            <span id="statusText">INACTIVE</span>
+          </div>
+        </div>
+
+        <div class="stats-card">
+          <h3>Points (Session)</h3>
+          <div class="points-display">
+            <span id="sessionPoints" class="points-value">0</span>
+            <span class="points-label">Earned</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-card">
+          <h3>Hashrate / Logs</h3>
+          <div class="terminal-view" id="terminalLogs">
+              <div class="log-entry"><span class="log-time">[SYSTEM]</span> Ready to mine...</div>
+          </div>
+      </div>
+
+      <div class="controls">
+        <button id="toggleBtn" class="btn-round" aria-label="Start / Pause">
+          <span id="toggleIcon">▶</span>
+        </button>
+      </div>
+
+      <div class="footer">
+        <button id="logoutBtn" class="btn-link">Sign out</button>
+        <a href="https://revolution-network.fr/" target="_blank" class="btn-link">Web Dashboard >></a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/popup.js"></script>
+</body>
+</html>

@@ -212,6 +212,29 @@ router.get('/referrals/stats', authenticateToken, async (req, res) => {
   }
 });
 
+// Liste des parrainages pour l'utilisateur connecté
+router.get('/referrals', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    
+    const result = await db.query(
+      `SELECT u.username, u.total_points, r.created_at,
+              COALESCE(u.is_active, true) as is_active
+       FROM referrals r
+       JOIN users u ON u.id = r.referred_user_id
+       WHERE r.referrer_user_id = $1
+       ORDER BY r.created_at DESC`,
+      [userId]
+    );
+    
+    res.json({ referrals: result.rows });
+    
+  } catch (error) {
+    console.error('Get referrals error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Obtenir le classement (leaderboard)
 router.get('/leaderboard', async (req, res) => {
   try {

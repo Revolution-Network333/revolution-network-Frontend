@@ -88,6 +88,13 @@ if (sqliteForced || (!connectionString && !shouldUseMySql())) {
 
     const rewriteForMySql = (sql) => {
       let s = String(sql || '');
+      
+      // NEW: Intercept RETURNING here if not handled by query() wrapper
+      const retMatch = s.match(/\s+RETURNING\s+([\s\S]+)$/i);
+      if (retMatch) {
+        s = s.slice(0, retMatch.index).trim();
+      }
+
       s = s.replace(/^\s*BEGIN\s*;?\s*$/i, 'START TRANSACTION');
       s = s.replace(/\bALTER\s+TABLE\s+IF\s+EXISTS\s+/gi, 'ALTER TABLE ');
       s = s.replace(/\bCREATE\s+UNIQUE\s+INDEX\s+IF\s+NOT\s+EXISTS\s+/gi, 'CREATE UNIQUE INDEX ');
@@ -170,7 +177,20 @@ if (sqliteForced || (!connectionString && !shouldUseMySql())) {
     };
 
     const query = async (sql, params = []) => {
-      const returningInfo = parseReturning(sql);
+      let returningInfo = parseReturning(sql);
+      
+      // If no RETURNING found with regex, check if it's a simple DELETE/UPDATE/INSERT with RETURNING
+      if (!returningInfo) {
+        const upper = String(sql || '').toUpperCase();
+        const retIdx = upper.lastIndexOf(' RETURNING ');
+        if (retIdx !== -1) {
+          returningInfo = {
+            returning: String(sql).slice(retIdx + 11).trim(),
+            baseSql: String(sql).slice(0, retIdx).trim()
+          };
+        }
+      }
+
       if (returningInfo) {
         const baseSql = returningInfo.baseSql;
         const returning = returningInfo.returning;
@@ -207,6 +227,34 @@ if (sqliteForced || (!connectionString && !shouldUseMySql())) {
           const cols = returning === '*' ? '*' : returning;
           const [rows] = await pool.query(`SELECT ${cols} FROM ${table} WHERE ${whereClauseMySql}`, whereParams);
           return { rows: rows || [], rowCount: Array.isArray(rows) ? rows.length : 0 };
+        }
+
+        if (/^\s*DELETE\b/i.test(baseSql)) {
+          const tableMatch = baseSql.match(/^\s*DELETE\s+FROM\s+([`"\w.]+)/i);
+          const table = tableMatch ? tableMatch[1] : null;
+          const whereClausePg = extractWhereForReturning(baseSql);
+          const whereParams = whereClausePg ? getParamValuesForClause(whereClausePg, params) : [];
+          const whereClauseMySql = whereClausePg ? rewriteForMySql(translatePgParamsToMySql(whereClausePg)) : null;
+
+          const normalized = rewriteForMySql(translatePgParamsToMySql(baseSql));
+          const [result] = await pool.query(normalized, params);
+
+          const rowCount = result?.affectedRows || 0;
+          if (rowCount === 0) return { rows: [], rowCount: 0 };
+
+          // For DELETE ... RETURNING, we cannot select after delete.
+          // However, if we're only returning 'id', we might have it in params if it was a 'WHERE id = ?'
+          // For simplicity, if we are returning 'id' and it was a direct ID delete, we can mock it.
+          // Otherwise, we just return empty rows but with correct rowCount.
+          if (returning.toLowerCase() === 'id' && whereClauseMySql && whereClauseMySql.includes('id = ?')) {
+             // Find the index of 'id = ?' in whereClauseMySql to get the correct param
+             const parts = whereClauseMySql.split(/\bAND\b/i);
+             const idPartIdx = parts.findIndex(p => p.toLowerCase().includes('id = ?'));
+             if (idPartIdx !== -1 && whereParams[idPartIdx] !== undefined) {
+                return { rows: [{ id: whereParams[idPartIdx] }], rowCount };
+             }
+          }
+          return { rows: [], rowCount };
         }
       }
 

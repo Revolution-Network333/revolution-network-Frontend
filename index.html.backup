@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Révolution Network - Dashboard</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="chrome-extension/assets/icon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="chrome-extension/assets/icon-16.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="assets/nexon.jpg" alt="Logo" class="logo-icon" style="width: 32px; height: 32px; border-radius: 8px; object-fit: cover;">
+                    <span class="logo-text">Révolution</span>
+                </div>
+                <button class="mobile-close" onclick="toggleMobileMenu()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-label">MENU</div>
+                <button class="menu-item active" onclick="setPage('overview')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    <span>Vue d'ensemble</span>
+                </button>
+                <button class="menu-item" onclick="setPage('nodes')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                        <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                        <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                        <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                    </svg>
+                    <span>Mes Nœuds</span>
+                </button>
+                <button class="menu-item" onclick="setPage('rewards')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="8" r="7"></circle>
+                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                    </svg>
+                    <span>Récompenses</span>
+                </button>
+                <button class="menu-item" onclick="setPage('referrals')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>Parrainages</span>
+                </button>
+                <button class="menu-item" onclick="setPage('profile')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>Profil</span>
+                </button>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="menu-label">SUIVEZ-NOUS</div>
+                <a href="#" class="social-link">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    <span>X(Twitter)</span>
+                </a>
+                <a href="#" class="social-link">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>Discord</span>
+                </a>
+                <a href="#" class="social-link">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    <span>Website</span>
+                </a>
+                
+                <div class="theme-toggle">
+                    <span class="theme-label">Thème</span>
+                    <button onclick="toggleTheme()" class="theme-button">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="header-info">
+                    <div class="referral-badge">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <span>Parrainés: 1</span>
+                    </div>
+                    <div class="account-status">
+                        <span class="status-label">Statut du compte:</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 73%"></div>
+                        </div>
+                        <div class="status-badge"></div>
+                    </div>
+                    <div class="total-points">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                        <span id="header-total-points">Total: 0 pt</span>
+                    </div>
+                    <div class="user-avatar">M</div>
+                </div>
+            </header>
+            
+            <div class="page-wrapper" id="pageContent">
+                <!-- Content will be injected here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // State
+        let currentPage = 'overview';
+
+        // Navigation
+        function setPage(page) {
+            currentPage = page;
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.menu-item').classList.add('active');
+            renderPage();
+            if (window.innerWidth <= 768) {
+                toggleMobileMenu();
+            }
+        }
+
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            document.body.classList.toggle('light-theme');
+        }
+
+        // Mobile menu
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('mobile-open');
+        }
+
+        // Header refresh from profile
+        function refreshHeader() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            fetch('/api/user/profile', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.user) {
+                    const tp = document.getElementById('header-total-points');
+                    if (tp) tp.textContent = `Total: ${data.user.total_points} pt`;
+                    const avatar = document.querySelector('.user-avatar');
+                    if (avatar && data.user.username) {
+                        avatar.textContent = data.user.username.charAt(0).toUpperCase();
+                    }
+                }
+            });
+        }
+
+        // Render pages
+        function renderPage() {
+            const content = document.getElementById('pageContent');
+            
+            switch(currentPage) {
+                case 'overview':
+                    content.innerHTML = getOverviewHTML();
+                    initializeMining();
+                    break;
+                case 'nodes':
+                    content.innerHTML = getNodesHTML();
+                    break;
+                case 'rewards':
+                    content.innerHTML = getRewardsHTML();
+                    break;
+                case 'referrals':
+                    content.innerHTML = getReferralsHTML();
+                    break;
+                case 'profile':
+                    content.innerHTML = getProfileHTML();
+                    initializeProfilePage();
+                    break;
+            }
+        }
+
+        // Overview page
+        function getOverviewHTML() {
+            const miningSection = getMiningHTML();
+            return `
+                <div class="page-content">
+                    <div class="welcome-header">
+                        <h1 class="welcome-title">
+                            Bienvenue, Maxime Peres! <span class="wave-emoji">👋</span>
+                        </h1>
+                    </div>
+
+                    ${miningSection}
+
+                    <div class="stats-grid">
+                        <div class="stat-card season-rewards">
+                            <div class="stat-header">
+                                <div class="stat-icon green">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="8" r="7"></circle>
+                                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="stat-title">
+                                    Saison 1 Récompenses
+                                    <span class="info-icon">ⓘ</span>
+                                </div>
+                            </div>
+                            <div class="stat-value">17.77K</div>
+                            <div class="stat-label">Points</div>
+                        </div>
+
+                        <div class="stat-card today-rewards">
+                            <div class="stat-header">
+                                <div class="stat-icon purple">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                    </svg>
+                                </div>
+                                <div class="stat-title">
+                                    Récompenses du jour
+                                    <span class="info-icon">ⓘ</span>
+                                </div>
+                            </div>
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">Points</div>
+                        </div>
+
+                        <div class="stat-card node-status">
+                            <div class="stat-header-row">
+                                <div class="stat-title">Statut des Nœuds</div>
+                                <button class="manage-btn">
+                                    Gérer 
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="node-details">
+                                <div class="node-row">
+                                    <span>Nœuds</span>
+                                    <span class="node-type">Nœud Sentinelle</span>
+                                </div>
+                                <div class="node-row">
+                                    <span>Total:</span>
+                                    <span class="node-value">9</span>
+                                </div>
+                                <div class="node-row">
+                                    <span>Connectés:</span>
+                                    <span class="node-value connected">1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-section">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Statistiques des Récompenses</h3>
+                                <select class="filter-select">
+                                    <option value="daily">Quotidien</option>
+                                    <option value="weekly">Hebdomadaire</option>
+                                    <option value="monthly">Mensuel</option>
+                                </select>
+                            </div>
+                            <div class="chart-placeholder">
+                                <p style="text-align: center; padding: 100px 0; color: #9ca3af;">
+                                    📊 Graphique des statistiques de récompenses<br>
+                                    <small>Network • Parrainages • Boost • Bonus</small>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="season-card">
+                            <div class="season-badge">
+                                <svg class="season-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                </svg>
+                            </div>
+                            <h2 class="season-title">Saison 1<br/>terminée</h2>
+                            <p class="season-subtitle">Restez à l'écoute pour la suite.</p>
+                            <button class="learn-more-btn">En savoir plus</button>
+                            <div class="season-decoration"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getMiningHTML() {
+            return `
+                <div class="mining-section">
+                    <h2>Miner des points</h2>
+                    <p>Lancer le minage pour gagner des points en utilisant la puissance de votre CPU.</p>
+                    <button id="start-mining-btn" class="profile-btn primary">Commencer à miner</button>
+                    <div id="mining-status" style="margin-top: 15px;"></div>
+                </div>
+            `;
+        }
+
+        function initializeMining() {
+            const startMiningBtn = document.getElementById('start-mining-btn');
+            const miningStatus = document.getElementById('mining-status');
+            let isMining = false;
+
+            refreshHeader();
+
+            startMiningBtn.addEventListener('click', () => {
+                if (isMining) {
+                    isMining = false;
+                    startMiningBtn.textContent = 'Commencer à miner';
+                    miningStatus.textContent = 'Minage arrêté.';
+                } else {
+                    isMining = true;
+                    startMiningBtn.textContent = 'Arrêter le minage';
+                    miningStatus.textContent = 'Minage en cours...';
+                    mine();
+                }
+            });
+
+            async function mine() {
+                if (!isMining) return;
+
+                const challenge = 'révolution_network_challenge_' + Date.now();
+                let nonce = 0;
+                let found = false;
+
+                while (isMining && !found) {
+                    const attempt = `${challenge}:${nonce}`;
+                    const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(attempt));
+                    const hashArray = Array.from(new Uint8Array(hashBuffer));
+                    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+                    if (hashHex.startsWith('0000')) {
+                        found = true;
+                        miningStatus.textContent = `Preuve trouvée ! Hash : ${hashHex.substring(0, 10)}...`;
+                        submitProof(challenge, nonce);
+                    } else {
+                        nonce++;
+                        if (nonce % 1000 === 0) {
+                            miningStatus.textContent = `Minage en cours... (nonce: ${nonce})`;
+                            await new Promise(resolve => setTimeout(resolve, 0)); // Permet au navigateur de respirer
+                        }
+                    }
+                }
+
+                if (isMining) {
+                    setTimeout(mine, 1000); // Recommence après une seconde
+                }
+            }
+
+            function submitProof(challenge, nonce) {
+                const token = localStorage.getItem('token');
+                fetch('/api/rewards/proof-of-work', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ challenge, nonce })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        miningStatus.textContent = `+${data.points_earned} points gagnés !`;
+                        refreshHeader();
+                    } else {
+                        miningStatus.textContent = `Erreur : ${data.error}`;
+                    }
+                });
+            }
+        }
+
+        // Nodes page
+        function getNodesHTML() {
+            const nodes = [
+                { id: 1, name: 'Nœud Principal #1', status: 'connected', uptime: '99.8%', points: 8543, location: 'Paris, FR' },
+                { id: 2, name: 'Nœud Sentinelle #2', status: 'connected', uptime: '100%', points: 5234, location: 'Londres, UK' },
+                { id: 3, name: 'Nœud Backup #3', status: 'disconnected', uptime: '0%', points: 0, location: 'Berlin, DE' },
+                { id: 4, name: 'Nœud Test #4', status: 'maintenance', uptime: '85.3%', points: 3421, location: 'Amsterdam, NL' },
+                { id: 5, name: 'Nœud Principal #5', status: 'connected', uptime: '98.5%', points: 7891, location: 'Madrid, ES' },
+                { id: 6, name: 'Nœud Sentinelle #6', status: 'disconnected', uptime: '0%', points: 0, location: 'Rome, IT' },
+                { id: 7, name: 'Nœud #7', status: 'connected', uptime: '97.2%', points: 4567, location: 'Bruxelles, BE' },
+                { id: 8, name: 'Nœud #8', status: 'maintenance', uptime: '75.1%', points: 2345, location: 'Zurich, CH' },
+                { id: 9, name: 'Nœud #9', status: 'connected', uptime: '99.1%', points: 6789, location: 'Lyon, FR' }
+            ];
+
+            const statusText = {
+                connected: 'Connecté',
+                disconnected: 'Déconnecté',
+                maintenance: 'Maintenance'
+            };
+
+            let nodesCards = nodes.map(node => `
+                <div class="node-card">
+                    <div class="node-card-header">
+                        <div class="node-name">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                            </svg>
+                            <span>${node.name}</span>
+                        </div>
+                        <span class="node-status status-${node.status}">
+                            ${statusText[node.status]}
+                        </span>
+                    </div>
+                    <div class="node-card-body">
+                        <div class="node-metric">
+                            <span class="metric-label">Temps de fonctionnement</span>
+                            <span class="metric-value">${node.uptime}</span>
+                        </div>
+                        <div class="node-metric">
+                            <span class="metric-label">Points gagnés</span>
+                            <span class="metric-value highlight">${node.points.toLocaleString()}</span>
+                        </div>
+                        <div class="node-metric">
+                            <span class="metric-label">Localisation</span>
+                            <span class="metric-value">${node.location}</span>
+                        </div>
+                    </div>
+                    <div class="node-card-footer">
+                        <button class="node-action-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M12 1v6m0 6v6m5.2-10.8l-4.2 4.2m0 0l-4.2-4.2"></path>
+                            </svg>
+                            Configurer
+                        </button>
+                        <button class="node-action-btn secondary">
+                            Détails
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            return `
+                <div class="page-content">
+                    <div class="page-header">
+                        <h1 class="page-title">Mes Nœuds</h1>
+                        <button class="add-node-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                            </svg>
+                            Ajouter un nœud
+                        </button>
+                    </div>
+
+                    <div class="nodes-stats">
+                        <div class="node-stat-card">
+                            <svg class="node-stat-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                            </svg>
+                            <div class="node-stat-info">
+                                <div class="node-stat-value">9</div>
+                                <div class="node-stat-label">Total des nœuds</div>
+                            </div>
+                        </div>
+                        <div class="node-stat-card active">
+                            <svg class="node-stat-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                                <rect x="9" y="9" width="6" height="6"></rect>
+                                <line x1="9" y1="1" x2="9" y2="4"></line>
+                                <line x1="15" y1="1" x2="15" y2="4"></line>
+                                <line x1="9" y1="20" x2="9" y2="23"></line>
+                                <line x1="15" y1="20" x2="15" y2="23"></line>
+                                <line x1="20" y1="9" x2="23" y2="9"></line>
+                                <line x1="20" y1="14" x2="23" y2="14"></line>
+                                <line x1="1" y1="9" x2="4" y2="9"></line>
+                                <line x1="1" y1="14" x2="4" y2="14"></line>
+                            </svg>
+                            <div class="node-stat-info">
+                                <div class="node-stat-value">5</div>
+                                <div class="node-stat-label">Nœuds actifs</div>
+                            </div>
+                        </div>
+                        <div class="node-stat-card">
+                            <svg class="node-stat-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                            <div class="node-stat-info">
+                                <div class="node-stat-value">38.79K</div>
+                                <div class="node-stat-label">Points totaux</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nodes-grid">
+                        ${nodesCards}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Rewards page
+        function getRewardsHTML() {
+            const rewards = [
+                { date: '26 Août', network: 1200, referrals: 800, boost: 400, bonus: 300, total: 2700 },
+                { date: '25 Août', network: 1350, referrals: 650, boost: 500, bonus: 250, total: 2750 },
+                { date: '24 Août', network: 1100, referrals: 900, boost: 350, bonus: 400, total: 2750 },
+                { date: '23 Août', network: 1450, referrals: 750, boost: 450, bonus: 350, total: 3000 },
+                { date: '22 Août', network: 1250, referrals: 850, boost: 400, bonus: 300, total: 2800 },
+                { date: '21 Août', network: 1300, referrals: 700, boost: 550, bonus: 450, total: 3000 },
+                { date: '20 Août', network: 1150, referrals: 950, boost: 300, bonus: 350, total: 2750 }
+            ];
+
+            let rows = rewards.map(reward => `
+                <tr>
+                    <td class="date-cell">${reward.date}</td>
+                    <td class="network-cell">${reward.network}</td>
+                    <td class="referrals-cell">${reward.referrals}</td>
+                    <td class="boost-cell">${reward.boost}</td>
+                    <td class="bonus-cell">${reward.bonus}</td>
+                    <td class="total-cell">${reward.total}</td>
+                </tr>
+            `).join('');
+
+            return `
+                <div class="page-content">
+                    <div class="page-header">
+                        <h1 class="page-title">Récompenses</h1>
+                    </div>
+
+                    <div class="rewards-summary">
+                        <div class="summary-card total">
+                            <svg class="summary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="8" r="7"></circle>
+                                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                            </svg>
+                            <div class="summary-info">
+                                <div class="summary-label">Total Saison 1</div>
+                                <div class="summary-value">17.77K</div>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-color network"></div>
+                            <div class="summary-info">
+                                <div class="summary-label">Network</div>
+                                <div class="summary-value">8.5K</div>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-color referrals"></div>
+                            <div class="summary-info">
+                                <div class="summary-label">Parrainages</div>
+                                <div class="summary-value">5.2K</div>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-color boost"></div>
+                            <div class="summary-info">
+                                <div class="summary-label">Boost</div>
+                                <div class="summary-value">2.8K</div>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-color bonus"></div>
+                            <div class="summary-info">
+                                <div class="summary-label">Bonus</div>
+                                <div class="summary-value">1.3K</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rewards-table-container">
+                        <table class="rewards-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Network</th>
+                                    <th>Parrainages</th>
+                                    <th>Boost</th>
+                                    <th>Bonus</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rows}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Referrals page
+        function getReferralsHTML() {
+            const referrals = [
+                { name: 'Alice Martin', joined: '15 Août 2024', points: 3420, status: 'active' },
+                { name: 'Thomas Dubois', joined: '18 Août 2024', points: 2150, status: 'active' },
+                { name: 'Sophie Bernard', joined: '20 Août 2024', points: 1890, status: 'active' },
+                { name: 'Lucas Petit', joined: '22 Août 2024', points: 980, status: 'inactive' },
+                { name: 'Emma Rousseau', joined: '24 Août 2024', points: 450, status: 'active' }
+            ];
+
+            let referralsList = referrals.map(ref => {
+                const initials = ref.name.split(' ').map(n => n[0]).join('');
+                return `
+                    <div class="referral-item">
+                        <div class="referral-avatar">${initials}</div>
+                        <div class="referral-info">
+                            <div class="referral-name">${ref.name}</div>
+                            <div class="referral-joined">Inscrit le ${ref.joined}</div>
+                        </div>
+                        <div class="referral-points">${ref.points} pts</div>
+                        <div class="referral-status ${ref.status}">
+                            ${ref.status === 'active' ? 'Actif' : 'Inactif'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="page-content">
+                    <div class="page-header">
+                        <h1 class="page-title">Parrainages</h1>
+                    </div>
+
+                    <div class="referral-stats-grid">
+                        <div class="referral-stat">
+                            <svg class="referral-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                            <div class="referral-stat-info">
+                                <div class="referral-stat-value">5</div>
+                                <div class="referral-stat-label">Total parrainés</div>
+                            </div>
+                        </div>
+                        <div class="referral-stat">
+                            <svg class="referral-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="8" r="7"></circle>
+                                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                            </svg>
+                            <div class="referral-stat-info">
+                                <div class="referral-stat-value">8,890</div>
+                                <div class="referral-stat-label">Points gagnés</div>
+                            </div>
+                        </div>
+                        <div class="referral-stat">
+                            <svg class="referral-stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                            <div class="referral-stat-info">
+                                <div class="referral-stat-value">4</div>
+                                <div class="referral-stat-label">Actifs</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="referral-link-section">
+                        <h3>Votre lien de parrainage</h3>
+                        <div class="referral-link-box">
+                            <input 
+                                type="text" 
+                                value="https://revolution-network.io/ref/maxime-peres" 
+                                readonly 
+                                class="referral-input"
+                            />
+                            <button class="copy-btn" onclick="copyReferralLink()">Copier</button>
+                        </div>
+                    </div>
+
+                    <div class="referrals-list">
+                        <h3>Vos parrainés</h3>
+                        ${referralsList}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Profile page
+        function getProfileHTML() {
+            return `
+                <div class="page-content">
+                    <div class="page-header">
+                        <h1 class="page-title">Profil</h1>
+                    </div>
+
+                    <div class="profile-container">
+                        <div class="profile-card">
+                            <form id="profile-form">
+                                <div class="profile-avatar-section">
+                                    <img id="avatar-preview" class="profile-avatar-large" src="https://via.placeholder.com/120" alt="Avatar">
+                                    <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+                                    <button type="button" id="change-avatar-btn" class="profile-btn-secondary">Changer</button>
+                                </div>
+
+                                <div class="profile-info-section">
+                                    <div class="profile-field">
+                                        <label for="username">Nom d'utilisateur</label>
+                                        <input type="text" id="username" name="username" required>
+                                    </div>
+                                    <div class="profile-field">
+                                        <label for="email">Email</label>
+                                        <input type="email" id="email" name="email" readonly>
+                                    </div>
+                                    <div class="profile-field">
+                                        <label for="solana_address">Adresse Solana</label>
+                                        <input type="text" id="solana_address" name="solana_address">
+                                    </div>
+                                </div>
+
+                                <div class="profile-actions">
+                                    <button type="submit" class="profile-btn primary">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                            <polyline points="7 3 7 8 15 8"></polyline>
+                                        </svg>
+                                        Enregistrer
+                                    </button>
+                                    <button type="button" id="logout-btn" class="profile-btn danger">
+                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                            <polyline points="16 17 21 12 16 7"></polyline>
+                                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                                        </svg>
+                                        Se déconnecter
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="achievements-card">
+                            <h3>Accomplissements</h3>
+                            <div class="achievements-grid">
+                                <!-- Les accomplissements seront chargés dynamiquement -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializeProfilePage() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const avatarPreview = document.getElementById('avatar-preview');
+            const avatarUpload = document.getElementById('avatar-upload');
+            const changeAvatarBtn = document.getElementById('change-avatar-btn');
+            const profileForm = document.getElementById('profile-form');
+            const usernameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
+            const solanaInput = document.getElementById('solana_address');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            // Charger les données du profil
+            fetch('/api/user/profile', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.user) {
+                    usernameInput.value = data.user.username;
+                    emailInput.value = data.user.email;
+                    solanaInput.value = data.user.solana_address || '';
+                    if (data.user.profile_picture_url) {
+                        avatarPreview.src = data.user.profile_picture_url;
+                    }
+                }
+            });
+
+            // Gérer le changement d'avatar
+            changeAvatarBtn.addEventListener('click', () => avatarUpload.click());
+            avatarUpload.addEventListener('change', () => {
+                if (avatarUpload.files && avatarUpload.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        avatarPreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(avatarUpload.files[0]);
+                }
+            });
+
+            // Gérer la soumission du formulaire
+            profileForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData();
+                formData.append('username', usernameInput.value);
+                formData.append('solana_address', solanaInput.value);
+                if (avatarUpload.files && avatarUpload.files[0]) {
+                    formData.append('avatar', avatarUpload.files[0]);
+                }
+
+                fetch('/api/user/profile', {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Profil mis à jour avec succès!');
+                        // Mettre à jour l'avatar dans le header
+                        document.querySelector('.user-avatar').textContent = usernameInput.value.charAt(0).toUpperCase();
+                    } else {
+                        alert('Erreur: ' + data.error);
+                    }
+                });
+            });
+            
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('token');
+                window.location.reload();
+            });
+        }
+
+        // Copy referral link function
+        function copyReferralLink() {
+            const input = document.querySelector('.referral-input');
+            input.select();
+            document.execCommand('copy');
+            
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Copié!';
+            setTimeout(() => {
+                btn.textContent = originalText;
+            }, 2000);
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPage();
+        });
+    </script>
+</body>
+</html>

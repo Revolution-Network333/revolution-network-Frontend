@@ -1,0 +1,49 @@
+{
+  "name": "revolution-network-desktop",
+  "version": "1.0.0",
+  "description": "Revolution Network Desktop Node",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win",
+    "dist": "electron-builder"
+  },
+  "keywords": [
+    "electron",
+    "revolution",
+    "network",
+    "node"
+  ],
+  "author": "Revolution Network",
+  "license": "ISC",
+  "dependencies": {
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "electron": "^28.2.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.revolution.network",
+    "productName": "Revolution Network Node",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Revolution Network Node",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "runAfterFinish": true
+    },
+    "directories": {
+      "output": "dist"
+    }
+  }
+}

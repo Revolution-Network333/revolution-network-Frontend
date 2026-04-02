@@ -19,12 +19,24 @@ function generateNodeName() {
 router.post('/create', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
+    if (!userId) {
+        return res.status(401).json({ error: 'User ID missing from token' });
+    }
+
     const ipAddressRaw = (req.headers['x-forwarded-for'] || '').split(',')[0] 
       || req.connection?.remoteAddress 
       || req.socket?.remoteAddress 
       || req.ip;
     const ipAddress = (ipAddressRaw || '').replace('::ffff:', '') || 'unknown';
-    const userAgent = req.headers['user-agent'];
+    const userAgent = req.headers['user-agent'] || 'unknown';
+
+    // Rôle utilisateur
+    const roleRes = await db.query('SELECT role FROM users WHERE id = $1', [userId]);
+    if (roleRes.rows.length === 0) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+    const isAdmin = (roleRes.rows[0]?.role === 'admin');
+
     try {
       const banned = await db.query(
         'SELECT 1 FROM banned_ips WHERE ip_address = $1 LIMIT 1',
@@ -33,43 +45,46 @@ router.post('/create', authenticateToken, async (req, res) => {
       if (banned.rows.length > 0) {
         return res.status(403).json({ error: 'IP bannie' });
       }
-    } catch (_) {}
-    
-    // Rôle utilisateur
-    const roleRes = await db.query('SELECT role FROM users WHERE id = $1', [userId]);
-    const isAdmin = (roleRes.rows[0]?.role === 'admin');
-    
-    // Nettoyer les sessions périmées (pas de ping depuis > 5 minutes)
-    if (db.isSQLite) {
-      await db.query(
-        `UPDATE sessions
-         SET end_time = CURRENT_TIMESTAMP, is_active = 0, status = 'expired'
-         WHERE ip_address = $1 
-           AND is_active = 1
-           AND ((julianday('now') - julianday(COALESCE(last_ping, start_time))) * 86400) > 300`,
-        [ipAddress]
-      );
-    } else if (db.isMySQL) {
-      await db.query(
-        `UPDATE sessions
-         SET end_time = NOW(), is_active = false, status = 'expired'
-         WHERE ip_address = $1 
-           AND is_active = true
-           AND TIMESTAMPDIFF(SECOND, COALESCE(last_ping, start_time), NOW()) > 300`,
-        [ipAddress]
-      );
-    } else {
-      await db.query(
-        `UPDATE sessions
-         SET end_time = CURRENT_TIMESTAMP, is_active = false, status = 'expired'
-         WHERE ip_address = $1 
-           AND is_active = true
-           AND EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - COALESCE(last_ping, start_time))) > 300`,
-        [ipAddress]
-      );
+    } catch (e) {
+        console.error('Banned IP check error:', e);
     }
     
-    // Vérifier le nombre de sessions actives (après nettoyage)
+    // Nettoyer les sessions périmées
+    try {
+        if (db.isSQLite) {
+          await db.query(
+            `UPDATE sessions
+             SET end_time = CURRENT_TIMESTAMP, is_active = 0, status = 'expired'
+             WHERE ip_address = $1 
+               AND is_active = 1
+               AND ((julianday('now') - julianday(COALESCE(last_ping, start_time))) * 86400) > 300`,
+            [ipAddress]
+          );
+        } else if (db.isMySQL) {
+          await db.query(
+            `UPDATE sessions
+             SET end_time = NOW(), is_active = false, status = 'expired'
+             WHERE ip_address = $1 
+               AND is_active = true
+               AND TIMESTAMPDIFF(SECOND, COALESCE(last_ping, start_time), NOW()) > 300`,
+            [ipAddress]
+          );
+        } else {
+          // PostgreSQL fallback
+          await db.query(
+            `UPDATE sessions
+             SET end_time = CURRENT_TIMESTAMP, is_active = false, status = 'expired'
+             WHERE ip_address = $1 
+               AND is_active = true
+               AND (EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - COALESCE(last_ping, start_time))) > 300 OR COALESCE(last_ping, start_time) IS NULL)`,
+            [ipAddress]
+          );
+        }
+    } catch (cleanupErr) {
+        console.error('Session cleanup error (non-fatal):', cleanupErr);
+    }
+    
+    // Vérifier le nombre de sessions actives
     const activeSessionsResult = await db.query(
       `SELECT COUNT(*) as count
        FROM sessions
@@ -77,46 +92,7 @@ router.post('/create', authenticateToken, async (req, res) => {
       [userId]
     );
     
-    const activeSessions = parseInt(activeSessionsResult.rows[0].count);
-    
-    /*
-    if (activeSessions >= config.rewards.maxPeersPerUser) {
-      return res.status(429).json({ 
-        error: 'Maximum active sessions reached',
-        max: config.rewards.maxPeersPerUser,
-      });
-    }
-    */
-    
-    // Vérifier les sessions par IP (anti-fraude)
-    const ipSessionsResult = await db.query(
-      `SELECT COUNT(*) as count
-       FROM sessions
-       WHERE ip_address = $1 AND is_active = true`,
-      [ipAddress]
-    );
-    
-    const ipSessions = parseInt(ipSessionsResult.rows[0].count);
-    
-    /*
-    if (!isAdmin && ipSessions >= config.antiFraud.maxSessionsPerIP) {
-      // Stratégie de déblocage: fermer la plus ancienne session active pour cette IP
-      const oldest = await db.query(
-        `SELECT id FROM sessions 
-         WHERE ip_address = $1 AND is_active = true 
-         ORDER BY start_time ASC LIMIT 1`,
-        [ipAddress]
-      );
-      if (oldest.rows.length > 0) {
-        await db.query(
-          `UPDATE sessions SET end_time = CURRENT_TIMESTAMP, is_active = false, status = 'closed_by_policy'
-           WHERE id = $1`,
-          [oldest.rows[0].id]
-        );
-      }
-      // Continuer la création pour ne pas bloquer (policy: permissive)
-    }
-    */
+    const activeSessions = parseInt(activeSessionsResult.rows[0]?.count || 0);
     
     // Créer la session
     const sessionToken = uuidv4();
@@ -129,6 +105,10 @@ router.post('/create', authenticateToken, async (req, res) => {
       [userId, sessionToken, ipAddress, userAgent, nodeName]
     );
     
+    if (result.rows.length === 0) {
+        throw new Error('Failed to insert session');
+    }
+
     const session = result.rows[0];
     
     res.status(201).json({
@@ -140,8 +120,8 @@ router.post('/create', authenticateToken, async (req, res) => {
     });
     
   } catch (error) {
-    console.error('Create session error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Full Create session error:', error);
+    res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 });
 

@@ -1,3 +1,11 @@
+# Electron / Desktop App
+desktop-app/dist/
+desktop-app/node_modules/
+*.exe
+*.zip
+*.crx
+*.pem
+
 # Backend - garder en local
 *.env
 *.db
