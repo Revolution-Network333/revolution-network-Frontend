@@ -874,8 +874,8 @@ router.delete('/users/:id', authenticateToken, checkAdmin, async (req, res) => {
   try {
     const userId = parseInt(req.params.id);
     if (!userId || Number.isNaN(userId)) return res.status(400).json({ error: 'ID utilisateur invalide' });
-    const r = await db.query('DELETE FROM users WHERE id = $1 RETURNING id', [userId]);
-    if (r.rows.length === 0) return res.status(404).json({ error: 'Utilisateur introuvable' });
+    const r = await db.query('DELETE FROM users WHERE id = $1', [userId]);
+    if (r.rowCount === 0) return res.status(404).json({ error: 'Utilisateur introuvable' });
     res.json({ success: true });
   } catch (e) {
     console.error(e);

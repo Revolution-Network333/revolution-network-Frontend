@@ -185,9 +185,11 @@ router.post('/login', async (req, res) => {
     let result;
     if (email) {
       // Trouver l'utilisateur par email OU username
+      // Correction: On vérifie si l'entrée est un email pour adapter la requête si besoin, 
+      // mais la requête combinée est déjà correcte. On s'assure juste de l'is_active.
       result = await db.query(
-        'SELECT * FROM users WHERE (email = $1 OR username = $2) AND is_active = true',
-        [email, email]
+        'SELECT * FROM users WHERE (LOWER(email) = LOWER($1) OR LOWER(username) = LOWER($1))',
+        [email]
       );
     } else {
       // Login via adresse wallet

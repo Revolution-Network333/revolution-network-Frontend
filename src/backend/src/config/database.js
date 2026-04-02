@@ -208,6 +208,34 @@ if (sqliteForced || (!connectionString && !shouldUseMySql())) {
           const [rows] = await pool.query(`SELECT ${cols} FROM ${table} WHERE ${whereClauseMySql}`, whereParams);
           return { rows: rows || [], rowCount: Array.isArray(rows) ? rows.length : 0 };
         }
+
+        if (/^\s*DELETE\b/i.test(baseSql)) {
+          const tableMatch = baseSql.match(/^\s*DELETE\s+FROM\s+([`"\w.]+)/i);
+          const table = tableMatch ? tableMatch[1] : null;
+          const whereClausePg = extractWhereForReturning(baseSql);
+          const whereParams = whereClausePg ? getParamValuesForClause(whereClausePg, params) : [];
+          const whereClauseMySql = whereClausePg ? rewriteForMySql(translatePgParamsToMySql(whereClausePg)) : null;
+
+          const normalized = rewriteForMySql(translatePgParamsToMySql(baseSql));
+          const [result] = await pool.query(normalized, params);
+
+          const rowCount = result?.affectedRows || 0;
+          if (rowCount === 0) return { rows: [], rowCount: 0 };
+
+          // For DELETE ... RETURNING, we cannot select after delete.
+          // However, if we're only returning 'id', we might have it in params if it was a 'WHERE id = ?'
+          // For simplicity, if we are returning 'id' and it was a direct ID delete, we can mock it.
+          // Otherwise, we just return empty rows but with correct rowCount.
+          if (returning.toLowerCase() === 'id' && whereClauseMySql && whereClauseMySql.includes('id = ?')) {
+             // Find the index of 'id = ?' in whereClauseMySql to get the correct param
+             const parts = whereClauseMySql.split(/\bAND\b/i);
+             const idPartIdx = parts.findIndex(p => p.toLowerCase().includes('id = ?'));
+             if (idPartIdx !== -1 && whereParams[idPartIdx] !== undefined) {
+                return { rows: [{ id: whereParams[idPartIdx] }], rowCount };
+             }
+          }
+          return { rows: [], rowCount };
+        }
       }
 
       const normalized = rewriteForMySql(translatePgParamsToMySql(sql));

@@ -40,6 +40,6 @@ const start = async () => {
     }
   } catch (_) {}
   process.env.SRC_PROXY = 'backend';
-  require('../backend/src/server.js');
+  require('./backend/src/server.js');
 };
 start();
