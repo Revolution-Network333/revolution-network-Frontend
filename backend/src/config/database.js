@@ -88,6 +88,13 @@ if (sqliteForced || (!connectionString && !shouldUseMySql())) {
 
     const rewriteForMySql = (sql) => {
       let s = String(sql || '');
+      
+      // NEW: Intercept RETURNING here if not handled by query() wrapper
+      const retMatch = s.match(/\s+RETURNING\s+([\s\S]+)$/i);
+      if (retMatch) {
+        s = s.slice(0, retMatch.index).trim();
+      }
+
       s = s.replace(/^\s*BEGIN\s*;?\s*$/i, 'START TRANSACTION');
       s = s.replace(/\bALTER\s+TABLE\s+IF\s+EXISTS\s+/gi, 'ALTER TABLE ');
       s = s.replace(/\bCREATE\s+UNIQUE\s+INDEX\s+IF\s+NOT\s+EXISTS\s+/gi, 'CREATE UNIQUE INDEX ');
@@ -170,7 +177,20 @@ if (sqliteForced || (!connectionString && !shouldUseMySql())) {
     };
 
     const query = async (sql, params = []) => {
-      const returningInfo = parseReturning(sql);
+      let returningInfo = parseReturning(sql);
+      
+      // If no RETURNING found with regex, check if it's a simple DELETE/UPDATE/INSERT with RETURNING
+      if (!returningInfo) {
+        const upper = String(sql || '').toUpperCase();
+        const retIdx = upper.lastIndexOf(' RETURNING ');
+        if (retIdx !== -1) {
+          returningInfo = {
+            returning: String(sql).slice(retIdx + 11).trim(),
+            baseSql: String(sql).slice(0, retIdx).trim()
+          };
+        }
+      }
+
       if (returningInfo) {
         const baseSql = returningInfo.baseSql;
         const returning = returningInfo.returning;
