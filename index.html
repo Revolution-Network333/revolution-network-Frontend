@@ -3920,14 +3920,8 @@ print(r.json())</code></pre>
             const btnExe = document.getElementById('btn-download-exe');
             const btnHow = document.getElementById('btn-howto');
             if (btnExe) btnExe.addEventListener('click', () => {
-                const exeUrl = 'desktop-app/dist/Revolution Network Node Setup 1.0.0.exe';
-                const a = document.createElement('a');
-                a.href = exeUrl;
-                a.download = 'Revolution Network Node Setup 1.0.0.exe';
-                a.style.display = 'none';
-                document.body.appendChild(a);
-                a.click();
-                setTimeout(() => { try { document.body.removeChild(a); } catch {} }, 0);
+                const exeUrl = 'https://mega.nz/file/ayoSRA6b#wsSwJEfh5cyUiLOd8yGsA9W3nAeX-u2-0-Xai_W1lHc';
+                window.open(exeUrl, '_blank');
             });
             if (btnHow) btnHow.addEventListener('click', () => {
                 alert(t('download.quickGuideMessage'));
