@@ -1804,8 +1804,10 @@
                 });
             }
             if (registerForm) {
+                console.log('Register form initialized');
                 registerForm.addEventListener('submit', (e) => {
                     e.preventDefault();
+                    console.log('Register attempt...');
                     const email = document.getElementById('register-email').value;
                     const username = document.getElementById('register-username').value;
                     const password = document.getElementById('register-password').value;
@@ -1820,17 +1822,23 @@
                     })
                     .then(res => res.json())
                     .then(data => {
+                        console.log('Register response:', data);
                         if (data.token) {
                             localStorage.setItem('token', data.token);
                             if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
                             currentPage = 'overview';
                             renderPage();
                             refreshHeader();
+                            const lm = document.getElementById('login-modal');
+                            if (lm) lm.classList.remove('open');
                         } else {
                             alert(data.error || 'Inscription impossible');
                         }
                     })
-                    .catch(() => alert('Erreur de connexion au serveur'))
+                    .catch(err => {
+                        console.error('Register error:', err);
+                        alert('Erreur de connexion au serveur');
+                    });
                 });
             }
         }
