@@ -3399,6 +3399,13 @@ print(r.json())</code></pre>
                         document.querySelectorAll('#subscription-modal .plan-card button').forEach(btn => {
                             btn.addEventListener('click', () => {
                                 const link = btn.getAttribute('data-link');
+                                const isQuote = btn.textContent.includes('devis') || btn.textContent.includes('demander') || btn.textContent.includes('quote');
+                                
+                                if (isQuote) {
+                                    modal.remove();
+                                    try { setPage('support'); } catch(e) { console.error(e); }
+                                    return;
+                                }
                                 if (link) window.open(link, '_blank');
                             });
                         });
@@ -4601,6 +4608,14 @@ function initializeShopPage() {
                 document.querySelectorAll('#shop-subscriptions .plan-card button').forEach(btn => {
                     btn.addEventListener('click', () => {
                         const link = btn.getAttribute('data-link');
+                        const isQuote = btn.textContent.includes('devis') || btn.textContent.includes('demander') || btn.textContent.includes('quote');
+                        
+                        if (isQuote) {
+                            closePlansModal();
+                            try { setPage('support'); } catch(e) { console.error(e); }
+                            return;
+                        }
+
                         if (!link) {
                             alert(t('shop.payment.unavailable_plan'));
                             return;
