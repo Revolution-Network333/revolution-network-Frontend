@@ -1086,6 +1086,7 @@ router.get('/leaderboard', authenticateToken, checkAdmin, async (req, res) => {
         u.total_points, 
         u.rank, 
         u.created_at,
+        COALESCE(w.balance_ath, 0) AS balance_ath,
         (
           SELECT s.cancel_at_period_end 
           FROM subscriptions s 
@@ -1094,6 +1095,7 @@ router.get('/leaderboard', authenticateToken, checkAdmin, async (req, res) => {
           LIMIT 1
         ) AS cancel_at_period_end
       FROM users u
+      LEFT JOIN wallets w ON w.user_id = u.id
       WHERE COALESCE(u.is_banned, ${db.isSQLite ? 0 : 'FALSE'}) = ${db.isSQLite ? 0 : 'FALSE'}
     `;
     const params = [];
@@ -1141,6 +1143,7 @@ router.get('/leaderboard', authenticateToken, checkAdmin, async (req, res) => {
         tasks_count: Number(tasksCount) || 0,
         tasks_completed: Number(tasksCount) || 0,
         active_days: activeDays,
+        balance_ath: u.balance_ath || 0,
         final_airdrop_score: (u.total_points || 0) + (Number(refCount) * 100) + (Number(tasksCount) * 10),
         credits_used_month: credits.credits_used_month || 0,
         credits_balance: credits.credits_balance || 0,

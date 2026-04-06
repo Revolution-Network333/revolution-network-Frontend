@@ -3422,6 +3422,8 @@ print(r.json())</code></pre>
                     }
                 }
                 const list = document.getElementById('tasks-list');
+                const token = localStorage.getItem('token');
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
                 const typeLabels = {
                     x_follow: t('tasks.type.x_follow'),
                     x_like: t('tasks.type.x_like'),
@@ -3438,6 +3440,12 @@ print(r.json())</code></pre>
                             headers: { 'Authorization': `Bearer ${token}` }
                         });
                         if (eaRes.ok) eaStatus = await eaRes.json();
+                        
+                        // Fallback: if user is already Gold in localStorage, consider them as Gold early adopter
+                        const cachedUser = JSON.parse(localStorage.getItem('user') || '{}');
+                        if (cachedUser.rank === 'Gold' || cachedUser.role === 'Gold') {
+                            eaStatus.isGold = true;
+                        }
                     } catch (e) {}
                 }
 
@@ -3452,7 +3460,10 @@ print(r.json())</code></pre>
                     let extraInfo = '';
 
                     if (task.type === 'early_adopter') {
-                        if (eaStatus.isGold) {
+                        // Source d'autorité: le rang Gold ou le statut eaStatus
+                        const isGold = eaStatus.isGold || (user && (user.rank === 'Gold' || user.role === 'Gold'));
+                        
+                        if (isGold) {
                             statusLabel = t('tasks.validated');
                             btnStyle = 'background-color: #fbbf24; border-color: #fbbf24; color: #000; font-weight: bold;';
                             isDisabled = true;
@@ -3671,6 +3682,7 @@ print(r.json())</code></pre>
                             <input id="admin-search-input" type="text" placeholder="Recherche (username ou email)" 
                                    style="padding:8px;border:1px solid #374151;border-radius:6px;background:#111827;color:#e5e7eb;min-width:260px;">
                             <button class="profile-btn" id="admin-search-btn">Rechercher</button>
+                            <button class="profile-btn primary" onclick="currentPage='adminAirdrop'; renderPage();" title="Aller à la page des bonus globaux">🎁 Bonus Général</button>
                         </div>
                     </div>
                     <table class="data-table" id="admin-leaderboard-table">
@@ -3682,6 +3694,7 @@ print(r.json())</code></pre>
                                 <th>Points</th>
                                 <th>Referrals</th>
                                 <th>Tasks</th>
+                                <th>Aether</th>
                                 <th>Jours Actifs</th>
                                 <th>Actions</th>
                             </tr>
@@ -3753,6 +3766,7 @@ print(r.json())</code></pre>
                         <td>${u.points || 0}</td>
                         <td>${u.referral_count || 0}</td>
                         <td>${u.tasks_completed || 0}</td>
+                        <td style="color:#86efac; font-weight:bold;">${parseFloat(u.balance_ath || 0).toLocaleString()} ATH</td>
                         <td>${u.active_days || 0}</td>
                         <td class="admin-actions-cell">
                             <div class="admin-actions">
