@@ -228,28 +228,13 @@ router.get('/admin/stats', authenticateToken, async (req, res) => {
 
     const result = await db.query(`
       SELECT 
-        COUNT(*) FILTER (WHERE status = 'pending_admin') as pending_count,
-        COUNT(*) FILTER (WHERE status != 'closed') as open_count
+        SUM(CASE WHEN status = 'pending_admin' THEN 1 ELSE 0 END) as pending_count,
+        SUM(CASE WHEN status != 'closed' THEN 1 ELSE 0 END) as open_count
       FROM support_tickets
     `);
     
-    // Si FILTER n'est pas supporté (ex: SQLite ancien ou MySQL), on adapte
-    // Mais ici on semble être sur PostgreSQL/SQLite récent.
-    // Pour être sûr (DB agnostic):
-    let pending_count, open_count;
-    if (db.isSQLite || db.isMySQL) {
-        const r = await db.query(`
-            SELECT 
-                SUM(CASE WHEN status = 'pending_admin' THEN 1 ELSE 0 END) as pending_count,
-                SUM(CASE WHEN status != 'closed' THEN 1 ELSE 0 END) as open_count
-            FROM support_tickets
-        `);
-        pending_count = parseInt(r.rows[0].pending_count || 0);
-        open_count = parseInt(r.rows[0].open_count || 0);
-    } else {
-        pending_count = parseInt(result.rows[0].pending_count || 0);
-        open_count = parseInt(result.rows[0].open_count || 0);
-    }
+    const pending_count = parseInt(result.rows[0].pending_count || 0);
+    const open_count = parseInt(result.rows[0].open_count || 0);
 
     res.json({ pending_count, open_count });
   } catch (error) {
