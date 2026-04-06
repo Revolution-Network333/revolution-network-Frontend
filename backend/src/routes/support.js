@@ -229,14 +229,16 @@ router.get('/admin/stats', authenticateToken, async (req, res) => {
     const result = await db.query(`
       SELECT 
         SUM(CASE WHEN status = 'pending_admin' THEN 1 ELSE 0 END) as pending_count,
-        SUM(CASE WHEN status != 'closed' THEN 1 ELSE 0 END) as open_count
+        SUM(CASE WHEN status != 'closed' THEN 1 ELSE 0 END) as open_count,
+        COUNT(*) as total_count
       FROM support_tickets
     `);
     
     const pending_count = parseInt(result.rows[0].pending_count || 0);
     const open_count = parseInt(result.rows[0].open_count || 0);
+    const total_count = parseInt(result.rows[0].total_count || 0);
 
-    res.json({ pending_count, open_count });
+    res.json({ pending_count, open_count, total_count });
   } catch (error) {
     console.error('Admin support stats error:', error);
     res.status(500).json({ error: 'Erreur serveur' });
