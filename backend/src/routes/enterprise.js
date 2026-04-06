@@ -89,9 +89,36 @@ async function getSubscriptionPlans() {
     }));
   } catch (e) {
     plans = [
-      { id: null, name: 'Standard', description: '500 GB / mois, Support standard, Priorité normale', price: 20, currency: 'EUR', gbPerMonth: 500, priority: 'Standard', paymentLink: 'https://buy.stripe.com/5kA28p3EK2RPe76008' },
-      { id: null, name: 'Pro', description: '1 000 GB / mois, Support rapide, Priorité haute', price: 40, currency: 'EUR', gbPerMonth: 1000, priority: 'Pro', paymentLink: 'https://buy.stripe.com/bJedRb2AG8g96eyg4E4gg09' },
-      { id: null, name: 'Premium', description: '2 500 GB / mois, Support VIP, Priorité Ultra', price: 100, currency: 'EUR', gbPerMonth: 2500, priority: 'Premium', paymentLink: 'https://buy.stripe.com/00gbIX3EKbsh2YieV8' },
+      { 
+        id: null, 
+        name: 'Standard Plan – 500 GB', 
+        description: 'Standard bandwidth plan for your project. Monthly volume: 500 GB. Price per GB: €0.04. Automatic consumption tracking included. Ideal for small projects and regular users.', 
+        price: 20, 
+        currency: 'EUR', 
+        gbPerMonth: 500, 
+        priority: 'Standard', 
+        paymentLink: 'https://buy.stripe.com/3cI28t8Z46819qK9Gg4gg0a' 
+      },
+      { 
+        id: null, 
+        name: 'Pro Plan – 1,000 GB', 
+        description: 'Pro bandwidth plan for demanding projects. Monthly volume: 1,000 GB. Price per GB: €0.04. Automatic consumption tracking included. Suitable for professional users and regular applications.', 
+        price: 40, 
+        currency: 'EUR', 
+        gbPerMonth: 1000, 
+        priority: 'Pro', 
+        paymentLink: 'https://buy.stripe.com/bJedRb2AG8g96eyg4E4gg09' 
+      },
+      { 
+        id: null, 
+        name: 'Premium Plan – 2,500 GB', 
+        description: 'Premium bandwidth plan for high-traffic projects and demanding clients. Monthly volume: 2,500 GB. Price per GB: €0.04. Automatic consumption tracking included. Speed and priority bonus included.', 
+        price: 100, 
+        currency: 'EUR', 
+        gbPerMonth: 2500, 
+        priority: 'Premium', 
+        paymentLink: 'https://buy.stripe.com/3cIaEZgrw7c58mGaKk4gg08' 
+      },
     ];
   }
   // Ajouter option Entreprise Illimité sur devis

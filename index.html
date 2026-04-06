@@ -4531,57 +4531,55 @@ function initializeShopPage() {
                 if (!subs) return;
 
                 const cards = plans.map(p => {
-                    const name = p.name || t('shop.plan.default_name');
-                    const isEnterprise = /enterprise/i.test(name);
-                    const isStandard = /standard|basic/i.test(name);
+                    const name = p.name || '';
+                    const isStandard = /standard/i.test(name);
                     const isPro = /pro/i.test(name);
-                    const isPremium = /premium|business/i.test(name);
-
+                    const isPremium = /premium/i.test(name);
+                    const isEnterprise = /enterprise/i.test(name);
+                    
                     const priceLabel = (() => {
                         if (p.price == null) return t('shop.plan.quote_price');
                         return formatPrice(p.price, 'EUR');
                     })();
 
-                    // Use gbPerMonth from metadata if available, otherwise fallback to what we have
                     let gbPerMonth = p.gbPerMonth;
                     if (!gbPerMonth && p.metadata) {
                         try {
-                            const meta = JSON.parse(p.metadata);
+                            const meta = typeof p.metadata === 'string' ? JSON.parse(p.metadata) : p.metadata;
                             gbPerMonth = meta.gbPerMonth;
                         } catch(e) {}
                     }
                     const pointsLabel = gbPerMonth ? `🚀 ${gbPerMonth} GB / ${t('common.month') || 'mois'}` : '';
-                    
+
                     let recommendedTag = '';
                     if (isPro) recommendedTag = `<div class="plan-tag">${t('shop.plan.tag.recommended')}</div>`;
                     if (isPremium) recommendedTag = `<div class="plan-tag">${t('shop.plan.tag.best_value')}</div>`;
                     if (isEnterprise) recommendedTag = `<div class="plan-tag special">${t('shop.plan.tag.custom')}</div>`;
 
                     const btnLabel = (p.price == null) ? t('shop.plan.button.request_quote') : t('shop.plan.button.subscribe');
-                    
-                    const features = (() => {
-                        if (isStandard) return ['500 GB de volume', 'Support standard', 'Priorité normale'];
-                        if (isPro) return ['1 000 GB de volume', 'Support rapide', 'Priorité haute'];
-                        if (isPremium) return ['2 500 GB de volume', 'Support VIP', 'Priorité Ultra'];
-                        if (isEnterprise) return [t('shop.plan.feature.enterprise.1'), t('shop.plan.feature.enterprise.2'), t('shop.plan.feature.enterprise.3'), t('shop.plan.feature.enterprise.4'), t('shop.plan.feature.enterprise.5')];
-                        return p.description ? p.description.split(', ') : [];
-                    })();
 
                     let link = p.paymentLink || '';
                     if (isStandard) {
-                        link = 'https://buy.stripe.com/5kA28p3EK2RPe76008';
+                        link = 'https://buy.stripe.com/3cI28t8Z46819qK9Gg4gg0a';
                     } else if (isPro) {
                         link = 'https://buy.stripe.com/bJedRb2AG8g96eyg4E4gg09';
                     } else if (isPremium) {
-                        link = 'https://buy.stripe.com/00gbIX3EKbsh2YieV8';
+                        link = 'https://buy.stripe.com/3cIaEZgrw7c58mGaKk4gg08';
                     }
                     
                     const buttonHTML = `<button class="profile-btn ${isPro || isEnterprise ? 'primary' : ''}" data-link="${link}" style="font-size:0.85em;padding:8px 12px;width:auto;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${btnLabel}</button>`;
 
                     let displayName = name;
-                    if (isStandard) displayName = t('shop.plan.display.basic') || 'Standard Plan';
-                    if (isPro) displayName = t('shop.plan.display.pro_recommended') || 'Pro Plan';
-                    if (isPremium) displayName = t('shop.plan.display.business') || 'Premium Plan';
+                    if (isStandard) displayName = 'Standard Plan – 500 GB';
+                    if (isPro) displayName = 'Pro Plan – 1,000 GB';
+                    if (isPremium) displayName = 'Premium Plan – 2,500 GB';
+
+                    const features = (() => {
+                        if (isStandard) return ['Monthly volume: 500 GB', 'Price per GB: €0.04', 'Ideal for small projects'];
+                        if (isPro) return ['Monthly volume: 1,000 GB', 'Price per GB: €0.04', 'Optional speed/priority bonus'];
+                        if (isPremium) return ['Monthly volume: 2,500 GB', 'Price per GB: €0.04', 'Speed and priority included'];
+                        return p.description ? p.description.split('. ') : [];
+                    })();
 
                     return `
                         <div class="plan-card ${isPro ? 'recommended' : ''} ${isEnterprise ? 'enterprise' : ''}">
