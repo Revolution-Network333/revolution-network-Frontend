@@ -219,6 +219,45 @@ router.put('/tickets/:id/close', authenticateToken, async (req, res) => {
 
 // --- Routes Admin ---
 
+// Obtenir les statistiques des tickets (pour la bulle de notification)
+router.get('/admin/stats', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const userRes = await db.query('SELECT role FROM users WHERE id = $1', [userId]);
+    if (userRes.rows[0]?.role !== 'admin') return res.status(403).json({ error: 'Admin only' });
+
+    const result = await db.query(`
+      SELECT 
+        COUNT(*) FILTER (WHERE status = 'pending_admin') as pending_count,
+        COUNT(*) FILTER (WHERE status != 'closed') as open_count
+      FROM support_tickets
+    `);
+    
+    // Si FILTER n'est pas supporté (ex: SQLite ancien ou MySQL), on adapte
+    // Mais ici on semble être sur PostgreSQL/SQLite récent.
+    // Pour être sûr (DB agnostic):
+    let pending_count, open_count;
+    if (db.isSQLite || db.isMySQL) {
+        const r = await db.query(`
+            SELECT 
+                SUM(CASE WHEN status = 'pending_admin' THEN 1 ELSE 0 END) as pending_count,
+                SUM(CASE WHEN status != 'closed' THEN 1 ELSE 0 END) as open_count
+            FROM support_tickets
+        `);
+        pending_count = parseInt(r.rows[0].pending_count || 0);
+        open_count = parseInt(r.rows[0].open_count || 0);
+    } else {
+        pending_count = parseInt(result.rows[0].pending_count || 0);
+        open_count = parseInt(result.rows[0].open_count || 0);
+    }
+
+    res.json({ pending_count, open_count });
+  } catch (error) {
+    console.error('Admin support stats error:', error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
 // Lister tous les tickets
 router.get('/admin/tickets', authenticateToken, async (req, res) => {
   try {

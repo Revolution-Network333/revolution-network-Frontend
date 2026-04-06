@@ -125,6 +125,7 @@
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                     <span data-i18n="menu.admin_support">Admin Support</span>
+                    <span id="admin-support-notification" class="notification-bubble" style="display:none;"></span>
                 </button>
                 <button id="menu-wallet" class="menu-item" onclick="setPage('wallet')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1618,7 +1619,9 @@
                         supportBtn.style.display = 'flex';
                     }
                     if (adminSupportBtn) {
-                        adminSupportBtn.style.display = (role === 'admin' || isKornAdmin) ? 'flex' : 'none';
+                        const isAdmin = role === 'admin' || isKornAdmin;
+                        adminSupportBtn.style.display = isAdmin ? 'flex' : 'none';
+                        if (isAdmin) refreshAdminSupportNotification();
                     }
                     
                     if (enterpriseBtn) {
@@ -1661,6 +1664,43 @@
                 console.error('Erreur:', error);
             });
         }
+
+        // Logic for admin support notification
+        async function refreshAdminSupportNotification() {
+            const token = localStorage.getItem('token');
+            const bubble = document.getElementById('admin-support-notification');
+            if (!token || !bubble) return;
+
+            try {
+                const res = await fetch(`${API_BASE}/api/support/admin/stats`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    bubble.style.display = 'inline-block';
+                    bubble.classList.remove('red', 'green');
+                    if (data.pending_count > 0) {
+                        bubble.classList.add('red');
+                    } else if (data.open_count > 0) {
+                        bubble.classList.add('green');
+                    } else {
+                        bubble.style.display = 'none';
+                    }
+                } else {
+                    bubble.style.display = 'none';
+                }
+            } catch (err) {
+                // ignore
+            }
+        }
+
+        // Interval to refresh admin support notification
+        setInterval(() => {
+            const adminSupportBtn = document.getElementById('menu-admin-support');
+            if (adminSupportBtn && adminSupportBtn.style.display !== 'none') {
+                refreshAdminSupportNotification();
+            }
+        }, 60000); // every 60 seconds
 
         function maskUsername(name) {
             if (!name) return '';

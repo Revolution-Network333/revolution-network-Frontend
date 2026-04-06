@@ -112,4 +112,6 @@ module.exports = {
   query,
   getClient,
   db,
+  isSQLite: true,
+  dialect: 'sqlite'
 };

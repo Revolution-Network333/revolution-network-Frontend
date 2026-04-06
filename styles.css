@@ -161,6 +161,27 @@ body::before {
   color: #ffffff;
 }
 
+/* Notification bubble */
+.notification-bubble {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 8px;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.notification-bubble.red {
+  background-color: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+}
+
+.notification-bubble.green {
+  background-color: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
 .sidebar-footer {
   padding: 16px;
   border-top: 1px solid #111111;
