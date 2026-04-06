@@ -55,11 +55,15 @@ const rewriteForMySql = (sql) => {
   s = s.replace(/EXTRACT\s*\(\s*EPOCH\s+FROM\s*\(([^)]+)\s*-\s*([^)]+)\)\)/gi, 'TIMESTAMPDIFF(SECOND, $2, $1)');
   s = s.replace(/EXTRACT\s*\(\s*EPOCH\s+FROM\s*([^)]+)\)/gi, 'UNIX_TIMESTAMP($1)');
 
-  s = s.replace(/(\b)(rank|key|value)(\b)/gi, (m, p1, p2, offset, str) => {
+  s = s.replace(/\b(rank|key|value)\b/gi, (match, offset, str) => {
     const prev = str[offset - 1];
-    const next = str[offset + m.length];
-    if (prev === '`' && next === '`') return m;
-    return '`' + p2 + '`';
+    const next = str[offset + match.length];
+    if (prev === '`' || next === '`') return match;
+    const before = str.slice(Math.max(0, offset - 20), offset).toUpperCase();
+    if (match.toLowerCase() === 'key' && (before.includes('PRIMARY') || before.includes('UNIQUE') || before.includes('FOREIGN'))) {
+      return match;
+    }
+    return '`' + match + '`';
   });
   s = s.replace(/to_char\(([^,]+)::date,\s*'YYYY-MM-DD'\)/gi, 'DATE_FORMAT($1, "%Y-%m-%d")');
   s = s.replace(/to_char\(([^,]+),\s*'YYYY-MM-DD'\)/gi, 'DATE_FORMAT($1, "%Y-%m-%d")');

@@ -866,10 +866,10 @@ async function ensureMySqlSchema() {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         last_login TIMESTAMP NULL,
         PRIMARY KEY (id),
-        UNIQUE KEY uq_users_email (email),
-        UNIQUE KEY uq_users_username (username),
-        UNIQUE KEY uq_users_referral_code (referral_code),
-        KEY idx_users_referrer (referrer_id)
+        UNIQUE INDEX uq_users_email (email),
+        UNIQUE INDEX uq_users_username (username),
+        UNIQUE INDEX uq_users_referral_code (referral_code),
+        INDEX idx_users_referrer (referrer_id)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
       await client.query(`CREATE TABLE IF NOT EXISTS sessions (
@@ -886,8 +886,8 @@ async function ensureMySqlSchema() {
         peers_connected INT DEFAULT 0,
         status VARCHAR(50) DEFAULT 'active',
         PRIMARY KEY (id),
-        KEY idx_sessions_user_id (user_id),
-        KEY idx_sessions_active (is_active),
+        INDEX idx_sessions_user_id (user_id),
+        INDEX idx_sessions_active (is_active),
         CONSTRAINT fk_sessions_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
@@ -908,9 +908,9 @@ async function ensureMySqlSchema() {
         timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         verified BOOLEAN DEFAULT FALSE,
         PRIMARY KEY (id),
-        KEY idx_bandwidth_logs_session (session_id),
-        KEY idx_bandwidth_logs_user (user_id),
-        KEY idx_bandwidth_logs_timestamp (timestamp),
+        INDEX idx_bandwidth_logs_session (session_id),
+        INDEX idx_bandwidth_logs_user (user_id),
+        INDEX idx_bandwidth_logs_timestamp (timestamp),
         CONSTRAINT fk_bandwidth_logs_session FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE,
         CONSTRAINT fk_bandwidth_logs_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
@@ -925,9 +925,9 @@ async function ensureMySqlSchema() {
         total_points_earned INT DEFAULT 0,
         sessions_count INT DEFAULT 0,
         PRIMARY KEY (id),
-        UNIQUE KEY uq_daily_stats_user_date (user_id, date),
-        KEY idx_daily_stats_user (user_id),
-        KEY idx_daily_stats_date (date),
+        UNIQUE INDEX uq_daily_stats_user_date (user_id, date),
+        INDEX idx_daily_stats_user (user_id),
+        INDEX idx_daily_stats_date (date),
         CONSTRAINT fk_daily_stats_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
@@ -941,9 +941,9 @@ async function ensureMySqlSchema() {
         ip_address VARCHAR(45),
         detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        KEY idx_fraud_logs_user (user_id),
-        KEY idx_fraud_logs_session (session_id),
-        KEY idx_fraud_logs_detected (detected_at),
+        INDEX idx_fraud_logs_user (user_id),
+        INDEX idx_fraud_logs_session (session_id),
+        INDEX idx_fraud_logs_detected (detected_at),
         CONSTRAINT fk_fraud_logs_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         CONSTRAINT fk_fraud_logs_session FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
@@ -957,8 +957,8 @@ async function ensureMySqlSchema() {
         disconnected_at TIMESTAMP NULL,
         bytes_exchanged BIGINT DEFAULT 0,
         PRIMARY KEY (id),
-        KEY idx_peer_connections_session (session_id),
-        KEY idx_peer_connections_peer_user (peer_user_id),
+        INDEX idx_peer_connections_session (session_id),
+        INDEX idx_peer_connections_peer_user (peer_user_id),
         CONSTRAINT fk_peer_connections_session FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
@@ -969,9 +969,9 @@ async function ensureMySqlSchema() {
         level INT DEFAULT 1,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        UNIQUE KEY uq_referrals_pair (referrer_user_id, referred_user_id),
-        KEY idx_referrals_referrer (referrer_user_id),
-        KEY idx_referrals_referred (referred_user_id),
+        UNIQUE INDEX uq_referrals_pair (referrer_user_id, referred_user_id),
+        INDEX idx_referrals_referrer (referrer_user_id),
+        INDEX idx_referrals_referred (referred_user_id),
         CONSTRAINT fk_referrals_referrer FOREIGN KEY (referrer_user_id) REFERENCES users(id) ON DELETE CASCADE,
         CONSTRAINT fk_referrals_referred FOREIGN KEY (referred_user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
@@ -984,8 +984,8 @@ async function ensureMySqlSchema() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         last_used TIMESTAMP NULL,
         PRIMARY KEY (id),
-        KEY idx_api_keys_user (user_id),
-        KEY idx_api_keys_active (active),
+        INDEX idx_api_keys_user (user_id),
+        INDEX idx_api_keys_active (active),
         CONSTRAINT fk_api_keys_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
@@ -1011,8 +1011,8 @@ async function ensureMySqlSchema() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        KEY idx_jobs_user (user_id),
-        KEY idx_jobs_status_created_at (status, created_at),
+        INDEX idx_jobs_user (user_id),
+        INDEX idx_jobs_status_created_at (status, created_at),
         CONSTRAINT fk_jobs_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
@@ -1023,8 +1023,8 @@ async function ensureMySqlSchema() {
         error_text TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        UNIQUE KEY uq_job_results_job_id (job_id),
-        KEY idx_job_results_job_id (job_id),
+        UNIQUE INDEX uq_job_results_job_id (job_id),
+        INDEX idx_job_results_job_id (job_id),
         CONSTRAINT fk_job_results_job FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
@@ -1040,8 +1040,8 @@ async function ensureMySqlSchema() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        KEY idx_subscriptions_user (user_id),
-        KEY idx_subscriptions_status (status),
+        INDEX idx_subscriptions_user (user_id),
+        INDEX idx_subscriptions_status (status),
         CONSTRAINT fk_subscriptions_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
@@ -1057,7 +1057,7 @@ async function ensureMySqlSchema() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        KEY idx_shop_items_active (active)
+        INDEX idx_shop_items_active (active)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
       await client.query(`CREATE TABLE IF NOT EXISTS user_entitlements (
@@ -1069,8 +1069,8 @@ async function ensureMySqlSchema() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        UNIQUE KEY uq_user_entitlements_user_feature (user_id, feature),
-        KEY idx_user_entitlements_user (user_id),
+        UNIQUE INDEX uq_user_entitlements_user_feature (user_id, feature),
+        INDEX idx_user_entitlements_user (user_id),
         CONSTRAINT fk_user_entitlements_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
@@ -1085,8 +1085,8 @@ async function ensureMySqlSchema() {
         metadata TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        KEY idx_orders_user (user_id),
-        KEY idx_orders_status (status),
+        INDEX idx_orders_user (user_id),
+        INDEX idx_orders_status (status),
         CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         CONSTRAINT fk_orders_item FOREIGN KEY (item_id) REFERENCES shop_items(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
@@ -1108,7 +1108,7 @@ async function ensureMySqlSchema() {
         active BOOLEAN DEFAULT TRUE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        KEY idx_stakes_user (user_id),
+        INDEX idx_stakes_user (user_id),
         CONSTRAINT fk_stakes_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
@@ -1120,7 +1120,7 @@ async function ensureMySqlSchema() {
         metadata TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        KEY idx_wallet_events_user (user_id),
+        INDEX idx_wallet_events_user (user_id),
         CONSTRAINT fk_wallet_events_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
@@ -1130,7 +1130,7 @@ async function ensureMySqlSchema() {
         reason TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        UNIQUE KEY uq_banned_ips_ip (ip_address)
+        UNIQUE INDEX uq_banned_ips_ip (ip_address)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
       await client.query(`CREATE TABLE IF NOT EXISTS credit_ledger (
@@ -1141,9 +1141,9 @@ async function ensureMySqlSchema() {
         job_id BIGINT UNSIGNED NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        KEY idx_credit_ledger_user (user_id),
-        KEY idx_credit_ledger_created (created_at),
-        KEY idx_credit_ledger_job (job_id),
+        INDEX idx_credit_ledger_user (user_id),
+        INDEX idx_credit_ledger_created (created_at),
+        INDEX idx_credit_ledger_job (job_id),
         CONSTRAINT fk_credit_ledger_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
@@ -1156,8 +1156,8 @@ async function ensureMySqlSchema() {
         details JSON,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        KEY idx_rewards_ledger_user (user_id),
-        KEY idx_rewards_ledger_created (created_at),
+        INDEX idx_rewards_ledger_user (user_id),
+        INDEX idx_rewards_ledger_created (created_at),
         CONSTRAINT fk_rewards_ledger_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
@@ -1173,8 +1173,8 @@ async function ensureMySqlSchema() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        KEY idx_tasks_active_created (active, created_at),
-        KEY idx_tasks_type (type)
+        INDEX idx_tasks_active_created (active, created_at),
+        INDEX idx_tasks_type (type)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
       await client.query(`CREATE TABLE IF NOT EXISTS user_tasks (
@@ -1186,8 +1186,8 @@ async function ensureMySqlSchema() {
         timestamp_approved TIMESTAMP NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        UNIQUE KEY uq_user_tasks_user_task (user_id, task_id),
-        KEY idx_user_tasks_user_status (user_id, status),
+        UNIQUE INDEX uq_user_tasks_user_task (user_id, task_id),
+        INDEX idx_user_tasks_user_status (user_id, status),
         CONSTRAINT fk_user_tasks_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         CONSTRAINT fk_user_tasks_task FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
@@ -1201,7 +1201,7 @@ async function ensureMySqlSchema() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        KEY idx_support_tickets_user (user_id),
+        INDEX idx_support_tickets_user (user_id),
         CONSTRAINT fk_support_tickets_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
@@ -1214,7 +1214,7 @@ async function ensureMySqlSchema() {
         attachment_url TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        KEY idx_support_messages_ticket (ticket_id),
+        INDEX idx_support_messages_ticket (ticket_id),
         CONSTRAINT fk_support_messages_ticket FOREIGN KEY (ticket_id) REFERENCES support_tickets(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
@@ -1233,7 +1233,7 @@ async function ensureMySqlSchema() {
         ip_address VARCHAR(45),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
-        KEY idx_admin_logs_admin (admin_id),
+        INDEX idx_admin_logs_admin (admin_id),
         CONSTRAINT fk_admin_logs_admin FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
