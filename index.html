@@ -4668,9 +4668,19 @@ function initializeShopPage() {
                                     <label>Description</label>
                                     <textarea id="shop-description" rows="4"></textarea>
                                 </div>
-                                <div>
-                                    <label>Points / mois (abonnement)</label>
-                                    <input type="number" step="1" id="shop-points" placeholder="Ex: 25000">
+                                <div style="display: flex; gap: 10px;">
+                                    <div style="flex: 1;">
+                                        <label>GB / mois (abonnement)</label>
+                                        <input type="number" step="1" id="shop-gb" placeholder="Ex: 500">
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <label>Priorité (1-3)</label>
+                                        <select id="shop-priority">
+                                            <option value="1">Standard (1)</option>
+                                            <option value="2">Haute (2)</option>
+                                            <option value="3">Ultra (3)</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div>
                                     <label>Lien de paiement Stripe</label>
@@ -4738,7 +4748,8 @@ function initializeShopPage() {
                 };
 
                 // Defaults: hide all specific fields
-                show('#shop-points', false);
+                show('#shop-gb', false);
+                show('#shop-priority', false);
                 show('#shop-payment-link', false);
                 show('#shop-proxy-host', false);
                 show('#shop-proxy-port', false);
@@ -4751,7 +4762,8 @@ function initializeShopPage() {
                 show('#shop-admin-only', true); // Always show
 
                 if (type === 'subscription') {
-                    show('#shop-points', true);
+                    show('#shop-gb', true);
+                    show('#shop-priority', true);
                     show('#shop-payment-link', true);
                 } else if (type === 'vpn') {
                     show('#shop-proxy-host', true);
@@ -4913,7 +4925,8 @@ function initializeShopPage() {
                 const currency = document.getElementById('shop-currency');
                 const active = document.getElementById('shop-active');
                 const description = document.getElementById('shop-description');
-                const points = document.getElementById('shop-points');
+                const gb = document.getElementById('shop-gb');
+                const priority = document.getElementById('shop-priority');
                 const payment = document.getElementById('shop-payment-link');
                 const isPack = document.getElementById('shop-is-pack');
                 const packAmount = document.getElementById('shop-pack-amount');
@@ -4923,7 +4936,8 @@ function initializeShopPage() {
                 currency.value = tr.querySelector('[data-field="currency"]').textContent.trim() || 'EUR';
                 active.value = tr.querySelector('select[data-field="active"]').value;
                 description.value = tr.querySelector('[data-field="description"]').textContent.trim();
-                points.value = '';
+                gb.value = '';
+                priority.value = '1';
                 payment.value = '';
                 isPack.value = '0';
                 packAmount.value = '';
@@ -4931,7 +4945,8 @@ function initializeShopPage() {
                     const metaCell = tr.querySelector('[data-field="metadata"]');
                     if (metaCell) {
                         const meta = JSON.parse(metaCell.textContent || '{}');
-                        points.value = meta.pointsPerMonth || '';
+                        gb.value = meta.gbPerMonth || '';
+                        priority.value = meta.priority_level || '1';
                         payment.value = meta.paymentLink || '';
                         document.getElementById('shop-token-symbol').value = meta.tokenSymbol || '';
                         document.getElementById('shop-unit-price').value = meta.unitPrice || '';
@@ -4975,7 +4990,8 @@ function initializeShopPage() {
                     active: document.getElementById('shop-active').value === '1',
                     description: document.getElementById('shop-description').value,
                     metadata: JSON.stringify({
-                        pointsPerMonth: parseInt(document.getElementById('shop-points').value || '0') || undefined,
+                        gbPerMonth: parseInt(document.getElementById('shop-gb').value || '0') || undefined,
+                        priority_level: parseInt(document.getElementById('shop-priority').value || '1') || 1,
                         paymentLink: (document.getElementById('shop-payment-link').value || '').trim() || undefined,
                         stripeLink: (document.getElementById('shop-payment-link').value || '').trim() || undefined,
                         proxyHost: (document.getElementById('shop-proxy-host').value || '').trim() || undefined,

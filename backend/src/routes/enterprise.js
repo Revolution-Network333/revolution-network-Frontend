@@ -281,10 +281,10 @@ router.get('/dashboard-stats', authenticateToken, async (req, res) => {
     // 1. Bande passante disponible
     // Calculé sur le nombre de sessions actives (nœuds) ayant pingué récemment
     const activeClause = db.isSQLite ? 'is_active = 1' : 'is_active = TRUE';
-    // Utilisation d'une syntaxe plus simple pour MySQL pour éviter les erreurs de traduction
+    // Utilisation d'une fenêtre de 10 minutes pour être plus tolérant sur la détection
     const pingClause = db.isSQLite 
-      ? "last_ping > datetime('now', '-5 minutes')" 
-      : "last_ping > DATE_SUB(NOW(), INTERVAL 5 MINUTE)";
+      ? "last_ping > datetime('now', '-10 minutes')" 
+      : "last_ping > DATE_SUB(NOW(), INTERVAL 10 MINUTE)";
 
     const bandwidthRes = await db.query(`
       SELECT 
@@ -298,8 +298,7 @@ router.get('/dashboard-stats', authenticateToken, async (req, res) => {
     const activeNodes = parseInt(bandwidthRes.rows[0]?.active_nodes || 0);
     const totalPeers = parseInt(bandwidthRes.rows[0]?.total_peers || 0);
     
-    // Logique corrigée : Chaque nœud actif apporte une base de 50 Mbps de bande passante disponible
-    // Les pairs connectés augmentent cette valeur (plus de trafic réel)
+    // Logique : 50 Mbps par nœud actif + 10 Mbps par pair
     const availableBandwidthMbps = (activeNodes * 50) + (totalPeers * 10);
 
     // 2. Uptime (Ratio de succès des jobs de l'utilisateur sur les 30 derniers jours)
