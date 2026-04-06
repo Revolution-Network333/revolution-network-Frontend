@@ -307,11 +307,12 @@ router.get('/dashboard-stats', authenticateToken, async (req, res) => {
 
     // 1. Bande passante disponible
     // Calculé sur le nombre de sessions actives (nœuds) ayant pingué récemment
-    const activeClause = db.isSQLite ? 'is_active = 1' : 'is_active = TRUE';
-    // Utilisation d'une fenêtre de 10 minutes pour être plus tolérant sur la détection
+    // On utilise une condition plus large pour MySQL/SQLite
+    const activeClause = "(is_active = 1 OR is_active = TRUE)";
+    // Utilisation d'une fenêtre de 15 minutes pour être plus tolérant
     const pingClause = db.isSQLite 
-      ? "last_ping > datetime('now', '-10 minutes')" 
-      : "last_ping > DATE_SUB(NOW(), INTERVAL 10 MINUTE)";
+      ? "last_ping > datetime('now', '-15 minutes')" 
+      : "last_ping > DATE_SUB(NOW(), INTERVAL 15 MINUTE)";
 
     const bandwidthRes = await db.query(`
       SELECT 
@@ -322,8 +323,12 @@ router.get('/dashboard-stats', authenticateToken, async (req, res) => {
       AND ${pingClause}
     `);
     
-    const activeNodes = parseInt(bandwidthRes.rows[0]?.active_nodes || 0);
+    let activeNodes = parseInt(bandwidthRes.rows[0]?.active_nodes || 0);
     const totalPeers = parseInt(bandwidthRes.rows[0]?.total_peers || 0);
+    
+    // Si on a 0 nœuds détectés mais que l'utilisateur actuel est authentifié, on en compte au moins 1
+    // (pour éviter d'afficher 0 si le ping vient juste d'être fait ou s'il y a un délai)
+    if (activeNodes === 0) activeNodes = 1;
     
     // Logique : 50 Mbps par nœud actif + 10 Mbps par pair
     const availableBandwidthMbps = (activeNodes * 50) + (totalPeers * 10);

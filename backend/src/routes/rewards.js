@@ -276,6 +276,25 @@ router.post('/proof-of-work', authenticateToken, async (req, res) => {
                 [points, userId]
             );
 
+            // Mettre à jour last_ping et s'assurer que la session est active
+            if (sessionId) {
+              try {
+                if (db.isMySQL) {
+                  await db.query(
+                    'UPDATE sessions SET last_ping = NOW(), is_active = true WHERE id = $1',
+                    [sessionId]
+                  );
+                } else {
+                  await db.query(
+                    'UPDATE sessions SET last_ping = CURRENT_TIMESTAMP, is_active = true WHERE id = $1',
+                    [sessionId]
+                  );
+                }
+              } catch (err) {
+                console.error('Failed to update last_ping in proof-of-work:', err);
+              }
+            }
+
             try {
               const ref = await db.query('SELECT referrer_id FROM users WHERE id = $1', [userId]);
               const referrerId = ref.rows[0]?.referrer_id || null;
