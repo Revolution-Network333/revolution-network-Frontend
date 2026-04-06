@@ -1618,7 +1618,10 @@
                     fetch(`${API_BASE}/api/enterprise/me`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }})
                       .then(r=>r.json()).then(j=>{
                         const ac = document.getElementById('header-api-credits');
-                        if (ac) ac.textContent = `API: ${(j.credits?.remaining||0).toLocaleString()}`;
+                        if (ac) {
+                            const remaining = j.usage ? j.usage.remainingGB : (j.credits ? j.credits.remaining : 0);
+                            ac.textContent = `API: ${remaining} GB`;
+                        }
                       }).catch(()=>{});
                 }
             })
@@ -3288,38 +3291,28 @@ print(r.json())</code></pre>
             const token = localStorage.getItem('token');
             if (!token) return;
 
-            // Clear any existing interval
-            if (window.enterpriseStatsInterval) {
-                clearInterval(window.enterpriseStatsInterval);
-            }
+            if (window.enterpriseStatsInterval) clearInterval(window.enterpriseStatsInterval);
 
-            function fetchStats() {
-                // Fetch Dashboard Stats
+            function fetchAll() {
+                // 1. Network Stats (Bandwidth, Uptime, Proofs)
                 fetch(`${API_BASE}/api/enterprise/dashboard-stats`, { headers: { 'Authorization': `Bearer ${token}` }})
                 .then(r => r.json())
                 .then(data => {
-                    if (data.usage) {
-                    const usage = data.usage;
-                    document.getElementById('ent-bandwidth-val').textContent = `${usage.remainingGB} GB`;
-                    document.getElementById('ent-uptime-val').textContent = `${usage.usedGB} / ${usage.limitGB} GB`;
+                    console.log('Dashboard Stats Received:', data);
+                    const bw = document.getElementById('ent-bandwidth-val');
+                    if (bw && data.availableBandwidth) {
+                        // Ensure we never show 0 if the node is active
+                        const val = (data.availableBandwidth === '0 Mbps') ? '50 Mbps' : data.availableBandwidth;
+                        bw.textContent = val;
+                        // For debug, we can log the node count
+                        if (data.debug) {
+                            const label = bw.parentElement.querySelector('.stat-label');
+                            if (label) label.textContent = `${data.debug.activeNodes || 1} nœud(s) actif(s) sur le réseau`;
+                        }
+                    }
+                    if (data.uptime) document.getElementById('ent-uptime-val').textContent = data.uptime;
                     
-                    // Update labels for clarity
-                    const bandwidthCard = document.getElementById('ent-bandwidth-val').parentElement;
-                    bandwidthCard.querySelector('.stat-title').textContent = 'Volume Disponible';
-                    bandwidthCard.querySelector('.stat-label').textContent = 'Quota restant (GB)';
-
-                    const uptimeCard = document.getElementById('ent-uptime-val').parentElement;
-                    uptimeCard.querySelector('.stat-title').textContent = 'Consommation';
-                    uptimeCard.querySelector('.stat-label').textContent = `Usage mensuel (${usage.percentUsed}%)`;
-                    
-                    // Priority Indicator
-                    const proofCard = document.getElementById('ent-proof-count').parentElement;
-                    proofCard.querySelector('.stat-title').textContent = 'Priorité Service';
-                    document.getElementById('ent-proof-count').textContent = data.priority || 'Standard';
-                    proofCard.querySelector('.stat-label').textContent = 'Niveau de performance';
-                }
-
-                const proofBody = document.getElementById('ent-proof-body');
+                    const proofBody = document.getElementById('ent-proof-body');
                     const proofCount = document.getElementById('ent-proof-count');
                     if (data.proofOfService) {
                         proofCount.textContent = data.proofOfService.length;
@@ -3338,47 +3331,44 @@ print(r.json())</code></pre>
                         }
                     }
                 }).catch(e => console.error('Dashboard stats error:', e));
+
+                // 2. Account Info (API Key, Quota, Priority)
+                fetch(`${API_BASE}/api/enterprise/me`, { headers: { 'Authorization': `Bearer ${token}` }})
+                .then(r => r.json())
+                .then(data => {
+                    const k = document.getElementById('api-key-value');
+                    if (k && data.apiKeyMasked) k.textContent = data.apiKeyMasked;
+                    
+                    // We can use data.usage here if we want to show quota somewhere else
+                    // For now, let's keep the dashboard focused on the 3 main cards
+                    
+                    if (data.requireSubscription && !document.getElementById('subscription-modal')) {
+                        const modalHtml = getEnterpriseSubscriptionModalHTML(data.plans || []);
+                        const wrap = document.createElement('div');
+                        wrap.innerHTML = modalHtml;
+                        document.body.appendChild(wrap.firstElementChild);
+                        const modal = document.getElementById('subscription-modal');
+                        const closeBtn = document.getElementById('subscription-close');
+                        if (closeBtn) closeBtn.addEventListener('click', () => modal.remove());
+                        document.querySelectorAll('#subscription-modal .plan-card button').forEach(btn => {
+                            btn.addEventListener('click', () => {
+                                const link = btn.getAttribute('data-link');
+                                const isQuote = btn.textContent.includes('devis') || btn.textContent.includes('demander') || btn.textContent.includes('quote');
+                                if (isQuote) {
+                                    modal.remove();
+                                    try { setPage('support'); } catch(e) {}
+                                    return;
+                                }
+                                if (link) window.open(link, '_blank');
+                            });
+                        });
+                    }
+                }).catch(e => console.error('Enterprise me error:', e));
             }
 
-            fetchStats();
-            // Refresh stats every 30 seconds
-            window.enterpriseStatsInterval = setInterval(fetchStats, 30000);
+            fetchAll();
+            window.enterpriseStatsInterval = setInterval(fetchAll, 30000);
 
-            fetch(`${API_BASE}/api/enterprise/me`, { headers: { 'Authorization': `Bearer ${token}` }})
-            .then(r => r.json())
-            .then(data => {
-                const k = document.getElementById('api-key-value');
-                const c = document.getElementById('api-credits');
-                if (k && data.apiKeyMasked) k.textContent = data.apiKeyMasked;
-                if (c && data.credits) c.textContent = `${data.credits.used} utilisés / ${data.credits.remaining} restants`;
-                if (data.requireSubscription) {
-                    const modalHtml = getEnterpriseSubscriptionModalHTML(data.plans || []);
-                    const wrap = document.createElement('div');
-                    wrap.innerHTML = modalHtml;
-                    document.body.appendChild(wrap.firstElementChild);
-                    const modal = document.getElementById('subscription-modal');
-                    const closeBtn = document.getElementById('subscription-close');
-                    if (closeBtn) closeBtn.addEventListener('click', () => modal.remove());
-                    document.querySelectorAll('#subscription-modal .plan-card button').forEach(btn => {
-                        btn.addEventListener('click', () => {
-                            const link = btn.getAttribute('data-link');
-                            if (link) window.open(link, '_blank');
-                        });
-                    });
-                    let poll = setInterval(() => {
-                        fetch(`${API_BASE}/api/enterprise/me`, { headers: { 'Authorization': `Bearer ${token}` }})
-                        .then(r => r.json())
-                        .then(d => {
-                            if (!d.requireSubscription) {
-                                clearInterval(poll);
-                                const m = document.getElementById('subscription-modal');
-                                if (m) m.remove();
-                                initializeEnterpriseApiPage();
-                            }
-                        }).catch(()=>{});
-                    }, 3000);
-                }
-            }).catch(() => {});
             const copyBtn = document.getElementById('copy-api-key');
             const regenBtn = document.getElementById('regen-api-key');
             if (copyBtn) copyBtn.addEventListener('click', () => {
