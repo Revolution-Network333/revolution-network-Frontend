@@ -77,6 +77,9 @@ const rewriteForMySql = (sql) => {
   s = s.replace(/INTERVAL\s+'(\d+)\s+weeks?'/gi, 'INTERVAL $1 WEEK');
   s = s.replace(/INTERVAL\s+'(\d+)\s+months?'/gi, 'INTERVAL $1 MONTH');
   s = s.replace(/INTERVAL\s+'(\d+)\s+years?'/gi, 'INTERVAL $1 YEAR');
+  s = s.replace(/INTERVAL\s+'(\d+)\s+minutes?'/gi, 'INTERVAL $1 MINUTE');
+  s = s.replace(/INTERVAL\s+'(\d+)\s+hours?'/gi, 'INTERVAL $1 HOUR');
+  s = s.replace(/INTERVAL\s+'(\d+)\s+seconds?'/gi, 'INTERVAL $1 SECOND');
   
   s = s.replace(/\bJSONB\b/gi, 'JSON');
   s = s.replace(/\bSERIAL\b/gi, 'BIGINT UNSIGNED AUTO_INCREMENT');

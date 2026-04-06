@@ -257,13 +257,18 @@ router.get('/dashboard-stats', authenticateToken, async (req, res) => {
 
     // 1. Bande passante disponible
     // Calculé sur le nombre de sessions actives (nœuds) ayant pingué récemment
+    const activeClause = db.isSQLite ? 'is_active = 1' : 'is_active = TRUE';
+    const pingClause = db.isSQLite 
+      ? "last_ping > datetime('now', '-5 minutes')" 
+      : "last_ping > NOW() - INTERVAL '5 minutes'";
+
     const bandwidthRes = await db.query(`
       SELECT 
         COUNT(*) as active_nodes,
         SUM(peers_connected) as total_peers 
       FROM sessions 
-      WHERE is_active = ${db.isSQLite ? '1' : 'TRUE'}
-      AND last_ping > ${db.isSQLite ? "datetime('now', '-5 minutes')" : "NOW() - INTERVAL '5 minutes'"}
+      WHERE ${activeClause}
+      AND ${pingClause}
     `);
     
     const activeNodes = parseInt(bandwidthRes.rows[0]?.active_nodes || 0);
@@ -274,13 +279,17 @@ router.get('/dashboard-stats', authenticateToken, async (req, res) => {
     const availableBandwidthMbps = (activeNodes * 50) + (totalPeers * 10);
 
     // 2. Uptime (Ratio de succès des jobs de l'utilisateur sur les 30 derniers jours)
+    const uptimeDateClause = db.isSQLite 
+      ? "datetime('now', '-30 days')" 
+      : "NOW() - INTERVAL '30 days'";
+
     const uptimeRes = await db.query(`
       SELECT 
         COUNT(*) as total,
         COUNT(CASE WHEN status = 'completed' THEN 1 END) as success
       FROM jobs 
       WHERE user_id = $1 
-      AND created_at > ${db.isSQLite ? "datetime('now', '-30 days')" : "NOW() - INTERVAL '30 days'"}
+      AND created_at > ${uptimeDateClause}
     `, [userId]);
     
     const totalJobs = parseInt(uptimeRes.rows[0]?.total || 0);
