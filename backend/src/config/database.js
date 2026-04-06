@@ -80,6 +80,9 @@ const rewriteForMySql = (sql) => {
   s = s.replace(/INTERVAL\s+'(\d+)\s+minutes?'/gi, 'INTERVAL $1 MINUTE');
   s = s.replace(/INTERVAL\s+'(\d+)\s+hours?'/gi, 'INTERVAL $1 HOUR');
   s = s.replace(/INTERVAL\s+'(\d+)\s+seconds?'/gi, 'INTERVAL $1 SECOND');
+
+  // Fix: handle trailing single quote if left by the above regexes (PostgreSQL syntax is INTERVAL '5 minutes')
+  s = s.replace(/INTERVAL\s+(\d+)\s+(DAY|WEEK|MONTH|YEAR|MINUTE|HOUR|SECOND)'/gi, 'INTERVAL $1 $2');
   
   s = s.replace(/\bJSONB\b/gi, 'JSON');
   s = s.replace(/\bSERIAL\b/gi, 'BIGINT UNSIGNED AUTO_INCREMENT');

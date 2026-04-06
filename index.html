@@ -3298,10 +3298,28 @@ print(r.json())</code></pre>
                 fetch(`${API_BASE}/api/enterprise/dashboard-stats`, { headers: { 'Authorization': `Bearer ${token}` }})
                 .then(r => r.json())
                 .then(data => {
-                    if (data.availableBandwidth) document.getElementById('ent-bandwidth-val').textContent = data.availableBandwidth;
-                    if (data.uptime) document.getElementById('ent-uptime-val').textContent = data.uptime;
+                    if (data.usage) {
+                    const usage = data.usage;
+                    document.getElementById('ent-bandwidth-val').textContent = `${usage.remainingGB} GB`;
+                    document.getElementById('ent-uptime-val').textContent = `${usage.usedGB} / ${usage.limitGB} GB`;
                     
-                    const proofBody = document.getElementById('ent-proof-body');
+                    // Update labels for clarity
+                    const bandwidthCard = document.getElementById('ent-bandwidth-val').parentElement;
+                    bandwidthCard.querySelector('.stat-title').textContent = 'Volume Disponible';
+                    bandwidthCard.querySelector('.stat-label').textContent = 'Quota restant (GB)';
+
+                    const uptimeCard = document.getElementById('ent-uptime-val').parentElement;
+                    uptimeCard.querySelector('.stat-title').textContent = 'Consommation';
+                    uptimeCard.querySelector('.stat-label').textContent = `Usage mensuel (${usage.percentUsed}%)`;
+                    
+                    // Priority Indicator
+                    const proofCard = document.getElementById('ent-proof-count').parentElement;
+                    proofCard.querySelector('.stat-title').textContent = 'Priorité Service';
+                    document.getElementById('ent-proof-count').textContent = data.priority || 'Standard';
+                    proofCard.querySelector('.stat-label').textContent = 'Niveau de performance';
+                }
+
+                const proofBody = document.getElementById('ent-proof-body');
                     const proofCount = document.getElementById('ent-proof-count');
                     if (data.proofOfService) {
                         proofCount.textContent = data.proofOfService.length;

@@ -192,8 +192,10 @@ CREATE INDEX IF NOT EXISTS idx_api_keys_active ON api_keys(active);
 CREATE TABLE IF NOT EXISTS enterprise_credits (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    credits_balance BIGINT DEFAULT 0,
-    credits_used_month BIGINT DEFAULT 0,
+    credits_balance BIGINT DEFAULT 0, -- Total GB remaining (in MB or actual GB, let's use MB for precision)
+    credits_used_month BIGINT DEFAULT 0, -- Total MB used this month
+    bandwidth_limit_gb INTEGER DEFAULT 0, -- Monthly quota in GB
+    priority_level INTEGER DEFAULT 1, -- 1: Normal, 2: High, 3: Ultra
     reset_date TIMESTAMP
 );
 

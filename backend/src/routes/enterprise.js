@@ -77,8 +77,11 @@ async function getSubscriptionPlans() {
       description: r.description || '',
       price: r.price || 0,
       currency: r.currency || 'EUR',
-      pointsPerMonth: (() => {
-        try { const meta = r.metadata ? JSON.parse(r.metadata) : {}; return meta.pointsPerMonth || null; } catch { return null; }
+      gbPerMonth: (() => {
+        try { const meta = r.metadata ? JSON.parse(r.metadata) : {}; return meta.gbPerMonth || null; } catch { return null; }
+      })(),
+      priority: (() => {
+        try { const meta = r.metadata ? JSON.parse(r.metadata) : {}; return meta.priority || 'Standard'; } catch { return 'Standard'; }
       })(),
       paymentLink: (() => {
         try { const meta = r.metadata ? JSON.parse(r.metadata) : {}; return meta.paymentLink || null; } catch { return null; }
@@ -86,39 +89,41 @@ async function getSubscriptionPlans() {
     }));
   } catch (e) {
     plans = [
-      { id: null, name: 'BASIC', description: 'Accès API, Dashboard entreprise, Support standard', price: 19, currency: 'EUR', pointsPerMonth: 25000, paymentLink: 'mailto:contact@revolution-network.com?subject=BASIC%20-%20Abonnement' },
-      { id: null, name: 'PRO', description: 'Priorité plus rapide, Accès jobs avancés, Support rapide', price: 49, currency: 'EUR', pointsPerMonth: 80000, paymentLink: 'mailto:contact@revolution-network.com?subject=PRO%20-%20Abonnement' },
-      { id: null, name: 'BUSINESS', description: 'Priorité haute, Meilleure vitesse d’exécution, Support VIP, Export rapports', price: 150, currency: 'EUR', pointsPerMonth: 250000, paymentLink: 'mailto:contact@revolution-network.com?subject=BUSINESS%20-%20Abonnement' },
-      { id: null, name: 'ENTERPRISE', description: 'Infrastructure dédiée, SLA 99.9%, Support 24/7, Intégration sur mesure', price: null, currency: 'EUR', pointsPerMonth: null, paymentLink: 'mailto:contact@revolution-network.com?subject=ENTERPRISE%20-%20Abonnement' },
+      { id: null, name: 'Standard', description: '500 GB / mois, Support standard, Priorité normale', price: 20, currency: 'EUR', gbPerMonth: 500, priority: 'Standard', paymentLink: 'mailto:contact@revolution-network.com?subject=Standard%20-%20Abonnement' },
+      { id: null, name: 'Pro', description: '1 000 GB / mois, Support rapide, Priorité haute', price: 40, currency: 'EUR', gbPerMonth: 1000, priority: 'Pro', paymentLink: 'mailto:contact@revolution-network.com?subject=Pro%20-%20Abonnement' },
+      { id: null, name: 'Premium', description: '2 500 GB / mois, Support VIP, Priorité Ultra', price: 100, currency: 'EUR', gbPerMonth: 2500, priority: 'Premium', paymentLink: 'mailto:contact@revolution-network.com?subject=Premium%20-%20Abonnement' },
     ];
   }
   // Ajouter option Entreprise Illimité sur devis
   plans.push({
     id: null,
-    name: 'Entreprise Illimité',
-    description: 'Sur devis — volume illimité, SLA sur mesure',
+    name: 'Sur Mesure',
+    description: 'Volume illimité ou spécifique, SLA personnalisé, Priorité dédiée',
     price: null,
     currency: 'EUR',
-    pointsPerMonth: null,
-    paymentLink: null,
+    gbPerMonth: null,
+    priority: 'Dédiée',
+    paymentLink: 'mailto:contact@revolution-network.com?subject=Custom%20-%20Abonnement',
   });
   return plans;
 }
 
 function costFor(type, params) {
+  // Coût fixe par job en MB (0.04€ / GB = 0.00004€ / MB)
+  // On estime la consommation moyenne par type de job
   switch (type) {
-    case 'http_get': return 5;
-    case 'content_check': return 20;
-    case 'csv_stats': return 30;
-    case 'image_svg_generate': return 10; // Compression image
-    case 'audio_convert': return 200; // Conversion audio (per minute)
-    case 'video_transcode': return 500; // Encodage vidéo (per minute)
-    case 'ocr_pdf': return 300; // OCR / PDF
-    case 'data_job': return 1000; // Data job
-    case 'text_transform': return 5;
-    case 'text_generate_template': return 10;
-    case 'code_run_js': return 50;
-    default: return 0;
+    case 'http_get': return 1; // 1 MB
+    case 'content_check': return 5; // 5 MB
+    case 'csv_stats': return 10; // 10 MB
+    case 'image_svg_generate': return 2; // 2 MB
+    case 'audio_convert': return 50; // 50 MB
+    case 'video_transcode': return 500; // 500 MB
+    case 'ocr_pdf': return 20; // 20 MB
+    case 'data_job': return 100; // 100 MB
+    case 'text_transform': return 1;
+    case 'text_generate_template': return 1;
+    case 'code_run_js': return 5;
+    default: return 1;
   }
 }
 
@@ -126,19 +131,34 @@ function costFor(type, params) {
 router.get('/me', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    let credits = { credits_balance: 0, credits_used_month: 0 };
+    const u = await db.query('SELECT username, role FROM users WHERE id = $1', [userId]);
+    const isAdmin = (u.rows[0]?.username === 'korn666') || ((u.rows[0]?.role || '').toLowerCase() === 'admin');
+
+    let credits = { credits_balance: 0, credits_used_month: 0, bandwidth_limit_gb: 0, priority_level: 1 };
     try {
       await ensureEnterpriseRecords(userId);
-      const cRes = await db.query('SELECT credits_balance, credits_used_month FROM enterprise_credits WHERE user_id = $1', [userId]);
+      const cRes = await db.query('SELECT credits_balance, credits_used_month, bandwidth_limit_gb, priority_level FROM enterprise_credits WHERE user_id = $1', [userId]);
       credits = cRes.rows[0] || credits;
     } catch {}
     const subscribed = await hasActiveSubscription(userId);
+    
+    // Convert MB to GB for display
+    const usedGB = (credits.credits_used_month / 1024).toFixed(2);
+    const remainingGB = (credits.credits_balance / 1024).toFixed(2);
+    const limitGB = credits.bandwidth_limit_gb || 0;
+
     const payload = {
       apiKeyMasked: maskKey(),
-      credits: { used: credits.credits_used_month || 0, remaining: credits.credits_balance || 0 },
-      requireSubscription: !subscribed,
+      usage: { 
+        usedGB: parseFloat(usedGB), 
+        remainingGB: parseFloat(remainingGB),
+        limitGB: limitGB,
+        percentUsed: limitGB > 0 ? Math.min(100, (parseFloat(usedGB) / limitGB) * 100).toFixed(1) : 0
+      },
+      priority: credits.priority_level === 3 ? 'Ultra' : (credits.priority_level === 2 ? 'Haute' : 'Standard'),
+      requireSubscription: !subscribed && !isAdmin, // Admins don't need sub for /me view
     };
-    if (!subscribed) payload.plans = await getSubscriptionPlans();
+    if (!subscribed && !isAdmin) payload.plans = await getSubscriptionPlans();
     res.json(payload);
   } catch (e) {
     console.error('Enterprise /me error:', e);
@@ -150,8 +170,11 @@ router.get('/me', authenticateToken, async (req, res) => {
 router.post('/api-key', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
+    const u = await db.query('SELECT username, role FROM users WHERE id = $1', [userId]);
+    const isAdmin = (u.rows[0]?.username === 'korn666') || ((u.rows[0]?.role || '').toLowerCase() === 'admin');
+    
     const subscribed = await hasActiveSubscription(userId);
-    if (!subscribed) {
+    if (!subscribed && !isAdmin) {
       return res.status(402).json({ error: 'subscription_required', plans: await getSubscriptionPlans() });
     }
     // deactivate previous keys
@@ -258,9 +281,10 @@ router.get('/dashboard-stats', authenticateToken, async (req, res) => {
     // 1. Bande passante disponible
     // Calculé sur le nombre de sessions actives (nœuds) ayant pingué récemment
     const activeClause = db.isSQLite ? 'is_active = 1' : 'is_active = TRUE';
+    // Utilisation d'une syntaxe plus simple pour MySQL pour éviter les erreurs de traduction
     const pingClause = db.isSQLite 
       ? "last_ping > datetime('now', '-5 minutes')" 
-      : "last_ping > NOW() - INTERVAL '5 minutes'";
+      : "last_ping > DATE_SUB(NOW(), INTERVAL 5 MINUTE)";
 
     const bandwidthRes = await db.query(`
       SELECT 
@@ -281,7 +305,7 @@ router.get('/dashboard-stats', authenticateToken, async (req, res) => {
     // 2. Uptime (Ratio de succès des jobs de l'utilisateur sur les 30 derniers jours)
     const uptimeDateClause = db.isSQLite 
       ? "datetime('now', '-30 days')" 
-      : "NOW() - INTERVAL '30 days'";
+      : "DATE_SUB(NOW(), INTERVAL 30 DAY)";
 
     const uptimeRes = await db.query(`
       SELECT 

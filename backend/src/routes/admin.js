@@ -877,22 +877,37 @@ router.post('/shop/orders/:id/mark-paid', authenticateToken, checkAdmin, async (
 
 router.post('/subscriptions/activate', authenticateToken, checkAdmin, async (req, res) => {
   try {
-    const { user_id, plan_name } = req.body || {};
+    const { user_id, plan_name, gb_limit, priority_level } = req.body || {};
     if (!user_id) return res.status(400).json({ error: 'user_id requis' });
+    
     await db.query(`INSERT INTO subscriptions (user_id, plan_name, status, current_period_start, current_period_end) 
       VALUES ($1, $2, $3, CURRENT_TIMESTAMP, NULL)`, [user_id, plan_name || 'MANUAL', 'active']);
-    const c = await db.query('SELECT * FROM enterprise_credits WHERE user_id = $1', [user_id]);
-    if (c.rows.length === 0) await db.query('INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month) VALUES ($1, 0, 0)', [user_id]);
+    
+    const mbLimit = (parseInt(gb_limit) || 0) * 1024;
+    const priority = parseInt(priority_level) || 1;
+
+    await db.query(`
+      INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month, bandwidth_limit_gb, priority_level) 
+      VALUES ($1, $2, 0, $3, $4)
+      ON CONFLICT (user_id) DO UPDATE SET 
+        credits_balance = enterprise_credits.credits_balance + EXCLUDED.credits_balance,
+        bandwidth_limit_gb = EXCLUDED.bandwidth_limit_gb,
+        priority_level = EXCLUDED.priority_level,
+        updated_at = CURRENT_TIMESTAMP`, 
+      [user_id, mbLimit, parseInt(gb_limit) || 0, priority]
+    );
+    
     res.json({ success: true });
   } catch (e) { console.error(e); res.status(500).json({ error: 'Erreur interne du serveur' }); }
 });
 
 router.post('/credits/topup', authenticateToken, checkAdmin, async (req, res) => {
   try {
-    const { user_id, amount } = req.body || {};
-    if (!user_id || !amount) return res.status(400).json({ error: 'user_id et amount requis' });
-    await db.query('UPDATE enterprise_credits SET credits_balance = credits_balance + $1, updated_at = CURRENT_TIMESTAMP WHERE user_id = $2', [parseInt(amount), parseInt(user_id)]);
-    await db.query('INSERT INTO credit_ledger (user_id, amount, reason) VALUES ($1, $2, $3)', [parseInt(user_id), parseInt(amount), 'topup']);
+    const { user_id, amount_gb } = req.body || {};
+    if (!user_id || !amount_gb) return res.status(400).json({ error: 'user_id et amount_gb requis' });
+    const amountMb = parseInt(amount_gb) * 1024;
+    await db.query('UPDATE enterprise_credits SET credits_balance = credits_balance + $1, updated_at = CURRENT_TIMESTAMP WHERE user_id = $2', [amountMb, parseInt(user_id)]);
+    await db.query('INSERT INTO credit_ledger (user_id, amount, reason) VALUES ($1, $2, $3)', [parseInt(user_id), amountMb, 'topup_gb']);
     res.json({ success: true });
   } catch (e) { console.error(e); res.status(500).json({ error: 'Erreur interne du serveur' }); }
 });
