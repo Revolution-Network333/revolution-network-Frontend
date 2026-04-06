@@ -140,7 +140,7 @@ router.post('/create', authenticateToken, async (req, res) => {
           );
 
           // Update user rank to Gold
-          await db.query("UPDATE users SET rank = 'Gold' WHERE id = $1", [userId]);
+          await db.query("UPDATE users SET rank = 'Gold', is_rank_locked = 1 WHERE id = $1", [userId]);
 
           // Credit 100 Aether
           const walletCheck = await db.query('SELECT user_id FROM wallets WHERE user_id = $1', [userId]);

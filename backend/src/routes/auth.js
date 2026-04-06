@@ -254,7 +254,7 @@ router.post('/login', async (req, res) => {
           [referrerId, user.id, 1]
         );
         try {
-          await db.query("UPDATE users SET rank = CASE WHEN COALESCE(rank,'Bronze') = 'Bronze' THEN 'Silver' ELSE COALESCE(rank,'Bronze') END WHERE id = $1", [referrerId]);
+          await db.query("UPDATE users SET rank = CASE WHEN COALESCE(is_rank_locked, 0) = 1 THEN rank WHEN COALESCE(rank,'Bronze') = 'Bronze' THEN 'Silver' ELSE rank END WHERE id = $1", [referrerId]);
         } catch (_) {}
       }
     }

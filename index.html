@@ -5865,7 +5865,8 @@ function initializeShopPage() {
                         headers: { 
                             'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json'
-                        }
+                        },
+                        body: JSON.stringify({ circulating_supply: previewSupply })
                     });
                     let j = null;
                     let raw = '';

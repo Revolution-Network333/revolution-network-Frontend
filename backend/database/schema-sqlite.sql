@@ -14,7 +14,8 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
     last_login TEXT,
-    rank TEXT DEFAULT 'Bronze'
+    rank TEXT DEFAULT 'Bronze',
+    is_rank_locked INTEGER DEFAULT 0
 );
 
 -- Sessions table

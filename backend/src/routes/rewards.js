@@ -306,11 +306,7 @@ router.post('/proof-of-work', authenticateToken, async (req, res) => {
                     [referrerId, bonus, 'referral_bonus', JSON.stringify({ from_user_id: userId, source: 'pow' })]
                   );
                   await db.query('UPDATE users SET total_points = total_points + $1 WHERE id = $2', [bonus, referrerId]);
-                  if (db.isSQLite) {
-                    await db.query("UPDATE users SET rank = CASE WHEN COALESCE(rank,'Bronze') = 'Bronze' THEN 'Silver' ELSE COALESCE(rank,'Bronze') END WHERE id = $1", [referrerId]);
-                  } else {
-                    await db.query("UPDATE users SET rank = CASE WHEN COALESCE(rank,'Bronze') = 'Bronze' THEN 'Silver' ELSE COALESCE(rank,'Bronze') END WHERE id = $1", [referrerId]);
-                  }
+                  await db.query("UPDATE users SET rank = CASE WHEN COALESCE(is_rank_locked, 0) = 1 THEN rank WHEN COALESCE(rank,'Bronze') = 'Bronze' THEN 'Silver' ELSE rank END WHERE id = $1", [referrerId]);
                 }
               }
             } catch (_) {}

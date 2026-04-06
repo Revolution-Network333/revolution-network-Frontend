@@ -38,6 +38,7 @@ const initDatabase = () => {
     try { db.exec("ALTER TABLE users ADD COLUMN airdrop_score REAL DEFAULT 0"); } catch (e) { /* already exists */ }
     try { db.exec("ALTER TABLE users ADD COLUMN airdrop_allocation REAL DEFAULT 0"); } catch (e) { /* already exists */ }
     try { db.exec("ALTER TABLE users ADD COLUMN last_airdrop_calculation TEXT"); } catch (e) { /* already exists */ }
+    try { db.exec("ALTER TABLE users ADD COLUMN is_rank_locked INTEGER DEFAULT 0"); } catch (e) { /* already exists */ }
 
     // Settings table (withdrawals_enabled)
     db.exec(`

@@ -55,11 +55,11 @@ const rewriteForMySql = (sql) => {
   s = s.replace(/EXTRACT\s*\(\s*EPOCH\s+FROM\s*\(([^)]+)\s*-\s*([^)]+)\)\)/gi, 'TIMESTAMPDIFF(SECOND, $2, $1)');
   s = s.replace(/EXTRACT\s*\(\s*EPOCH\s+FROM\s*([^)]+)\)/gi, 'UNIX_TIMESTAMP($1)');
 
-  s = s.replace(/(\b)rank(\b)/gi, (m, p1, p2, offset, str) => {
+  s = s.replace(/(\b)(rank|key|value)(\b)/gi, (m, p1, p2, offset, str) => {
     const prev = str[offset - 1];
     const next = str[offset + m.length];
     if (prev === '`' && next === '`') return m;
-    return '`rank`';
+    return '`' + p2 + '`';
   });
   s = s.replace(/to_char\(([^,]+)::date,\s*'YYYY-MM-DD'\)/gi, 'DATE_FORMAT($1, "%Y-%m-%d")');
   s = s.replace(/to_char\(([^,]+),\s*'YYYY-MM-DD'\)/gi, 'DATE_FORMAT($1, "%Y-%m-%d")');

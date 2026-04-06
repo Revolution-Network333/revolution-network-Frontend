@@ -102,11 +102,25 @@ router.post('/airdrop/calculate', authenticateToken, checkAdmin, async (req, res
   try {
     const DEFAULT_CIRCULATING_SUPPLY = 500000000;
     let circulatingSupply = DEFAULT_CIRCULATING_SUPPLY;
-    try {
-      const row = (await db.query("SELECT value FROM settings WHERE key = 'airdrop_circulating_supply'")).rows?.[0];
-      const v = row ? parseFloat(row.value) : NaN;
-      if (Number.isFinite(v) && v > 0) circulatingSupply = v;
-    } catch {}
+    
+    // Priorité à la valeur passée dans le body (si présente)
+    if (req.body && req.body.circulating_supply) {
+      const v = parseFloat(req.body.circulating_supply);
+      if (Number.isFinite(v) && v > 0) {
+        circulatingSupply = v;
+      }
+    } else {
+      // Sinon, on cherche dans les paramètres de la base de données
+      try {
+        const row = (await db.query("SELECT value FROM settings WHERE key = 'airdrop_circulating_supply'")).rows?.[0];
+        const v = row ? parseFloat(row.value) : NaN;
+        if (Number.isFinite(v) && v > 0) circulatingSupply = v;
+      } catch (err) {
+        console.error('Error fetching airdrop supply from DB:', err);
+      }
+    }
+    
+    console.log(`Calculating airdrop with supply: ${circulatingSupply}`);
     
     // Ensure required schema exists (idempotent, DB-agnostic)
     try {
@@ -128,13 +142,22 @@ router.post('/airdrop/calculate', authenticateToken, checkAdmin, async (req, res
     }
   } catch (_) {}
   try {
-    if (db.isSQLite) {
-      await db.query("ALTER TABLE users ADD COLUMN last_airdrop_calculation TEXT");
-    } else if (db.isMySQL) {
-      try { await db.query("ALTER TABLE users ADD COLUMN last_airdrop_calculation TIMESTAMP NULL"); } catch(_) {}
-    } else {
-      await db.query("ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS last_airdrop_calculation TIMESTAMP");
-    }
+      if (db.isSQLite) {
+        await db.query("ALTER TABLE users ADD COLUMN last_airdrop_calculation TEXT");
+      } else if (db.isMySQL) {
+        try { await db.query("ALTER TABLE users ADD COLUMN last_airdrop_calculation TIMESTAMP NULL"); } catch(_) {}
+      } else {
+        await db.query("ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS last_airdrop_calculation TIMESTAMP");
+      }
+    } catch (_) {}
+    try {
+      if (db.isSQLite) {
+        await db.query("ALTER TABLE users ADD COLUMN is_rank_locked INTEGER DEFAULT 0");
+      } else if (db.isMySQL) {
+        try { await db.query("ALTER TABLE users ADD COLUMN is_rank_locked TINYINT DEFAULT 0"); } catch(_) {}
+      } else {
+        await db.query("ALTER TABLE IF EXISTS users ADD COLUMN IF NOT EXISTS is_rank_locked INTEGER DEFAULT 0");
+      }
     } catch (_) {}
     try {
       if (db.isSQLite) {
@@ -428,7 +451,7 @@ router.post('/bonus/apply', authenticateToken, checkAdmin, async (req, res) => {
             [u.id, 'bonus', rewardValue, JSON.stringify({ reason: 'admin_global_bonus', awarded_at: timestamp })]
           );
         } else if (rewardType === 'rank') {
-          await client.query('UPDATE users SET rank = $1 WHERE id = $2', [rewardValue, u.id]);
+          await client.query('UPDATE users SET rank = $1, is_rank_locked = 1 WHERE id = $2', [rewardValue, u.id]);
         }
         count++;
       }
@@ -534,80 +557,6 @@ router.post('/settings/airdrop-supply', authenticateToken, checkAdmin, async (re
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-// 4. Get Airdrop Participants
-router.get('/airdrop/participants', authenticateToken, checkAdmin, async (req, res) => {
-    try {
-        const { sort_by = 'score', order = 'desc', search = '' } = req.query;
-        
-        // Map sort keys to columns
-        const sortMap = {
-            'id': 'id',
-            'email': 'email',
-            'score': 'airdrop_score',
-            'allocation': 'airdrop_allocation',
-            'spent': 'total_spent',
-            'points': 'total_points',
-            'days': 'created_at', 
-            'last_calc': 'last_airdrop_calculation'
-        };
-        
-        const sortCol = sortMap[sort_by] || 'airdrop_score';
-        const sortDir = order === 'asc' ? 'ASC' : 'DESC';
-        
-        // Handle Active Days calculation based on DB type
-        let activeDaysExpr = '';
-        if (db.isSQLite) {
-            activeDaysExpr = "(julianday('now') - julianday(created_at))";
-        } else if (db.isMySQL) {
-            activeDaysExpr = "TIMESTAMPDIFF(DAY, created_at, NOW())";
-        } else {
-            // PostgreSQL
-            activeDaysExpr = "EXTRACT(DAY FROM (NOW() - created_at))";
-        }
-
-        let query = `
-            SELECT 
-                u.id, u.email, u.username, 
-                COALESCE(u.airdrop_score, 0) as airdrop_score, 
-                COALESCE(u.airdrop_allocation, 0) as airdrop_allocation, 
-                COALESCE(u.total_points, 0) as total_points, 
-                (SELECT COALESCE(SUM(o.total_price), 0) FROM orders o WHERE o.user_id = u.id AND o.status = 'paid') as total_spent,
-                COALESCE(w.balance_ath, 0) as balance_ath,
-                u.last_airdrop_calculation,
-                ${activeDaysExpr} as active_days
-            FROM users u
-            LEFT JOIN wallets w ON w.user_id = u.id
-            WHERE 1=1
-        `;
-        
-        const params = [];
-        if (search) {
-            query += " AND (email LIKE $1 OR username LIKE $1)";
-            params.push(`%${search}%`);
-        }
-        
-        // If sort_by is 'days', we sort by created_at. 
-        // If order is DESC (more days), we want created_at ASC (older date).
-        let finalSortDir = sortDir;
-        let finalSortCol = sortCol;
-        
-        if (sort_by === 'days') {
-             finalSortCol = 'created_at';
-             finalSortDir = (sortDir === 'DESC') ? 'ASC' : 'DESC';
-        }
-
-        query += ` ORDER BY ${finalSortCol} ${finalSortDir} LIMIT 100`;
-
-        const result = await db.query(query, params);
-        
-        res.json({ participants: result.rows });
-    } catch (e) {
-        console.error('Error fetching airdrop participants:', e);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
 
 // Route pour réinitialiser les points de tous les utilisateurs
 router.post('/reset-points', authenticateToken, checkAdmin, async (req, res) => {
@@ -943,10 +892,42 @@ router.post('/users/:id/reset-credits', authenticateToken, checkAdmin, async (re
 router.post('/users/:id/override-grade', authenticateToken, checkAdmin, async (req, res) => {
   try {
     const userId = parseInt(req.params.id);
-    const { grade } = req.body || {};
+    const { grade, lock = true } = req.body || {};
     if (!userId || Number.isNaN(userId)) return res.status(400).json({ error: 'ID utilisateur invalide' });
     if (!grade || typeof grade !== 'string') return res.status(400).json({ error: 'grade requis' });
-    await db.query('UPDATE users SET rank = $1 WHERE id = $2', [grade, userId]);
+    
+    const lockVal = (lock === true || lock === 1 || lock === '1') ? 1 : 0;
+    
+    await db.query('UPDATE users SET rank = $1, is_rank_locked = $2 WHERE id = $3', [grade, lockVal, userId]);
+    
+    // Log action
+    const adminId = req.user.userId;
+    await db.query(
+      'INSERT INTO admin_logs (admin_id, action, details) VALUES ($1, $2, $3)',
+      [adminId, 'OVERRIDE_GRADE', `User: ${userId}, New Grade: ${grade}, Locked: ${lockVal}`]
+    );
+    
+    res.json({ success: true, grade, locked: !!lockVal });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Erreur interne du serveur' });
+  }
+});
+
+router.post('/users/:id/unlock-grade', authenticateToken, checkAdmin, async (req, res) => {
+  try {
+    const userId = parseInt(req.params.id);
+    if (!userId || Number.isNaN(userId)) return res.status(400).json({ error: 'ID utilisateur invalide' });
+    
+    await db.query('UPDATE users SET is_rank_locked = 0 WHERE id = $1', [userId]);
+    
+    // Log action
+    const adminId = req.user.userId;
+    await db.query(
+      'INSERT INTO admin_logs (admin_id, action, details) VALUES ($1, $2, $3)',
+      [adminId, 'UNLOCK_GRADE', `User: ${userId}`]
+    );
+    
     res.json({ success: true });
   } catch (e) {
     console.error(e);

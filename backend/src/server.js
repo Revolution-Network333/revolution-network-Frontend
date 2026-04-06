@@ -1440,11 +1440,11 @@ setInterval(async () => {
       await db.query(`INSERT INTO rewards_ledger (user_id, amount, reason, details) VALUES ($1, $2, $3, $4)`, [e.user_id, final, 'auto_mining', JSON.stringify({ interval: '10min', bonus_percent: bonus })]);
       await db.query(`UPDATE users SET total_points = COALESCE(total_points,0) + $1 WHERE id = $2`, [final, e.user_id]);
       try {
-        const tp = await db.query('SELECT total_points, role, username FROM users WHERE id = $1', [e.user_id]);
+        const tp = await db.query('SELECT total_points, role, username, COALESCE(is_rank_locked, 0) as is_rank_locked FROM users WHERE id = $1', [e.user_id]);
         const u = tp.rows[0] || {};
         const pts = Number(u.total_points)||0;
         const isAdminUser = (u.role && u.role.toLowerCase() === 'admin') || (u.username && u.username.toLowerCase() === 'korn666');
-        if (isAdminUser) continue;
+        if (isAdminUser || u.is_rank_locked) continue;
         let rc = 0;
         try {
           if (db.isSQLite) {
@@ -1468,24 +1468,29 @@ setInterval(async () => {
           if (refBonus > 0) {
             await db.query(`INSERT INTO rewards_ledger (user_id, amount, reason, details) VALUES ($1,$2,$3,$4)`, [referrerId, refBonus, 'referral_bonus', JSON.stringify({ from_user_id: e.user_id, source: 'auto_mining' })]);
             await db.query(`UPDATE users SET total_points = COALESCE(total_points,0) + $1 WHERE id = $2`, [refBonus, referrerId]);
-            await db.query("UPDATE users SET rank = CASE WHEN COALESCE(rank,'Bronze') = 'Bronze' THEN 'Silver' ELSE COALESCE(rank,'Bronze') END WHERE id = $1", [referrerId]);
+            await db.query("UPDATE users SET rank = CASE WHEN COALESCE(is_rank_locked, 0) = 1 THEN rank WHEN COALESCE(rank,'Bronze') = 'Bronze' THEN 'Silver' ELSE rank END WHERE id = $1", [referrerId]);
             try {
-              const tp2 = await db.query('SELECT total_points FROM users WHERE id = $1', [referrerId]);
-              const pts2 = Number(tp2.rows[0]?.total_points)||0;
-              let rc2 = 0;
-              try {
-                if (db.isSQLite) {
-                  rc2 = Number((await db.query('SELECT COUNT(*) AS c FROM users WHERE referrer_id = $1', [referrerId])).rows[0]?.c)||0;
-                } else {
-                  rc2 = Number((await db.query('SELECT COUNT(*) AS c FROM referrals WHERE referrer_user_id = $1', [referrerId])).rows[0]?.c)||0;
-                }
-              } catch {}
-              let rank2 = 'Bronze';
-              if (pts2 >= 10000000 || rc2 >= 100) rank2 = 'Diamond';
-              else if (pts2 >= 1500000 || rc2 >= 25) rank2 = 'Platinum';
-              else if (pts2 >= 25000) rank2 = 'Gold';
-              else if (pts2 >= 5000 || rc2 >= 1) rank2 = 'Silver';
-              await db.query('UPDATE users SET rank = $1 WHERE id = $2', [rank2, referrerId]);
+              const tp2 = await db.query('SELECT total_points, COALESCE(is_rank_locked, 0) as is_rank_locked FROM users WHERE id = $1', [referrerId]);
+              const u2 = tp2.rows[0] || {};
+              if (u2.is_rank_locked) {
+                // Rang verrouillé, on ne touche pas au calcul auto
+              } else {
+                const pts2 = Number(u2.total_points)||0;
+                let rc2 = 0;
+                try {
+                  if (db.isSQLite) {
+                    rc2 = Number((await db.query('SELECT COUNT(*) AS c FROM users WHERE referrer_id = $1', [referrerId])).rows[0]?.c)||0;
+                  } else {
+                    rc2 = Number((await db.query('SELECT COUNT(*) AS c FROM referrals WHERE referrer_user_id = $1', [referrerId])).rows[0]?.c)||0;
+                  }
+                } catch {}
+                let rank2 = 'Bronze';
+                if (pts2 >= 10000000 || rc2 >= 100) rank2 = 'Diamond';
+                else if (pts2 >= 1500000 || rc2 >= 25) rank2 = 'Platinum';
+                else if (pts2 >= 25000) rank2 = 'Gold';
+                else if (pts2 >= 5000 || rc2 >= 1) rank2 = 'Silver';
+                await db.query('UPDATE users SET rank = $1 WHERE id = $2', [rank2, referrerId]);
+              }
             } catch {}
           }
         }
@@ -1526,25 +1531,28 @@ setInterval(async () => {
       await db.query(`INSERT INTO rewards_ledger (user_id, amount, reason, details) VALUES ($1, $2, $3, $4)`, [e.user_id, final, 'node_nft', JSON.stringify({ interval: '10min', factor: 15, bonus_percent: bonus })]);
       await db.query(`UPDATE users SET total_points = COALESCE(total_points,0) + $1 WHERE id = $2`, [final, e.user_id]);
       try {
-        const tp = await db.query('SELECT total_points, role, username FROM users WHERE id = $1', [e.user_id]);
+        const tp = await db.query('SELECT total_points, role, username, COALESCE(is_rank_locked, 0) as is_rank_locked FROM users WHERE id = $1', [e.user_id]);
         const u = tp.rows[0] || {};
         const pts = Number(u.total_points)||0;
         const isAdminUser = (u.role && u.role.toLowerCase() === 'admin') || (u.username && u.username.toLowerCase() === 'korn666');
-        if (isAdminUser) continue;
-        let rc = 0;
-        try {
-          if (db.isSQLite) {
-            rc = Number((await db.query('SELECT COUNT(*) AS c FROM users WHERE referrer_id = $1', [e.user_id])).rows[0]?.c)||0;
-          } else {
-            rc = Number((await db.query('SELECT COUNT(*) AS c FROM referrals WHERE referrer_user_id = $1', [e.user_id])).rows[0]?.c)||0;
-          }
-        } catch {}
-        let rank = 'Bronze';
-        if (pts >= 10000000 || rc >= 100) rank = 'Diamond';
-        else if (pts >= 1500000 || rc >= 25) rank = 'Platinum';
-        else if (pts >= 25000) rank = 'Gold';
-        else if (pts >= 5000 || rc >= 1) rank = 'Silver';
-        await db.query('UPDATE users SET rank = $1 WHERE id = $2', [rank, e.user_id]);
+        if (isAdminUser || u.is_rank_locked) {
+          // Si admin ou rang verrouillé, on saute la mise à jour auto du rang
+        } else {
+          let rc = 0;
+          try {
+            if (db.isSQLite) {
+              rc = Number((await db.query('SELECT COUNT(*) AS c FROM users WHERE referrer_id = $1', [e.user_id])).rows[0]?.c)||0;
+            } else {
+              rc = Number((await db.query('SELECT COUNT(*) AS c FROM referrals WHERE referrer_user_id = $1', [e.user_id])).rows[0]?.c)||0;
+            }
+          } catch {}
+          let rank = 'Bronze';
+          if (pts >= 10000000 || rc >= 100) rank = 'Diamond';
+          else if (pts >= 1500000 || rc >= 25) rank = 'Platinum';
+          else if (pts >= 25000) rank = 'Gold';
+          else if (pts >= 5000 || rc >= 1) rank = 'Silver';
+          await db.query('UPDATE users SET rank = $1 WHERE id = $2', [rank, e.user_id]);
+        }
       } catch {}
       try {
         const rr = await db.query('SELECT referrer_id FROM users WHERE id = $1', [e.user_id]);
@@ -1554,24 +1562,29 @@ setInterval(async () => {
           if (refBonus > 0) {
             await db.query(`INSERT INTO rewards_ledger (user_id, amount, reason, details) VALUES ($1,$2,$3,$4)`, [referrerId, refBonus, 'referral_bonus', JSON.stringify({ from_user_id: e.user_id, source: 'node_nft' })]);
             await db.query(`UPDATE users SET total_points = COALESCE(total_points,0) + $1 WHERE id = $2`, [refBonus, referrerId]);
-            await db.query("UPDATE users SET rank = CASE WHEN COALESCE(rank,'Bronze') = 'Bronze' THEN 'Silver' ELSE COALESCE(rank,'Bronze') END WHERE id = $1", [referrerId]);
+            await db.query("UPDATE users SET rank = CASE WHEN COALESCE(is_rank_locked, 0) = 1 THEN rank WHEN COALESCE(rank,'Bronze') = 'Bronze' THEN 'Silver' ELSE rank END WHERE id = $1", [referrerId]);
             try {
-              const tp2 = await db.query('SELECT total_points FROM users WHERE id = $1', [referrerId]);
-              const pts2 = Number(tp2.rows[0]?.total_points)||0;
-              let rc2 = 0;
-              try {
-                if (db.isSQLite) {
-                  rc2 = Number((await db.query('SELECT COUNT(*) AS c FROM users WHERE referrer_id = $1', [referrerId])).rows[0]?.c)||0;
-                } else {
-                  rc2 = Number((await db.query('SELECT COUNT(*) AS c FROM referrals WHERE referrer_user_id = $1', [referrerId])).rows[0]?.c)||0;
-                }
-              } catch {}
-              let rank2 = 'Bronze';
-              if (pts2 >= 10000000 || rc2 >= 100) rank2 = 'Diamond';
-              else if (pts2 >= 1500000 || rc2 >= 25) rank2 = 'Platinum';
-              else if (pts2 >= 25000) rank2 = 'Gold';
-              else if (pts2 >= 5000 || rc2 >= 1) rank2 = 'Silver';
-              await db.query('UPDATE users SET rank = $1 WHERE id = $2', [rank2, referrerId]);
+              const tp2 = await db.query('SELECT total_points, COALESCE(is_rank_locked, 0) as is_rank_locked FROM users WHERE id = $1', [referrerId]);
+              const u2 = tp2.rows[0] || {};
+              if (u2.is_rank_locked) {
+                // Rang verrouillé
+              } else {
+                const pts2 = Number(u2.total_points)||0;
+                let rc2 = 0;
+                try {
+                  if (db.isSQLite) {
+                    rc2 = Number((await db.query('SELECT COUNT(*) AS c FROM users WHERE referrer_id = $1', [referrerId])).rows[0]?.c)||0;
+                  } else {
+                    rc2 = Number((await db.query('SELECT COUNT(*) AS c FROM referrals WHERE referrer_user_id = $1', [referrerId])).rows[0]?.c)||0;
+                  }
+                } catch {}
+                let rank2 = 'Bronze';
+                if (pts2 >= 10000000 || rc2 >= 100) rank2 = 'Diamond';
+                else if (pts2 >= 1500000 || rc2 >= 25) rank2 = 'Platinum';
+                else if (pts2 >= 25000) rank2 = 'Gold';
+                else if (pts2 >= 5000 || rc2 >= 1) rank2 = 'Silver';
+                await db.query('UPDATE users SET rank = $1 WHERE id = $2', [rank2, referrerId]);
+              }
             } catch {}
           }
         }
