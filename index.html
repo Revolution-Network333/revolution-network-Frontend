@@ -216,6 +216,19 @@
             <div class="page-wrapper" id="pageContent">
                 <!-- Content will be injected here -->
             </div>
+
+            <footer class="main-footer">
+                <div class="footer-content">
+                    <div class="footer-links">
+                        <a href="javascript:void(0)" onclick="setPage('privacy')" data-i18n="footer.privacy">Privacy Policy</a>
+                        <a href="javascript:void(0)" onclick="setPage('terms')" data-i18n="footer.terms">Terms of Service</a>
+                        <a href="javascript:void(0)" onclick="setPage('disclaimer')" data-i18n="footer.disclaimer">Token Disclaimer</a>
+                    </div>
+                    <div class="footer-copyright">
+                        &copy; 2026 Revolution Network. All rights reserved.
+                    </div>
+                </div>
+            </footer>
         </main>
     </div>
 
@@ -503,6 +516,9 @@
                 'tasks.points': 'Points',
                 'tasks.bonus': 'Bonus %',
                 'tasks.miningBonusLabel': 'Bonus minage',
+                'footer.privacy': 'Privacy Policy',
+                'footer.terms': 'Terms of Service',
+                'footer.disclaimer': 'Token Disclaimer',
                 'leaderboard.title': 'Classement',
                 'leaderboard.th.username': 'Pseudo',
                 'leaderboard.th.grade': 'Grade',
@@ -784,6 +800,9 @@
                 'tasks.points': 'Points',
                 'tasks.bonus': 'Bonus %',
                 'tasks.miningBonusLabel': 'Mining bonus',
+                'footer.privacy': 'Privacy Policy',
+                'footer.terms': 'Terms of Service',
+                'footer.disclaimer': 'Token Disclaimer',
                 'leaderboard.title': 'Leaderboard',
                 'leaderboard.th.username': 'Username',
                 'leaderboard.th.grade': 'Grade',
@@ -1297,6 +1316,9 @@
                 'tasks.points': 'Puntos',
                 'tasks.bonus': 'Bonus %',
                 'tasks.miningBonusLabel': 'Bonus de minado',
+                'footer.privacy': 'Privacy Policy',
+                'footer.terms': 'Terms of Service',
+                'footer.disclaimer': 'Token Disclaimer',
                 'leaderboard.title': 'Clasificación',
                 'leaderboard.th.username': 'Usuario',
                 'leaderboard.th.grade': 'Grado',
@@ -1406,6 +1428,7 @@
         // Navigation
         async function setPage(page) {
             console.log('Navigating to:', page);
+            window.scrollTo(0, 0);
             // Clear intervals from previous pages
             if (overviewInterval) {
                 clearInterval(overviewInterval);
@@ -1737,6 +1760,18 @@
                 case 'adminSupport':
                     content.innerHTML = getAdminSupportHTML();
                     initializeAdminSupportPage();
+                    applyTranslations();
+                    break;
+                case 'privacy':
+                    content.innerHTML = getPrivacyHTML();
+                    applyTranslations();
+                    break;
+                case 'terms':
+                    content.innerHTML = getTermsHTML();
+                    applyTranslations();
+                    break;
+                case 'disclaimer':
+                    content.innerHTML = getDisclaimerHTML();
                     applyTranslations();
                     break;
             }
@@ -5141,6 +5176,107 @@ function initializeShopPage() {
                             </thead>
                             <tbody></tbody>
                         </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getPrivacyHTML() {
+            return `
+                <div class="page-content legal-page">
+                    <div class="page-header">
+                        <h1 class="page-title neon-text">Privacy Policy – Revolution Network</h1>
+                    </div>
+                    <div class="legal-content glass-card">
+                        <p>Revolution Network collects limited data necessary to operate a decentralized bandwidth network.</p>
+                        <p>We may collect technical information such as IP address, device type, uptime metrics, bandwidth contribution, and application performance logs.</p>
+                        <p>Users may optionally connect a Solana wallet to receive rewards in Aether (ATH). Wallet addresses are stored only for reward distribution.</p>
+                        <p>No private keys are ever requested or stored.</p>
+                        
+                        <h3>Data Usage</h3>
+                        <p>We do not sell personal data. Collected information is used exclusively for:</p>
+                        <ul>
+                            <li>network performance and security</li>
+                            <li>fraud prevention and abuse detection</li>
+                            <li>reward calculation and airdrop distribution</li>
+                            <li>service analytics and improvement</li>
+                        </ul>
+                        
+                        <p>Cookies may be used for authentication, session management, and analytics.</p>
+                        <p>Users may request data deletion by contacting support.</p>
+                        
+                        <p>By using Revolution Network, users consent to this data processing necessary for decentralized infrastructure operation.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getTermsHTML() {
+            return `
+                <div class="page-content legal-page">
+                    <div class="page-header">
+                        <h1 class="page-title neon-text">Terms of Service – Revolution Network</h1>
+                    </div>
+                    <div class="legal-content glass-card">
+                        <p>Revolution Network provides a decentralized bandwidth-sharing application.</p>
+                        <p>Users voluntarily contribute network resources and receive points that may convert into Aether (ATH) tokens.</p>
+                        
+                        <p>Rewards are not guaranteed and depend on network activity, uptime, and Proof-of-Work validation.</p>
+                        <p>Revolution Network does not guarantee token value, liquidity, or market availability.</p>
+                        
+                        <h3>User Obligations</h3>
+                        <p>Users agree:</p>
+                        <ul>
+                            <li>not to manipulate network traffic</li>
+                            <li>not to create fraudulent nodes</li>
+                            <li>not to abuse bandwidth routing</li>
+                            <li>not to attempt reward exploitation</li>
+                        </ul>
+                        
+                        <p>Revolution Network may suspend accounts suspected of abuse.</p>
+                        <p>Token distributions may be modified, delayed, or cancelled if necessary.</p>
+                        
+                        <h3>Disclaimer</h3>
+                        <p>The service is provided “as is” without warranty.</p>
+                        <p>Revolution Network is not responsible for financial losses, token volatility, or third-party wallet issues.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getDisclaimerHTML() {
+            return `
+                <div class="page-content legal-page">
+                    <div class="page-header">
+                        <h1 class="page-title neon-text">Token Disclaimer – Aether (ATH)</h1>
+                    </div>
+                    <div class="legal-content glass-card">
+                        <p>Aether (ATH) is a utility token designed for use within the Revolution Network ecosystem.</p>
+                        <p>ATH is distributed as rewards for network contribution and participation.</p>
+                        
+                        <h3>Nature of Token</h3>
+                        <p>Aether (ATH):</p>
+                        <ul>
+                            <li>is not an investment product</li>
+                            <li>does not represent equity</li>
+                            <li>does not grant ownership rights</li>
+                            <li>does not guarantee profit</li>
+                            <li>may have no market value</li>
+                        </ul>
+                        
+                        <p>Token price is determined by market liquidity and may be highly volatile.</p>
+                        <p>Users should not expect financial return.</p>
+                        
+                        <h3>User Acknowledgment</h3>
+                        <p>By receiving ATH, users acknowledge:</p>
+                        <ul>
+                            <li>rewards are discretionary</li>
+                            <li>value is not guaranteed</li>
+                            <li>liquidity may be limited</li>
+                            <li>vesting schedules may apply</li>
+                        </ul>
+                        
+                        <p>Aether (ATH) is intended solely for ecosystem utility.</p>
                     </div>
                 </div>
             `;
