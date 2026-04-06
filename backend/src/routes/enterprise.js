@@ -250,4 +250,62 @@ router.get('/v1/jobs/:id/result', async (req, res) => {
   }
 });
 
+// Stats pour le dashboard client
+router.get('/dashboard-stats', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    // 1. Bande passante disponible (Somme des pairs connectés dans les sessions actives)
+    const bandwidthRes = await db.query(`
+      SELECT SUM(peers_connected) as total_peers 
+      FROM sessions 
+      WHERE is_active = ${db.isSQLite ? '1' : 'TRUE'}
+    `);
+    const totalPeers = parseInt(bandwidthRes.rows[0]?.total_peers || 0);
+    // Estimation simple : 1 peer = 10 Mbps disponibles en moyenne
+    const availableBandwidthMbps = totalPeers * 10;
+
+    // 2. Uptime (Ratio de succès des jobs de l'utilisateur sur les 30 derniers jours)
+    const uptimeRes = await db.query(`
+      SELECT 
+        COUNT(*) as total,
+        COUNT(CASE WHEN status = 'completed' THEN 1 END) as success
+      FROM jobs 
+      WHERE user_id = $1 
+      AND created_at > ${db.isSQLite ? "datetime('now', '-30 days')" : "NOW() - INTERVAL '30 days'"}
+    `, [userId]);
+    
+    const totalJobs = parseInt(uptimeRes.rows[0]?.total || 0);
+    const successJobs = parseInt(uptimeRes.rows[0]?.success || 0);
+    const uptimePercent = totalJobs > 0 ? (successJobs / totalJobs) * 100 : 100;
+
+    // 3. Preuve de service (Derniers jobs avec leurs résultats)
+    const proofRes = await db.query(`
+      SELECT j.id, j.type, j.status, j.created_at, jr.result_json
+      FROM jobs j
+      LEFT JOIN job_results jr ON j.id = jr.job_id
+      WHERE j.user_id = $1
+      ORDER BY j.created_at DESC
+      LIMIT 5
+    `, [userId]);
+
+    const proofOfService = proofRes.rows.map(r => ({
+      id: r.id,
+      type: r.type,
+      status: r.status,
+      timestamp: r.created_at,
+      hasResult: !!r.result_json
+    }));
+
+    res.json({
+      availableBandwidth: `${availableBandwidthMbps} Mbps`,
+      uptime: `${uptimePercent.toFixed(2)}%`,
+      proofOfService
+    });
+  } catch (e) {
+    console.error('Dashboard stats error:', e);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 module.exports = router;

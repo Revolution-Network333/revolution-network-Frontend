@@ -3117,6 +3117,75 @@
                     <div class="page-header">
                         <h1 class="page-title">${t('enterprise.title')}</h1>
                     </div>
+
+                    <!-- Dashboard Stats Section -->
+                    <div class="stats-grid" style="margin-bottom: 24px;">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon green">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12.55V17a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4.45"></path>
+                                        <path d="M7 15l5 5 5-5"></path>
+                                        <path d="M12 15V3"></path>
+                                    </svg>
+                                </div>
+                                <div class="stat-title">Bande Passante Disponible</div>
+                            </div>
+                            <div class="stat-value" id="ent-bandwidth-val">0 Mbps</div>
+                            <div class="stat-label">Réseau décentralisé</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon purple">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="stat-title">Uptime Service</div>
+                            </div>
+                            <div class="stat-value" id="ent-uptime-val">100%</div>
+                            <div class="stat-label">30 derniers jours</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon blue">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="stat-title">Preuve de Service</div>
+                            </div>
+                            <div class="stat-value" id="ent-proof-count">0</div>
+                            <div class="stat-label">Jobs récents</div>
+                        </div>
+                    </div>
+
+                    <div class="api-section">
+                        <div class="api-card" style="margin-bottom:16px;">
+                            <h3 style="margin:0 0 8px 0;">Preuve de Service (Logs récents)</h3>
+                            <div class="table-container" style="background:#0b0f14; border:1px solid #1f2937; border-radius:8px;">
+                                <table class="rewards-table" id="ent-proof-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Preuve</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ent-proof-body">
+                                        <tr><td colspan="5" style="text-align:center; padding:20px; color:#9ca3af;">Chargement...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="api-section">
                         <div class="api-card" style="margin-bottom:16px;">
                             <h3 style="margin:0 0 8px 0;">${t('enterprise.intro')}</h3>
@@ -3202,6 +3271,34 @@ print(r.json())</code></pre>
         function initializeEnterpriseApiPage() {
             const token = localStorage.getItem('token');
             if (!token) return;
+
+            // Fetch Dashboard Stats
+            fetch(`${API_BASE}/api/enterprise/dashboard-stats`, { headers: { 'Authorization': `Bearer ${token}` }})
+            .then(r => r.json())
+            .then(data => {
+                if (data.availableBandwidth) document.getElementById('ent-bandwidth-val').textContent = data.availableBandwidth;
+                if (data.uptime) document.getElementById('ent-uptime-val').textContent = data.uptime;
+                
+                const proofBody = document.getElementById('ent-proof-body');
+                const proofCount = document.getElementById('ent-proof-count');
+                if (data.proofOfService) {
+                    proofCount.textContent = data.proofOfService.length;
+                    if (data.proofOfService.length > 0) {
+                        proofBody.innerHTML = data.proofOfService.map(p => `
+                            <tr>
+                                <td>#${p.id}</td>
+                                <td>${p.type}</td>
+                                <td><span class="status-badge ${p.status}">${p.status}</span></td>
+                                <td>${new Date(p.timestamp).toLocaleString()}</td>
+                                <td>${p.hasResult ? '✅ Vérifiée' : '⏳ En attente'}</td>
+                            </tr>
+                        `).join('');
+                    } else {
+                        proofBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#9ca3af;">Aucun job récent</td></tr>';
+                    }
+                }
+            }).catch(e => console.error('Dashboard stats error:', e));
+
             fetch(`${API_BASE}/api/enterprise/me`, { headers: { 'Authorization': `Bearer ${token}` }})
             .then(r => r.json())
             .then(data => {

@@ -232,11 +232,13 @@ async function submitProof(challenge, nonce) {
 }
 
 function createWindow() {
+  const isHidden = process.argv.includes('--hidden');
   mainWindow = new BrowserWindow({
     width: 400,
     height: 600,
     resizable: false,
     autoHideMenuBar: true,
+    show: !isHidden, // Don't show window if started with --hidden
     icon: path.join(__dirname, 'assets/icon.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -269,10 +271,25 @@ function createTray() {
   tray.on('click', () => mainWindow.show());
 }
 
+function enableAutoStart() {
+  // Only for Windows and non-dev environments for safety
+  if (process.platform === 'win32') {
+    const isDev = !app.isPackaged;
+    if (!isDev) {
+      app.setLoginItemSettings({
+        openAtLogin: true,
+        path: app.getPath('exe'),
+        args: ['--hidden']
+      });
+    }
+  }
+}
+
 app.whenReady().then(async () => {
   await resolveApiUrl();
   createWindow();
   createTray();
+  enableAutoStart();
   if (isActive) mine();
 });
 
