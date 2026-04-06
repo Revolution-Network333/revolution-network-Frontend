@@ -49,8 +49,8 @@ body::before {
 /* Styles de la barre latérale */
 .sidebar {
   width: 280px;
-  background-color: #121212;
-  border-right: 1px solid #2a2a2a;
+  background-color: #000000;
+  border-right: 1px solid #1a1a1a;
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -64,12 +64,13 @@ body::before {
 
 .sidebar-header {
   padding: 10px;
-  border-bottom: 1px solid #2a2a2a;
+  border-bottom: 1px solid #1a1a1a;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 300px;
   overflow: hidden;
+  background-color: #000000;
 }
 
 .sidebar-header .logo {

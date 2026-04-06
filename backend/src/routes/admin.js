@@ -561,13 +561,13 @@ router.get('/airdrop/participants', authenticateToken, checkAdmin, async (req, r
 
         let query = `
             SELECT 
-                id, email, username, 
-                COALESCE(airdrop_score, 0) as airdrop_score, 
-                COALESCE(airdrop_allocation, 0) as airdrop_allocation, 
-                COALESCE(total_points, 0) as total_points, 
-                COALESCE(total_spent, 0) as total_spent, 
+                u.id, u.email, u.username, 
+                COALESCE(u.airdrop_score, 0) as airdrop_score, 
+                COALESCE(u.airdrop_allocation, 0) as airdrop_allocation, 
+                COALESCE(u.total_points, 0) as total_points, 
+                (SELECT COALESCE(SUM(o.total_price), 0) FROM orders o WHERE o.user_id = u.id AND o.status = 'paid') as total_spent,
                 COALESCE(w.balance_ath, 0) as balance_ath,
-                last_airdrop_calculation,
+                u.last_airdrop_calculation,
                 ${activeDaysExpr} as active_days
             FROM users u
             LEFT JOIN wallets w ON w.user_id = u.id

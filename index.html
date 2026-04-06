@@ -3496,6 +3496,16 @@ print(r.json())</code></pre>
                         headers: { 'Authorization': `Bearer ${token}` }
                     }).then(r => r.json()).then(j => {
                         const statuses = j.statuses || [];
+                        
+                        // Fusionner avec le statut early adopter si c'est Gold
+                        if (eaStatus.isGold) {
+                            // Trouver l'ID de la task early_adopter dans les données
+                            const eaTask = (data.tasks || []).find(t => t.type === 'early_adopter');
+                            if (eaTask) {
+                                statuses.push({ taskId: eaTask.id, status: 'approved' });
+                            }
+                        }
+
                         statuses.forEach(st => {
                             const btn = list.querySelector(`button.profile-btn[data-id="${st.taskId}"]`);
                             if (!btn) return;
