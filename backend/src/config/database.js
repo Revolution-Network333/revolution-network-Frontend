@@ -55,7 +55,8 @@ const rewriteForMySql = (sql) => {
   s = s.replace(/EXTRACT\s*\(\s*EPOCH\s+FROM\s*\(([^)]+)\s*-\s*([^)]+)\)\)/gi, 'TIMESTAMPDIFF(SECOND, $2, $1)');
   s = s.replace(/EXTRACT\s*\(\s*EPOCH\s+FROM\s*([^)]+)\)/gi, 'UNIX_TIMESTAMP($1)');
 
-  s = s.replace(/\b(rank|key|value)\b/gi, (match, offset, str) => {
+  s = s.replace(/\b(rank|key|value)\b/gi, (match, p1, offset, str) => {
+    if (typeof str !== 'string') return match;
     const prev = str[offset - 1];
     const next = str[offset + match.length];
     if (prev === '`' || next === '`') return match;
