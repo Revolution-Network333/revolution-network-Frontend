@@ -3114,7 +3114,7 @@
                         body: JSON.stringify({ newPassword: np })
                     }).then(r=>r.json()).then(data=>{
                         if (data.success) {
-                            alert('Mot de passe enregistré. Vous pouvez vous connecter dans l’extension.');
+                            alert('Mot de passe enregistré. Vous pouvez vous connecter dans l’application Windows.');
                             newPasswordInput.value=''; confirmPasswordInput.value='';
                         } else { alert('Erreur: ' + (data.error||'inconnue')); }
                     });
@@ -6635,6 +6635,7 @@ function initializeShopPage() {
                   <select id="faq-chat-lang">
                     <option value="fr">FR</option>
                     <option value="en">EN</option>
+                    <option value="es">ES</option>
                   </select>
                   <button class="faq-chat-close" id="faq-chat-close">✕</button>
                 </div>
@@ -6666,21 +6667,22 @@ function initializeShopPage() {
                         triggers: ['a quoi ca sert', 'utilite', 'usage', 'ia', 'bande passante', 'revenu passif', 'airdrop'],
                         question: "À quoi ça sert ?",
                         answer:
-`On utilise la bande passante inutilisée de l'utilisateur de l'extension pour résoudre des calculs pour les IA et qu'en échange nous sommes rémunérés, ce qui permettra de faire des airdrops pour les utilisateurs, ce qui sera une source de revenu passif en plus.`
+`On utilise la bande passante inutilisée de l'utilisateur de l'application Windows pour résoudre des calculs pour les IA et qu'en échange nous sommes rémunérés, ce qui permettra de faire des airdrops pour les utilisateurs, ce qui sera une source de revenu passif en plus.`
                     },
                     {
                         id: 'about',
                         triggers: ['c est quoi', "c'est quoi", 'révolution network', 'projet', 'plateforme', 'concept', 'but', 'objectif'],
                         question: "C’est quoi Révolution Network ?",
                         answer:
-`Révolution Network est une plateforme qui te permet de participer à un réseau P2P (peer-to-peer) basé sur WebRTC, tout en gagnant des points utilisés pour le classement et la phase d’airdrop.
+`Révolution Network est une plateforme qui te permet de participer à un réseau P2P (peer-to-peer) basé sur WebRTC via notre application Windows, tout en gagnant des points utilisés pour le classement et la phase d’airdrop.
 
 Ce que tu fais concrètement :
 - Tu crées un compte et tu te connectes au dashboard.
+- Tu installes l'application Windows pour commencer le minage.
 - Tu participes (activité régulière, sessions, engagement).
 - Tu complètes des tasks et tu peux parrainer d’autres utilisateurs.
 
-Le but : construire une communauté active et récompenser l’engagement réel, pas seulement “l’inscription”.`
+Le but : construire une communauté active et récompenser l’engagement réel.`
                     },
                     {
                         id: 'points',
@@ -6689,164 +6691,50 @@ Le but : construire une communauté active et récompenser l’engagement réel,
                         answer:
 `Tu peux gagner des points via plusieurs leviers :
 
-1) Activité / sessions
-- Être actif régulièrement et maintenir des sessions augmente ton total.
+1) Minage via l'application Windows
+- Laisse l'application tourner en arrière-plan pour accumuler des points.
 
 2) Tasks (missions)
-- Certaines actions (réseaux sociaux, participation, preuves) donnent des points.
-- Selon la task, elle peut aussi ajouter un bonus en % côté airdrop/boosts (quand c’est activé/validé).
+- Certaines actions (réseaux sociaux, participation) donnent des points.
 
 3) Parrainage
-- Si tes filleuls deviennent actifs, tu peux recevoir des points bonus (et ça augmente ton total).`
+- Invite tes amis et reçois des bonus basés sur leur activité.`
                     },
                     {
-                        id: 'optimize_airdrop',
-                        triggers: ['bien placé', 'bien place', 'augmenter score', 'booster', 'optimiser', 'maximiser', 'meilleur score', 'top airdrop'],
-                        question: "Comment être bien placé pour l’airdrop ?",
-                        answer:
-`Pour être bien placé, pense “régularité + engagement + preuve” :
-
-1) Sois actif souvent (jours actifs)
-- Le score prend en compte l’ancienneté/présence : se connecter tôt et rester actif aide beaucoup.
-
-2) Monte en points (mais intelligemment)
-- Activité + rewards + auto-mining (si tu y as accès) = progression continue.
-- Les tasks validées ajoutent des points (et parfois un bonus en %).
-
-3) Fais valider les tasks
-- Un task “fait” mais non approuvé ne sert pas pareil qu’un task approuvé : vise la validation.
-
-4) Prévente / achats confirmés
-- Les achats “paid” améliorent le score via montant dépensé + nombre d’achats.
-- Donc acheter en prévente (si tu le souhaites) peut donner un avantage mesurable.
-
-5) Parrainage (qualité > quantité)
-- Un ou deux filleuls actifs valent mieux que 50 comptes “morts”.
-
-6) Reste clean
-- Les comptes bannis/inactifs ne sont pas favorisés dans les classements publics.`
-                    },
-                    {
-                        id: 'ranks',
-                        triggers: ['rank', 'rang', 'bronze', 'silver', 'gold', 'platinum', 'diamond', 'grade'],
-                        question: "Ranks (Bronze/Silver/Gold/Platinum/Diamond) : ça signifie quoi ?",
-                        answer:
-`Les ranks sont un repère de progression basé surtout sur tes points (et parfois le parrainage).
-
-Seuils actuels (indicatifs) :
-- Bronze : par défaut.
-- Silver : ≥ 5 000 points ou ≥ 1 parrain actif.
-- Gold : ≥ 25 000 points.
-- Platinum : ≥ 1 500 000 points ou ≥ 25 parrains.
-- Diamond : ≥ 10 000 000 points ou ≥ 100 parrains.
-
-Le rank ne remplace pas l’airdrop score, mais il reflète ton engagement global.`
-                    },
-                    {
-                        id: 'airdrop',
-                        triggers: ['airdrop', 'allocation', 'classement', 'ranking', 'score', 'leaderboard', 'rank'],
-                        question: "Comment fonctionne le classement / l’airdrop ?",
-                        answer:
-`Le serveur calcule un score d’airdrop, puis l’allocation est répartie proportionnellement à ce score.
-
-Dans la formule actuelle, le score dépend surtout de :
-- Montant dépensé (achats confirmés “paid”) : plus tu participes financièrement, plus ça pèse (racine carrée).
-- Points : ils comptent avec une puissance (points^0.7), donc monter en points aide, mais avec un effet d’équilibrage.
-- Jours actifs (ancienneté/présence) : être là tôt et rester actif augmente ton score.
-- Nombre d’achats “paid” : la participation à l’écosystème compte aussi.
-
-Donc : activité + points + ancienneté + achats confirmés = meilleur positionnement pour la phase d’airdrop.`
-                    },
-                    {
-                        id: 'auto_mining',
-                        triggers: ['auto mining', 'auto-mining', 'minage auto', 'minage automatique', 'passif', 'passive mining'],
-                        question: "Auto-mining : c’est quoi et ça sert à quoi ?",
-                        answer:
-`L’auto-mining est une option (entitlement) qui crédite régulièrement des points quand tu es éligible.
-
-À retenir :
-- C’est pensé pour récompenser les utilisateurs qui veulent une progression continue.
-- Les tasks approuvées peuvent ajouter un bonus en % qui augmente ce taux.
-
-Résultat : plus tu participes (tasks + activité), plus ton rendement peut être optimisé, et ton total de points augmente (ce qui aide aussi pour le score d’airdrop).`
-                    },
-                    {
-                        id: 'node_nft',
-                        triggers: ['node nft', 'nft node', 'node', 'nœud nft', 'noeud', 'minage passif'],
-                        question: "Node / Node NFT : quel avantage ?",
-                        answer:
-`Le Node (ou Node NFT selon la formule) donne un accès à du minage passif et/ou des avantages d’entitlements.
-
-En général :
-- Tu peux générer des points de façon régulière sans dépendre uniquement de l’activité “live”.
-- Les bonus de tasks (en %) peuvent aussi s’appliquer, donc faire des tasks reste utile même en passif.
-
-Pour être sûr de ton statut, regarde tes entitlements/avantages dans l’app et ton historique de rewards.`
-                    },
-                    {
-                        id: 'presale',
-                        triggers: ['prévente', 'presale', 'acheter', 'token', 'ath', 'aether', 'pack', 'boutique'],
-                        question: "La prévente (presale) donne un avantage ?",
-                        answer:
-`Oui, parce qu’un achat confirmé (“paid”) influence directement le score d’airdrop via :
-- le montant dépensé,
-- et le nombre d’achats.
-
-Workflow :
-- Tu passes commande → état “pending_payment”.
-- Stripe confirme le paiement → état “paid”.
-- À partir de là, la commande compte dans les métriques et l’achat est livré.
-
-En plus, acheter en prévente te positionne tôt et soutient le lancement, ce qui est cohérent avec un airdrop orienté “engagement”.`
-                    },
-                    {
-                        id: 'extension',
-                        triggers: ['extension', 'chrome', 'node', 'nœud', 'miner', 'minage', 'webrtc', 'installer'],
-                        question: "Comment participer concrètement (extension / nœud) ?",
+                        id: 'app_windows',
+                        triggers: ['application', 'windows', 'app', 'node', 'nœud', 'miner', 'minage', 'webrtc', 'installer', 'telecharger', 'download'],
+                        question: "Comment installer l'application Windows ?",
                         answer:
 `Pour participer :
 - Crée un compte puis connecte-toi.
-- Installe l’extension Chrome (si tu l’utilises) et connecte-la à ton compte.
-- Laisse ton activité tourner de façon régulière.
+- Va dans la section "Download" du dashboard.
+- Télécharge l'installateur Windows (.exe).
+- Installe l'application et connecte-toi avec tes identifiants.
+- Appuie sur ▶ pour démarrer le minage.
 
-Astuce : la régularité est plus rentable que “un gros rush”, car les jours actifs et l’engagement dans le temps comptent.`
+L'application est 100% sûre. Si Windows SmartScreen affiche une alerte, clique sur "Informations complémentaires" puis "Exécuter quand même".`
                     },
                     {
-                        id: 'payments',
-                        triggers: ['paiement', 'stripe', 'payment', 'achat', 'commande', 'facture', 'pending', 'paid'],
-                        question: "Paiement : pourquoi je ne reçois pas l’achat immédiatement ?",
+                        id: 'socials',
+                        triggers: ['social', 'reseaux', 'x', 'twitter', 'discord', 'telegram', 'contact', 'suivre'],
+                        question: "Où nous suivre ?",
                         answer:
-`La livraison se fait uniquement après confirmation réelle du paiement.
+`Rejoins notre communauté :
+- X (Twitter) : https://x.com/RvolutionSup
+- Discord : https://discord.gg/eadE7uK6ss
+- Telegram : https://t.me/+sWtih46Yg91kNWQ0
 
-Schéma actuel :
-- Commande créée en “pending_payment”.
-- Confirmation côté Stripe (webhook).
-- Passage en “paid” et livraison automatique.
-
-C’est une sécurité : ça évite qu’un échec/annulation laisse une commande “gratuite”.`
-                    },
-                    {
-                        id: 'referral',
-                        triggers: ['parrainage', 'referral', 'code', 'filleul', 'inviter'],
-                        question: "Parrainage : comment ça marche ?",
-                        answer:
-`Tu as un code de parrainage dans ton profil.
-
-Quand quelqu’un s’inscrit via ton code :
-- tu peux obtenir des bonus (souvent sous forme de points),
-- et si la personne devient active, ça renforce ton gain indirectement via ton total de points.`
+Suis-nous pour les dernières annonces et mises à jour !`
                     },
                     {
                         id: 'security',
                         triggers: ['sécurité', 'privacy', 'vie privée', 'risque', 'danger', 'ip', 'safe'],
                         question: "Sécurité / vie privée : qu’est-ce qui est partagé ?",
                         answer:
-`Le projet repose sur un réseau P2P (WebRTC). Comme tout système P2P, garde de bonnes pratiques :
-- évite d’exposer des données sensibles,
-- utilise des environnements propres,
-- et si tu actives des fonctions type proxy/VPN, assure-toi de comprendre ce que ça implique.
-
-Si tu veux une réponse précise adaptée à ton cas, crée un ticket support avec ton contexte (OS, extension, objectif).`
+`L'application Windows utilise des connexions sécurisées via WebRTC.
+- Nous ne collectons que les données techniques nécessaires au réseau.
+- Aucune clé privée n'est demandée.
+- L'application est optimisée pour ne pas ralentir ton PC.`
                     }
                 ],
                 en: [
@@ -6855,55 +6743,82 @@ Si tu veux une réponse précise adaptée à ton cas, crée un ticket support av
                         triggers: ['what is it for', 'utility', 'usage', 'ai', 'bandwidth', 'passive income', 'airdrop'],
                         question: "What is it for?",
                         answer:
-`We use the unused bandwidth of the extension user to solve calculations for AI and in exchange we are paid, which will allow us to do airdrops for users, which will be an additional source of passive income.`
+`We use the unused bandwidth of the Windows application user to solve calculations for AI and in exchange we are paid, which will allow us to do airdrops for users, which will be an additional source of passive income.`
                     },
                     {
                         id: 'about',
                         triggers: ['what is', 'revolution network', 'project', 'platform', 'purpose'],
                         question: "What is Révolution Network?",
                         answer:
-`Révolution Network is a WebRTC-based P2P platform where you contribute (activity, participation) and earn points used for ranking and airdrop phases.
+`Révolution Network is a WebRTC-based P2P platform where you contribute via our Windows app and earn points used for ranking and airdrop phases.`
+                    },
+                    {
+                        id: 'app_windows',
+                        triggers: ['application', 'windows', 'app', 'node', 'miner', 'mining', 'webrtc', 'install', 'download'],
+                        question: "How to install the Windows app?",
+                        answer:
+`To participate:
+- Create an account and sign in.
+- Go to the "Download" section on the dashboard.
+- Download the Windows installer (.exe).
+- Install the app and sign in with your credentials.
+- Press ▶ to start mining.
 
-You can earn by staying active, completing tasks, and inviting others (referrals).`
+The app is 100% safe. If Windows SmartScreen shows an alert, click "More info" then "Run anyway".`
                     },
                     {
-                        id: 'airdrop',
-                        triggers: ['airdrop', 'ranking', 'leaderboard', 'allocation', 'score'],
-                        question: "How does the airdrop ranking work?",
+                        id: 'socials',
+                        triggers: ['social', 'networks', 'x', 'twitter', 'discord', 'telegram', 'contact', 'follow'],
+                        question: "Where to follow us?",
                         answer:
-`The backend calculates an airdrop score and distributes allocation proportionally.
+`Join our community:
+- X (Twitter): https://x.com/RvolutionSup
+- Discord: https://discord.gg/eadE7uK6ss
+- Telegram: https://t.me/+sWtih46Yg91kNWQ0
 
-Current score signals include:
-- total paid spend (sqrt),
-- points (pow(points, 0.7)),
-- account active days,
-- number of paid purchases.`
+Follow us for the latest announcements and updates!`
+                    }
+                ],
+                es: [
+                    {
+                        id: 'utility',
+                        triggers: ['para que sirve', 'utilidad', 'uso', 'ia', 'ancho de banda', 'ingresos pasivos', 'airdrop'],
+                        question: "¿Para qué sirve?",
+                        answer:
+`Utilizamos el ancho de banda no utilizado del usuario de la aplicación de Windows para resolver cálculos para IA y a cambio se nos paga, lo que nos permitirá realizar airdrops para los usuarios, lo que será una fuente adicional de ingresos pasivos.`
                     },
                     {
-                        id: 'presale',
-                        triggers: ['presale', 'buy', 'token', 'ath', 'aether'],
-                        question: "Does presale help for airdrop?",
+                        id: 'about',
+                        triggers: ['que es', 'revolution network', 'proyecto', 'plataforma', 'proposito'],
+                        question: "¿Qué es Révolution Network?",
                         answer:
-`A paid presale purchase can improve the score inputs (paid spend + purchase count). Payments must be confirmed before delivery.`
+`Révolution Network es una plataforma P2P basada en WebRTC donde contribuyes a través de nuestra aplicación de Windows y ganas puntos utilizados para el ranking y las fases de airdrop.`
                     },
                     {
-                        id: 'support',
-                        triggers: ['support', 'ticket', 'help', 'issue'],
-                        question: "How to contact support?",
+                        id: 'app_windows',
+                        triggers: ['aplicacion', 'windows', 'app', 'nodo', 'minero', 'mineria', 'webrtc', 'instalar', 'descargar'],
+                        question: "¿Cómo instalar la aplicación de Windows?",
                         answer:
-`If the FAQ doesn’t solve it, you can create a support ticket and the team can reply inside the Support page.`
-                    },
-                    {
-                        id: 'optimize_airdrop',
-                        triggers: ['how to rank', 'improve score', 'boost airdrop', 'maximize', 'best score'],
-                        question: "How to be well positioned for the airdrop?",
-                        answer:
-`Focus on consistent participation:
+`Para participar:
+- Crea una cuenta e inicia sesión.
+- Ve a la sección "Download" en el dashboard.
+- Descarga el instalador de Windows (.exe).
+- Instala la aplicación e inicia sesión con tus credenciales.
+- Presiona ▶ para comenzar a minar.
 
-- Stay active over time (active days matter).
-- Grow points (activity + approved tasks + optional auto-mining).
-- Paid purchases can improve score inputs (paid spend + purchase count).
-- Bring real users (referrals) who actually become active.`
+La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz clic en "Más información" y luego en "Ejecutar de todos modos".`
+                    },
+                    {
+                        id: 'socials',
+                        triggers: ['social', 'redes', 'x', 'twitter', 'discord', 'telegram', 'contacto', 'seguir'],
+                        question: "¿Dónde seguirnos?",
+                        answer:
+`Únete a nuestra comunidad:
+- X (Twitter): https://x.com/RvolutionSup
+- Discord: https://discord.gg/eadE7uK6ss
+- Telegram: https://t.me/+sWtih46Yg91kNWQ0
+
+¡Síguenos para los últimos anuncios y actualizaciones!`
                     }
                 ]
             };
@@ -6916,7 +6831,9 @@ Current score signals include:
 
             const getLang = () => {
                 const v = (document.getElementById('faq-chat-lang')?.value || 'fr');
-                return v === 'en' ? 'en' : 'fr';
+                if (v === 'en') return 'en';
+                if (v === 'es') return 'es';
+                return 'fr';
             };
 
             const addMsg = (role, text) => {
@@ -6947,7 +6864,11 @@ Current score signals include:
                     wrap.className = 'faq-chat-msg bot';
                     const b = document.createElement('button');
                     b.className = 'faq-support-btn';
-                    b.textContent = (getLang() === 'en') ? 'Create a support ticket' : 'Créer un ticket support';
+                    const lang = getLang();
+                    if (lang === 'en') b.textContent = 'Create a support ticket';
+                    else if (lang === 'es') b.textContent = 'Crear un ticket de soporte';
+                    else b.textContent = 'Créer un ticket support';
+
                     b.onclick = () => {
                         const token = localStorage.getItem('token');
                         if (!token) {
@@ -6974,10 +6895,20 @@ Current score signals include:
                                 setTimeout(() => { try { openUserTicket(j.id, subject); } catch {} }, 400);
                                 closeFaqPanel();
                             } else {
-                                addMsg('bot', (getLang()==='en') ? 'Ticket creation failed. Open the Support page.' : 'Création du ticket impossible. Ouvre la page Support.');
+                                const lang = getLang();
+                                let err = 'Création du ticket impossible. Ouvre la page Support.';
+                                if (lang === 'en') err = 'Ticket creation failed. Open the Support page.';
+                                else if (lang === 'es') err = 'No se pudo crear el ticket. Abre la página de Soporte.';
+                                addMsg('bot', err);
                             }
                         })
-                        .catch(() => addMsg('bot', (getLang()==='en') ? 'Ticket creation failed. Open the Support page.' : 'Création du ticket impossible. Ouvre la page Support.'));
+                        .catch(() => {
+                            const lang = getLang();
+                            let err = 'Création du ticket impossible. Ouvre la page Support.';
+                            if (lang === 'en') err = 'Ticket creation failed. Open the Support page.';
+                            else if (lang === 'es') err = 'No se pudo crear el ticket. Abre la página de Soporte.';
+                            addMsg('bot', err);
+                        });
                     };
                     const bubble2 = document.createElement('div');
                     bubble2.style.maxWidth = '85%';
@@ -7021,9 +6952,10 @@ Current score signals include:
                 const qa = document.getElementById('faq-quick-actions');
                 if (!qa) return;
                 const lang = getLang();
-                const pills = (lang === 'en')
-                    ? ['Airdrop', 'Points', 'Presale', 'Extension', 'Payments', 'Support']
-                    : ['Airdrop', 'Points', 'Prévente', 'Extension', 'Paiements', 'Support'];
+                let pills = ['Airdrop', 'Points', 'Prévente', 'Application', 'Social', 'Support'];
+                if (lang === 'en') pills = ['Airdrop', 'Points', 'Presale', 'Application', 'Social', 'Support'];
+                if (lang === 'es') pills = ['Airdrop', 'Puntos', 'Preventa', 'Aplicación', 'Social', 'Soporte'];
+
                 qa.innerHTML = '';
                 pills.forEach((label) => {
                     const b = document.createElement('button');
@@ -7039,9 +6971,11 @@ Current score signals include:
                 setQuickActions();
                 const body = document.getElementById('faq-chat-body');
                 if (body && body.childElementCount === 0) {
-                    addBotWithSupport(getLang()==='en'
-                        ? "Ask a common question. If it doesn’t match the FAQ, create a support ticket."
-                        : "Pose une question courante. Si la FAQ ne suffit pas, crée un ticket support.", false);
+                    const lang = getLang();
+                    let intro = "Pose une question courante. Si la FAQ ne suffit pas, crée un ticket support.";
+                    if (lang === 'en') intro = "Ask a common question. If it doesn’t match the FAQ, create a support ticket.";
+                    if (lang === 'es') intro = "Haz una pregunta común. Si las preguntas frecuentes no coinciden, crea un ticket de soporte.";
+                    addBotWithSupport(intro, false);
                 }
                 setTimeout(() => {
                     const input = document.getElementById('faq-chat-input');
@@ -7067,12 +7001,10 @@ Current score signals include:
                 }
 
                 state.lastMatchConfidence = m ? m.confidence : 0;
-                addBotWithSupport(
-                    (lang === 'en')
-                        ? "I couldn't find an exact FAQ match. Create a support ticket and the team will reply."
-                        : "Je n’ai pas trouvé une réponse FAQ exacte. Crée un ticket support et l’équipe répondra.",
-                    true
-                );
+                let fallback = "Je n’ai pas trouvé une réponse FAQ exacte. Crée un ticket support et l’équipe répondra.";
+                if (lang === 'en') fallback = "I couldn't find an exact FAQ match. Create a support ticket and the team will reply.";
+                if (lang === 'es') fallback = "No pude encontrar una coincidencia exacta en las preguntas frecuentes. Crea un ticket de soporte y el equipo responderá.";
+                addBotWithSupport(fallback, true);
             };
 
             btn.addEventListener('click', () => {
