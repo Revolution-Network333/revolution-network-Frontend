@@ -16,7 +16,10 @@ CREATE TABLE users (
     is_banned BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    last_login TIMESTAMP
+    last_login TIMESTAMP,
+    airdrop_score INTEGER DEFAULT 0,
+    airdrop_allocation DECIMAL(20, 8) DEFAULT 0,
+    last_airdrop_calculation TIMESTAMP
 );
 
 -- Sessions table (tracking active P2P sessions)
@@ -289,6 +292,15 @@ CREATE TABLE IF NOT EXISTS user_activity (
 );
 
 CREATE INDEX IF NOT EXISTS idx_user_activity_user ON user_activity(user_id);
+
+CREATE TABLE IF NOT EXISTS early_adopters (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    is_gold BOOLEAN DEFAULT false,
+    aether_awarded INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id)
+);
 
 CREATE TABLE IF NOT EXISTS shop_items (
     id SERIAL PRIMARY KEY,

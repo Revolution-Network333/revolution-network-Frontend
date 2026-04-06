@@ -162,11 +162,17 @@ router.post('/airdrop/calculate', authenticateToken, checkAdmin, async (req, res
 
     // Handle Active Days calculation based on DB type
     let activeDaysExpr = '';
+    let nowExpr = '';
     if (db.isSQLite) {
         activeDaysExpr = "(julianday('now') - julianday(u.created_at))";
+        nowExpr = "datetime('now')";
+    } else if (db.isMySQL) {
+        activeDaysExpr = "TIMESTAMPDIFF(DAY, u.created_at, NOW())";
+        nowExpr = "NOW()";
     } else {
         // PostgreSQL
         activeDaysExpr = "EXTRACT(DAY FROM (NOW() - u.created_at))";
+        nowExpr = "NOW()";
     }
 
     // Fetch all eligible users with necessary data
@@ -211,22 +217,23 @@ router.post('/airdrop/calculate', authenticateToken, checkAdmin, async (req, res
         await client.query('BEGIN');
         
         let updatedCount = 0;
-        const timestamp = new Date().toISOString();
+        const timestamp = db.isSQLite ? new Date().toISOString() : new Date();
         
         for (const u of userScores) {
             const allocation = (u.score / totalGlobalScore) * circulatingSupply;
             await client.query(
-                "UPDATE users SET airdrop_score = $1, airdrop_allocation = $2, last_airdrop_calculation = $3 WHERE id = $4",
-                [u.score, allocation, timestamp, u.id]
+                `UPDATE users SET airdrop_score = $1, airdrop_allocation = $2, last_airdrop_calculation = ${db.isSQLite ? '$3' : 'NOW()'} WHERE id = ${db.isSQLite ? '$4' : '$3'}`,
+                db.isSQLite ? [u.score, allocation, timestamp, u.id] : [u.score, allocation, u.id]
             );
             updatedCount++;
         }
         
         // Log action
         const adminId = req.user.userId;
+        const logDetails = `Updated ${updatedCount} users. Total Score: ${totalGlobalScore}. Circulating supply: ${circulatingSupply}`;
         await client.query(
-            "INSERT INTO admin_logs (admin_id, action, details, created_at) VALUES ($1, $2, $3, $4)", 
-            [adminId, 'CALCULATE_AIRDROP', `Updated ${updatedCount} users. Total Score: ${totalGlobalScore}. Circulating supply: ${circulatingSupply}`, timestamp]
+            `INSERT INTO admin_logs (admin_id, action, details, created_at) VALUES ($1, $2, $3, ${nowExpr})`, 
+            [adminId, 'CALCULATE_AIRDROP', logDetails]
         );
 
         await client.query('COMMIT');
