@@ -4134,64 +4134,64 @@ print(r.json())</code></pre>
                     
 
                     <div class="api-section">
-                        <h2 class="section-title">${t('shop.example.costs')}</h2>
-                        <div class="section-info-bubble">${t('shop.example.info')}</div>
+                        <h2 class="section-title">Coûts estimés par volume</h2>
+                        <div class="section-info-bubble">La consommation est déduite de votre forfait mensuel.</div>
                         <div class="api-card">
                             <div class="costs-list">
                                 <div class="cost-item">
-                                    <span class="cost-icon">🖼️</span>
-                                    <span class="cost-label">${t('shop.cost.image_compress')}</span>
-                                    <span class="cost-value">10 ${t('shop.points')}</span>
+                                    <span class="cost-icon">🔍</span>
+                                    <span class="cost-label">Analyse Web simple</span>
+                                    <span class="cost-value">~1 MB</span>
                                 </div>
                                 <div class="cost-item">
-                                    <span class="cost-icon">🔍</span>
-                                    <span class="cost-label">${t('shop.cost.http_get')}</span>
-                                    <span class="cost-value">5 ${t('shop.points')}</span>
+                                    <span class="cost-icon">🖼️</span>
+                                    <span class="cost-label">Traitement d'image</span>
+                                    <span class="cost-value">~2 MB</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">🧪</span>
-                                    <span class="cost-label">${t('shop.cost.content_check')}</span>
-                                    <span class="cost-value">20 ${t('shop.points')}</span>
+                                    <span class="cost-label">Vérification de contenu</span>
+                                    <span class="cost-value">~5 MB</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">📈</span>
-                                    <span class="cost-label">${t('shop.cost.csv_stats')}</span>
-                                    <span class="cost-value">30 ${t('shop.points')}</span>
+                                    <span class="cost-label">Statistiques CSV</span>
+                                    <span class="cost-value">~10 MB</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">🎵</span>
-                                    <span class="cost-label">${t('shop.cost.audio_convert')}</span>
-                                    <span class="cost-value">200 ${t('shop.points')} ${t('shop.per_minute')}</span>
+                                    <span class="cost-label">Conversion Audio</span>
+                                    <span class="cost-value">~50 MB / min</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">🎥</span>
-                                    <span class="cost-label">${t('shop.cost.video_encode')}</span>
-                                    <span class="cost-value">500 ${t('shop.points')} ${t('shop.per_minute')}</span>
+                                    <span class="cost-label">Encodage Vidéo</span>
+                                    <span class="cost-value">~500 MB / min</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">📄</span>
-                                    <span class="cost-label">${t('shop.cost.ocr_pdf')}</span>
-                                    <span class="cost-value">300 ${t('shop.points')}</span>
+                                    <span class="cost-label">OCR / PDF</span>
+                                    <span class="cost-value">~20 MB</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">📊</span>
-                                    <span class="cost-label">${t('shop.cost.data_job')}</span>
-                                    <span class="cost-value">${t('shop.from')} 1000 ${t('shop.points')}</span>
+                                    <span class="cost-label">Traitement de données</span>
+                                    <span class="cost-value">~100 MB</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">📝</span>
-                                    <span class="cost-label">${t('shop.cost.text_transform')}</span>
-                                    <span class="cost-value">5 ${t('shop.points')}</span>
+                                    <span class="cost-label">Transformation texte</span>
+                                    <span class="cost-value">~1 MB</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">📄</span>
-                                    <span class="cost-label">${t('shop.cost.text_template')}</span>
-                                    <span class="cost-value">10 ${t('shop.points')}</span>
+                                    <span class="cost-label">Génération template</span>
+                                    <span class="cost-value">~1 MB</span>
                                 </div>
                                 <div class="cost-item">
                                     <span class="cost-icon">⚙️</span>
-                                    <span class="cost-label">${t('shop.cost.code_js')}</span>
-                                    <span class="cost-value">50 ${t('shop.points')}</span>
+                                    <span class="cost-label">Exécution de code JS</span>
+                                    <span class="cost-value">~5 MB</span>
                                 </div>
                             </div>
                         </div>
@@ -4531,53 +4531,65 @@ function initializeShopPage() {
                 if (!subs) return;
 
                 const cards = plans.map(p => {
-                    const isEnterprise = /enterprise/i.test(p.name);
+                    const name = p.name || t('shop.plan.default_name');
+                    const isEnterprise = /enterprise/i.test(name);
+                    const isStandard = /standard|basic/i.test(name);
+                    const isPro = /pro/i.test(name);
+                    const isPremium = /premium|business/i.test(name);
+
                     const priceLabel = (() => {
                         if (p.price == null) return t('shop.plan.quote_price');
                         return formatPrice(p.price, 'EUR');
                     })();
-                    const points = p.pointsPerMonth ? `🎁 ${Number(p.pointsPerMonth).toLocaleString(currentLocale)} ${t('shop.plan.points_per_month')}` : '';
-                    const name = p.name || t('shop.plan.default_name');
-                    const isPro = /pro/i.test(name);
+
+                    // Use gbPerMonth from metadata if available, otherwise fallback to what we have
+                    let gbPerMonth = p.gbPerMonth;
+                    if (!gbPerMonth && p.metadata) {
+                        try {
+                            const meta = JSON.parse(p.metadata);
+                            gbPerMonth = meta.gbPerMonth;
+                        } catch(e) {}
+                    }
+                    const pointsLabel = gbPerMonth ? `🚀 ${gbPerMonth} GB / ${t('common.month') || 'mois'}` : '';
                     
                     let recommendedTag = '';
                     if (isPro) recommendedTag = `<div class="plan-tag">${t('shop.plan.tag.recommended')}</div>`;
-                    if (/business/i.test(name)) recommendedTag = `<div class="plan-tag">${t('shop.plan.tag.best_value')}</div>`;
+                    if (isPremium) recommendedTag = `<div class="plan-tag">${t('shop.plan.tag.best_value')}</div>`;
                     if (isEnterprise) recommendedTag = `<div class="plan-tag special">${t('shop.plan.tag.custom')}</div>`;
 
                     const btnLabel = (p.price == null) ? t('shop.plan.button.request_quote') : t('shop.plan.button.subscribe');
                     
                     const features = (() => {
-                        if (/basic/i.test(name)) return [t('shop.plan.feature.basic.1'), t('shop.plan.feature.basic.2'), t('shop.plan.feature.basic.3')];
-                        if (/pro/i.test(name)) return [t('shop.plan.feature.pro.1'), t('shop.plan.feature.pro.2'), t('shop.plan.feature.pro.3')];
-                        if (/business/i.test(name)) return [t('shop.plan.feature.business.1'), t('shop.plan.feature.business.2'), t('shop.plan.feature.business.3'), t('shop.plan.feature.business.4')];
+                        if (isStandard) return ['500 GB de volume', 'Support standard', 'Priorité normale'];
+                        if (isPro) return ['1 000 GB de volume', 'Support rapide', 'Priorité haute'];
+                        if (isPremium) return ['2 500 GB de volume', 'Support VIP', 'Priorité Ultra'];
                         if (isEnterprise) return [t('shop.plan.feature.enterprise.1'), t('shop.plan.feature.enterprise.2'), t('shop.plan.feature.enterprise.3'), t('shop.plan.feature.enterprise.4'), t('shop.plan.feature.enterprise.5')];
                         return p.description ? p.description.split(', ') : [];
                     })();
 
-                    const isStandard = /standard|basic/i.test(name);
-                    const isProPlan = /pro/i.test(name);
-                    const isPremiumPlan = /premium|business/i.test(name);
                     let link = p.paymentLink || '';
                     if (isStandard) {
                         link = 'https://buy.stripe.com/5kA28p3EK2RPe76008';
-                    } else if (isProPlan) {
+                    } else if (isPro) {
                         link = 'https://buy.stripe.com/bJedRb2AG8g96eyg4E4gg09';
-                    } else if (isPremiumPlan) {
+                    } else if (isPremium) {
                         link = 'https://buy.stripe.com/00gbIX3EKbsh2YieV8';
                     }
                     
                     const buttonHTML = `<button class="profile-btn ${isPro || isEnterprise ? 'primary' : ''}" data-link="${link}" style="font-size:0.85em;padding:8px 12px;width:auto;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${btnLabel}</button>`;
 
-                    const displayName = isBasic ? t('shop.plan.display.basic') : (isProPlan ? t('shop.plan.display.pro_recommended') : (isBusinessPlan ? t('shop.plan.display.business') : name));
+                    let displayName = name;
+                    if (isStandard) displayName = t('shop.plan.display.basic') || 'Standard Plan';
+                    if (isPro) displayName = t('shop.plan.display.pro_recommended') || 'Pro Plan';
+                    if (isPremium) displayName = t('shop.plan.display.business') || 'Premium Plan';
+
                     return `
                         <div class="plan-card ${isPro ? 'recommended' : ''} ${isEnterprise ? 'enterprise' : ''}">
                             ${recommendedTag}
                             <div class="plan-name">${displayName}</div>
                             <div class="plan-price">${priceLabel}</div>
                             <div class="plan-period">${t('shop.plan.period')}</div>
-                            ${points ? `<div class="plan-points">${points}</div>` : ''}
-                            <div class="plan-points-badge">${points || ''}</div>
+                            <div class="plan-points-badge">${pointsLabel}</div>
                             <ul class="plan-features">
                                 ${features.map(f => `<li>${f}</li>`).join('')}
                             </ul>
