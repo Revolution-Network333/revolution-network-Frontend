@@ -535,6 +535,7 @@ async function ensurePostgresSchema() {
       try { await client.query("ALTER TABLE users ADD COLUMN referral_code TEXT"); } catch (e) { if (e.code !== '42701') throw e; }
       try { await client.query("ALTER TABLE users ADD COLUMN referrer_id INTEGER"); } catch (e) { if (e.code !== '42701') throw e; }
       try { await client.query("ALTER TABLE users ADD COLUMN rank TEXT DEFAULT 'Bronze'"); } catch (e) { if (e.code !== '42701') throw e; }
+      try { await client.query("ALTER TABLE users ADD COLUMN is_rank_locked INTEGER DEFAULT 0"); } catch (e) { if (e.code !== '42701') throw e; }
       try { await client.query("ALTER TABLE users ADD COLUMN google_sub TEXT"); } catch (e) { if (e.code !== '42701') throw e; }
       try { await client.query("ALTER TABLE users ADD COLUMN is_admin BOOLEAN DEFAULT false"); } catch (e) { if (e.code !== '42701') throw e; }
       try { await client.query("ALTER TABLE users ADD COLUMN twofa_enabled BOOLEAN DEFAULT false"); } catch (e) { if (e.code !== '42701') throw e; }
@@ -854,6 +855,7 @@ async function ensureMySqlSchema() {
         referral_code VARCHAR(64),
         referrer_id BIGINT UNSIGNED,
         \`rank\` VARCHAR(50) DEFAULT 'Bronze',
+        is_rank_locked TINYINT(1) DEFAULT 0,
         google_sub VARCHAR(255),
         stripe_customer_id VARCHAR(255),
         is_admin BOOLEAN DEFAULT FALSE,
@@ -871,6 +873,13 @@ async function ensureMySqlSchema() {
         UNIQUE INDEX uq_users_referral_code (referral_code),
         INDEX idx_users_referrer (referrer_id)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+
+      try {
+        await client.query("ALTER TABLE users ADD COLUMN is_rank_locked TINYINT(1) DEFAULT 0 AFTER \`rank\`");
+        console.log('✅ MySQL users.is_rank_locked column added');
+      } catch (_) {
+        // Column likely already exists
+      }
 
       await client.query(`CREATE TABLE IF NOT EXISTS sessions (
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
