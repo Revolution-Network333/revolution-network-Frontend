@@ -466,7 +466,7 @@
                 'download.points.note': 'Les points rendent éligible au futur airdrop.',
                 'download.install': 'Lancer l\'installation (.exe)',
                 'download.guide': 'Aide',
-                'download.mega_link': 'https://mega.nz/file/izJAjKjL#ADUQpY0sXyUelSvSelWXi3gSqd3RwLgFGgZX_FlA_OY',
+                'download.mega_link': 'https://mega.nz/file/Pn5A1abC#PtBF1LqXb88mL2qq5KjpIVlKh-jLizauyd6RYNwcF9I',
                 'download.faq.title': 'FAQ',
                 'download.faq.q1': 'Pourquoi une application desktop ?',
                 'download.faq.a1': 'Elle permet un minage plus stable et performant directement depuis votre PC Windows.',
@@ -746,7 +746,7 @@
                 'download.points.note': 'Points make you eligible for the future airdrop.',
                 'download.install': 'Start installation (.exe)',
                 'download.guide': 'Help',
-                'download.mega_link': 'https://mega.nz/file/izJAjKjL#ADUQpY0sXyUelSvSelWXi3gSqd3RwLgFGgZX_FlA_OY',
+                'download.mega_link': 'https://mega.nz/file/Pn5A1abC#PtBF1LqXb88mL2qq5KjpIVlKh-jLizauyd6RYNwcF9I',
                 'download.faq.title': 'FAQ',
                 'download.faq.q1': 'Why a desktop app?',
                 'download.faq.a1': 'It allows for more stable and efficient mining directly from your Windows PC.',
@@ -996,6 +996,7 @@
                 'download.recommended.step4': 'A shortcut will be created on your desktop.',
                 'download.recommended.step5': 'Launch the app and sign in via the “Sign in via website” button.',
                 'download.recommended.step6': 'Press the ▶ button to start earning points.',
+                'download.mega_link': 'https://mega.nz/file/Pn5A1abC#PtBF1LqXb88mL2qq5KjpIVlKh-jLizauyd6RYNwcF9I',
                 'tasks.title': 'Tasks',
                 'tasks.validate': 'Validate',
                 'tasks.validated': 'Validated',
@@ -1272,6 +1273,7 @@
                 'download.recommended.step4': 'Se creará un acceso directo en tu escritorio.',
                 'download.recommended.step5': 'Inicia la aplicación y conéctate a través del botón “Sign in via website”.',
                 'download.recommended.step6': 'Presiona el botón ▶ para comenzar a ganar puntos.',
+                'download.mega_link': 'https://mega.nz/file/Pn5A1abC#PtBF1LqXb88mL2qq5KjpIVlKh-jLizauyd6RYNwcF9I',
                 'download.security.title': '🛡️ Seguridad y Windows SmartScreen',
                 'download.security.desc': "Durante la instalación, Windows puede mostrar un mensaje de advertencia (\"Windows protegió su PC\"). **Tenga la seguridad de que esto es completamente normal.** Como desarrolladores independientes, nuestra aplicación aún no es \"conocida\" por los servidores de Microsoft. La aplicación es 100% segura y no contiene malware.",
                 'download.security.procedure': 'Para continuar con la instalación, simplemente haga clic en **"Más información"** y luego en el botón **"Ejecutar de todas formas"**.',
@@ -1844,6 +1846,13 @@
                     } else if (ok && data.token) {
                         localStorage.setItem('token', data.token);
                         if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
+                        
+                        const urlParams = new URL(window.location.href).searchParams;
+                        if (urlParams.get('desktop') === 'true') {
+                            window.location.reload(); // Let DOMContentLoaded handle the deep link
+                            return;
+                        }
+                        
                         currentPage = 'overview';
                         renderPage();
                         refreshHeader();
@@ -1877,6 +1886,13 @@
                         if (data.token) {
                             localStorage.setItem('token', data.token);
                             if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
+                            
+                            const urlParams = new URL(window.location.href).searchParams;
+                            if (urlParams.get('desktop') === 'true') {
+                                window.location.reload();
+                                return;
+                            }
+                            
                             currentPage = 'overview';
                             renderPage();
                             refreshHeader();
@@ -1927,6 +1943,13 @@
                         if (data.token) {
                             localStorage.setItem('token', data.token);
                             if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
+                            
+                            const urlParams = new URL(window.location.href).searchParams;
+                            if (urlParams.get('desktop') === 'true') {
+                                window.location.reload();
+                                return;
+                            }
+                            
                             currentPage = 'overview';
                             renderPage();
                             refreshHeader();
@@ -3403,14 +3426,52 @@ print(r.json())</code></pre>
                     x_follow: t('tasks.type.x_follow'),
                     x_like: t('tasks.type.x_like'),
                     telegram_join: t('tasks.type.telegram_join'),
-                    twofa_enable: 'Validé 2FA'
+                    twofa_enable: 'Validé 2FA',
+                    early_adopter: 'Early Adopter (Auto)'
                 };
+                
+                // Fetch early adopter status for current user
+                let eaStatus = { isEarlyAdopter: false, isGold: false, spotsLeft: 50 };
+                if (token) {
+                    try {
+                        const eaRes = await fetch(`${API_BASE}/api/tasks/early-adopter/status`, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        if (eaRes.ok) eaStatus = await eaRes.json();
+                    } catch (e) {}
+                }
+
                 const items = (data.tasks || []).map(task => {
                     const typeLabel = typeLabels[task.type] || (task.type || '');
                     const bonus = task.reward_airdrop_bonus_percent || 0;
                     const points = task.reward_points || 0;
+                    
+                    let statusLabel = t('tasks.validate');
+                    let btnStyle = '';
+                    let isDisabled = false;
+                    let extraInfo = '';
+
+                    if (task.type === 'early_adopter') {
+                        if (eaStatus.isGold) {
+                            statusLabel = t('tasks.validated');
+                            btnStyle = 'background-color: #fbbf24; border-color: #fbbf24; color: #000; font-weight: bold;';
+                            isDisabled = true;
+                            extraInfo = `<div style="margin-top:8px; color:#fbbf24; font-size:0.85em; font-weight:bold;">✨ Félicitations ! Vous êtes l'un des 50 premiers utilisateurs.</div>`;
+                        } else if (eaStatus.isEarlyAdopter) {
+                            statusLabel = 'Non éligible (Limite atteinte)';
+                            btnStyle = 'background-color: #374151; border-color: #374151; opacity: 0.7;';
+                            isDisabled = true;
+                            extraInfo = `<div style="margin-top:8px; color:#94a3b8; font-size:0.85em;">Désolé, les 50 places Gold ont déjà été attribuées.</div>`;
+                        } else {
+                            statusLabel = 'En attente du premier Ping...';
+                            btnStyle = 'background-color: #1e3a8a; border-color: #1e3a8a;';
+                            isDisabled = true;
+                            extraInfo = `<div style="margin-top:8px; color:#93c5fd; font-size:0.85em;">Places restantes : ${eaStatus.spotsLeft}/50. Installez l'app et lancez un ping pour valider !</div>`;
+                        }
+                    }
+
                     return `
-                    <div class="task-item">
+                    <div class="task-item" id="task-item-${task.id}">
                         <div class="task-info">
                             <div class="task-title">${task.title}</div>
                             <div class="task-desc">${task.description || ''}</div>
@@ -3419,9 +3480,10 @@ print(r.json())</code></pre>
                                 ${bonus > 0 ? `<span style="display:inline-block;padding:3px 8px;border:1px solid #14532d;border-radius:9999px;background:#052e16;color:#86efac;font-size:.78rem;">+${bonus}%</span>` : ''}
                                 <span style="display:inline-block;padding:3px 8px;border:1px solid #1e3a8a;border-radius:9999px;background:#0a1229;color:#93c5fd;font-size:.78rem;">${points} pts</span>
                             </div>
+                            ${extraInfo}
                         </div>
                         <div class="task-actions">
-                            <button class="profile-btn" data-url="${task.link_url}" data-id="${task.id}" data-type="${task.type}">${t('tasks.validate')}</button>
+                            <button class="profile-btn" data-url="${task.link_url}" data-id="${task.id}" data-type="${task.type}" style="${btnStyle}" ${isDisabled ? 'disabled' : ''}>${statusLabel}</button>
                             <div class="task-timer" id="task-timer-${task.id}"></div>
                         </div>
                     </div>`;
@@ -4835,6 +4897,7 @@ function initializeShopPage() {
                                         <option value="x_like">X Like</option>
                                     <option value="telegram_join">Telegram Join</option>
                                     <option value="twofa_enable">Validé 2FA</option>
+                                    <option value="early_adopter">Early Adopter (Auto)</option>
                                     </select>
                                 </div>
                                 <div><label>Points</label><input id="task-points" type="number" step="1"></div>
@@ -5242,7 +5305,10 @@ function initializeShopPage() {
                     </div>
                     
                     <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
-                        <input type="text" id="airdrop-search" placeholder="Rechercher par email ou username..." style="padding: 8px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #fff; width: 300px;">
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <input type="text" id="airdrop-search" placeholder="Rechercher par email ou username..." style="padding: 8px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #fff; width: 300px;">
+                            <button class="profile-btn primary" id="btn-open-bonus-panel" title="Appliquer un bonus global">🎁 Bonus Général</button>
+                        </div>
                         <div style="color: #94a3b8; font-size: 0.9em;" id="airdrop-stats">Chargement...</div>
                     </div>
 
@@ -5256,11 +5322,57 @@ function initializeShopPage() {
                                 <th data-sort="spent" style="cursor:pointer">Dépensé (€) ↕</th>
                                 <th data-sort="points" style="cursor:pointer">Points ↕</th>
                                 <th data-sort="days" style="cursor:pointer">Jours Actifs ↕</th>
+                                <th data-sort="ath" style="cursor:pointer">Solde Aether ↕</th>
                                 <th>Dernier Calcul</th>
                             </tr>
                         </thead>
-                        <tbody><tr><td colspan="8" style="text-align:center">Chargement...</td></tr></tbody>
+                        <tbody><tr><td colspan="9" style="text-align:center">Chargement...</td></tr></tbody>
                     </table>
+
+                    <!-- Bonus Panel Modal -->
+                    <div class="modal" id="bonus-panel-modal">
+                        <div class="modal-content glass-card neon-border-purple" style="max-width: 500px;">
+                            <h2 class="neon-text-purple" style="margin-bottom: 20px; text-align: center;">Configuration du Bonus</h2>
+                            <div class="form-grid" style="grid-template-columns: 1fr;">
+                                <div class="profile-field">
+                                    <label>Jours actifs minimum (ancienneté)</label>
+                                    <input type="number" id="bonus-active-days" placeholder="Ex: 10" min="0">
+                                    <div style="font-size:0.75rem;color:#94a3b8;">Cible les utilisateurs inscrits depuis au moins X jours.</div>
+                                </div>
+                                <div class="profile-field">
+                                    <label>Nombre de nouveaux utilisateurs éligibles</label>
+                                    <input type="number" id="bonus-max-users" placeholder="Ex: 50" min="0">
+                                    <div style="font-size:0.75rem;color:#94a3b8;">Limite le bonus aux X plus récents utilisateurs (0 pour tous).</div>
+                                </div>
+                                <div class="profile-field">
+                                    <label>Type de récompense</label>
+                                    <select id="bonus-reward-type">
+                                        <option value="points">Points Dashboard</option>
+                                        <option value="aether">Crypto Aether (ATH)</option>
+                                        <option value="rank">Rang Classement</option>
+                                    </select>
+                                </div>
+                                <div class="profile-field" id="bonus-value-container">
+                                    <label id="bonus-value-label">Valeur à ajouter</label>
+                                    <input type="text" id="bonus-reward-value" placeholder="Ex: 1000">
+                                </div>
+                                <div class="profile-field" id="bonus-rank-container" style="display:none;">
+                                    <label>Séléctionner le rang</label>
+                                    <select id="bonus-reward-rank">
+                                        <option value="Bronze">Bronze</option>
+                                        <option value="Silver">Silver</option>
+                                        <option value="Gold">Gold</option>
+                                        <option value="Platinum">Platinum</option>
+                                        <option value="Diamond">Diamond</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="display:flex; gap:10px; margin-top:20px; justify-content: center;">
+                                <button class="profile-btn primary" id="btn-apply-bonus">Appliquer le Bonus</button>
+                                <button class="profile-btn" onclick="document.getElementById('bonus-panel-modal').classList.remove('open')">Annuler</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             `;
         }
@@ -5282,6 +5394,78 @@ function initializeShopPage() {
             let currentOrder = 'desc';
             let participantsData = [];
             let currentCirculatingSupply = 500000000;
+
+            const bonusModal = document.getElementById('bonus-panel-modal');
+            const btnOpenBonus = document.getElementById('btn-open-bonus-panel');
+            const btnApplyBonus = document.getElementById('btn-apply-bonus');
+            const rewardTypeSelect = document.getElementById('bonus-reward-type');
+            const valueContainer = document.getElementById('bonus-value-container');
+            const rankContainer = document.getElementById('bonus-rank-container');
+            const valueLabel = document.getElementById('bonus-value-label');
+
+            if (btnOpenBonus) {
+                btnOpenBonus.addEventListener('click', () => {
+                    bonusModal.classList.add('open');
+                });
+            }
+
+            if (rewardTypeSelect) {
+                rewardTypeSelect.addEventListener('change', () => {
+                    const type = rewardTypeSelect.value;
+                    if (type === 'rank') {
+                        valueContainer.style.display = 'none';
+                        rankContainer.style.display = 'block';
+                    } else {
+                        valueContainer.style.display = 'block';
+                        rankContainer.style.display = 'none';
+                        valueLabel.textContent = type === 'aether' ? 'Quantité d\'Aether à ajouter' : 'Points à ajouter';
+                    }
+                });
+            }
+
+            if (btnApplyBonus) {
+                btnApplyBonus.addEventListener('click', async () => {
+                    const activeDays = document.getElementById('bonus-active-days').value;
+                    const maxUsers = document.getElementById('bonus-max-users').value;
+                    const rewardType = rewardTypeSelect.value;
+                    const rewardValue = rewardType === 'rank' ? document.getElementById('bonus-reward-rank').value : document.getElementById('bonus-reward-value').value;
+
+                    if (!rewardValue) { alert('Veuillez entrer une valeur'); return; }
+                    if (!confirm(`Voulez-vous vraiment appliquer ce bonus à tous les utilisateurs correspondants ?`)) return;
+
+                    btnApplyBonus.disabled = true;
+                    btnApplyBonus.textContent = 'Application...';
+
+                    try {
+                        const res = await fetch(`${API_BASE}/api/admin/bonus/apply`, {
+                            method: 'POST',
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}` 
+                            },
+                            body: JSON.stringify({
+                                activeDays: activeDays ? parseInt(activeDays) : 0,
+                                maxNewUsers: maxUsers ? parseInt(maxUsers) : 0,
+                                rewardType,
+                                rewardValue: (rewardType === 'rank' ? rewardValue : parseFloat(rewardValue))
+                            })
+                        });
+                        const j = await res.json();
+                        if (res.ok) {
+                            alert(j.message || 'Bonus appliqué !');
+                            bonusModal.classList.remove('open');
+                            loadParticipants();
+                        } else {
+                            alert('Erreur: ' + (j.error || 'Inconnue'));
+                        }
+                    } catch (e) {
+                        alert('Erreur réseau');
+                    } finally {
+                        btnApplyBonus.disabled = false;
+                        btnApplyBonus.textContent = 'Appliquer le Bonus';
+                    }
+                });
+            }
 
             // 1. Fetch Withdrawal Status
             fetch(`${API_BASE}/api/admin/settings/withdrawals`, { headers: { 'Authorization': `Bearer ${token}` }})
@@ -5409,6 +5593,7 @@ function initializeShopPage() {
                             <td>${parseFloat(u.total_spent || 0).toFixed(2)} €</td>
                             <td>${parseInt(u.total_points || 0).toLocaleString()}</td>
                             <td>${u.active_days}j</td>
+                            <td style="font-weight:bold;color:#86efac">${parseFloat(u.balance_ath || 0).toLocaleString(undefined, {maximumFractionDigits: 8})} ATH</td>
                             <td style="font-size:0.85em;color:#94a3b8">${lastCalc}</td>
                         </tr>
                     `;
@@ -5578,8 +5763,35 @@ function initializeShopPage() {
             await ensureValidSession();
             const urlParams = new URL(window.location.href).searchParams;
             const pageParam = urlParams.get('page');
+            const isDesktop = urlParams.get('desktop') === 'true';
             
-            if (!localStorage.getItem('token')) {
+            const token = localStorage.getItem('token');
+            if (isDesktop && token) {
+                const refreshToken = localStorage.getItem('refreshToken');
+                const user = localStorage.getItem('user');
+                const deepLink = `revolution-network://auth?token=${encodeURIComponent(token)}&refreshToken=${encodeURIComponent(refreshToken || '')}&user=${encodeURIComponent(user || '')}`;
+                window.location.href = deepLink;
+                
+                // Show a message to the user
+                setTimeout(() => {
+                    const content = document.getElementById('pageContent');
+                    if (content) {
+                        content.innerHTML = `
+                            <div class="page-content futuristic-wallet" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 120px);">
+                                <div class="glass-card neon-border-green" style="padding: 40px; text-align: center; max-width: 500px;">
+                                    <h2 class="neon-text" style="margin-bottom: 20px;">Connexion en cours...</h2>
+                                    <p style="color: #9ca3af; margin-bottom: 24px;">Votre navigateur tente d'ouvrir l'application Revolution Network Node.</p>
+                                    <button class="neon-button primary" onclick="window.location.href='${deepLink}'">Ouvrir l'application manuellement</button>
+                                    <p style="margin-top: 20px; font-size: 0.85em; color: #6b7280;">Vous pouvez fermer cette fenêtre une fois connecté.</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }, 500);
+                return;
+            }
+            
+            if (!token) {
                 currentPage = 'login';
             } else if (pageParam && ['overview', 'nodes', 'referrals', 'profile', 'shop', 'download', 'enterpriseApi', 'tasks', 'wallet', 'leaderboard'].includes(pageParam)) {
                 currentPage = pageParam;

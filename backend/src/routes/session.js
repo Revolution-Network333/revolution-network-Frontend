@@ -110,6 +110,49 @@ router.post('/create', authenticateToken, async (req, res) => {
     }
 
     const session = result.rows[0];
+
+    // --- EARLY ADOPTER LOGIC ---
+    try {
+      // Check if user is already an early adopter
+      const eaCheck = await db.query('SELECT user_id FROM early_adopters WHERE user_id = $1', [userId]);
+      if (eaCheck.rows.length === 0) {
+        // Count how many early adopters we have
+        const eaCountRes = await db.query('SELECT COUNT(*) as count FROM early_adopters WHERE is_gold = true');
+        const eaCount = parseInt(eaCountRes.rows[0]?.count || 0);
+
+        if (eaCount < 50) {
+          // Add to early adopters and reward
+          await db.query(
+            'INSERT INTO early_adopters (user_id, is_gold, aether_awarded) VALUES ($1, true, 100)',
+            [userId]
+          );
+
+          // Update user rank to Gold
+          await db.query("UPDATE users SET rank = 'Gold' WHERE id = $1", [userId]);
+
+          // Credit 100 Aether
+          const walletCheck = await db.query('SELECT user_id FROM wallets WHERE user_id = $1', [userId]);
+          if (walletCheck.rows.length === 0) {
+            await db.query('INSERT INTO wallets (user_id, balance_ath) VALUES ($1, 100)', [userId]);
+          } else {
+            await db.query('UPDATE wallets SET balance_ath = balance_ath + 100 WHERE user_id = $1', [userId]);
+          }
+
+          // Log the event
+          await db.query(
+            'INSERT INTO wallet_events (user_id, type, amount, metadata) VALUES ($1, $2, $3, $4)',
+            [userId, 'bonus', 100, JSON.stringify({ reason: 'early_adopter_reward', rank_awarded: 'Gold' })]
+          );
+
+          console.log(`🎁 User ${userId} rewarded as Early Adopter #${eaCount + 1}`);
+        } else {
+          // Just log first ping but no reward (limit reached)
+          await db.query('INSERT INTO early_adopters (user_id, is_gold, aether_awarded) VALUES ($1, false, 0)', [userId]);
+        }
+      }
+    } catch (eaErr) {
+      console.error('Early Adopter logic error (non-fatal):', eaErr);
+    }
     
     res.status(201).json({
       sessionId: session.id,

@@ -1234,6 +1234,15 @@ async function ensureMySqlSchema() {
         CONSTRAINT fk_admin_logs_admin FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
+      await client.query(`CREATE TABLE IF NOT EXISTS early_adopters (
+        user_id BIGINT UNSIGNED NOT NULL,
+        first_ping_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        is_gold BOOLEAN DEFAULT FALSE,
+        aether_awarded DOUBLE DEFAULT 0,
+        PRIMARY KEY (user_id),
+        CONSTRAINT fk_early_adopters_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+
       await client.query(`INSERT IGNORE INTO settings (\`key\`, value) VALUES ('withdrawals_enabled', 'false')`);
       console.log('✅ MySQL schema initialized / ensured');
     } finally {

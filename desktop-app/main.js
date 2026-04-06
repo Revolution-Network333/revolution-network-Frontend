@@ -3,11 +3,75 @@ const path = require('path');
 const Store = require('electron-store');
 const crypto = require('crypto');
 
+// Register custom protocol
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient('revolution-network', process.execPath, [path.resolve(process.argv[1])]);
+  }
+} else {
+  app.setAsDefaultProtocolClient('revolution-network');
+}
+
 app.name = 'Revolution Network Node';
 const store = new Store();
 let mainWindow;
 let tray;
 let API_URL = 'https://revolution-backend-sal2.onrender.com';
+
+// Handle deep links
+function handleDeepLink(url) {
+  try {
+    const parsedUrl = new URL(url);
+    if (parsedUrl.protocol === 'revolution-network:' && parsedUrl.hostname === 'auth') {
+      const params = parsedUrl.searchParams;
+      const token = params.get('token');
+      const refreshToken = params.get('refreshToken');
+      const userStr = params.get('user');
+
+      if (token) {
+        store.set('token', token);
+        if (refreshToken) store.set('refreshToken', refreshToken);
+        if (userStr) {
+          try {
+            store.set('user', JSON.parse(decodeURIComponent(userStr)));
+          } catch (e) {}
+        }
+        
+        if (mainWindow) {
+          mainWindow.webContents.send('auth-success', token);
+          mainWindow.show();
+        }
+        addLog('Successfully signed in via browser!');
+      }
+    }
+  } catch (e) {
+    console.error('Failed to handle deep link:', e);
+  }
+}
+
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
+    }
+    // Handle the deep link from commandLine (Windows)
+    const url = commandLine.pop();
+    if (url.startsWith('revolution-network://')) {
+      handleDeepLink(url);
+    }
+  });
+
+  app.on('open-url', (event, url) => {
+    event.preventDefault();
+    handleDeepLink(url);
+  });
+}
 
 // State
 let sessionId = store.get('sessionId') || null;
@@ -191,60 +255,7 @@ function createWindow() {
 }
 
 function createLoginWindow() {
-  const loginWin = new BrowserWindow({
-    width: 600,
-    height: 800,
-    autoHideMenuBar: true,
-    parent: mainWindow,
-    modal: true,
-  });
-
-  loginWin.loadURL('https://revolution-network.fr/');
-
-  const checkToken = setInterval(async () => {
-    try {
-      if (loginWin.isDestroyed()) {
-        clearInterval(checkToken);
-        return;
-      }
-      const tokenData = await loginWin.webContents.executeJavaScript(`
-        (function() {
-          const token = localStorage.getItem('token');
-          if (!token) return null;
-          let user = null;
-          try {
-            const u = localStorage.getItem('user');
-            if (u) user = JSON.parse(u);
-          } catch(e) {}
-          return {
-            token: token,
-            refreshToken: localStorage.getItem('refreshToken'),
-            user: user
-          };
-        })()
-      `);
-
-      if (tokenData && tokenData.token) {
-        clearInterval(checkToken);
-        // Clean old session before saving new one
-        await stopMiningSession();
-        store.clear(); 
-        
-        store.set('token', tokenData.token);
-        store.set('refreshToken', tokenData.refreshToken);
-        if (tokenData.user) {
-          store.set('user', tokenData.user);
-        }
-        
-        if (mainWindow) {
-          mainWindow.webContents.send('auth-success', tokenData.token);
-        }
-        
-        loginWin.close();
-        addLog('Successfully signed in from website!');
-      }
-    } catch (e) {}
-  }, 1000);
+  shell.openExternal('https://revolution-network.fr/?desktop=true');
 }
 
 function createTray() {

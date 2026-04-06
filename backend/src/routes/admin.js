@@ -61,10 +61,12 @@ router.get('/airdrop/participants', authenticateToken, checkAdmin, async (req, r
         COALESCE(u.airdrop_score, 0) AS airdrop_score,
         COALESCE(u.airdrop_allocation, 0) AS airdrop_allocation,
         u.last_airdrop_calculation,
+        COALESCE(w.balance_ath, 0) AS balance_ath,
         (SELECT COALESCE(SUM(o.total_price), 0) FROM orders o WHERE o.user_id = u.id AND o.status = 'paid') AS total_spent,
         (SELECT COUNT(*) FROM orders o WHERE o.user_id = u.id AND o.status = 'paid') AS purchase_count,
         ${activeDaysExpr} AS active_days
       FROM users u
+      LEFT JOIN wallets w ON w.user_id = u.id
       WHERE COALESCE(u.is_banned, ${db.isSQLite ? 0 : 'FALSE'}) = ${db.isSQLite ? 0 : 'FALSE'}
     `;
 
@@ -332,6 +334,7 @@ router.post('/airdrop/award', authenticateToken, checkAdmin, async (req, res) =>
   }
 });
 
+// 2FA Validate (Admin force enable)
 router.post('/users/:id/2fa-validate', authenticateToken, checkAdmin, async (req, res) => {
   try {
     const userId = parseInt(req.params.id);
@@ -348,6 +351,97 @@ router.post('/users/:id/2fa-validate', authenticateToken, checkAdmin, async (req
     res.json({ success: true });
   } catch (e) {
     res.status(500).json({ error: 'Erreur interne du serveur' });
+  }
+});
+
+// --- GLOBAL BONUS PANEL ---
+
+// Create a global bonus
+router.post('/bonus/apply', authenticateToken, checkAdmin, async (req, res) => {
+  try {
+    const { 
+      activeDays, 
+      maxNewUsers, 
+      rewardType, // 'points', 'aether', 'rank'
+      rewardValue 
+    } = req.body;
+
+    if (!rewardType || !rewardValue) {
+      return res.status(400).json({ error: 'Type et valeur de récompense requis' });
+    }
+
+    const adminId = req.user.userId;
+    const timestamp = new Date().toISOString();
+
+    // Expression for active days check
+    let activeDaysExpr = '';
+    if (db.isSQLite) {
+      activeDaysExpr = "(julianday('now') - julianday(created_at))";
+    } else if (db.isMySQL) {
+      activeDaysExpr = "TIMESTAMPDIFF(DAY, created_at, NOW())";
+    } else {
+      activeDaysExpr = "EXTRACT(DAY FROM (NOW() - created_at))";
+    }
+
+    // 1. Target users based on activeDays (if provided)
+    let userQuery = "SELECT id, username FROM users WHERE 1=1";
+    const params = [];
+    if (activeDays) {
+      userQuery += ` AND ${activeDaysExpr} >= $1`;
+      params.push(activeDays);
+    }
+
+    // 2. Limit to maxNewUsers (sorted by most recent) if provided
+    if (maxNewUsers) {
+      userQuery += " ORDER BY created_at DESC LIMIT $" + (params.length + 1);
+      params.push(maxNewUsers);
+    }
+
+    const targetUsers = (await db.query(userQuery, params)).rows;
+    if (targetUsers.length === 0) {
+      return res.json({ success: true, message: 'Aucun utilisateur ne correspond aux critères', count: 0 });
+    }
+
+    const client = await db.getClient();
+    try {
+      await client.query('BEGIN');
+      let count = 0;
+
+      for (const u of targetUsers) {
+        if (rewardType === 'points') {
+          await client.query('UPDATE users SET total_points = total_points + $1 WHERE id = $2', [rewardValue, u.id]);
+        } else if (rewardType === 'aether') {
+          const w = await client.query('SELECT user_id FROM wallets WHERE user_id = $1', [u.id]);
+          if (w.rows.length === 0) {
+            await client.query('INSERT INTO wallets (user_id, balance_ath) VALUES ($1, $2)', [u.id, 0]);
+          }
+          await client.query('UPDATE wallets SET balance_ath = balance_ath + $1 WHERE user_id = $2', [rewardValue, u.id]);
+          await client.query(
+            'INSERT INTO wallet_events (user_id, type, amount, metadata) VALUES ($1, $2, $3, $4)',
+            [u.id, 'bonus', rewardValue, JSON.stringify({ reason: 'admin_global_bonus', awarded_at: timestamp })]
+          );
+        } else if (rewardType === 'rank') {
+          await client.query('UPDATE users SET rank = $1 WHERE id = $2', [rewardValue, u.id]);
+        }
+        count++;
+      }
+
+      await client.query(
+        'INSERT INTO admin_logs (admin_id, action, details, created_at) VALUES ($1, $2, $3, $4)',
+        [adminId, 'APPLY_GLOBAL_BONUS', `Type: ${rewardType}, Value: ${rewardValue}, Users: ${count}, Criteria: activeDays>=${activeDays||0}, maxNewUsers=${maxNewUsers||'all'}`, timestamp]
+      );
+
+      await client.query('COMMIT');
+      res.json({ success: true, message: `Bonus appliqué avec succès à ${count} utilisateurs.`, count });
+    } catch (err) {
+      await client.query('ROLLBACK');
+      throw err;
+    } finally {
+      client.release();
+    }
+  } catch (e) {
+    console.error('Error applying global bonus:', e);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 // 3. Toggle Withdrawals
@@ -472,9 +566,11 @@ router.get('/airdrop/participants', authenticateToken, checkAdmin, async (req, r
                 COALESCE(airdrop_allocation, 0) as airdrop_allocation, 
                 COALESCE(total_points, 0) as total_points, 
                 COALESCE(total_spent, 0) as total_spent, 
+                COALESCE(w.balance_ath, 0) as balance_ath,
                 last_airdrop_calculation,
                 ${activeDaysExpr} as active_days
-            FROM users
+            FROM users u
+            LEFT JOIN wallets w ON w.user_id = u.id
             WHERE 1=1
         `;
         

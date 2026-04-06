@@ -44,6 +44,27 @@ router.get('/tasks', async (req, res) => {
   }
 });
 
+// Route spéciale pour la task Early Adopter (détection automatique)
+router.get('/early-adopter/status', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const eaRes = await db.query('SELECT is_gold FROM early_adopters WHERE user_id = $1', [userId]);
+    
+    // Compter le nombre total de gold restants
+    const countRes = await db.query('SELECT COUNT(*) as count FROM early_adopters WHERE is_gold = true');
+    const currentCount = parseInt(countRes.rows[0]?.count || 0);
+    
+    res.json({
+      isEarlyAdopter: eaRes.rows.length > 0,
+      isGold: eaRes.rows[0]?.is_gold || false,
+      spotsLeft: Math.max(0, 50 - currentCount)
+    });
+  } catch (e) {
+    console.error('Early adopter status error:', e);
+    res.status(500).json({ error: 'Erreur interne' });
+  }
+});
+
 // Utilisateur: déclarer une task à valider (mise en file - usage unique)
 router.post('/user/tasks/approve', authenticateToken, async (req, res) => {
   try {
