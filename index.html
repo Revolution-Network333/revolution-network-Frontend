@@ -1410,6 +1410,10 @@
                 clearInterval(rewardsInterval);
                 rewardsInterval = null;
             }
+            if (window.enterpriseStatsInterval) {
+                clearInterval(window.enterpriseStatsInterval);
+                window.enterpriseStatsInterval = null;
+            }
 
             await ensureValidSession();
             const token = localStorage.getItem('token');
@@ -3120,7 +3124,7 @@
 
                     <!-- Dashboard Stats Section -->
                     <div class="stats-grid" style="margin-bottom: 24px;">
-                        <div class="stat-card">
+                        <div class="stat-card glass-card neon-border-green">
                             <div class="stat-header">
                                 <div class="stat-icon green">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -3131,11 +3135,11 @@
                                 </div>
                                 <div class="stat-title">Bande Passante Disponible</div>
                             </div>
-                            <div class="stat-value" id="ent-bandwidth-val">0 Mbps</div>
+                            <div class="stat-value neon-text-green" id="ent-bandwidth-val">0 Mbps</div>
                             <div class="stat-label">Réseau décentralisé</div>
                         </div>
 
-                        <div class="stat-card">
+                        <div class="stat-card glass-card neon-border-purple">
                             <div class="stat-header">
                                 <div class="stat-icon purple">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -3145,11 +3149,11 @@
                                 </div>
                                 <div class="stat-title">Uptime Service</div>
                             </div>
-                            <div class="stat-value" id="ent-uptime-val">100%</div>
+                            <div class="stat-value neon-text-purple" id="ent-uptime-val">100%</div>
                             <div class="stat-label">30 derniers jours</div>
                         </div>
 
-                        <div class="stat-card">
+                        <div class="stat-card glass-card neon-border-blue">
                             <div class="stat-header">
                                 <div class="stat-icon blue">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -3159,27 +3163,39 @@
                                 </div>
                                 <div class="stat-title">Preuve de Service</div>
                             </div>
-                            <div class="stat-value" id="ent-proof-count">0</div>
+                            <div class="stat-value neon-text-blue" id="ent-proof-count">0</div>
                             <div class="stat-label">Jobs récents</div>
                         </div>
                     </div>
 
                     <div class="api-section">
-                        <div class="api-card" style="margin-bottom:16px;">
-                            <h3 style="margin:0 0 8px 0;">Preuve de Service (Logs récents)</h3>
-                            <div class="table-container" style="background:#0b0f14; border:1px solid #1f2937; border-radius:8px;">
-                                <table class="rewards-table" id="ent-proof-table">
+                        <div class="api-card glass-card neon-border-white" style="margin-bottom:16px; padding: 24px;">
+                            <h3 style="margin:0 0 16px 0; color: #fff; font-size: 1.2rem; display: flex; align-items: center; gap: 10px;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                                Preuve de Service (Logs récents)
+                            </h3>
+                            <div class="table-container futuristic-table">
+                                <table class="data-table" id="ent-proof-table">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
                                             <th>Type</th>
                                             <th>Status</th>
                                             <th>Date</th>
-                                            <th>Preuve</th>
+                                            <th>Vérification</th>
                                         </tr>
                                     </thead>
                                     <tbody id="ent-proof-body">
-                                        <tr><td colspan="5" style="text-align:center; padding:20px; color:#9ca3af;">Chargement...</td></tr>
+                                        <tr><td colspan="5" style="text-align:center; padding:40px; color:#9ca3af;">
+                                            <div class="loading-spinner"></div>
+                                            Chargement des preuves...
+                                        </td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -3187,7 +3203,7 @@
                     </div>
 
                     <div class="api-section">
-                        <div class="api-card" style="margin-bottom:16px;">
+                        <div class="api-card glass-card" style="margin-bottom:16px;">
                             <h3 style="margin:0 0 8px 0;">${t('enterprise.intro')}</h3>
                             <div style="color:#9ca3af; line-height:1.6;">
                                 L’API Entreprise permet d’exécuter des <strong>jobs</strong> de contrôle web, d’analyse légère et de traitement basique des données via une <strong>clé API</strong> sécurisée. 
@@ -3272,32 +3288,43 @@ print(r.json())</code></pre>
             const token = localStorage.getItem('token');
             if (!token) return;
 
-            // Fetch Dashboard Stats
-            fetch(`${API_BASE}/api/enterprise/dashboard-stats`, { headers: { 'Authorization': `Bearer ${token}` }})
-            .then(r => r.json())
-            .then(data => {
-                if (data.availableBandwidth) document.getElementById('ent-bandwidth-val').textContent = data.availableBandwidth;
-                if (data.uptime) document.getElementById('ent-uptime-val').textContent = data.uptime;
-                
-                const proofBody = document.getElementById('ent-proof-body');
-                const proofCount = document.getElementById('ent-proof-count');
-                if (data.proofOfService) {
-                    proofCount.textContent = data.proofOfService.length;
-                    if (data.proofOfService.length > 0) {
-                        proofBody.innerHTML = data.proofOfService.map(p => `
-                            <tr>
-                                <td>#${p.id}</td>
-                                <td>${p.type}</td>
-                                <td><span class="status-badge ${p.status}">${p.status}</span></td>
-                                <td>${new Date(p.timestamp).toLocaleString()}</td>
-                                <td>${p.hasResult ? '✅ Vérifiée' : '⏳ En attente'}</td>
-                            </tr>
-                        `).join('');
-                    } else {
-                        proofBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#9ca3af;">Aucun job récent</td></tr>';
+            // Clear any existing interval
+            if (window.enterpriseStatsInterval) {
+                clearInterval(window.enterpriseStatsInterval);
+            }
+
+            function fetchStats() {
+                // Fetch Dashboard Stats
+                fetch(`${API_BASE}/api/enterprise/dashboard-stats`, { headers: { 'Authorization': `Bearer ${token}` }})
+                .then(r => r.json())
+                .then(data => {
+                    if (data.availableBandwidth) document.getElementById('ent-bandwidth-val').textContent = data.availableBandwidth;
+                    if (data.uptime) document.getElementById('ent-uptime-val').textContent = data.uptime;
+                    
+                    const proofBody = document.getElementById('ent-proof-body');
+                    const proofCount = document.getElementById('ent-proof-count');
+                    if (data.proofOfService) {
+                        proofCount.textContent = data.proofOfService.length;
+                        if (data.proofOfService.length > 0) {
+                            proofBody.innerHTML = data.proofOfService.map(p => `
+                                <tr>
+                                    <td>#${p.id}</td>
+                                    <td>${p.type}</td>
+                                    <td><span class="status-badge ${p.status}">${p.status}</span></td>
+                                    <td>${new Date(p.timestamp).toLocaleString()}</td>
+                                    <td>${p.hasResult ? '✅ Vérifiée' : '⏳ En attente'}</td>
+                                </tr>
+                            `).join('');
+                        } else {
+                            proofBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#9ca3af;">Aucun job récent</td></tr>';
+                        }
                     }
-                }
-            }).catch(e => console.error('Dashboard stats error:', e));
+                }).catch(e => console.error('Dashboard stats error:', e));
+            }
+
+            fetchStats();
+            // Refresh stats every 30 seconds
+            window.enterpriseStatsInterval = setInterval(fetchStats, 30000);
 
             fetch(`${API_BASE}/api/enterprise/me`, { headers: { 'Authorization': `Bearer ${token}` }})
             .then(r => r.json())
