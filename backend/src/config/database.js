@@ -64,7 +64,7 @@ const rewriteForMySql = (sql) => {
     const next = str[offset + match.length];
     if (prev === '`' || next === '`') return match;
     const before = str.slice(Math.max(0, offset - 20), offset).toUpperCase();
-    if (match.toLowerCase() === 'key' && (before.includes('PRIMARY') || before.includes('UNIQUE') || before.includes('FOREIGN'))) {
+    if (match.toLowerCase() === 'key' && (before.includes('PRIMARY') || before.includes('UNIQUE') || before.includes('FOREIGN') || before.includes('DUPLICATE'))) {
       return match;
     }
     return '`' + match + '`';
