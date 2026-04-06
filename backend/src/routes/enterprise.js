@@ -89,9 +89,9 @@ async function getSubscriptionPlans() {
     }));
   } catch (e) {
     plans = [
-      { id: null, name: 'Standard', description: '500 GB / mois, Support standard, Priorité normale', price: 20, currency: 'EUR', gbPerMonth: 500, priority: 'Standard', paymentLink: 'mailto:contact@revolution-network.com?subject=Standard%20-%20Abonnement' },
-      { id: null, name: 'Pro', description: '1 000 GB / mois, Support rapide, Priorité haute', price: 40, currency: 'EUR', gbPerMonth: 1000, priority: 'Pro', paymentLink: 'mailto:contact@revolution-network.com?subject=Pro%20-%20Abonnement' },
-      { id: null, name: 'Premium', description: '2 500 GB / mois, Support VIP, Priorité Ultra', price: 100, currency: 'EUR', gbPerMonth: 2500, priority: 'Premium', paymentLink: 'mailto:contact@revolution-network.com?subject=Premium%20-%20Abonnement' },
+      { id: null, name: 'Standard', description: '500 GB / mois, Support standard, Priorité normale', price: 20, currency: 'EUR', gbPerMonth: 500, priority: 'Standard', paymentLink: 'https://buy.stripe.com/5kA28p3EK2RPe76008' },
+      { id: null, name: 'Pro', description: '1 000 GB / mois, Support rapide, Priorité haute', price: 40, currency: 'EUR', gbPerMonth: 1000, priority: 'Pro', paymentLink: 'https://buy.stripe.com/bJedRb2AG8g96eyg4E4gg09' },
+      { id: null, name: 'Premium', description: '2 500 GB / mois, Support VIP, Priorité Ultra', price: 100, currency: 'EUR', gbPerMonth: 2500, priority: 'Premium', paymentLink: 'https://buy.stripe.com/00gbIX3EKbsh2YieV8' },
     ];
   }
   // Ajouter option Entreprise Illimité sur devis

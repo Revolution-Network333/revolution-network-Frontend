@@ -3471,22 +3471,22 @@ print(r.json())</code></pre>
             }
             const planCards = (plans || []).map(p => {
                 const priceLabel = (p.price == null) ? t('shop.plan.quote_price') : formatPrice(p.price, p.currency || 'EUR');
-                const points = p.pointsPerMonth ? `${Number(p.pointsPerMonth).toLocaleString(currentLocale)} ${t('shop.plan.points_per_month')}` : '';
+                const gbLabel = p.gbPerMonth ? `${Number(p.gbPerMonth).toLocaleString(currentLocale)} GB / ${t('common.month') || 'mois'}` : '';
                 const name = p.name || t('shop.plan.default_name');
                 const recommended = /pro/i.test(name) ? t('shop.plan.recommended_suffix') : '';
                 const btnLabel = (p.price == null) ? t('shop.plan.button.request_quote') : t('shop.plan.button.subscribe');
                 const features = (() => {
-                    if (/basic|standard/i.test(name)) return [t('shop.plan.feature.basic.1'), t('shop.plan.feature.basic.2'), t('shop.plan.feature.basic.3')];
-                    if (/pro/i.test(name)) return [t('shop.plan.feature.pro.1'), t('shop.plan.feature.pro.2'), t('shop.plan.feature.pro.3')];
-                    if (/business|entreprise/i.test(name)) return [t('shop.plan.feature.business.1'), t('shop.plan.feature.business.2'), t('shop.plan.feature.business.3'), t('shop.plan.feature.business.4')];
-                    return [];
+                    if (/standard/i.test(name)) return ['500 GB de volume', 'Support standard', 'Priorité normale'];
+                    if (/pro/i.test(name)) return ['1 000 GB de volume', 'Support rapide', 'Priorité haute'];
+                    if (/premium/i.test(name)) return ['2 500 GB de volume', 'Support VIP', 'Priorité Ultra'];
+                    return p.description ? [p.description] : [];
                 })();
                 const link = p.paymentLink || '';
                 return `
                     <div class="plan-card">
                         <div class="plan-name">${name}${recommended}</div>
                         <div class="plan-price">${priceLabel}</div>
-                        ${points ? `<div class="plan-points">${points}</div>` : ''}
+                        ${gbLabel ? `<div class="plan-points">${gbLabel}</div>` : ''}
                         <ul class="plan-features">
                             ${features.map(f => `<li>${f}</li>`).join('')}
                         </ul>
@@ -3506,19 +3506,18 @@ print(r.json())</code></pre>
                                 ${planCards}
                             </div>
                             <div class="topup-section">
-                                <h4>${t('enterprise.topup.title')}</h4>
+                                <h4>Rechargement de volume</h4>
                                 <div class="topup-grid">
-                                    <div class="topup-item">10€ = 15 000 ${t('shop.points')}</div>
-                                    <div class="topup-item">50€ = 90 000 ${t('shop.points')}</div>
-                                    <div class="topup-item">100€ = 200 000 ${t('shop.points')}</div>
+                                    <div class="topup-item">10€ = 250 GB</div>
+                                    <div class="topup-item">40€ = 1 000 GB</div>
+                                    <div class="topup-item">100€ = 2 500 GB</div>
                                 </div>
-                                <h4>${t('shop.example.costs')}</h4>
+                                <h4>Coûts estimés par job</h4>
                                 <ul class="points-examples">
-                                    <li>${t('shop.cost.image_compress')} : 10 ${t('shop.points')}</li>
-                                    <li>${t('shop.cost.audio_convert')} : 200 ${t('shop.points')} ${t('shop.per_minute')}</li>
-                                    <li>${t('shop.cost.video_encode')} : 500 ${t('shop.points')} ${t('shop.per_minute')}</li>
-                                    <li>${t('shop.cost.ocr_pdf')} : 300 ${t('shop.points')}</li>
-                                    <li>${t('shop.cost.data_job')} : ${t('shop.from')} 1000 ${t('shop.points')}</li>
+                                    <li>Analyse Web : ~5 MB</li>
+                                    <li>Conversion Audio : ~50 MB / min</li>
+                                    <li>Encodage Vidéo : ~500 MB / min</li>
+                                    <li>Traitement de données : ~100 MB</li>
                                 </ul>
                             </div>
                         </div>
@@ -4556,14 +4555,16 @@ function initializeShopPage() {
                         return p.description ? p.description.split(', ') : [];
                     })();
 
-                    const isBasic = /basic/i.test(name);
+                    const isStandard = /standard|basic/i.test(name);
                     const isProPlan = /pro/i.test(name);
-                    const isBusinessPlan = /business/i.test(name);
+                    const isPremiumPlan = /premium|business/i.test(name);
                     let link = p.paymentLink || '';
-                    if (isBasic) {
-                        link = 'https://buy.stripe.com/eVq5kF8Z4eEx6eydWw4gg03';
+                    if (isStandard) {
+                        link = 'https://buy.stripe.com/5kA28p3EK2RPe76008';
                     } else if (isProPlan) {
-                        link = 'https://buy.stripe.com/bJe8wR8Z41RL32mg4E4gg02';
+                        link = 'https://buy.stripe.com/bJedRb2AG8g96eyg4E4gg09';
+                    } else if (isPremiumPlan) {
+                        link = 'https://buy.stripe.com/00gbIX3EKbsh2YieV8';
                     }
                     
                     const buttonHTML = `<button class="profile-btn ${isPro || isEnterprise ? 'primary' : ''}" data-link="${link}" style="font-size:0.85em;padding:8px 12px;width:auto;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${btnLabel}</button>`;
