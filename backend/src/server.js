@@ -36,6 +36,22 @@ app.get('/api/version', (req, res) => {
     ts: new Date().toISOString()
   });
 });
+
+// Téléchargement direct du Node Windows
+app.get('/api/download/node', (req, res) => {
+  const path = require('path');
+  const fs = require('fs');
+  const fileName = 'Revolution Network Node Setup 1.0.0.exe';
+  const filePath = path.join(__dirname, '..', '..', 'public', 'downloads', fileName);
+
+  if (fs.existsSync(filePath)) {
+    res.download(filePath, fileName);
+  } else {
+    // Fallback vers un lien distant si le fichier n'est pas sur le serveur Render (pour éviter de casser le bouton)
+    const fallbackUrl = process.env.NODE_EXE_URL || 'https://mega.nz/file/mrQ1UYBB#TCKwdvkGRKO6LPFs6G_pIHJyxFntjPL8-naCjh8DsgE';
+    res.redirect(302, fallbackUrl);
+  }
+});
 const stripeWebhookPath = '/api/stripe/webhook';
 app.post(stripeWebhookPath, express.raw({ type: 'application/json' }), async (req, res) => {
   try {
