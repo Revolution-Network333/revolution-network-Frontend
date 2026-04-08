@@ -43,14 +43,20 @@ app.get('/api/download/node', (req, res) => {
   const fs = require('fs');
   const fileName = 'Revolution Network Node Setup 1.0.0.exe';
   const filePath = path.join(__dirname, '..', '..', 'public', 'downloads', fileName);
-
-  if (fs.existsSync(filePath)) {
-    res.download(filePath, fileName);
-  } else {
-    // Fallback vers un lien distant si le fichier n'est pas sur le serveur Render (pour éviter de casser le bouton)
-    const fallbackUrl = process.env.NODE_EXE_URL || 'https://mega.nz/file/mrQ1UYBB#TCKwdvkGRKO6LPFs6G_pIHJyxFntjPL8-naCjh8DsgE';
-    res.redirect(302, fallbackUrl);
+  
+  // 1. Priorité au lien direct configuré dans les variables d'environnement (ex: GitHub Release)
+  if (process.env.NODE_EXE_URL) {
+    return res.redirect(302, process.env.NODE_EXE_URL);
   }
+
+  // 2. Si le fichier est présent physiquement sur le serveur
+  if (fs.existsSync(filePath)) {
+    return res.download(filePath, fileName);
+  } 
+  
+  // 3. Fallback par défaut (Lien GitHub Release v1.0.0)
+  const defaultFallback = 'https://github.com/Revolution-Network333/Revolution-Network/releases/download/v1.0.0/Revolution.Network.Node.Setup.1.0.0.exe';
+  res.redirect(302, defaultFallback);
 });
 const stripeWebhookPath = '/api/stripe/webhook';
 app.post(stripeWebhookPath, express.raw({ type: 'application/json' }), async (req, res) => {
