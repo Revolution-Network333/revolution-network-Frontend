@@ -28,13 +28,6 @@ const EnterpriseJobsService = require('./services/enterprise-jobs');
 const app = express();
 const httpServer = createServer(app);
 
-// Initialize Services
-const rewardsService = new RewardsService();
-rewardsService.startPeriodicCalculation();
-
-const enterpriseJobsService = new EnterpriseJobsService(db);
-enterpriseJobsService.start();
-
 // Behind Render's proxy: trust first proxy to read correct client IP
 app.set('trust proxy', 1);
 
@@ -1749,7 +1742,6 @@ const rewardsService = new RewardsService();
 rewardsService.startPeriodicCalculation();
 
 // Enterprise Jobs Service
-const EnterpriseJobsService = require('./services/enterprise-jobs');
 const jobsService = new EnterpriseJobsService(db);
 jobsService.start();
 
