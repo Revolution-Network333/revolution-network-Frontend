@@ -1,6 +1,7 @@
 const express = require('express');
 const crypto = require('crypto');
 const db = require('../config/database');
+const config = require('../config');
 const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
