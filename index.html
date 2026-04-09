@@ -2063,6 +2063,30 @@
         function getOverviewHTML() {
             return `
                 <div class="page-content">
+                    <!-- Network Context Section -->
+                    <div class="network-context-bar glass-card">
+                        <div class="network-stat-item">
+                            <div class="network-stat-label">Network Status</div>
+                            <div class="network-stat-value status-live" id="net-status">LIVE / EARLY STAGE</div>
+                        </div>
+                        <div class="network-stat-item">
+                            <div class="network-stat-label">Active Nodes</div>
+                            <div class="network-stat-value neon-text-blue" id="net-active-nodes">0</div>
+                        </div>
+                        <div class="network-stat-item">
+                            <div class="network-stat-label">Total Uptime</div>
+                            <div class="network-stat-value neon-text-green" id="net-total-uptime">0h</div>
+                        </div>
+                        <div class="network-stat-item">
+                            <div class="network-stat-label">Bandwidth Processed</div>
+                            <div class="network-stat-value neon-text-purple" id="net-total-bw">0 MB</div>
+                        </div>
+                        <div class="network-stat-item">
+                            <div class="network-stat-label">API Requests</div>
+                            <div class="network-stat-value" id="net-api-reqs">0</div>
+                        </div>
+                    </div>
+
                     <div class="welcome-header">
                         <h1 class="welcome-title">
                             ${t('overview.welcome')} <span class="wave-emoji">👋</span>
@@ -2218,6 +2242,29 @@
         function updateDashboard() {
             const token = localStorage.getItem('token');
             if (!token) return;
+
+            // Fetch Global Network Stats
+            fetch(`${API_BASE}/api/rewards/network-stats`)
+            .then(r => r.json())
+            .then(data => {
+                const ns = document.getElementById('net-status');
+                if (ns) ns.textContent = data.status;
+                const an = document.getElementById('net-active-nodes');
+                if (an) an.textContent = data.activeNodes;
+                const ut = document.getElementById('net-total-uptime');
+                if (ut) {
+                    const hrs = Math.floor(data.totalUptimeSeconds / 3600);
+                    ut.textContent = `${hrs.toLocaleString()}h`;
+                }
+                const bw = document.getElementById('net-total-bw');
+                if (bw) {
+                    const totalBytes = data.totalBytesProcessed;
+                    if (totalBytes > 1073741824) bw.textContent = `${(totalBytes / 1073741824).toFixed(2)} GB`;
+                    else bw.textContent = `${(totalBytes / 1048576).toFixed(2)} MB`;
+                }
+                const ar = document.getElementById('net-api-reqs');
+                if (ar) ar.textContent = data.apiRequestsHandled.toLocaleString();
+            }).catch(err => console.error('Network stats error:', err));
 
             fetch(`${API_BASE}/api/user/stats`, {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -3872,20 +3919,24 @@ print(r.json())</code></pre>
             return `
                 <div class="page-content">
                     <div class="page-header">
-                        <h1 class="page-title">${t('leaderboard.title')}</h1>
+                        <h1 class="page-title neon-text">${t('leaderboard.title')}</h1>
+                        <p style="color: #9ca3af; margin-top: -10px; font-size: 0.9rem;">Network Contributors & Node Operators</p>
                     </div>
-                    <table class="data-table" id="leaderboard-table">
-                        <thead>
-                            <tr>
-                                <th>${t('leaderboard.th.username')}</th>
-                                <th>${t('leaderboard.th.grade')}</th>
-                                <th>${t('leaderboard.th.points')}</th>
-                                <th>${t('leaderboard.th.referrals')}</th>
-                                <th>${t('leaderboard.th.airdrop')}</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                    <div class="table-container futuristic-table">
+                        <table class="data-table" id="leaderboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Contributor</th>
+                                    <th>Status</th>
+                                    <th>Uptime</th>
+                                    <th>Bandwidth</th>
+                                    <th>Points</th>
+                                    <th>Activity Score</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             `;
         }
@@ -3895,17 +3946,38 @@ print(r.json())</code></pre>
             .then(r => r.json())
             .then(data => {
                 const tbody = document.querySelector('#leaderboard-table tbody');
-                const rows = (data.users || []).map(u => `
-                    <tr>
-                        <td>${maskUsername(u.username)}</td>
-                        <td>${u.grade || '-'}</td>
-                        <td>${u.points || 0}</td>
-                        <td>${u.referrals || 0}</td>
-                        <td>${u.final_airdrop_score || 0}</td>
-                    </tr>
-                `).join('');
-                tbody.innerHTML = rows || '';
-            }).catch(() => {});
+                if (!tbody) return;
+                
+                const rows = (data.leaderboard || []).map((u, index) => {
+                    // Badge logic
+                    let badge = '';
+                    if (index === 0) badge = '<span class="contributor-badge top-node">Top Node</span>';
+                    else if (u.activity_score > 1000) badge = '<span class="contributor-badge active-node">Active Node</span>';
+                    else badge = '<span class="contributor-badge">Node</span>';
+
+                    return `
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="rank-number">${index + 1}</div>
+                                    <span class="username-cell">${maskUsername(u.username)}</span>
+                                </div>
+                            </td>
+                            <td>${badge}</td>
+                            <td class="neon-text-green">${u.uptime_formatted || '0h'}</td>
+                            <td class="neon-text-blue">${u.bandwidth_formatted || '0 MB'}</td>
+                            <td>${Math.floor(u.total_points || 0).toLocaleString()}</td>
+                            <td>
+                                <div class="activity-score-cell">
+                                    <div class="score-value">${Math.floor(u.activity_score || 0).toLocaleString()}</div>
+                                    <div class="score-bar"><div class="score-fill" style="width: ${Math.min(100, (u.activity_score / 5000) * 100)}%"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+                tbody.innerHTML = rows || '<tr><td colspan="6" style="text-align:center; padding:40px;">No active contributors found.</td></tr>';
+            }).catch(err => console.error('Leaderboard error:', err));
         }
 
         function getAdminLeaderboardHTML() {

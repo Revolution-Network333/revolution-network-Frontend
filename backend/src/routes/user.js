@@ -235,21 +235,55 @@ router.get('/referrals', authenticateToken, async (req, res) => {
   }
 });
 
-// Obtenir le classement (leaderboard)
+// Obtenir le classement (leaderboard) amélioré "network oriented"
 router.get('/leaderboard', async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 100;
     
+    // Expression pour l'uptime total par utilisateur
+    const durationExpr = db.isMySQL 
+      ? 'TIMESTAMPDIFF(SECOND, s.start_time, COALESCE(s.end_time, NOW()))' 
+      : 'EXTRACT(EPOCH FROM (COALESCE(s.end_time, CURRENT_TIMESTAMP) - s.start_time))';
+
     const result = await db.query(
-      `SELECT id, username, total_points
-       FROM users
-       WHERE is_banned = false AND is_active = true
-       ORDER BY total_points DESC
+      `SELECT 
+        u.id, 
+        u.username, 
+        u.total_points,
+        u.rank as current_rank,
+        COALESCE(SUM(${durationExpr}), 0) as total_uptime_seconds,
+        COALESCE(SUM(bl.bytes_sent + bl.bytes_received), 0) as total_bandwidth_bytes,
+        COUNT(DISTINCT s.id) as total_sessions
+       FROM users u
+       LEFT JOIN sessions s ON u.id = s.user_id
+       LEFT JOIN bandwidth_logs bl ON s.id = bl.session_id
+       WHERE u.is_banned = false AND u.is_active = true
+       GROUP BY u.id
+       ORDER BY u.total_points DESC
        LIMIT $1`,
       [limit]
     );
+
+    // Calcul du score d'activité global (basé sur points, uptime et sessions)
+    const leaderboard = result.rows.map(user => {
+      const uptimeHrs = parseFloat(user.total_uptime_seconds || 0) / 3600;
+      const points = parseFloat(user.total_points || 0);
+      const sessions = parseInt(user.total_sessions || 0);
+      
+      // Score d'activité simple : points + (uptime * 10) + (sessions * 50)
+      const activityScore = Math.floor(points + (uptimeHrs * 10) + (sessions * 50));
+
+      return {
+        ...user,
+        activity_score: activityScore,
+        uptime_formatted: `${Math.floor(uptimeHrs)}h`,
+        bandwidth_formatted: user.total_bandwidth_bytes > 1073741824 
+          ? `${(user.total_bandwidth_bytes / 1073741824).toFixed(2)} GB`
+          : `${(user.total_bandwidth_bytes / 1048576).toFixed(2)} MB`
+      };
+    });
     
-    res.json({ leaderboard: result.rows });
+    res.json({ leaderboard });
     
   } catch (error) {
     console.error('Get leaderboard error:', error);

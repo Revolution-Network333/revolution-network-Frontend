@@ -4,6 +4,49 @@ const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Obtenir les statistiques globales du réseau (Network Context)
+router.get('/network-stats', async (req, res) => {
+  try {
+    const activeClause = "(is_active = 1 OR is_active = TRUE)";
+    const pingClause = db.isSQLite 
+      ? "last_ping > datetime('now', '-15 minutes')" 
+      : "last_ping > DATE_SUB(NOW(), INTERVAL 15 MINUTE)";
+
+    // 1. Nodes actifs et total
+    const nodesRes = await db.query(`
+      SELECT 
+        COUNT(*) as total_nodes,
+        COUNT(CASE WHEN ${activeClause} AND ${pingClause} THEN 1 END) as active_nodes
+      FROM sessions
+    `);
+
+    // 2. Uptime global cumulé (en secondes)
+    const durationExpr = db.isMySQL 
+      ? 'TIMESTAMPDIFF(SECOND, start_time, COALESCE(end_time, NOW()))' 
+      : 'EXTRACT(EPOCH FROM (COALESCE(end_time, CURRENT_TIMESTAMP) - start_time))';
+    
+    const uptimeRes = await db.query(`SELECT SUM(${durationExpr}) as total_uptime_seconds FROM sessions`);
+
+    // 3. Bande passante totale (approximative basée sur les logs)
+    const bwRes = await db.query(`SELECT SUM(bytes_sent + bytes_received) as total_bytes FROM bandwidth_logs`);
+
+    // 4. Requêtes API / Jobs traités
+    const jobsRes = await db.query(`SELECT COUNT(*) as total_jobs FROM jobs`);
+
+    res.json({
+      status: 'LIVE / EARLY STAGE',
+      activeNodes: parseInt(nodesRes.rows[0].active_nodes || 0),
+      totalNodes: parseInt(nodesRes.rows[0].total_nodes || 0),
+      totalUptimeSeconds: parseInt(uptimeRes.rows[0].total_uptime_seconds || 0),
+      totalBytesProcessed: parseInt(bwRes.rows[0].total_bytes || 0),
+      apiRequestsHandled: parseInt(jobsRes.rows[0].total_jobs || 0)
+    });
+  } catch (error) {
+    console.error('Get network stats error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Obtenir l'historique des récompenses
 router.get('/history', authenticateToken, async (req, res) => {
   try {
