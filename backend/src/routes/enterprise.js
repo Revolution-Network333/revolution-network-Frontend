@@ -37,6 +37,14 @@ async function ensureEnterpriseRecords(userId) {
 async function getUserIdFromApiKey(req) {
   const apiKey = req.headers['x-api-key'];
   if (!apiKey) return null;
+  
+  // Check against static Enterprise API Key if set
+  if (config.enterprise.apiKey && apiKey === config.enterprise.apiKey) {
+    // If static key is used, we return a special system user ID or the first admin
+    const admin = await db.query("SELECT id FROM users WHERE is_admin = 1 OR role = 'admin' LIMIT 1");
+    return admin.rows[0]?.id || 1; 
+  }
+
   const hash = crypto.createHash('sha256').update(String(apiKey)).digest('hex');
   const activeClause = db.isSQLite ? 'active = 1' : 'active = TRUE';
   const res = await db.query(`SELECT user_id FROM api_keys WHERE api_key_hash = $1 AND ${activeClause}`, [hash]);
@@ -140,6 +148,9 @@ function costFor(type, params) {
   // On estime la consommation moyenne par type de job
   switch (type) {
     case 'http_get': return 1; // 1 MB
+    case 'http_post': return 1;
+    case 'ping': return 1;
+    case 'dns_lookup': return 1;
     case 'content_check': return 5; // 5 MB
     case 'csv_stats': return 10; // 10 MB
     case 'image_svg_generate': return 2; // 2 MB
@@ -235,7 +246,7 @@ router.post('/v1/jobs', async (req, res) => {
     if (!userId) return res.status(401).json({ error: 'Unauthorized' });
     const { type, params } = req.body || {};
     if (!type) return res.status(400).json({ error: 'type requis' });
-    const supp = ['http_get','content_check','csv_stats','image_svg_generate','audio_convert','video_transcode','text_transform','text_generate_template','code_run_js', 'ocr_pdf', 'data_job'];
+    const supp = ['http_get','http_post','ping','dns_lookup','content_check','csv_stats','image_svg_generate','audio_convert','video_transcode','text_transform','text_generate_template','code_run_js', 'ocr_pdf', 'data_job'];
     if (!supp.includes(type)) return res.status(400).json({ error: 'type inconnu' });
     const cost = costFor(type, params || {});
     const cRes = await db.query('SELECT credits_balance, credits_used_month FROM enterprise_credits WHERE user_id = $1', [userId]);

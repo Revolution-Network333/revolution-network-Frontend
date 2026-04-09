@@ -23,9 +23,17 @@ const supportRoutes = require('./routes/support');
 // Services
 const SignalingService = require('./services/signaling');
 const RewardsService = require('./services/rewards');
+const EnterpriseJobsService = require('./services/enterprise-jobs');
 
 const app = express();
 const httpServer = createServer(app);
+
+// Initialize Services
+const rewardsService = new RewardsService();
+rewardsService.startPeriodicCalculation();
+
+const enterpriseJobsService = new EnterpriseJobsService(db);
+enterpriseJobsService.start();
 
 // Behind Render's proxy: trust first proxy to read correct client IP
 app.set('trust proxy', 1);

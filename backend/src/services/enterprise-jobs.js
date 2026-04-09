@@ -87,6 +87,9 @@ class EnterpriseJobsService {
   async execute(type, params) {
     switch (type) {
       case 'http_get': return await this.httpGet(params);
+      case 'http_post': return await this.httpPost(params);
+      case 'ping': return await this.ping(params);
+      case 'dns_lookup': return await this.dnsLookup(params);
       case 'content_check': return await this.contentCheck(params);
       case 'csv_stats': return await this.csvStats(params);
       case 'image_svg_generate': return await this.imageSvgGenerate(params);
@@ -97,6 +100,72 @@ class EnterpriseJobsService {
       case 'code_run_js': return await this.codeRunJs(params);
       default:
         throw new Error(`Unknown job type: ${type}`);
+    }
+  }
+
+  httpPost({ url, body, timeoutMs = 8000, insecure = false }) {
+    return new Promise((resolve, reject) => {
+      if (!url) return reject(new Error('Missing url'));
+      const mod = url.startsWith('https') ? https : http;
+      const start = Date.now();
+      const postData = typeof body === 'object' ? JSON.stringify(body) : String(body || '');
+      const opts = {
+        method: 'POST',
+        timeout: timeoutMs,
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(postData)
+        }
+      };
+      if (insecure && mod === https) {
+        opts.agent = new https.Agent({ rejectUnauthorized: false });
+      }
+      const req = mod.request(url, opts, (res) => {
+        let responseBody = '';
+        res.on('data', (chunk) => { responseBody += chunk.toString(); if (responseBody.length > 10000) res.destroy(); });
+        res.on('end', () => {
+          resolve({
+            statusCode: res.statusCode,
+            headers: res.headers,
+            body: responseBody.slice(0, 5000), // Tronqué
+            elapsedMs: Date.now() - start,
+          });
+        });
+      });
+      req.on('error', reject);
+      req.on('timeout', () => { req.destroy(new Error('Timeout')); });
+      req.write(postData);
+      req.end();
+    });
+  }
+
+  async ping({ url, timeoutMs = 5000 }) {
+    if (!url) throw new Error('Missing url');
+    const start = Date.now();
+    try {
+      const result = await this.httpGet({ url, method: 'HEAD', timeoutMs });
+      return { status: 'alive', statusCode: result.statusCode, elapsedMs: Date.now() - start };
+    } catch (e) {
+      return { status: 'unreachable', error: e.message, elapsedMs: Date.now() - start };
+    }
+  }
+
+  async dnsLookup({ url }) {
+    if (!url) throw new Error('Missing url');
+    const dns = require('dns').promises;
+    let domain = url;
+    try {
+      const u = new URL(url);
+      domain = u.hostname;
+    } catch (e) {
+      // maybe it's just a domain
+    }
+    const start = Date.now();
+    try {
+      const addresses = await dns.lookup(domain, { all: true });
+      return { domain, addresses, elapsedMs: Date.now() - start };
+    } catch (e) {
+      return { domain, error: e.message, elapsedMs: Date.now() - start };
     }
   }
   httpGet({ url, method = 'GET', timeoutMs = 8000, insecure = false }) {

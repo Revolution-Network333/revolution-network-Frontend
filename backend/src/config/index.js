@@ -59,6 +59,11 @@ module.exports = {
     walletAddress: process.env.ADMIN_WALLET || null,
   },
   
+  // Enterprise
+  enterprise: {
+    apiKey: process.env.ENTERPRISE_API_KEY || 'ma-cle-secrete',
+  },
+  
   // CORS
   cors: {
     frontendUrl: process.env.FRONTEND_URL || 'https://azurus333.github.io',
