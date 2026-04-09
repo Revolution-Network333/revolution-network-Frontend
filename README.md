@@ -69,19 +69,13 @@ Ready to join the network?
 
 ### Local Installation
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/Revolution-Network333/Revolution-Network.git
-    cd Revolution-Network
-    ```
-
-2.  **Install dependencies (Root and Backend):**
+1.  **Install dependencies (Root and Backend):**
     ```bash
     npm install
     ```
     *(The post-install script will automatically install dependencies in the `/backend` folder)*
 
-3.  **Configure environment variables:**
+2.  **Configure environment variables:**
     Create a `.env` file in the `/backend` folder based on `env-example.txt`:
     ```env
     PORT=3000
@@ -90,7 +84,7 @@ Ready to join the network?
     GOOGLE_CLIENT_ID=your_google_id
     ```
 
-4.  **Start the server:**
+3.  **Start the server:**
     ```bash
     npm start
     ```
