@@ -27,18 +27,19 @@ router.get('/network-stats', async (req, res) => {
     
     const uptimeRes = await db.query(`SELECT SUM(${durationExpr}) as total_uptime_seconds FROM sessions`);
 
-    // 3. Bande passante totale (approximative basée sur les logs)
+    // 3. Bande passante totale (basée sur tous les logs accumulés)
     const bwRes = await db.query(`SELECT SUM(bytes_sent + bytes_received) as total_bytes FROM bandwidth_logs`);
+    const totalBytes = parseInt(bwRes.rows[0].total_bytes || 0);
 
     // 4. Requêtes API / Jobs traités
     const jobsRes = await db.query(`SELECT COUNT(*) as total_jobs FROM jobs`);
 
     res.json({
-      status: 'LIVE / EARLY STAGE',
+      status: parseInt(nodesRes.rows[0].active_nodes || 0) > 0 ? 'LIVE / EARLY STAGE' : 'OFF / MAINTENANCE',
       activeNodes: parseInt(nodesRes.rows[0].active_nodes || 0),
       totalNodes: parseInt(nodesRes.rows[0].total_nodes || 0),
       totalUptimeSeconds: parseInt(uptimeRes.rows[0].total_uptime_seconds || 0),
-      totalBytesProcessed: parseInt(bwRes.rows[0].total_bytes || 0),
+      totalBytesProcessed: totalBytes,
       apiRequestsHandled: parseInt(jobsRes.rows[0].total_jobs || 0)
     });
   } catch (error) {
@@ -106,7 +107,7 @@ router.get('/today', authenticateToken, async (req, res) => {
       [userId]
     );
     
-    res.json({ todayPoints: parseInt(result.rows[0].today_points) });
+    res.json({ todayPoints: parseInt(result.rows[0].points || 0) });
     
   } catch (error) {
     console.error('Get today points error:', error);

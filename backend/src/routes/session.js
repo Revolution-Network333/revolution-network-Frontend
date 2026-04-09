@@ -158,7 +158,7 @@ router.post('/create', authenticateToken, async (req, res) => {
 
           // --- Automatic Task Validation ---
           // Find the early_adopter task
-          const taskRes = await db.query("SELECT id, reward_points FROM tasks WHERE type = 'early_adopter' AND active = ${db.isSQLite ? 1 : 'true'} LIMIT 1");
+          const taskRes = await db.query("SELECT id, reward_points FROM tasks WHERE type = 'early_adopter' AND active = $1 LIMIT 1", [db.isSQLite ? 1 : true]);
           if (taskRes.rows.length > 0) {
             const taskId = taskRes.rows[0].id;
             const rewardPoints = parseInt(taskRes.rows[0].reward_points || 0);
