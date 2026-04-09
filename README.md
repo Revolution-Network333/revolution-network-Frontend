@@ -4,6 +4,43 @@
 
 ---
 
+## 🔍 What is Revolution Network?
+
+Revolution Network est une infrastructure physique décentralisée (**DePIN**) permettant aux utilisateurs de monétiser leur bande passante inutilisée. En transformant chaque appareil connecté en un nœud actif du réseau, nous créons une couche de transport de données distribuée, résiliente et performante.
+
+---
+
+## ⚙️ How it works
+
+Le flux opérationnel du réseau suit un modèle de contribution simple :
+
+`User → Node → Network → Contribution → Rewards (Aether ATH)`
+
+1.  **User** : Installe et configure l'application.
+2.  **Node** : L'appareil devient un point de présence sur le réseau.
+3.  **Network** : Les ressources sont agrégées pour répondre aux besoins de l'infrastructure.
+4.  **Contribution** : La mesure en temps réel de la bande passante partagée.
+5.  **Rewards** : Distribution automatique de jetons ATH basée sur la contribution réelle.
+
+---
+
+## 💎 Aether (ATH)
+
+**Aether (ATH)** est le token utilitaire natif de Revolution Network. Il sert de moteur économique à l'écosystème :
+- **Récompenses** : Incitation financière pour les opérateurs de nodes en fonction de leur uptime et volume partagé.
+- **Gouvernance & Participation** : Accès aux services avancés du réseau et participation active à l'infrastructure.
+
+---
+
+## 🚀 Get Started
+
+Prêt à rejoindre le réseau ?
+- **Run a Node** : L'application de minage est actuellement en cours de développement (WIP / Coming Soon).
+- **Join Discord** : [Rejoindre notre communauté](https://discord.gg/eadE7uK6ss) pour le support et les échanges.
+- **Follow us on X** : Suivez [@revo_network_](https://x.com/revo_network_) pour les dernières annonces officielles.
+
+---
+
 ## 🚀 Fonctionnalités Clés
 
 - **Partage P2P (WebRTC) :** Optimisation de la bande passante via des protocoles de communication décentralisés.
