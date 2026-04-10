@@ -63,12 +63,12 @@ body::before {
 }
 
 .sidebar-header {
-  padding: 10px;
+  padding: 0;
   border-bottom: 1px solid #111111;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 300px;
+  height: 160px;
   overflow: hidden;
   background-color: #000000;
 }
@@ -82,11 +82,11 @@ body::before {
 }
 
 .sidebar-header .logo-icon {
-  width: 185%;
-  max-width: 100%;
+  width: 150%;
+  max-width: none;
   height: auto;
-  max-height: 380px;
   object-fit: contain;
+  margin-top: 5px;
 }
 
 .logo {
