@@ -439,8 +439,37 @@ router.post('/bonus/apply', authenticateToken, checkAdmin, async (req, res) => {
 
       for (const u of targetUsers) {
         if (rewardType === 'points') {
-          await client.query('UPDATE users SET total_points = total_points + $1 WHERE id = $2', [rewardValue, u.id]);
-        } else if (rewardType === 'aether') {
+      await client.query('UPDATE users SET total_points = total_points + $1 WHERE id = $2', [rewardValue, u.id]);
+    } else if (rewardType === 'api_gb' || rewardType === 'api') {
+      const amountMb = parseInt(rewardValue) * 1024;
+      if (db.isSQLite) {
+        await client.query(`
+          INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month)
+          VALUES ($1, $2, 0)
+          ON CONFLICT (user_id) DO UPDATE SET 
+            credits_balance = enterprise_credits.credits_balance + EXCLUDED.credits_balance
+        `, [u.id, amountMb]);
+      } else if (db.isMySQL) {
+        await client.query(`
+          INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month)
+          VALUES (?, ?, 0)
+          ON DUPLICATE KEY UPDATE 
+            credits_balance = credits_balance + VALUES(credits_balance)
+        `, [u.id, amountMb]);
+      } else {
+        await client.query(`
+          INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month)
+          VALUES ($1, $2, 0)
+          ON CONFLICT (user_id) DO UPDATE SET 
+            credits_balance = enterprise_credits.credits_balance + EXCLUDED.credits_balance,
+            updated_at = CURRENT_TIMESTAMP
+        `, [u.id, amountMb]);
+      }
+      await client.query(
+        'INSERT INTO credit_ledger (user_id, amount, reason) VALUES ($1, $2, $3)',
+        [u.id, amountMb, 'admin_bonus']
+      );
+    } else if (rewardType === 'aether') {
           const w = await client.query('SELECT user_id FROM wallets WHERE user_id = $1', [u.id]);
           if (w.rows.length === 0) {
             await client.query('INSERT INTO wallets (user_id, balance_ath) VALUES ($1, $2)', [u.id, 0]);
@@ -481,13 +510,15 @@ router.post('/settings/withdrawals', authenticateToken, checkAdmin, async (req, 
         const val = enabled ? 'true' : 'false';
         
         if (db.isSQLite) {
-            await db.query("INSERT OR REPLACE INTO settings (key, value, updated_at) VALUES ('withdrawals_enabled', $1, CURRENT_TIMESTAMP)", [val]);
-        } else {
-            await db.query(`
-                INSERT INTO settings (key, value, updated_at) VALUES ('withdrawals_enabled', $1, CURRENT_TIMESTAMP)
-                ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = CURRENT_TIMESTAMP
-            `, [val]);
-        }
+      await db.query("INSERT OR REPLACE INTO settings (key, value, updated_at) VALUES ('withdrawals_enabled', $1, CURRENT_TIMESTAMP)", [val]);
+    } else if (db.isMySQL) {
+      await db.query("INSERT INTO settings (\`key\`, value, updated_at) VALUES ('withdrawals_enabled', ?, NOW()) ON DUPLICATE KEY UPDATE value = VALUES(value), updated_at = NOW()", [val]);
+    } else {
+      await db.query(`
+        INSERT INTO settings (key, value, updated_at) VALUES ('withdrawals_enabled', $1, CURRENT_TIMESTAMP)
+        ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = CURRENT_TIMESTAMP
+      `, [val]);
+    }
         
         // Log
         const adminId = req.user.userId;
@@ -842,16 +873,36 @@ router.post('/subscriptions/activate', authenticateToken, checkAdmin, async (req
     const mbLimit = (parseInt(gb_limit) || 0) * 1024;
     const priority = parseInt(priority_level) || 1;
 
-    await db.query(`
-      INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month, bandwidth_limit_gb, priority_level) 
-      VALUES ($1, $2, 0, $3, $4)
-      ON CONFLICT (user_id) DO UPDATE SET 
-        credits_balance = enterprise_credits.credits_balance + EXCLUDED.credits_balance,
-        bandwidth_limit_gb = EXCLUDED.bandwidth_limit_gb,
-        priority_level = EXCLUDED.priority_level,
-        updated_at = CURRENT_TIMESTAMP`, 
-      [user_id, mbLimit, parseInt(gb_limit) || 0, priority]
-    );
+    if (db.isSQLite) {
+      await db.query(`
+        INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month, bandwidth_limit_gb, priority_level) 
+        VALUES ($1, $2, 0, $3, $4)
+        ON CONFLICT (user_id) DO UPDATE SET 
+          credits_balance = credits_balance + EXCLUDED.credits_balance,
+          bandwidth_limit_gb = EXCLUDED.bandwidth_limit_gb,
+          priority_level = EXCLUDED.priority_level
+      `, [user_id, mbLimit, parseInt(gb_limit) || 0, priority]);
+    } else if (db.isMySQL) {
+      await db.query(`
+        INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month, bandwidth_limit_gb, priority_level) 
+        VALUES (?, ?, 0, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+          credits_balance = credits_balance + VALUES(credits_balance),
+          bandwidth_limit_gb = VALUES(bandwidth_limit_gb),
+          priority_level = VALUES(priority_level)
+      `, [user_id, mbLimit, parseInt(gb_limit) || 0, priority]);
+    } else {
+      await db.query(`
+        INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month, bandwidth_limit_gb, priority_level) 
+        VALUES ($1, $2, 0, $3, $4)
+        ON CONFLICT (user_id) DO UPDATE SET 
+          credits_balance = enterprise_credits.credits_balance + EXCLUDED.credits_balance,
+          bandwidth_limit_gb = EXCLUDED.bandwidth_limit_gb,
+          priority_level = EXCLUDED.priority_level,
+          updated_at = CURRENT_TIMESTAMP`, 
+        [user_id, mbLimit, parseInt(gb_limit) || 0, priority]
+      );
+    }
     
     res.json({ success: true });
   } catch (e) { console.error(e); res.status(500).json({ error: 'Erreur interne du serveur' }); }
@@ -862,7 +913,25 @@ router.post('/credits/topup', authenticateToken, checkAdmin, async (req, res) =>
     const { user_id, amount_gb } = req.body || {};
     if (!user_id || !amount_gb) return res.status(400).json({ error: 'user_id et amount_gb requis' });
     const amountMb = parseInt(amount_gb) * 1024;
-    await db.query('UPDATE enterprise_credits SET credits_balance = credits_balance + $1, updated_at = CURRENT_TIMESTAMP WHERE user_id = $2', [amountMb, parseInt(user_id)]);
+    
+    if (db.isSQLite) {
+      await db.query(`
+        INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month)
+        VALUES ($1, $2, 0)
+        ON CONFLICT (user_id) DO UPDATE SET 
+          credits_balance = enterprise_credits.credits_balance + EXCLUDED.credits_balance
+      `, [parseInt(user_id), amountMb]);
+    } else if (db.isMySQL) {
+      await db.query(`
+        INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month)
+        VALUES (?, ?, 0)
+        ON DUPLICATE KEY UPDATE 
+          credits_balance = credits_balance + VALUES(credits_balance)
+      `, [parseInt(user_id), amountMb]);
+    } else {
+      await db.query('UPDATE enterprise_credits SET credits_balance = credits_balance + $1, updated_at = CURRENT_TIMESTAMP WHERE user_id = $2', [amountMb, parseInt(user_id)]);
+    }
+    
     await db.query('INSERT INTO credit_ledger (user_id, amount, reason) VALUES ($1, $2, $3)', [parseInt(user_id), amountMb, 'topup_gb']);
     res.json({ success: true });
   } catch (e) { console.error(e); res.status(500).json({ error: 'Erreur interne du serveur' }); }
@@ -872,15 +941,36 @@ router.post('/users/:id/reset-credits', authenticateToken, checkAdmin, async (re
   try {
     const userId = parseInt(req.params.id);
     if (!userId || Number.isNaN(userId)) return res.status(400).json({ error: 'ID utilisateur invalide' });
-    await db.query(
-      `INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month)
-       VALUES ($1, 0, 0)
-       ON CONFLICT (user_id) DO UPDATE
-       SET credits_balance = 0,
-           credits_used_month = 0,
-           updated_at = CURRENT_TIMESTAMP`,
-      [userId]
-    );
+    
+    if (db.isSQLite) {
+      await db.query(
+        `INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month)
+         VALUES ($1, 0, 0)
+         ON CONFLICT (user_id) DO UPDATE
+         SET credits_balance = 0,
+             credits_used_month = 0`,
+        [userId]
+      );
+    } else if (db.isMySQL) {
+      await db.query(
+        `INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month)
+         VALUES (?, 0, 0)
+         ON DUPLICATE KEY UPDATE
+         credits_balance = 0,
+         credits_used_month = 0`,
+        [userId]
+      );
+    } else {
+      await db.query(
+        `INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month)
+         VALUES ($1, 0, 0)
+         ON CONFLICT (user_id) DO UPDATE
+         SET credits_balance = 0,
+             credits_used_month = 0,
+             updated_at = CURRENT_TIMESTAMP`,
+        [userId]
+      );
+    }
     await db.query('INSERT INTO credit_ledger (user_id, amount, reason) VALUES ($1, $2, $3)', [userId, 0, 'admin_reset']);
     res.json({ success: true });
   } catch (e) {
