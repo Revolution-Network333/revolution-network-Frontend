@@ -1657,8 +1657,16 @@
                       .then(r=>r.json()).then(j=>{
                         const ac = document.getElementById('header-api-credits');
                         if (ac) {
-                            const remaining = j.usage ? j.usage.remainingGB : (j.credits ? j.credits.remaining : 0);
-                            ac.textContent = `API: ${remaining} GB`;
+                            // On affiche la valeur brute si usage n'existe pas encore
+                            let val = 0;
+                            if (j.usage && j.usage.remainingGB !== undefined) {
+                                val = j.usage.remainingGB;
+                            } else if (j.credits_balance !== undefined) {
+                                val = (j.credits_balance / 1024).toFixed(2);
+                            } else if (j.credits && j.credits.remaining !== undefined) {
+                                val = j.credits.remaining;
+                            }
+                            ac.textContent = `API: ${val} GB`;
                         }
                       }).catch(()=>{});
                 }
@@ -4214,9 +4222,15 @@ print(r.json())</code></pre>
                         fetch(`${API_BASE}/api/enterprise/me`, { headers: { 'Authorization': `Bearer ${token}` }})
                             .then(r => r.json())
                             .then(j => { 
-                                if (j && j.usage) {
-                                    ac.textContent = `API: ${j.usage.remainingGB} GB`; 
+                                let val = 0;
+                                if (j && j.usage && j.usage.remainingGB !== undefined) {
+                                    val = j.usage.remainingGB;
+                                } else if (j && j.credits_balance !== undefined) {
+                                    val = (j.credits_balance / 1024).toFixed(2);
+                                } else if (j && j.credits && j.credits.remaining !== undefined) {
+                                    val = j.credits.remaining;
                                 }
+                                ac.textContent = `API: ${val} GB`; 
                             })
                             .catch(()=>{});
                     }
