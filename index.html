@@ -4213,7 +4213,11 @@ print(r.json())</code></pre>
                     if (ac) {
                         fetch(`${API_BASE}/api/enterprise/me`, { headers: { 'Authorization': `Bearer ${token}` }})
                             .then(r => r.json())
-                            .then(j => { if (j && j.credits) ac.textContent = `API: ${(j.credits.remaining||0).toLocaleString()}`; })
+                            .then(j => { 
+                                if (j && j.usage) {
+                                    ac.textContent = `API: ${j.usage.remainingGB} GB`; 
+                                }
+                            })
                             .catch(()=>{});
                     }
                     try { if (typeof refreshHeader === 'function') refreshHeader(); } catch {}

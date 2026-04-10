@@ -1345,17 +1345,40 @@ router.post('/users/:id/bonus', authenticateToken, checkAdmin, async (req, res) 
             [userId, 'credit', qty, JSON.stringify({ reason: 'admin_bonus' })]);
 
     } else if (type === 'points_api') {
-        // Ajouter Points API
-        await db.query('UPDATE enterprise_credits SET credits_balance = credits_balance + $1, updated_at = CURRENT_TIMESTAMP WHERE user_id = $2', 
-            [qty, userId]);
-        // Ensure credits row exists
-        const c = await db.query('SELECT credits_balance FROM enterprise_credits WHERE user_id = $1', [userId]);
-        if (c.rows.length === 0) {
-             await db.query('INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month) VALUES ($1, $2, 0)', [userId, qty]);
-        }
+        // Ajouter Points API (convertir GB en MB car credits_balance est en MB)
+        const amountMb = Math.round(qty * 1024);
+        console.log(`Applying API bonus: ${qty} GB (${amountMb} MB) to user ${userId}`);
         
-        await db.query('INSERT INTO credit_ledger (user_id, amount, reason) VALUES ($1, $2, $3)', 
-            [userId, qty, 'admin_bonus']);
+        try {
+            // Approche portable : Update d'abord, Insert si nécessaire
+            const updateRes = await db.query(
+                'UPDATE enterprise_credits SET credits_balance = credits_balance + $1, updated_at = CURRENT_TIMESTAMP WHERE user_id = $2',
+                [amountMb, userId]
+            );
+            
+            if (updateRes.rowCount === 0) {
+                await db.query(
+                    'INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month) VALUES ($1, $2, 0)',
+                    [userId, amountMb]
+                );
+            }
+            
+            await db.query('INSERT INTO credit_ledger (user_id, amount, reason) VALUES ($1, $2, $3)', 
+                [userId, amountMb, 'admin_bonus']);
+                
+        } catch (sqlErr) {
+            console.error('SQL Bonus error details:', sqlErr);
+            // Fallback syntaxe spécifique si l'approche portable échoue
+            if (db.isMySQL) {
+                await db.query(`
+                    INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month)
+                    VALUES (?, ?, 0)
+                    ON DUPLICATE KEY UPDATE credits_balance = credits_balance + VALUES(credits_balance)
+                `, [userId, amountMb]);
+            } else {
+                throw sqlErr;
+            }
+        }
 
     } else if (type === 'points_leaderboard') {
         // Ajouter Points Leaderboard
