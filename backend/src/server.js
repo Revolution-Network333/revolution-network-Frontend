@@ -1640,34 +1640,46 @@ app.get('/metrics', async (req, res) => {
 });
 app.get('/api/leaderboard', async (req, res) => {
   try {
+    const activeClause = "(s.is_active = 1 OR s.is_active = TRUE)";
+    const pingClause = db.isSQLite 
+      ? "s.last_ping > datetime('now', '-15 minutes')" 
+      : "s.last_ping > DATE_SUB(NOW(), INTERVAL 15 MINUTE)";
+
     const rows = (await db.query(
-      `SELECT id, username, total_points, \`rank\`
-       FROM users
-       WHERE COALESCE(is_banned, false) = false
-       ORDER BY total_points DESC
+      `SELECT 
+        u.username, 
+        u.total_points, 
+        u.rank,
+        COUNT(DISTINCT s.id) as sessions_count,
+        SUM(CASE WHEN ${activeClause} AND ${pingClause} THEN 1 ELSE 0 END) as active_sessions,
+        COALESCE(SUM(bl.bytes_sent + bl.bytes_received), 0) as total_bytes
+       FROM users u
+       LEFT JOIN sessions s ON u.id = s.user_id
+       LEFT JOIN bandwidth_logs bl ON s.id = bl.session_id
+       WHERE COALESCE(u.is_banned, false) = false
+       GROUP BY u.id, u.username, u.total_points, u.rank
+       ORDER BY u.total_points DESC
        LIMIT 100`
     )).rows;
-    const users = [];
-    for (const u of rows) {
-      let refCount = 0;
-      try {
-        if (db.isSQLite) {
-          refCount = (await db.query('SELECT COUNT(*) AS c FROM users WHERE referrer_id = $1', [u.id])).rows[0]?.c || 0;
-        } else {
-          refCount = (await db.query('SELECT COUNT(*) AS c FROM referrals WHERE referrer_user_id = $1', [u.id])).rows[0]?.c || 0;
-        }
-      } catch (_) {
-        refCount = 0;
-      }
-      users.push({
+
+    const leaderboard = rows.map((u, index) => {
+      // Calcul d'un score d'activité arbitraire pour le remplissage visuel
+      const activityScore = (u.total_points || 0) + (parseInt(u.total_bytes) / 1048576);
+      
+      return {
         username: u.username,
-        grade: u.rank || null,
-        points: u.total_points || 0,
-        referrals: Number(refCount) || 0,
-        final_airdrop_score: (u.total_points || 0) + (Number(refCount) * 100),
-      });
-    }
-    res.json({ users });
+        rank: u.rank || 'Bronze',
+        total_points: u.total_points || 0,
+        activity_score: activityScore,
+        bandwidth_formatted: u.total_bytes > 1073741824 
+          ? `${(u.total_bytes / 1073741824).toFixed(2)} GB` 
+          : `${(u.total_bytes / 1048576).toFixed(2)} MB`,
+        uptime_formatted: u.sessions_count > 0 ? `${u.sessions_count * 2}h` : '0h', // Estimation simple
+        is_active: parseInt(u.active_sessions) > 0
+      };
+    });
+
+    res.json({ leaderboard });
   } catch (e) {
     console.error('Public leaderboard error:', e);
     res.status(500).json({ error: 'Internal server error' });
