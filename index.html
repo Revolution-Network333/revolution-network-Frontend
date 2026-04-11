@@ -922,10 +922,15 @@
                 'shop.points': 'points',
                 'shop.per_minute': '/ min',
                 'shop.from': 'from',
-                'enterprise.title': 'Enterprise API',
+                'enterprise.title': 'API',
                 'enterprise.intro': 'Overview',
                 'enterprise.tutorial': 'Integration tutorial',
-                'enterprise.subscriptions.title': 'Enterprise subscriptions (Points system)',
+                'enterprise.subscriptions.title': 'API Plans',
+                'enterprise.free_tier.title': 'Free tier (included)',
+                'enterprise.free_tier.weekly': '3 GB compute / week (weekly reset)',
+                'enterprise.free_tier.max_job': 'Max 0.2 GB per job',
+                'enterprise.free_tier.rate': '30 requests / minute limit',
+                'enterprise.free_tier.video': 'Video jobs disabled',
                 'enterprise.topup.title': 'Buy extra points (top-up)',
                 'shop.title': 'Shop',
                 'shop.warning.banner': '⚠️ 90% of shop profit is reinvested to strengthen the project.',
@@ -3300,6 +3305,62 @@
                         </div>
                     </div>
 
+                    <div class="api-section" style="display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px; align-items:start; margin-bottom: 24px;">
+                        <div class="api-card glass-card" style="margin:0;">
+                            <h3 style="margin:0 0 10px 0;">${t('enterprise.intro')}</h3>
+                            <div style="color:#9ca3af; line-height:1.6;">
+                                ${t('enterprise.title')} lets you execute lightweight <strong>jobs</strong> (monitoring, checks, basic processing) using a secure <strong>API key</strong>.
+                                Create a job, track its status, then fetch the result when ready. Authentication is done via the <code>x-api-key</code> header.
+                            </div>
+                            <div style="margin-top:12px; border-top:1px solid #1f2937; padding-top:12px;">
+                                <h4 style="margin:0 0 8px 0;">Quick start</h4>
+                                <div style="color:#9ca3af; line-height:1.6;">
+                                    <strong>1) Create a job</strong><br>
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X POST https://your-backend/api/enterprise/v1/jobs \
+-H "Content-Type: application/json" \
+-H "x-api-key: YOUR_KEY" \
+-d '{"type":"http_get","params":{"url":"https://example.com"}}'</code></pre>
+                                    <strong>2) List jobs</strong><br>
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X GET https://your-backend/api/enterprise/v1/jobs \
+-H "x-api-key: YOUR_KEY"</code></pre>
+                                    <strong>3) Get result</strong><br>
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X GET https://your-backend/api/enterprise/v1/jobs/ID/result \
+-H "x-api-key: YOUR_KEY"</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="api-card" style="margin:0;">
+                            <div class="api-row" style="align-items:flex-start;">
+                                <div style="flex:1;">
+                                    <div class="api-label">API Key</div>
+                                    <div id="api-key-value" class="api-key masked" style="margin-top:6px;">••••-••••-••••-••••</div>
+                                    <div style="margin-top:10px; color:#9ca3af; font-size:0.85rem; line-height:1.5;">
+                                        Use this key in <code>x-api-key</code>.
+                                    </div>
+                                </div>
+                                <div class="api-actions" style="display:flex; flex-direction:column; gap:8px;">
+                                    <button id="copy-api-key" class="profile-btn">${t('common.copy')}</button>
+                                    <button id="regen-api-key" class="profile-btn danger">Régénérer</button>
+                                </div>
+                            </div>
+                            <div class="api-row" style="margin-top:12px;">
+                                <div class="api-label">Crédits</div>
+                                <div id="api-credits">0 utilisés / 0 restants</div>
+                            </div>
+                            <div class="api-docs" style="margin-top:14px;">
+                                <h3 style="margin:0 0 8px 0;">Endpoints</h3>
+                                <div class="doc-list">
+                                    <div class="doc-item"><span>POST</span> /api/enterprise/v1/jobs</div>
+                                    <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs</div>
+                                    <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs/:id</div>
+                                    <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs/:id/result</div>
+                                </div>
+                                <div class="doc-auth">Header: x-api-key</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Dashboard Stats Section -->
                     <div class="stats-grid" style="margin-bottom: 24px;">
                         <div class="stat-card glass-card neon-border-green">
@@ -3380,61 +3441,8 @@
                         </div>
                     </div>
 
-                    <div class="api-section">
-                        <div class="api-card glass-card" style="margin-bottom:16px;">
-                            <h3 style="margin:0 0 8px 0;">${t('enterprise.intro')}</h3>
-                            <div style="color:#9ca3af; line-height:1.6;">
-                                L’API permet d’exécuter des <strong>jobs</strong> de contrôle web, d’analyse légère et de traitement basique des données via une <strong>clé API</strong> sécurisée. 
-                                Créez un job, suivez son statut, puis récupérez le résultat quand il est prêt. Les intégrations se font simplement avec le header <code>x-api-key</code>.
-                            </div>
-                            <div style="margin-top:12px; border-top:1px solid #1f2937; padding-top:12px;">
-                                <h4 style="margin:0 0 8px 0;">${t('enterprise.tutorial')}</h4>
-                                <div style="color:#9ca3af; line-height:1.6;">
-                                    <strong>1) Créer un job</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:8px; overflow:auto;"><code>curl -X POST https://votre-backend/api/enterprise/v1/jobs \
--H "Content-Type: application/json" \
--H "x-api-key: VOTRE_CLE" \
--d '{"type":"http_get","params":{"url":"https://example.com"}}'</code></pre>
-                                    <strong>2) Lister vos jobs</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:8px; overflow:auto;"><code>curl -X GET https://votre-backend/api/enterprise/v1/jobs \
--H "x-api-key: VOTRE_CLE"</code></pre>
-                                    <strong>3) Récupérer le résultat</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:8px; overflow:auto;"><code>curl -X GET https://votre-backend/api/enterprise/v1/jobs/ID/result \
--H "x-api-key: VOTRE_CLE"</code></pre>
-                                    <strong>Exemple Node.js</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:8px; overflow:auto;"><code>await fetch('/api/enterprise/v1/jobs', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json', 'x-api-key': 'VOTRE_CLE' },
-  body: JSON.stringify({ type: 'http_get', params: { url: 'https://example.com' } })
-});</code></pre>
-                                    <strong>Exemple Python</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:8px; overflow:auto;"><code>import requests
-r = requests.post('https://votre-backend/api/enterprise/v1/jobs',
-  json={'type':'http_get','params':{'url':'https://example.com'}},
-  headers={'x-api-key':'VOTRE_CLE'})
-print(r.json())</code></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="api-section">
-                        <div class="api-card">
-                            <div class="api-row">
-                                <div>
-                                    <div class="api-label">API Key</div>
-                                    <div id="api-key-value" class="api-key masked">••••-••••-••••-••••</div>
-                                </div>
-                                <div class="api-actions">
-                                    <button id="copy-api-key" class="profile-btn">Copier</button>
-                                    <button id="regen-api-key" class="profile-btn danger">Régénérer</button>
-                                </div>
-                            </div>
-                            <div class="api-row">
-                                <div class="api-label">Crédits</div>
-                                <div id="api-credits">0 utilisés / 0 restants</div>
-                            </div>
-                        </div>
-                        <div class="api-card" style="margin-top:16px;">
+                    
+                    <div class="api-card" style="margin-top:16px;">
                             <h3 style="margin:0 0 8px 0;">Types de jobs supportés</h3>
                             <div style="background:#0b0f14; border:1px solid #1f2937; border-radius:8px; padding:12px; color:#9ca3af;">
                                 <ul style="margin:0; padding-left:18px; line-height:1.8;">
@@ -3445,17 +3453,6 @@ print(r.json())</code></pre>
                                     <li><strong>Code:</strong> code_run_js (sandbox VM, timeout)</li>
                                 </ul>
                             </div>
-                        </div>
-                        <div class="api-docs">
-                            <h3>Endpoints</h3>
-                            <div class="doc-list">
-                                <div class="doc-item"><span>POST</span> /api/enterprise/v1/jobs</div>
-                                <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs</div>
-                                <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs/:id</div>
-                                <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs/:id/result</div>
-                                <div class="doc-item"><span>GET</span> /api/enterprise/me</div>
-                            </div>
-                            <div class="doc-auth">Header: x-api-key</div>
                         </div>
                     </div>
                 </div>
@@ -4762,6 +4759,23 @@ function initializeShopPage() {
                 const subs = document.getElementById('shop-subscriptions');
                 if (!subs) return;
 
+                const freeTierCard = `
+                    <div class="plan-card" style="border:1px solid rgba(34,197,94,0.35); box-shadow: 0 0 0 1px rgba(34,197,94,0.15) inset;">
+                        <div class="plan-tag" style="background:rgba(34,197,94,0.15); color:#86efac; border-color:rgba(34,197,94,0.35);">Free</div>
+                        <div class="plan-name">${t('enterprise.free_tier.title') || 'Free tier (included)'}</div>
+                        <div class="plan-price">${formatPrice(0, 'EUR')}</div>
+                        <div class="plan-period">${t('shop.plan.period')}</div>
+                        <div class="plan-points-badge">${t('common.included') || 'Included'}</div>
+                        <ul class="plan-features">
+                            <li>${t('enterprise.free_tier.weekly') || '3 GB compute / week (weekly reset)'}</li>
+                            <li>${t('enterprise.free_tier.max_job') || 'Max 0.2 GB per job'}</li>
+                            <li>${t('enterprise.free_tier.rate') || '30 requests / minute limit'}</li>
+                            <li>${t('enterprise.free_tier.video') || 'Video jobs disabled'}</li>
+                        </ul>
+                        <button class="profile-btn" style="font-size:0.85em;padding:8px 12px; background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.35); color:#bbf7d0;" disabled>${t('common.included') || 'Included'}</button>
+                    </div>
+                `;
+
                 const cards = plans.map(p => {
                     const name = p.name || '';
                     const isStandard = /standard/i.test(name);
@@ -4828,7 +4842,7 @@ function initializeShopPage() {
                     `;
                 }).join('');
 
-                subs.innerHTML = cards || `<p style="color:#9ca3af;">${t('shop.plans.empty')}</p>`;
+                subs.innerHTML = (freeTierCard + cards) || `<p style="color:#9ca3af;">${t('shop.plans.empty')}</p>`;
                 
                 document.querySelectorAll('#shop-subscriptions .plan-card button').forEach(btn => {
                     btn.addEventListener('click', () => {
@@ -6430,8 +6444,9 @@ function initializeShopPage() {
             loadUserTickets();
             const btn = document.getElementById('btn-new-ticket');
             if(btn) btn.addEventListener('click', () => {
-                const subject = prompt(t('support.subject') + '?');
-                if (subject) createTicket(subject);
+                const d = new Date();
+                const subject = `${t('support.subject')}: ${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
+                createTicket(subject);
             });
         }
 

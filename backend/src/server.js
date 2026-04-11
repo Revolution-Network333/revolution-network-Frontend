@@ -554,6 +554,51 @@ async function ensureSqliteMigrations() {
   }
 }
 
+function startOfWeekUTCISO(date) {
+  const d = new Date(date);
+  const day = d.getUTCDay();
+  const diffToMonday = (day + 6) % 7;
+  d.setUTCDate(d.getUTCDate() - diffToMonday);
+  d.setUTCHours(0, 0, 0, 0);
+  return d.toISOString();
+}
+
+async function backfillFreeTierCredits() {
+  try {
+    const weekStart = startOfWeekUTCISO(new Date());
+    const weeklyMb = 3 * 1024;
+
+    if (db.isSQLite) {
+      await db.query(
+        `UPDATE enterprise_credits
+         SET free_week_start = COALESCE(free_week_start, $1),
+             free_credits_balance = CASE
+               WHEN free_credits_balance IS NULL OR free_credits_balance = 0 THEN $2
+               ELSE free_credits_balance
+             END,
+             free_credits_used_week = COALESCE(free_credits_used_week, 0)
+         WHERE free_week_start IS NULL OR free_credits_balance IS NULL OR free_credits_balance = 0`,
+        [weekStart, weeklyMb]
+      );
+    } else {
+      await db.query(
+        `UPDATE enterprise_credits
+         SET free_week_start = COALESCE(free_week_start, $1),
+             free_credits_balance = CASE
+               WHEN free_credits_balance IS NULL OR free_credits_balance = 0 THEN $2
+               ELSE free_credits_balance
+             END,
+             free_credits_used_week = COALESCE(free_credits_used_week, 0)
+         WHERE free_week_start IS NULL OR free_credits_balance IS NULL OR free_credits_balance = 0`,
+        [weekStart, weeklyMb]
+      );
+    }
+    console.log('✅ Free tier credits backfilled');
+  } catch (e) {
+    console.error('Free tier backfill error:', e);
+  }
+}
+
 async function ensurePostgresSchema() {
   try {
     const client = await db.getClient();
@@ -1819,6 +1864,7 @@ const PORT = config.port;
     await initRun;
     await ensureAdminSeed();
     await ensureAdminApiKeyAndTopup();
+    await backfillFreeTierCredits();
   } catch (e) {
     console.error('Init error:', e);
   }
