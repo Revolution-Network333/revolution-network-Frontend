@@ -5149,7 +5149,8 @@ function initializeShopPage() {
                         link = 'https://buy.stripe.com/3cIaEZgrw7c58mGaKk4gg08';
                     }
                     
-                    const buttonHTML = `<button class="profile-btn ${isPro || isEnterprise ? 'primary' : ''}" data-link="${link}" style="font-size:0.85em;padding:8px 12px;width:auto;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${btnLabel}</button>`;
+                    const priceIdAttr = p.stripePriceId ? `data-priceid="${String(p.stripePriceId).replace(/"/g,'') }"` : '';
+                    const buttonHTML = `<button class="profile-btn ${isPro || isEnterprise ? 'primary' : ''}" data-link="${link}" ${priceIdAttr} style="font-size:0.85em;padding:8px 12px;width:auto;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${btnLabel}</button>`;
 
                     let displayName = name;
                     if (isStandard) displayName = 'Standard Plan – 500 GB';
@@ -5181,14 +5182,31 @@ function initializeShopPage() {
                 subs.innerHTML = (freeTierCard + cards) || `<p style="color:#9ca3af;">${t('shop.plans.empty')}</p>`;
                 
                 document.querySelectorAll('#shop-subscriptions .plan-card button').forEach(btn => {
-                    btn.addEventListener('click', () => {
+                    btn.addEventListener('click', async () => {
                         const link = btn.getAttribute('data-link');
+                        const priceId = btn.getAttribute('data-priceid');
                         const isQuote = btn.textContent.includes('devis') || btn.textContent.includes('demander') || btn.textContent.includes('quote');
                         
                         if (isQuote) {
                             closePlansModal();
                             try { setPage('support'); } catch(e) { console.error(e); }
                             return;
+                        }
+
+                        const token = localStorage.getItem('token');
+                        if (priceId && token) {
+                            try {
+                                const r = await fetch(`${API_BASE}/api/enterprise/billing/checkout-session`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                                    body: JSON.stringify({ priceId })
+                                });
+                                const j = await r.json().catch(() => ({}));
+                                if (r.ok && j && j.url) {
+                                    window.open(j.url, '_blank', 'noopener,noreferrer');
+                                    return;
+                                }
+                            } catch {}
                         }
 
                         if (!link) {
@@ -5198,7 +5216,7 @@ function initializeShopPage() {
                         if (link.startsWith('mailto:')) {
                             window.location.href = link;
                         } else {
-                            window.open(link, '_blank');
+                            window.open(link, '_blank', 'noopener,noreferrer');
                         }
                     });
                 });
@@ -5288,6 +5306,10 @@ function initializeShopPage() {
                                     <input type="text" id="shop-payment-link" placeholder="https://buy.stripe.com/...">
                                 </div>
                                 <div>
+                                    <label>Stripe Price ID (abonnement)</label>
+                                    <input type="text" id="shop-stripe-price-id" placeholder="price_...">
+                                </div>
+                                <div>
                                     <label>Proxy host (VPN)</label>
                                     <input type="text" id="shop-proxy-host" placeholder="vpn.example.com">
                                 </div>
@@ -5352,6 +5374,7 @@ function initializeShopPage() {
                 show('#shop-gb', false);
                 show('#shop-priority', false);
                 show('#shop-payment-link', false);
+                show('#shop-stripe-price-id', false);
                 show('#shop-proxy-host', false);
                 show('#shop-proxy-port', false);
                 show('#shop-token-symbol', false);
@@ -5366,6 +5389,7 @@ function initializeShopPage() {
                     show('#shop-gb', true);
                     show('#shop-priority', true);
                     show('#shop-payment-link', true);
+                    show('#shop-stripe-price-id', true);
                 } else if (type === 'vpn') {
                     show('#shop-proxy-host', true);
                     show('#shop-proxy-port', true);
@@ -5529,6 +5553,7 @@ function initializeShopPage() {
                 const gb = document.getElementById('shop-gb');
                 const priority = document.getElementById('shop-priority');
                 const payment = document.getElementById('shop-payment-link');
+                const stripePriceId = document.getElementById('shop-stripe-price-id');
                 const isPack = document.getElementById('shop-is-pack');
                 const packAmount = document.getElementById('shop-pack-amount');
                 title.value = tr.querySelector('[data-field="title"]').textContent.trim();
@@ -5540,6 +5565,7 @@ function initializeShopPage() {
                 gb.value = '';
                 priority.value = '1';
                 payment.value = '';
+                stripePriceId.value = '';
                 isPack.value = '0';
                 packAmount.value = '';
                 try {
@@ -5549,6 +5575,7 @@ function initializeShopPage() {
                         gb.value = meta.gbPerMonth || '';
                         priority.value = meta.priority_level || '1';
                         payment.value = meta.paymentLink || '';
+                        stripePriceId.value = meta.stripePriceId || meta.priceId || meta.stripe_price_id || '';
                         document.getElementById('shop-token-symbol').value = meta.tokenSymbol || '';
                         document.getElementById('shop-unit-price').value = meta.unitPrice || '';
                         document.getElementById('shop-min-qty').value = meta.minQty || '';
@@ -5595,6 +5622,7 @@ function initializeShopPage() {
                         priority_level: parseInt(document.getElementById('shop-priority').value || '1') || 1,
                         paymentLink: (document.getElementById('shop-payment-link').value || '').trim() || undefined,
                         stripeLink: (document.getElementById('shop-payment-link').value || '').trim() || undefined,
+                        stripePriceId: (document.getElementById('shop-stripe-price-id').value || '').trim() || undefined,
                         proxyHost: (document.getElementById('shop-proxy-host').value || '').trim() || undefined,
                         proxyPort: parseInt(document.getElementById('shop-proxy-port').value || '0') || undefined,
                         tokenSymbol: (document.getElementById('shop-token-symbol').value || '').trim() || undefined,

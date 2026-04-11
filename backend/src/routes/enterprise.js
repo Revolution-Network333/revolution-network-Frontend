@@ -144,6 +144,12 @@ async function getSubscriptionPlans() {
       paymentLink: (() => {
         try { const meta = r.metadata ? JSON.parse(r.metadata) : {}; return meta.paymentLink || null; } catch { return null; }
       })(),
+      stripePriceId: (() => {
+        try {
+          const meta = r.metadata ? JSON.parse(r.metadata) : {};
+          return meta.stripePriceId || meta.priceId || meta.stripe_price_id || null;
+        } catch { return null; }
+      })(),
     }));
   } catch (e) {
     plans = [
@@ -292,6 +298,57 @@ router.get('/plans', authenticateToken, async (req, res) => {
     res.json({ plans });
   } catch (e) {
     console.error('Plans error:', e);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Create a Stripe Checkout Session for subscriptions (recommended over Payment Links)
+router.post('/billing/checkout-session', authenticateToken, express.json({ limit: '32kb' }), async (req, res) => {
+  try {
+    if (!process.env.STRIPE_SECRET_KEY) {
+      return res.status(503).json({ error: 'stripe_not_configured' });
+    }
+
+    const userId = req.user.userId;
+    const priceId = String(req.body?.priceId || '').trim();
+    if (!priceId) return res.status(400).json({ error: 'missing_price_id' });
+    if (!/^price_/i.test(priceId)) return res.status(400).json({ error: 'invalid_price_id' });
+
+    const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+    const u = await db.query('SELECT email, stripe_customer_id FROM users WHERE id = $1', [userId]);
+    const email = u.rows[0]?.email || null;
+    const customerId = u.rows[0]?.stripe_customer_id || null;
+
+    const frontendUrl = (config?.cors?.frontendUrl || process.env.FRONTEND_URL || '').replace(/\/+$/, '');
+    if (!frontendUrl) return res.status(503).json({ error: 'frontend_url_not_configured' });
+
+    // Stripe doesn't accept emails without a dot in the domain (like admin@local)
+    const isValidForStripe = (e) => {
+      if (!e) return false;
+      const parts = String(e).split('@');
+      if (parts.length !== 2) return false;
+      const domain = parts[1];
+      return domain.includes('.') && domain.length > 3;
+    };
+
+    const session = await stripe.checkout.sessions.create({
+      mode: 'subscription',
+      client_reference_id: String(userId),
+      customer: customerId || undefined,
+      customer_email: !customerId && isValidForStripe(email) ? String(email) : undefined,
+      allow_promotion_codes: true,
+      line_items: [{ price: priceId, quantity: 1 }],
+      success_url: `${frontendUrl}/?payment=success&sub=1`,
+      cancel_url: `${frontendUrl}/?payment=cancel&sub=1`,
+      metadata: {
+        user_id: String(userId),
+        kind: 'subscription',
+      }
+    });
+
+    return res.json({ url: session?.url || null, sessionId: session?.id || null });
+  } catch (e) {
+    console.error('Stripe checkout session error:', e);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
