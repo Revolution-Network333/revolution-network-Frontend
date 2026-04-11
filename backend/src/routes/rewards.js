@@ -288,6 +288,7 @@ router.get('/calendar', authenticateToken, async (req, res) => {
   }
 });
 const crypto = require('crypto');
+const { ensureEarlyAdopter } = require('../services/early-adopter');
 
 // ... (le reste du code existant)
 
@@ -340,6 +341,12 @@ router.post('/proof-of-work', authenticateToken, async (req, res) => {
                 'UPDATE users SET total_points = total_points + $1 WHERE id = $2',
                 [points, userId]
             );
+
+            try {
+              await ensureEarlyAdopter(db, userId);
+            } catch (eaErr) {
+              console.error('Early Adopter logic error (non-fatal):', eaErr);
+            }
 
             // Mettre à jour last_ping et s'assurer que la session est active
             if (sessionId) {

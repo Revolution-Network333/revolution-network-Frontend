@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('../config/database');
 const { authenticateToken } = require('../middleware/auth');
+const { ensureEarlyAdopter } = require('../services/early-adopter');
 
 const router = express.Router();
 
@@ -598,6 +599,48 @@ router.post('/reset-points', authenticateToken, checkAdmin, async (req, res) => 
         console.error('Reset points error:', error);
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
+});
+
+router.post('/early-adopter/backfill', authenticateToken, checkAdmin, async (req, res) => {
+  try {
+    const limitRaw = req.body?.limit;
+    const limit = Math.min(5000, Math.max(1, parseInt(limitRaw || '200', 10) || 200));
+
+    const q = await db.query(
+      `SELECT id
+       FROM users
+       WHERE COALESCE(total_points, 0) > 0
+          OR id IN (SELECT DISTINCT user_id FROM sessions)
+          OR id IN (SELECT DISTINCT user_id FROM rewards_ledger)
+       ORDER BY created_at ASC
+       LIMIT $1`,
+      [limit]
+    );
+
+    let processed = 0;
+    let awarded = 0;
+    let gold = 0;
+    let already = 0;
+    let errors = 0;
+
+    for (const row of (q.rows || [])) {
+      const userId = row.id;
+      processed += 1;
+      try {
+        const r = await ensureEarlyAdopter(db, userId);
+        if (r && r.already) already += 1;
+        if (r && r.awarded) awarded += 1;
+        if (r && r.isGold) gold += 1;
+      } catch (e) {
+        errors += 1;
+      }
+    }
+
+    res.json({ ok: true, processed, awarded, gold, already, errors });
+  } catch (e) {
+    console.error('Early adopter backfill error:', e);
+    res.status(500).json({ error: 'Erreur interne du serveur' });
+  }
 });
 
 // Gestion des tasks (CRUD)

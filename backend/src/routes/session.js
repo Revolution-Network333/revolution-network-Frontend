@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const db = require('../config/database');
 const { authenticateToken } = require('../middleware/auth');
 const config = require('../config');
+const { ensureEarlyAdopter } = require('../services/early-adopter');
 
 const router = express.Router();
 
@@ -111,84 +112,8 @@ router.post('/create', authenticateToken, async (req, res) => {
 
     const session = result.rows[0];
 
-    // --- EARLY ADOPTER LOGIC ---
     try {
-      // Ensure table exists (MySQL/PostgreSQL)
-      if (!db.isSQLite) {
-        await db.query(`CREATE TABLE IF NOT EXISTS early_adopters (
-          id SERIAL PRIMARY KEY,
-          user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-          is_gold BOOLEAN DEFAULT false,
-          aether_awarded INTEGER DEFAULT 0,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          UNIQUE(user_id)
-        )`);
-      }
-
-      // Check if user is already an early adopter
-      const eaCheck = await db.query('SELECT user_id FROM early_adopters WHERE user_id = $1', [userId]);
-      if (eaCheck.rows.length === 0) {
-        // Count how many gold early adopters we have
-        const eaCountRes = await db.query('SELECT COUNT(*) as count FROM early_adopters WHERE is_gold = true');
-        const eaCount = parseInt(eaCountRes.rows[0]?.count || 0);
-
-        if (eaCount < 50) {
-          // Add to early adopters
-          await db.query(
-            'INSERT INTO early_adopters (user_id, is_gold, aether_awarded) VALUES ($1, true, 100) ON CONFLICT (user_id) DO NOTHING',
-            [userId]
-          );
-
-          // Update user rank to Gold
-          await db.query("UPDATE users SET rank = 'Gold', is_rank_locked = 1 WHERE id = $1", [userId]);
-
-          // Credit 100 Aether
-          const walletCheck = await db.query('SELECT user_id FROM wallets WHERE user_id = $1', [userId]);
-          if (walletCheck.rows.length === 0) {
-            await db.query('INSERT INTO wallets (user_id, balance_ath) VALUES ($1, 100)', [userId]);
-          } else {
-            await db.query('UPDATE wallets SET balance_ath = balance_ath + 100 WHERE user_id = $1', [userId]);
-          }
-
-          // Log the wallet event
-          await db.query(
-            'INSERT INTO wallet_events (user_id, type, amount, metadata) VALUES ($1, $2, $3, $4)',
-            [userId, 'bonus', 100, JSON.stringify({ reason: 'early_adopter_reward', rank_awarded: 'Gold' })]
-          );
-
-          // --- Automatic Task Validation ---
-          // Find the early_adopter task
-          const taskRes = await db.query("SELECT id, reward_points FROM tasks WHERE type = 'early_adopter' AND active = $1 LIMIT 1", [db.isSQLite ? 1 : true]);
-          if (taskRes.rows.length > 0) {
-            const taskId = taskRes.rows[0].id;
-            const rewardPoints = parseInt(taskRes.rows[0].reward_points || 0);
-
-            // Check if task already approved
-            const utCheck = await db.query('SELECT id FROM user_tasks WHERE user_id = $1 AND task_id = $2', [userId, taskId]);
-            if (utCheck.rows.length === 0) {
-              // Approve task
-              await db.query(
-                "INSERT INTO user_tasks (user_id, task_id, status, timestamp_approved) VALUES ($1, $2, 'approved', CURRENT_TIMESTAMP)",
-                [userId, taskId]
-              );
-
-              // Award points
-              if (rewardPoints > 0) {
-                await db.query('UPDATE users SET total_points = COALESCE(total_points, 0) + $1 WHERE id = $2', [rewardPoints, userId]);
-                await db.query(
-                  'INSERT INTO rewards_ledger (user_id, amount, reason, details) VALUES ($1, $2, $3, $4)',
-                  [userId, rewardPoints, 'task', JSON.stringify({ task_id: taskId, type: 'early_adopter' })]
-                );
-              }
-            }
-          }
-
-          console.log(`🎁 User ${userId} rewarded as Early Adopter #${eaCount + 1}`);
-        } else {
-          // Just log first ping but no reward (limit reached)
-          await db.query('INSERT INTO early_adopters (user_id, is_gold, aether_awarded) VALUES ($1, false, 0) ON CONFLICT (user_id) DO NOTHING', [userId]);
-        }
-      }
+      await ensureEarlyAdopter(db, userId);
     } catch (eaErr) {
       console.error('Early Adopter logic error (non-fatal):', eaErr);
     }
