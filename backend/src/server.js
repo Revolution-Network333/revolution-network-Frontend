@@ -887,6 +887,8 @@ async function ensureMySqlSchema() {
         last_airdrop_calculation TIMESTAMP NULL,
         twofa_enabled BOOLEAN DEFAULT FALSE,
         twofa_secret VARCHAR(255),
+        free_gb_remaining DECIMAL(14,8) NOT NULL DEFAULT 3.00000000,
+        free_credits_last_reset TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         last_login TIMESTAMP NULL,
@@ -903,6 +905,13 @@ async function ensureMySqlSchema() {
       } catch (_) {
         // Column likely already exists
       }
+
+      try {
+        await client.query("ALTER TABLE users ADD COLUMN free_gb_remaining DECIMAL(14,8) NOT NULL DEFAULT 3.00000000");
+      } catch (_) {}
+      try {
+        await client.query("ALTER TABLE users ADD COLUMN free_credits_last_reset TIMESTAMP DEFAULT CURRENT_TIMESTAMP");
+      } catch (_) {}
 
       await client.query(`CREATE TABLE IF NOT EXISTS sessions (
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,

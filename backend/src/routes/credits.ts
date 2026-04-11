@@ -30,9 +30,10 @@ export async function creditRoutes(fastify: FastifyInstance, options: FastifyPlu
   fastify.get('/me', { preHandler: [authenticateApiKey] }, async (request, reply) => {
     const userId = request.user.id;
 
-    const user = await db('users')
-      .where({ id: userId })
-      .select('id', 'email', 'api_key_prefix', 'credits_balance', 'free_gb_remaining')
+    const user = await db('users as u')
+      .leftJoin('enterprise_credits as ec', 'ec.user_id', 'u.id')
+      .where({ 'u.id': userId })
+      .select('u.id', 'u.email', 'u.api_key_prefix', 'ec.credits_balance', 'u.free_gb_remaining')
       .first();
 
     if (!user) {
@@ -43,8 +44,8 @@ export async function creditRoutes(fastify: FastifyInstance, options: FastifyPlu
       id: user.id,
       email: user.email,
       api_key_masked: `${user.api_key_prefix}••••-••••-••••`,
-      balance: parseFloat(user.credits_balance),
-      free_balance_gb: parseFloat(user.free_gb_remaining)
+      balance: parseFloat(user.credits_balance || '0'),
+      free_balance_gb: parseFloat(user.free_gb_remaining || '0')
     };
   });
 

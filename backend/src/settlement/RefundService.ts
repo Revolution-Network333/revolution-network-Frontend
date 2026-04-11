@@ -41,12 +41,15 @@ export class RefundService {
         const gbCost = parseFloat(jobTypeConfig?.gb_cost_internal || '0');
         await trx('users').where({ id: job.user_id }).increment('free_gb_remaining', gbCost);
       } else {
-        await trx('users').where({ id: job.user_id }).increment('credits_balance', cost); 
+        await trx('enterprise_credits').where({ user_id: job.user_id }).increment('credits_balance', cost); 
       }
  
       // 2. Refetch du solde global
       const [[updated]] = await trx.raw( 
-        'SELECT credits_balance, free_gb_remaining FROM users WHERE id = ?', 
+        `SELECT u.free_gb_remaining, ec.credits_balance 
+         FROM users u
+         LEFT JOIN enterprise_credits ec ON ec.user_id = u.id
+         WHERE u.id = ?`, 
         [job.user_id] 
       ); 
  

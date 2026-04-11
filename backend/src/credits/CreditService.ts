@@ -24,14 +24,26 @@ export class CreditService {
   ): Promise<{ credits_charged: number; is_free: boolean }> { 
  
     return db.transaction(async (trx) => { 
-      // 1. Lock exclusif utilisateur
+      // 1. Lock exclusif utilisateur avec ses crédits
       const [[user]] = await trx.raw( 
-        `SELECT id, credits_balance, free_gb_remaining, free_credits_last_reset, is_active 
-         FROM users WHERE id = ? FOR UPDATE`, 
+        `SELECT u.id, ec.credits_balance, u.free_gb_remaining, u.free_credits_last_reset, u.is_active 
+         FROM users u
+         LEFT JOIN enterprise_credits ec ON ec.user_id = u.id
+         WHERE u.id = ? FOR UPDATE`, 
         [userId] 
       ); 
  
       if (!user || !user.is_active) throw new UnauthorizedError(); 
+
+      // S'assurer que enterprise_credits existe
+      if (user.credits_balance === null) {
+        await trx('enterprise_credits').insert({
+          user_id: userId,
+          credits_balance: 0,
+          credits_used_month: 0
+        });
+        user.credits_balance = 0;
+      }
 
       // 2. Reset hebdomadaire du quota gratuit (si nécessaire)
       const lastReset = new Date(user.free_credits_last_reset);
@@ -70,14 +82,18 @@ export class CreditService {
         isFree = true;
       } else if (parseFloat(user.credits_balance) >= cost) {
         // Utilisation des crédits payants
-        await trx('users').where({ id: userId }).decrement('credits_balance', cost);
+        await trx('enterprise_credits').where({ user_id: userId }).decrement('credits_balance', cost);
+        isFree = false;
       } else {
         throw new InsufficientCreditsError(parseFloat(user.credits_balance), cost); 
       }
  
       // 5. Refetch pour le ledger
       const [[updated]] = await trx.raw( 
-        'SELECT credits_balance, free_gb_remaining FROM users WHERE id = ?', 
+        `SELECT u.free_gb_remaining, ec.credits_balance 
+         FROM users u
+         LEFT JOIN enterprise_credits ec ON ec.user_id = u.id
+         WHERE u.id = ?`, 
         [userId] 
       ); 
  
