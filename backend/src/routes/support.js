@@ -88,6 +88,29 @@ router.get('/tickets', authenticateToken, async (req, res) => {
   }
 });
 
+// Statistiques utilisateur (pour notification unread)
+router.get('/stats', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const result = await db.query(
+      `SELECT 
+        SUM(CASE WHEN status = 'pending_user' THEN 1 ELSE 0 END) as unread_count,
+        SUM(CASE WHEN status != 'closed' THEN 1 ELSE 0 END) as open_count,
+        COUNT(*) as total_count
+      FROM support_tickets
+      WHERE user_id = $1`,
+      [userId]
+    );
+    const unread_count = parseInt(result.rows[0]?.unread_count || 0);
+    const open_count = parseInt(result.rows[0]?.open_count || 0);
+    const total_count = parseInt(result.rows[0]?.total_count || 0);
+    res.json({ unread_count, open_count, total_count });
+  } catch (error) {
+    console.error('User support stats error:', error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
 // Obtenir un ticket et ses messages
 router.get('/tickets/:id', authenticateToken, async (req, res) => {
   try {
@@ -117,6 +140,18 @@ router.get('/tickets/:id', authenticateToken, async (req, res) => {
     }
 
     if (!ticket) return res.status(404).json({ error: 'Ticket non trouvé' });
+
+    // Mark as read (clear unread) when opened by the side that should read it
+    try {
+      if (isAdmin && ticket.status === 'pending_admin') {
+        await db.query("UPDATE support_tickets SET status = 'open', updated_at = CURRENT_TIMESTAMP WHERE id = $1", [ticketId]);
+        ticket.status = 'open';
+      }
+      if (!isAdmin && ticket.status === 'pending_user') {
+        await db.query("UPDATE support_tickets SET status = 'open', updated_at = CURRENT_TIMESTAMP WHERE id = $1 AND user_id = $2", [ticketId, userId]);
+        ticket.status = 'open';
+      }
+    } catch {}
 
     const messages = await db.query(
       `SELECT m.*, u.username, u.profile_picture_url 
