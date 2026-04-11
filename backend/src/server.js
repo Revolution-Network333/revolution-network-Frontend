@@ -1123,6 +1123,9 @@ async function ensureMySqlSchema() {
         user_id BIGINT UNSIGNED NOT NULL,
         credits_balance BIGINT DEFAULT 0,
         credits_used_month BIGINT DEFAULT 0,
+        free_credits_balance BIGINT DEFAULT 0,
+        free_credits_used_week BIGINT DEFAULT 0,
+        free_week_start TIMESTAMP NULL,
         bandwidth_limit_gb INTEGER DEFAULT 0,
         priority_level INTEGER DEFAULT 1,
         reset_date TIMESTAMP NULL,
@@ -1137,6 +1140,15 @@ async function ensureMySqlSchema() {
       } catch (e) {}
       try {
         await client.query("ALTER TABLE enterprise_credits ADD COLUMN priority_level INTEGER DEFAULT 1");
+      } catch (e) {}
+      try {
+        await client.query("ALTER TABLE enterprise_credits ADD COLUMN free_credits_balance BIGINT DEFAULT 0");
+      } catch (e) {}
+      try {
+        await client.query("ALTER TABLE enterprise_credits ADD COLUMN free_credits_used_week BIGINT DEFAULT 0");
+      } catch (e) {}
+      try {
+        await client.query("ALTER TABLE enterprise_credits ADD COLUMN free_week_start TIMESTAMP NULL");
       } catch (e) {}
 
       await client.query(`CREATE TABLE IF NOT EXISTS jobs (

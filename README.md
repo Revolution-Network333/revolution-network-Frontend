@@ -1,112 +1,28 @@
-# 🌐 Revolution Network
+# Revolution Network — API Integration Guide
 
-**Revolution Network** is a decentralized P2P ecosystem designed for bandwidth sharing with an integrated rewards system. This project combines a robust backend architecture with a desktop application to provide a smooth and secure user experience.
+This repository contains the Revolution Network platform.
 
----
+This README is intended to provide **only** the information required for developers to integrate with the API (authentication, endpoints, webhooks, SDK).
 
-## 🔍 What is Revolution Network?
-
-Revolution Network is a Decentralized Physical Infrastructure Network (**DePIN**) that allows users to monetize their unused bandwidth. By transforming every connected device into an active network node, we create a distributed, resilient, and high-performance data transport layer.
+Copyright (c) Revolution Network. **All rights reserved.**
 
 ---
 
-## ⚙️ How it works
-
-The network operational flow follows a simple contribution model:
-
-`User → Node → Network → Contribution → Rewards (Aether ATH)`
-
-1.  **User**: Installs and configures the application.
-2.  **Node**: The device becomes a point of presence on the network.
-3.  **Network**: Resources are aggregated to meet infrastructure needs.
-4.  **Contribution**: Real-time measurement of shared bandwidth.
-5.  **Rewards**: Automatic distribution of ATH tokens based on actual contribution.
-
----
-
-## 💎 Aether (ATH)
-
-**Aether (ATH)** is the native utility token of Revolution Network. It serves as the economic engine for the ecosystem:
-- **Rewards**: Financial incentive for node operators based on their uptime and shared volume.
-- **Governance & Participation**: Access to advanced network services and active participation in the infrastructure.
-
----
-
-## 🚀 Get Started
-
-Ready to join the network?
-- **Run a Node**: The mining application is currently under development (WIP / Coming Soon).
-- **Join Discord**: [Join our community](https://discord.gg/eadE7uK6ss) for support and discussions.
-- **Follow us on X**: Follow [@revo_network_](https://x.com/revo_network_) for the latest official announcements.
-
----
-
-## 🚀 Key Features
-
-- **P2P Sharing (WebRTC):** Bandwidth optimization via decentralized communication protocols.
-- **Rewards System:** Integrated mechanism to reward users sharing their resources.
-- **Enhanced Security:** JWT authentication, rate-limiting protection, and security headers (Helmet).
-- **Multi-layer Architecture:** Clear separation between backend, desktop application, and utility scripts.
-- **Multi-DB Compatibility:** Support for MySQL (Production) and SQLite (Local development).
-
----
-
-## 📁 Project Structure
-
-- **`/backend`**: The core of the system. Express REST API handling authentication, transactions, and tasks.
-- **`/desktop-app`**: Client application (Electron/JS) allowing users to connect to the network.
-- **`/src`**: Relay server (Proxy) to facilitate deployment on platforms like Render.
-- **`/scripts`**: Utility tools for icon generation and API key management.
-
----
-
-## 🛠️ Installation and Configuration
-
-### Prerequisites
-
-- Node.js (v18+)
-- MySQL (or SQLite for local development)
-
-### Local Installation
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/Revolution-Network333/Revolution-Network.git
-    cd Revolution-Network
-    ```
-
-2.  **Install dependencies (Root and Backend):**
-    ```bash
-    npm install
-    ```
-    *(The post-install script will automatically install dependencies in the `/backend` folder)*
-
-3.  **Configure environment variables:**
-    Create a `.env` file in the `/backend` folder based on `env-example.txt`:
-    ```env
-    PORT=3000
-    MYSQL_URL=your_mysql_url
-    JWT_SECRET=your_jwt_secret
-    GOOGLE_CLIENT_ID=your_google_id
-    ```
-
-4.  **Start the server:**
-    ```bash
-    npm start
-    ```
-
----
-
-## 🔌 Enterprise API (Developer Access)
+## API Overview
 
 ### Base URL
 
 - Local: `http://localhost:3000/api/enterprise`
 - Production: `https://revolution-backend-sal2.onrender.com/api/enterprise`
 
+### OpenAPI / Swagger
+
+- OpenAPI JSON: `GET /openapi.json`
+- Swagger UI: `GET /docs`
+
 ### Authentication
 
-There are 2 ways to authenticate, depending on the endpoint:
+There are 2 authentication layers:
 
 #### 1) User session (JWT) for account endpoints
 
@@ -133,7 +49,10 @@ This returns `fullKey` once so you can store it securely.
 
 #### 2) API key for /v1 endpoints
 
-Use `x-api-key: <your_api_key>` for all `/api/enterprise/v1/*` endpoints.
+Use either header for all `/api/enterprise/v1/*` endpoints:
+
+- `x-api-key: <your_api_key>`
+- `Authorization: Bearer <your_api_key>`
 
 Example:
 
@@ -153,6 +72,10 @@ When you do not have an active subscription (Free tier):
 - **30 requests / minute**
 - **Video jobs disabled** (`type = video_transcode`)
 
+You can query limits programmatically:
+
+- `GET /api/enterprise/v1/limits`
+
 ### Main endpoints
 
 - `POST /api/enterprise/v1/jobs`
@@ -163,30 +86,67 @@ When you do not have an active subscription (Free tier):
 
 ---
 
-## ☁️ Deployment (Render)
+## Webhooks (job status notifications)
 
-To deploy on Render, use the following settings:
+Webhooks are managed via API key auth on `/api/enterprise/v1/webhooks`.
 
-- **Root Directory:** *(Leave empty)*
-- **Build Command:** `npm install`
-- **Start Command:** `npm start`
+### Endpoints
 
-The relay server at the root will automatically launch the backend located in the sub-folder.
+- `GET /api/enterprise/v1/webhooks`
+- `POST /api/enterprise/v1/webhooks`
+- `DELETE /api/enterprise/v1/webhooks/:id`
+
+### Events
+
+- `job.completed`
+- `job.failed`
+
+### Delivery & signature
+
+Webhook POST requests include:
+
+- `X-Revolution-Event`
+- `X-Revolution-Timestamp`
+- `X-Revolution-Signature`
+
+The signature is an HMAC computed with your webhook `secret` (returned **only on creation**). You should:
+
+- validate the signature
+- reject timestamps that are too old
 
 ---
 
-## 📝 Additional Documentation
+## Node.js SDK
 
-For more details on specific modules, refer to the following files:
-- [DOCUMENTATION.md](./DOCUMENTATION.md): API technical details.
-- [QUICKSTART.md](./QUICKSTART.md): Quick start guide for new developers.
-- [STATUS.md](./STATUS.md): Current development status and roadmap.
+An npm SDK is available in this repository under `revolution-sdk`.
+
+### Features
+
+- Create / list / get jobs
+- Fetch limits
+- Manage webhooks
+
+### Example
+
+```js
+const { RevolutionAPI } = require('revolution-sdk');
+
+const api = new RevolutionAPI({
+  apiKey: process.env.REVOLUTION_API_KEY,
+  baseUrl: 'https://revolution-backend-sal2.onrender.com',
+  authMode: 'x-api-key'
+});
+
+async function main() {
+  const job = await api.createJob('http_get', { url: 'https://example.com' });
+  console.log('job', job);
+}
+
+main();
+```
 
 ---
 
-## ⚖️ License
+## Support
 
-This project is licensed under the **MIT** License. See the [LICENSE](./LICENSE) file for more details.
-
----
-*Developed with ❤️ by the Revolution Network team.*
+- Discord: https://discord.gg/eadE7uK6ss
