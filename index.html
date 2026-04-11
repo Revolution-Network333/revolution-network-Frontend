@@ -390,6 +390,11 @@
                 'profile.solana': 'Adresse Solana',
                 'profile.save': 'Enregistrer',
                 'profile.logout': 'Se déconnecter',
+                'profile.subscription.title': 'Abonnement',
+                'profile.subscription.manage': 'Gérer mon abonnement',
+                'profile.subscription.hint': 'Ouvrir la gestion Stripe (paiement, annulation, factures).',
+                'profile.subscription.no_customer': "Aucun abonnement Stripe trouvé pour ce compte.",
+                'profile.subscription.unavailable': "Gestion d'abonnement indisponible pour le moment.",
                 'profile.referrals.total': 'Parrainages',
                 'profile.referrals.active': 'Actifs',
                 'profile.rank.progress': 'Progression de rang',
@@ -966,6 +971,11 @@
                 'profile.solana': 'Solana address',
                 'profile.save': 'Save',
                 'profile.logout': 'Log out',
+                'profile.subscription.title': 'Subscription',
+                'profile.subscription.manage': 'Manage my subscription',
+                'profile.subscription.hint': 'Open Stripe billing portal (payment, cancel, invoices).',
+                'profile.subscription.no_customer': 'No Stripe subscription found for this account.',
+                'profile.subscription.unavailable': 'Subscription management is unavailable right now.',
                 'profile.referrals.total': 'Referrals',
                 'profile.referrals.active': 'Active',
                 'profile.rank.progress': 'Rank progress',
@@ -1292,6 +1302,11 @@
                 'profile.solana': 'Dirección Solana',
                 'profile.save': 'Guardar',
                 'profile.logout': 'Cerrar sesión',
+                'profile.subscription.title': 'Suscripción',
+                'profile.subscription.manage': 'Gestionar mi suscripción',
+                'profile.subscription.hint': 'Abrir el portal de Stripe (pago, cancelar, facturas).',
+                'profile.subscription.no_customer': 'No se encontró una suscripción Stripe para esta cuenta.',
+                'profile.subscription.unavailable': 'La gestión de suscripción no está disponible ahora.',
                 'profile.referrals.total': 'Referidos',
                 'profile.referrals.active': 'Activos',
                 'profile.rank.progress': 'Progreso de rango',
@@ -3171,6 +3186,12 @@ main();</code></pre>
                                     </div>
 
                                     <div class="profile-section-card">
+                                        <h3 class="profile-section-title">${t('profile.subscription.title')}</h3>
+                                        <div class="section-info-bubble profile-info-bubble">${t('profile.subscription.hint')}</div>
+                                        <button type="button" id="manage-subscription-btn" class="profile-btn primary">${t('profile.subscription.manage')}</button>
+                                    </div>
+
+                                    <div class="profile-section-card">
                                         <h3 class="profile-section-title">${t('profile.2fa.title')}</h3>
                                         <div id="twofa-info" class="section-info-bubble profile-info-bubble">
                                             ${t('profile.2fa.info')}
@@ -3230,6 +3251,7 @@ main();</code></pre>
             const twofaManual = document.getElementById('twofa-manual');
             const twofaSecretEl = document.getElementById('twofa-secret');
             const twofaCopySecret = document.getElementById('twofa-copy-secret');
+            const manageSubscriptionBtn = document.getElementById('manage-subscription-btn');
 
             function formatPoints(n) {
                 const v = Number(n || 0);

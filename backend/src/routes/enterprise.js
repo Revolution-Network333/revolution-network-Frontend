@@ -296,6 +296,37 @@ router.get('/plans', authenticateToken, async (req, res) => {
   }
 });
 
+// Stripe billing portal (manage subscription)
+router.get('/billing/portal', authenticateToken, async (req, res) => {
+  try {
+    if (!process.env.STRIPE_SECRET_KEY) {
+      return res.status(503).json({ error: 'stripe_not_configured' });
+    }
+
+    const userId = req.user.userId;
+    const u = await db.query('SELECT email, stripe_customer_id FROM users WHERE id = $1', [userId]);
+    const customerId = u.rows[0]?.stripe_customer_id || null;
+
+    if (!customerId) {
+      return res.status(404).json({ error: 'no_stripe_customer' });
+    }
+
+    const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+    const frontendUrl = (config?.cors?.frontendUrl || process.env.FRONTEND_URL || '').replace(/\/+$/, '');
+    const returnUrl = frontendUrl ? `${frontendUrl}/?page=profile` : undefined;
+
+    const session = await stripe.billingPortal.sessions.create({
+      customer: customerId,
+      return_url: returnUrl,
+    });
+
+    res.json({ url: session?.url || null });
+  } catch (e) {
+    console.error('Stripe billing portal error:', e);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Jobs API v1
 
 // Resolve API authentication for /v1/* routes (token or x-api-key)
