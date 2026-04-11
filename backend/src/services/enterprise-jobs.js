@@ -3,6 +3,95 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
+const crypto = require('crypto');
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function httpJsonPost(urlString, payload, headers = {}, timeoutMs = 8000) {
+  return new Promise((resolve, reject) => {
+    let u;
+    try { u = new URL(urlString); } catch { return reject(new Error('invalid_url')); }
+    const mod = u.protocol === 'https:' ? https : http;
+    const data = Buffer.from(JSON.stringify(payload));
+    const opts = {
+      method: 'POST',
+      hostname: u.hostname,
+      port: u.port || (u.protocol === 'https:' ? 443 : 80),
+      path: `${u.pathname || '/'}${u.search || ''}`,
+      timeout: timeoutMs,
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': data.length,
+        ...headers,
+      },
+    };
+    const req = mod.request(opts, (res) => {
+      const chunks = [];
+      res.on('data', c => chunks.push(c));
+      res.on('end', () => {
+        const body = Buffer.concat(chunks).toString('utf8');
+        resolve({ status: res.statusCode || 0, body });
+      });
+    });
+    req.on('timeout', () => {
+      try { req.destroy(new Error('timeout')); } catch {}
+    });
+    req.on('error', reject);
+    req.write(data);
+    req.end();
+  });
+}
+
+async function deliverEnterpriseWebhooks(db, userId, eventType, eventPayload) {
+  try {
+    const activeClause = db.isSQLite ? 'active = 1' : (db.isMySQL ? 'active = 1' : 'active = TRUE');
+    const r = await db.query(
+      `SELECT id, url, secret, events_json
+       FROM enterprise_webhooks
+       WHERE user_id = $1 AND ${activeClause}`,
+      [userId]
+    );
+    const rows = r.rows || [];
+    if (!rows.length) return;
+
+    const now = Date.now();
+    const payload = {
+      id: crypto.randomUUID(),
+      type: eventType,
+      createdAt: new Date(now).toISOString(),
+      data: eventPayload,
+    };
+
+    await Promise.allSettled(rows.map(async (w) => {
+      const events = (() => { try { return w.events_json ? JSON.parse(w.events_json) : []; } catch { return []; } })();
+      if (Array.isArray(events) && events.length && !events.includes(eventType)) return;
+
+      const ts = String(now);
+      const base = `${ts}.${JSON.stringify(payload)}`;
+      const sig = crypto.createHmac('sha256', String(w.secret || '')).update(base).digest('hex');
+      const headers = {
+        'X-Revolution-Event': eventType,
+        'X-Revolution-Timestamp': ts,
+        'X-Revolution-Signature': `sha256=${sig}`,
+      };
+
+      const delays = [0, 1000, 3000];
+      for (let i = 0; i < delays.length; i++) {
+        if (delays[i]) await sleep(delays[i]);
+        try {
+          const resp = await httpJsonPost(w.url, payload, headers, 8000);
+          if (resp.status >= 200 && resp.status < 300) return;
+        } catch (_) {
+          // retry
+        }
+      }
+    }));
+  } catch (_) {
+    // swallow
+  }
+}
 
 class EnterpriseJobsService {
   constructor(db) {
@@ -42,6 +131,7 @@ class EnterpriseJobsService {
             );
           }
           await this.db.query("UPDATE jobs SET status = 'completed', updated_at = CURRENT_TIMESTAMP WHERE id = $1", [job.id]);
+          await deliverEnterpriseWebhooks(this.db, job.user_id, 'job.completed', { job_id: job.id, type: job.type, status: 'completed', result: out });
         } catch (err) {
           if (this.db.isSQLite) {
             await this.db.query("INSERT OR REPLACE INTO job_results (job_id, result_json, error_text) VALUES ($1, NULL, $2)", [job.id, String(err.message || err)]);
@@ -52,6 +142,7 @@ class EnterpriseJobsService {
             );
           }
           await this.db.query("UPDATE jobs SET status = 'failed', updated_at = CURRENT_TIMESTAMP WHERE id = $1", [job.id]);
+          await deliverEnterpriseWebhooks(this.db, job.user_id, 'job.failed', { job_id: job.id, type: job.type, status: 'failed', error: String(err.message || err) });
           const cost = this.costFor(job.type, params);
           try {
             const owner = await this.db.query('SELECT user_id FROM jobs WHERE id = $1', [job.id]);

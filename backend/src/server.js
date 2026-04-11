@@ -548,6 +548,18 @@ async function ensureSqliteMigrations() {
       const sCols = (sInfo.rows || []).map(r => r.name);
       if (!sCols.includes('name')) await run("ALTER TABLE sessions ADD COLUMN name TEXT");
     } catch {}
+
+    try {
+      await db.query(`CREATE TABLE IF NOT EXISTS enterprise_webhooks (
+        id TEXT PRIMARY KEY,
+        user_id INTEGER NOT NULL,
+        url TEXT NOT NULL,
+        secret TEXT NOT NULL,
+        events_json TEXT,
+        active INTEGER DEFAULT 1,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )`);
+    } catch {}
     console.log('✅ SQLite migrations ensured for users table');
   } catch (e) {
     console.error('SQLite migration error:', e);
@@ -912,6 +924,18 @@ async function ensurePostgresSchema() {
         await client.query("ALTER TABLE sessions ADD COLUMN name TEXT");
         console.log('✅ Colonne sessions.name ajoutée');
       }
+
+      try {
+        await client.query(`CREATE TABLE IF NOT EXISTS enterprise_webhooks (
+          id TEXT PRIMARY KEY,
+          user_id BIGINT NOT NULL,
+          url TEXT NOT NULL,
+          secret TEXT NOT NULL,
+          events_json TEXT,
+          active BOOLEAN DEFAULT TRUE,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )`);
+      } catch (_) {}
     } finally {
       client.release();
     }
@@ -1054,6 +1078,18 @@ async function ensureMySqlSchema() {
         INDEX idx_peer_connections_session (session_id),
         INDEX idx_peer_connections_peer_user (peer_user_id),
         CONSTRAINT fk_peer_connections_session FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+
+      await client.query(`CREATE TABLE IF NOT EXISTS enterprise_webhooks (
+        id VARCHAR(64) NOT NULL,
+        user_id BIGINT UNSIGNED NOT NULL,
+        url TEXT NOT NULL,
+        secret TEXT NOT NULL,
+        events_json TEXT,
+        active TINYINT(1) DEFAULT 1,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        INDEX idx_enterprise_webhooks_user (user_id)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
 
       await client.query(`CREATE TABLE IF NOT EXISTS referrals (
@@ -1759,6 +1795,152 @@ app.get('/api/leaderboard', async (req, res) => {
 });
 
 // API Routes
+app.get('/openapi.json', (req, res) => {
+  const serverUrl = (config && config.cors && config.cors.frontendUrl) ? 'https://revolution-backend-sal2.onrender.com' : `http://localhost:${config.port}`;
+  res.json({
+    openapi: '3.0.3',
+    info: {
+      title: 'Revolution API',
+      version: '1.0.0',
+    },
+    servers: [{ url: serverUrl }],
+    components: {
+      securitySchemes: {
+        ApiKeyHeader: { type: 'apiKey', in: 'header', name: 'x-api-key' },
+        BearerApiKey: { type: 'http', scheme: 'bearer', bearerFormat: 'apiKey' },
+      },
+      schemas: {
+        ErrorResponse: {
+          type: 'object',
+          properties: {
+            error: { type: 'string' },
+            message: { type: 'string' },
+            required: { type: 'number' },
+            balance: { type: 'number' },
+            weekly_limit: { type: 'number' },
+          },
+        },
+        CreateJobRequest: {
+          type: 'object',
+          required: ['type'],
+          properties: {
+            type: { type: 'string', example: 'http_get' },
+            params: { type: 'object', additionalProperties: true },
+          },
+        },
+        CreateJobResponse: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer' },
+            status: { type: 'string', example: 'queued' },
+          },
+        },
+      },
+    },
+    paths: {
+      '/api/enterprise/v1/limits': {
+        get: {
+          summary: 'Get API limits and capabilities',
+          security: [{ ApiKeyHeader: [] }, { BearerApiKey: [] }],
+          responses: {
+            200: { description: 'OK' },
+            401: { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } },
+          },
+        },
+      },
+      '/api/enterprise/v1/jobs': {
+        post: {
+          summary: 'Create a job',
+          security: [{ ApiKeyHeader: [] }, { BearerApiKey: [] }],
+          requestBody: {
+            required: true,
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/CreateJobRequest' } } },
+          },
+          responses: {
+            200: { description: 'Created', content: { 'application/json': { schema: { $ref: '#/components/schemas/CreateJobResponse' } } } },
+            400: { description: 'Bad request', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } },
+            401: { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } },
+            402: { description: 'Payment required / quota exceeded', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } },
+            403: { description: 'Forbidden', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } },
+          },
+        },
+        get: {
+          summary: 'List jobs',
+          security: [{ ApiKeyHeader: [] }, { BearerApiKey: [] }],
+          responses: {
+            200: { description: 'OK' },
+            401: { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } },
+          },
+        },
+      },
+      '/api/enterprise/v1/jobs/{id}': {
+        get: {
+          summary: 'Get job details',
+          security: [{ ApiKeyHeader: [] }, { BearerApiKey: [] }],
+          parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'integer' } }],
+          responses: {
+            200: { description: 'OK' },
+            401: { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } },
+            404: { description: 'Not found', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } },
+          },
+        },
+      },
+      '/api/enterprise/v1/jobs/{id}/result': {
+        get: {
+          summary: 'Get job result',
+          security: [{ ApiKeyHeader: [] }, { BearerApiKey: [] }],
+          parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'integer' } }],
+          responses: {
+            200: { description: 'OK' },
+            401: { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } },
+            403: { description: 'Forbidden', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } },
+          },
+        },
+      },
+      '/api/enterprise/me': {
+        get: {
+          summary: 'Get user enterprise status (dashboard)',
+          security: [],
+          responses: {
+            200: { description: 'OK' },
+            401: { description: 'Unauthorized', content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } } },
+          },
+        },
+      },
+    },
+  });
+});
+
+app.get('/docs', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.end(`<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Revolution API Docs</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
+    <style>
+      body { margin:0; background:#0b0f14; }
+      .topbar { display:none; }
+    </style>
+  </head>
+  <body>
+    <div id="swagger-ui"></div>
+    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <script>
+      window.ui = SwaggerUIBundle({
+        url: '/openapi.json',
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        persistAuthorization: true,
+        displayRequestDuration: true
+      });
+    </script>
+  </body>
+</html>`);
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/session', sessionRoutes);

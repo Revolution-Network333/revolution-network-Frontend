@@ -72,7 +72,20 @@ async function ensureFreeTierWeek(userId) {
 }
 
 async function getUserIdFromApiKey(req) {
-  const apiKey = req.headers['x-api-key'];
+  let apiKey = req.headers['x-api-key'];
+  if (!apiKey) apiKey = req.headers['x-api-key'.toLowerCase()];
+  if (!apiKey) apiKey = req.headers['x-api-key'.toUpperCase()];
+
+  if (!apiKey) {
+    const authHeader = req.headers['authorization'];
+    if (authHeader && typeof authHeader === 'string') {
+      const parts = authHeader.split(' ');
+      if (parts.length === 2 && /^bearer$/i.test(parts[0])) {
+        apiKey = parts[1];
+      }
+    }
+  }
+
   if (!apiKey) return null;
   
   // Check against static Enterprise API Key if set
@@ -210,10 +223,13 @@ router.get('/me', authenticateToken, async (req, res) => {
     const isAdmin = (u.rows[0]?.username === 'korn666') || ((u.rows[0]?.role || '').toLowerCase() === 'admin');
 
     let credits = { credits_balance: 0, credits_used_month: 0, bandwidth_limit_gb: 0, priority_level: 1 };
+    let free = { free_credits_balance: FREE_TIER_WEEKLY_MB, free_credits_used_week: 0, free_week_start: startOfWeekUTCISO(new Date()) };
     try {
       await ensureEnterpriseRecords(userId);
-      const cRes = await db.query('SELECT credits_balance, credits_used_month, bandwidth_limit_gb, priority_level FROM enterprise_credits WHERE user_id = $1', [userId]);
+      await ensureFreeTierWeek(userId);
+      const cRes = await db.query('SELECT credits_balance, credits_used_month, bandwidth_limit_gb, priority_level, free_credits_balance, free_credits_used_week, free_week_start FROM enterprise_credits WHERE user_id = $1', [userId]);
       credits = cRes.rows[0] || credits;
+      free = cRes.rows[0] || free;
     } catch {}
     const subscribed = await hasActiveSubscription(userId);
     
@@ -227,11 +243,21 @@ router.get('/me', authenticateToken, async (req, res) => {
 
     const payload = {
       apiKeyMasked: maskKey(),
+      subscribed: isAdmin ? true : !!subscribed,
       usage: { 
         usedGB: parseFloat(usedGB), 
         remainingGB: parseFloat(remainingGB),
         limitGB: limitGB,
         percentUsed: limitGB > 0 ? Math.min(100, (parseFloat(usedGB) / limitGB) * 100).toFixed(1) : 0
+      },
+      freeTier: {
+        weekStart: credits.free_week_start || free.free_week_start || null,
+        weeklyLimitGB: 3,
+        usedGB: parseFloat(((Number(credits.free_credits_used_week || 0)) / 1024).toFixed(2)),
+        remainingGB: parseFloat(((Number(credits.free_credits_balance || 0)) / 1024).toFixed(2)),
+        maxJobGB: 0.2,
+        requestsPerMinute: 30,
+        videoEnabled: false,
       },
       priority: credits.priority_level === 3 ? 'Ultra' : (credits.priority_level === 2 ? 'Haute' : 'Standard'),
       requireSubscription: false,
@@ -299,6 +325,94 @@ const freeTierLimiter = rateLimit({
   keyGenerator: (req) => String(req.enterpriseUserId || req.ip || 'unknown'),
   skip: (req) => !!req.enterpriseIsPremium,
   message: { error: 'too_many_requests', message: 'Free tier limit: 30 requests per minute.' }
+});
+
+router.get('/v1/limits', freeTierLimiter, async (req, res) => {
+  try {
+    res.json({
+      auth: {
+        headers: ['x-api-key', 'Authorization: Bearer <apiKey>'],
+      },
+      freeTier: {
+        weeklyLimitGB: 3,
+        maxJobGB: 0.2,
+        requestsPerMinute: 30,
+        videoEnabled: false,
+      },
+      jobTypes: ['http_get','http_post','ping','dns_lookup','content_check','csv_stats','image_svg_generate','audio_convert','video_transcode','text_transform','text_generate_template','code_run_js','ocr_pdf','data_job'],
+    });
+  } catch (e) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.get('/v1/webhooks', freeTierLimiter, async (req, res) => {
+  try {
+    const userId = req.enterpriseUserId;
+    const activeClause = db.isSQLite ? 'active = 1' : (db.isMySQL ? 'active = 1' : 'active = TRUE');
+    const r = await db.query(
+      `SELECT id, url, events_json, active, created_at
+       FROM enterprise_webhooks
+       WHERE user_id = $1 AND ${activeClause}
+       ORDER BY created_at DESC`,
+      [userId]
+    );
+    res.json({
+      webhooks: (r.rows || []).map(w => ({
+        id: w.id,
+        url: w.url,
+        events: (() => { try { return w.events_json ? JSON.parse(w.events_json) : []; } catch { return []; } })(),
+        active: !!w.active,
+        createdAt: w.created_at,
+      }))
+    });
+  } catch (e) {
+    console.error('List webhooks error:', e);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.post('/v1/webhooks', freeTierLimiter, express.json({ limit: '256kb' }), async (req, res) => {
+  try {
+    const userId = req.enterpriseUserId;
+    const { url, events, secret } = req.body || {};
+    if (!url || typeof url !== 'string') return res.status(400).json({ error: 'invalid_url' });
+
+    let parsed;
+    try { parsed = new URL(url); } catch { return res.status(400).json({ error: 'invalid_url' }); }
+    if (!/^https?:$/.test(parsed.protocol)) return res.status(400).json({ error: 'invalid_url' });
+
+    const allowedEvents = ['job.completed', 'job.failed'];
+    const eventsArr = Array.isArray(events) ? events.filter(e => allowedEvents.includes(e)) : allowedEvents;
+    const whSecret = (secret && typeof secret === 'string' && secret.length >= 8)
+      ? secret
+      : crypto.randomBytes(24).toString('hex');
+
+    const activeValue = (db.isSQLite || db.isMySQL) ? 1 : true;
+    const id = crypto.randomUUID();
+    await db.query(
+      'INSERT INTO enterprise_webhooks (id, user_id, url, secret, events_json, active) VALUES ($1, $2, $3, $4, $5, $6)',
+      [id, userId, url, whSecret, JSON.stringify(eventsArr), activeValue]
+    );
+    res.json({ id, url, events: eventsArr, secret: whSecret });
+  } catch (e) {
+    console.error('Create webhook error:', e);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.delete('/v1/webhooks/:id', freeTierLimiter, async (req, res) => {
+  try {
+    const userId = req.enterpriseUserId;
+    const id = String(req.params.id || '');
+    if (!id) return res.status(400).json({ error: 'invalid_id' });
+    const activeValue = (db.isSQLite || db.isMySQL) ? 0 : false;
+    await db.query('UPDATE enterprise_webhooks SET active = $1 WHERE id = $2 AND user_id = $3', [activeValue, id, userId]);
+    res.json({ ok: true });
+  } catch (e) {
+    console.error('Delete webhook error:', e);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 router.post('/v1/jobs', freeTierLimiter, async (req, res) => {

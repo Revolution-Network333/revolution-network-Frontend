@@ -79,6 +79,16 @@
                     </svg>
                     <span data-i18n="menu.enterprise_api">API</span>
                 </button>
+                <button id="menu-docs" class="menu-item" onclick="setPage('docs')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <span data-i18n="menu.docs">Docs</span>
+                </button>
                 <button id="menu-tasks" class="menu-item" onclick="setPage('tasks')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="20 6 9 17 4 12"></polyline>
@@ -267,6 +277,7 @@
                 'menu.download': 'Download App',
                 'menu.profile': 'Profil',
                 'menu.enterprise_api': 'API',
+                'menu.docs': 'Docs',
                 'menu.tasks': 'Tasks',
                 'menu.leaderboard': 'Leaderboard',
                 'menu.admin': 'Admin',
@@ -286,6 +297,47 @@
                 'support.admin.title': 'Gestion Support',
                 'support.user_details': 'Détails Utilisateur',
                 'support.user_since': 'Membre depuis',
+                'docs.title': 'Documentation',
+                'docs.subtitle': 'DePIN • Plateforme • API • Intégrations',
+                'docs.section.project': 'Le projet DePIN',
+                'docs.section.platform': 'Plateforme (site + node)',
+                'docs.section.api': 'API (Jobs)',
+                'docs.section.webhooks': 'Webhooks (événements)',
+                'docs.section.sdk': 'SDK npm',
+                'docs.section.security': 'Sécurité & bonnes pratiques',
+                'docs.section.faq': 'FAQ',
+                'docs.project.p1': 'Revolution Network est un projet DePIN (Decentralized Physical Infrastructure Network). L’objectif est de transformer des ressources distribuées (nœuds) en capacités utilisables via une plateforme. Le site sert d’interface (dashboard), tandis que le backend orchestre les jobs, les quotas, et l’exécution.',
+                'docs.platform.components': 'Composants',
+                'docs.platform.frontend': 'Frontend : interface utilisateur (profil, shop, API, support).',
+                'docs.platform.backend': 'Backend : auth, crédits, jobs, quotas free tier, webhooks, docs OpenAPI.',
+                'docs.platform.node': 'Node / sessions : présence réseau + métriques (selon configuration).',
+                'docs.api.base': 'Base',
+                'docs.api.auth_title': 'Auth (au choix)',
+                'docs.api.auth_1': 'x-api-key: YOUR_KEY',
+                'docs.api.auth_2': 'Authorization: Bearer YOUR_KEY',
+                'docs.api.interactive': 'Docs interactives',
+                'docs.api.main_endpoints': 'Endpoints principaux',
+                'docs.api.free_tier_title': 'Free tier',
+                'docs.api.free_tier_desc': '3 GB / semaine (reset lundi 00:00 UTC), 0.2 GB max / job, 30 req/min, vidéo désactivée.',
+                'docs.webhooks.available': 'Webhooks disponibles (auth API key) :',
+                'docs.webhooks.events_title': 'Événements',
+                'docs.webhooks.signature_title': 'Signature HMAC',
+                'docs.webhooks.signature_desc': 'Headers : X-Revolution-Event, X-Revolution-Timestamp, X-Revolution-Signature.',
+                'docs.sdk.p1': 'Le SDK npm (revolution-sdk) permet :',
+                'docs.sdk.f1': 'Créer/lister/consulter des jobs',
+                'docs.sdk.f2': 'Lire les limites (limits())',
+                'docs.sdk.f3': 'Gérer les webhooks',
+                'docs.sdk.example': 'Exemple',
+                'docs.security.1': 'Ne partage jamais une clé API côté frontend public.',
+                'docs.security.2': 'Utilise les webhooks avec signature et rejette les timestamps trop vieux.',
+                'docs.security.3': 'Gère les limites (30 req/min en free tier) et implémente un backoff.',
+                'docs.security.4': 'Sur les jobs sensibles, limite les URLs (allowlist) et vérifie les outputs.',
+                'docs.faq.q1': 'Comment récupérer ma clé ?',
+                'docs.faq.a1': 'Depuis l’onglet API (régénération/copie).',
+                'docs.faq.q2': 'Pourquoi 402 ?',
+                'docs.faq.a2': 'Crédits insuffisants ou quota free tier dépassé.',
+                'docs.faq.q3': 'Comment éviter le polling ?',
+                'docs.faq.a3': 'Enregistrant un webhook pour job.completed / job.failed.',
                 'sidebar.follow': 'SUIVEZ-NOUS',
                 'social.twitter': 'X(Twitter)',
                 'social.discord': 'Discord',
@@ -557,6 +609,7 @@
                 'menu.download': 'Download App',
                 'menu.profile': 'Profile',
                 'menu.enterprise_api': 'API',
+                'menu.docs': 'Docs',
                 'menu.tasks': 'Tasks',
                 'menu.leaderboard': 'Leaderboard',
                 'menu.admin': 'Admin',
@@ -576,6 +629,47 @@
                 'support.admin.title': 'Support Management',
                 'support.user_details': 'User Details',
                 'support.user_since': 'Member since',
+                'docs.title': 'Documentation',
+                'docs.subtitle': 'DePIN • Platform • API • Integrations',
+                'docs.section.project': 'DePIN project',
+                'docs.section.platform': 'Platform (site + node)',
+                'docs.section.api': 'API (Jobs)',
+                'docs.section.webhooks': 'Webhooks (events)',
+                'docs.section.sdk': 'npm SDK',
+                'docs.section.security': 'Security & best practices',
+                'docs.section.faq': 'FAQ',
+                'docs.project.p1': 'Revolution Network is a DePIN (Decentralized Physical Infrastructure Network) project. The goal is to turn distributed resources (nodes) into usable capacity through a platform. The website is the dashboard, while the backend orchestrates jobs, quotas, and execution.',
+                'docs.platform.components': 'Components',
+                'docs.platform.frontend': 'Frontend: user interface (profile, shop, API, support).',
+                'docs.platform.backend': 'Backend: auth, credits, jobs, free-tier quotas, webhooks, OpenAPI docs.',
+                'docs.platform.node': 'Node / sessions: network presence + metrics (depending on configuration).',
+                'docs.api.base': 'Base',
+                'docs.api.auth_title': 'Auth (choose one)',
+                'docs.api.auth_1': 'x-api-key: YOUR_KEY',
+                'docs.api.auth_2': 'Authorization: Bearer YOUR_KEY',
+                'docs.api.interactive': 'Interactive docs',
+                'docs.api.main_endpoints': 'Main endpoints',
+                'docs.api.free_tier_title': 'Free tier',
+                'docs.api.free_tier_desc': '3 GB / week (reset Monday 00:00 UTC), max 0.2 GB / job, 30 req/min, video disabled.',
+                'docs.webhooks.available': 'Available webhooks (API key auth):',
+                'docs.webhooks.events_title': 'Events',
+                'docs.webhooks.signature_title': 'HMAC signature',
+                'docs.webhooks.signature_desc': 'Headers: X-Revolution-Event, X-Revolution-Timestamp, X-Revolution-Signature.',
+                'docs.sdk.p1': 'The npm SDK (revolution-sdk) allows you to:',
+                'docs.sdk.f1': 'Create/list/get jobs',
+                'docs.sdk.f2': 'Read limits (limits())',
+                'docs.sdk.f3': 'Manage webhooks',
+                'docs.sdk.example': 'Example',
+                'docs.security.1': 'Never expose an API key in a public frontend.',
+                'docs.security.2': 'Use signed webhooks and reject stale timestamps.',
+                'docs.security.3': 'Handle limits (30 req/min on free tier) and implement backoff.',
+                'docs.security.4': 'For sensitive jobs, restrict URLs (allowlist) and validate outputs.',
+                'docs.faq.q1': 'How do I get my key?',
+                'docs.faq.a1': 'From the API tab (regenerate/copy).',
+                'docs.faq.q2': 'Why 402?',
+                'docs.faq.a2': 'Insufficient credits or free-tier quota exceeded.',
+                'docs.faq.q3': 'How to avoid polling?',
+                'docs.faq.a3': 'Register a webhook for job.completed / job.failed.',
                 'sidebar.follow': 'FOLLOW US',
                 'social.twitter': 'X(Twitter)',
                 'social.discord': 'Discord',
@@ -1085,6 +1179,7 @@
                 'menu.download': 'Descarga',
                 'menu.profile': 'Perfil',
                 'menu.enterprise_api': 'API',
+                'menu.docs': 'Docs',
                 'menu.tasks': 'Airdrop y Tareas',
                 'menu.leaderboard': 'Clasificación',
                 'menu.admin': 'Admin',
@@ -1104,6 +1199,47 @@
                 'support.admin.title': 'Gestión Soporte',
                 'support.user_details': 'Detalles Usuario',
                 'support.user_since': 'Miembro desde',
+                'docs.title': 'Documentación',
+                'docs.subtitle': 'DePIN • Plataforma • API • Integraciones',
+                'docs.section.project': 'Proyecto DePIN',
+                'docs.section.platform': 'Plataforma (sitio + nodo)',
+                'docs.section.api': 'API (Jobs)',
+                'docs.section.webhooks': 'Webhooks (eventos)',
+                'docs.section.sdk': 'SDK npm',
+                'docs.section.security': 'Seguridad y buenas prácticas',
+                'docs.section.faq': 'FAQ',
+                'docs.project.p1': 'Revolution Network es un proyecto DePIN (Decentralized Physical Infrastructure Network). El objetivo es convertir recursos distribuidos (nodos) en capacidad utilizable mediante una plataforma. El sitio es el panel, mientras que el backend orquesta los jobs, cuotas y ejecución.',
+                'docs.platform.components': 'Componentes',
+                'docs.platform.frontend': 'Frontend: interfaz de usuario (perfil, tienda, API, soporte).',
+                'docs.platform.backend': 'Backend: auth, créditos, jobs, cuotas free tier, webhooks, docs OpenAPI.',
+                'docs.platform.node': 'Nodo / sesiones: presencia de red + métricas (según configuración).',
+                'docs.api.base': 'Base',
+                'docs.api.auth_title': 'Auth (elige una)',
+                'docs.api.auth_1': 'x-api-key: YOUR_KEY',
+                'docs.api.auth_2': 'Authorization: Bearer YOUR_KEY',
+                'docs.api.interactive': 'Docs interactivas',
+                'docs.api.main_endpoints': 'Endpoints principales',
+                'docs.api.free_tier_title': 'Free tier',
+                'docs.api.free_tier_desc': '3 GB / semana (reset lunes 00:00 UTC), máx 0.2 GB / job, 30 req/min, video desactivado.',
+                'docs.webhooks.available': 'Webhooks disponibles (auth API key):',
+                'docs.webhooks.events_title': 'Eventos',
+                'docs.webhooks.signature_title': 'Firma HMAC',
+                'docs.webhooks.signature_desc': 'Headers: X-Revolution-Event, X-Revolution-Timestamp, X-Revolution-Signature.',
+                'docs.sdk.p1': 'El SDK npm (revolution-sdk) permite:',
+                'docs.sdk.f1': 'Crear/listar/consultar jobs',
+                'docs.sdk.f2': 'Leer límites (limits())',
+                'docs.sdk.f3': 'Gestionar webhooks',
+                'docs.sdk.example': 'Ejemplo',
+                'docs.security.1': 'Nunca expongas una clave API en un frontend público.',
+                'docs.security.2': 'Usa webhooks firmados y rechaza timestamps antiguos.',
+                'docs.security.3': 'Gestiona límites (30 req/min en free tier) e implementa backoff.',
+                'docs.security.4': 'Para jobs sensibles, restringe URLs (allowlist) y valida outputs.',
+                'docs.faq.q1': '¿Cómo obtengo mi clave?',
+                'docs.faq.a1': 'Desde la pestaña API (regenerar/copiar).',
+                'docs.faq.q2': '¿Por qué 402?',
+                'docs.faq.a2': 'Créditos insuficientes o cuota free tier superada.',
+                'docs.faq.q3': '¿Cómo evitar polling?',
+                'docs.faq.a3': 'Registrando un webhook para job.completed / job.failed.',
                 'sidebar.follow': 'SÍGUENOS',
                 'social.twitter': 'X(Twitter)',
                 'social.discord': 'Discord',
@@ -1789,6 +1925,10 @@
                     initializeEnterpriseApiPage();
                     applyTranslations();
                     break;
+                case 'docs':
+                    content.innerHTML = getDocsHTML();
+                    applyTranslations();
+                    break;
                 case 'tasks':
                     content.innerHTML = getTasksHTML();
                     initializeTasksPage();
@@ -1902,6 +2042,130 @@
                                     </div>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getDocsHTML() {
+            return `
+                <div class="page-content">
+                    <div class="page-header">
+                        <h1 class="page-title">${t('docs.title')}</h1>
+                        <div style="color:#9ca3af; margin-top:6px;">${t('docs.subtitle')}</div>
+                    </div>
+
+                    <div class="glass-card" style="padding: 16px 18px; border-radius: 14px; border: 1px solid #1f2937; background: rgba(17, 24, 39, 0.45); margin-bottom: 18px;">
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <a class="profile-btn" href="#docs-project" style="text-decoration:none;">${t('docs.section.project')}</a>
+                            <a class="profile-btn" href="#docs-platform" style="text-decoration:none;">${t('docs.section.platform')}</a>
+                            <a class="profile-btn" href="#docs-api" style="text-decoration:none;">${t('docs.section.api')}</a>
+                            <a class="profile-btn" href="#docs-webhooks" style="text-decoration:none;">${t('docs.section.webhooks')}</a>
+                            <a class="profile-btn" href="#docs-sdk" style="text-decoration:none;">${t('docs.section.sdk')}</a>
+                            <a class="profile-btn" href="#docs-security" style="text-decoration:none;">${t('docs.section.security')}</a>
+                            <a class="profile-btn" href="#docs-faq" style="text-decoration:none;">${t('docs.section.faq')}</a>
+                        </div>
+                    </div>
+
+                    <div id="docs-project" class="glass-card" style="padding: 18px; border-radius: 14px; border: 1px solid #1f2937; background: rgba(17, 24, 39, 0.35); margin-bottom: 14px;">
+                        <h2 style="margin:0 0 10px 0;">${t('docs.section.project')}</h2>
+                        <div style="color:#9ca3af; line-height:1.7;">
+                            ${t('docs.project.p1')}
+                        </div>
+                    </div>
+
+                    <div id="docs-platform" class="glass-card" style="padding: 18px; border-radius: 14px; border: 1px solid #1f2937; background: rgba(17, 24, 39, 0.35); margin-bottom: 14px;">
+                        <h2 style="margin:0 0 10px 0;">${t('docs.section.platform')}</h2>
+                        <div style="color:#9ca3af; line-height:1.7;">
+                            <div style="margin-bottom:10px;"><strong>${t('docs.platform.components')}</strong></div>
+                            <div>1) <strong>Frontend</strong> — ${t('docs.platform.frontend')}</div>
+                            <div>2) <strong>Backend</strong> — ${t('docs.platform.backend')}</div>
+                            <div>3) <strong>Node / sessions</strong> — ${t('docs.platform.node')}</div>
+                        </div>
+                    </div>
+
+                    <div id="docs-api" class="glass-card" style="padding: 18px; border-radius: 14px; border: 1px solid #1f2937; background: rgba(17, 24, 39, 0.35); margin-bottom: 14px;">
+                        <h2 style="margin:0 0 10px 0;">${t('docs.section.api')}</h2>
+                        <div style="color:#9ca3af; line-height:1.7;">
+                            <div style="margin-bottom:10px;"><strong>${t('docs.api.base')}</strong> : <code>${API_BASE}</code></div>
+                            <div style="margin-bottom:10px;"><strong>${t('docs.api.auth_title')}</strong> :</div>
+                            <div>1) <code>${t('docs.api.auth_1')}</code></div>
+                            <div>2) <code>${t('docs.api.auth_2')}</code></div>
+                            <div style="margin-top:12px;"><strong>${t('docs.api.interactive')}</strong> :</div>
+                            <div><a href="${API_BASE}/docs" target="_blank" style="color:#60a5fa; text-decoration:none;">${API_BASE}/docs</a></div>
+                            <div><a href="${API_BASE}/openapi.json" target="_blank" style="color:#60a5fa; text-decoration:none;">${API_BASE}/openapi.json</a></div>
+                            <div style="margin-top:14px;"><strong>${t('docs.api.main_endpoints')}</strong> :</div>
+                            <div class="doc-list" style="margin-top:8px;">
+                                <div class="doc-item"><span>GET</span> /api/enterprise/v1/limits</div>
+                                <div class="doc-item"><span>POST</span> /api/enterprise/v1/jobs</div>
+                                <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs</div>
+                                <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs/:id</div>
+                                <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs/:id/result</div>
+                            </div>
+                            <div style="margin-top:14px;"><strong>${t('docs.api.free_tier_title')}</strong> :</div>
+                            <div>${t('docs.api.free_tier_desc')}</div>
+                        </div>
+                    </div>
+
+                    <div id="docs-webhooks" class="glass-card" style="padding: 18px; border-radius: 14px; border: 1px solid #1f2937; background: rgba(17, 24, 39, 0.35); margin-bottom: 14px;">
+                        <h2 style="margin:0 0 10px 0;">${t('docs.section.webhooks')}</h2>
+                        <div style="color:#9ca3af; line-height:1.7;">
+                            <div>${t('docs.webhooks.available')}</div>
+                            <div class="doc-list" style="margin-top:8px;">
+                                <div class="doc-item"><span>GET</span> /api/enterprise/v1/webhooks</div>
+                                <div class="doc-item"><span>POST</span> /api/enterprise/v1/webhooks</div>
+                                <div class="doc-item"><span>DELETE</span> /api/enterprise/v1/webhooks/:id</div>
+                            </div>
+                            <div style="margin-top:12px;">${t('docs.webhooks.events_title')} :</div>
+                            <div>1) <code>job.completed</code></div>
+                            <div>2) <code>job.failed</code></div>
+                            <div style="margin-top:12px;">${t('docs.webhooks.signature_title')} :</div>
+                            <div>${t('docs.webhooks.signature_desc')}</div>
+                        </div>
+                    </div>
+
+                    <div id="docs-sdk" class="glass-card" style="padding: 18px; border-radius: 14px; border: 1px solid #1f2937; background: rgba(17, 24, 39, 0.35); margin-bottom: 14px;">
+                        <h2 style="margin:0 0 10px 0;">${t('docs.section.sdk')}</h2>
+                        <div style="color:#9ca3af; line-height:1.7;">
+                            <div>${t('docs.sdk.p1')}</div>
+                            <div>1) ${t('docs.sdk.f1')}</div>
+                            <div>2) ${t('docs.sdk.f2')}</div>
+                            <div>3) ${t('docs.sdk.f3')}</div>
+                            <div style="margin-top:12px;">${t('docs.sdk.example')} :</div>
+                            <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>const { RevolutionAPI } = require('revolution-sdk');
+
+const api = new RevolutionAPI({
+  apiKey: 'YOUR_KEY',
+  baseUrl: '${API_BASE}',
+  authMode: 'x-api-key'
+});
+
+async function main(){
+  const job = await api.createJob('http_get', { url: 'https://example.com' });
+  console.log(job);
+}
+
+main();</code></pre>
+                        </div>
+                    </div>
+
+                    <div id="docs-security" class="glass-card" style="padding: 18px; border-radius: 14px; border: 1px solid #1f2937; background: rgba(17, 24, 39, 0.35); margin-bottom: 14px;">
+                        <h2 style="margin:0 0 10px 0;">${t('docs.section.security')}</h2>
+                        <div style="color:#9ca3af; line-height:1.7;">
+                            <div>1) ${t('docs.security.1')}</div>
+                            <div>2) ${t('docs.security.2')}</div>
+                            <div>3) ${t('docs.security.3')}</div>
+                            <div>4) ${t('docs.security.4')}</div>
+                        </div>
+                    </div>
+
+                    <div id="docs-faq" class="glass-card" style="padding: 18px; border-radius: 14px; border: 1px solid #1f2937; background: rgba(17, 24, 39, 0.35); margin-bottom: 14px;">
+                        <h2 style="margin:0 0 10px 0;">${t('docs.section.faq')}</h2>
+                        <div style="color:#9ca3af; line-height:1.7;">
+                            <div style="margin-bottom:10px;"><strong>${t('docs.faq.q1')}</strong><br>${t('docs.faq.a1')}</div>
+                            <div style="margin-bottom:10px;"><strong>${t('docs.faq.q2')}</strong><br>${t('docs.faq.a2')}</div>
+                            <div><strong>${t('docs.faq.q3')}</strong><br>${t('docs.faq.a3')}</div>
                         </div>
                     </div>
                 </div>
