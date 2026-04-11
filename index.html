@@ -387,7 +387,7 @@
                 'shop.points': 'points',
                 'shop.per_minute': '/ minute',
                 'shop.from': 'à partir de',
-                'enterprise.title': 'API Entreprise',
+                'enterprise.title': 'API',
                 'enterprise.intro': 'Présentation',
                 'enterprise.tutorial': 'Tutoriel d’intégration',
                 'enterprise.stats.bandwidth': 'Bande Passante Disponible',
@@ -399,25 +399,25 @@
                 'enterprise.stats.recentJobs': 'Jobs récents',
                 'enterprise.logs.title': 'Preuve de Service (Logs récents)',
                 'enterprise.logs.loading': 'Chargement des preuves...',
-                'enterprise.description': 'L’API Entreprise permet d’exécuter des <strong>jobs</strong> de contrôle web, d’analyse légère et de traitement basique des données via une <strong>clé API</strong> sécurisée. Créez un job, suivez son statut, puis récupérez le résultat quand il est prêt. Les intégrations se font simplement avec le header <code>x-api-key</code>.',
-                'enterprise.step1': '1) Créer un job',
-                'enterprise.step2': '2) Lister vos jobs',
-                'enterprise.step3': '3) Récupérer le résultat',
-                'enterprise.example.node': 'Exemple Node.js',
-                'enterprise.example.python': 'Exemple Python',
-                'enterprise.api_key': 'Clé API',
-                'enterprise.copy': 'Copier',
-                'enterprise.regen': 'Régénérer',
-                'enterprise.credits': 'Crédits',
-                'enterprise.credits.used_remaining': 'utilisés / restants',
-                'enterprise.jobs.supported': 'Types de jobs supportés',
+                'enterprise.description': 'The Enterprise API allows you to execute web control <strong>jobs</strong> and analysis. <strong>Free tier:</strong> 3 GB/week, max 0.5 GB per job, video forbidden. Upgrade to Premium to remove these limits.',
+                'enterprise.step1': '1) Create a job',
+                'enterprise.step2': '2) List your jobs',
+                'enterprise.step3': '3) Retrieve the result',
+                'enterprise.example.node': 'Node.js Example',
+                'enterprise.example.python': 'Python Example',
+                'enterprise.api_key': 'API Key',
+                'enterprise.copy': 'Copy',
+                'enterprise.regen': 'Regenerate',
+                'enterprise.credits': 'Credits (GB)',
+                'enterprise.credits.used_remaining': 'used / remaining',
+                'enterprise.jobs.supported': 'Supported job types',
                 'enterprise.jobs.image': 'Image:',
-                'enterprise.jobs.video': 'Vidéo:',
+                'enterprise.jobs.video': 'Video (Premium):',
                 'enterprise.jobs.audio': 'Audio:',
-                'enterprise.jobs.text': 'Texte:',
+                'enterprise.jobs.text': 'Text:',
                 'enterprise.jobs.code': 'Code:',
-                'enterprise.jobs.image.desc': 'image_svg_generate (génère un SVG avec texte)',
-                'enterprise.jobs.video.desc': 'video_transcode (via ffmpeg si présent)',
+                'enterprise.jobs.image.desc': 'image_svg_generate (generates SVG with text)',
+                'enterprise.jobs.video.desc': 'video_transcode (Premium members only)',
                 'enterprise.jobs.audio.desc': 'audio_convert (via ffmpeg)',
                 'enterprise.jobs.text.desc': 'text_transform, text_generate_template',
                 'enterprise.jobs.code.desc': 'code_run_js (sandbox VM, timeout)',
@@ -712,7 +712,7 @@
                 'shop.points': 'points',
                 'shop.per_minute': '/ minute',
                 'shop.from': 'starting at',
-                'enterprise.title': 'Enterprise API',
+                'enterprise.title': 'API',
                 'enterprise.intro': 'Introduction',
                 'enterprise.tutorial': 'Integration Tutorial',
                 'enterprise.stats.bandwidth': 'Available Bandwidth',
@@ -724,7 +724,7 @@
                 'enterprise.stats.recentJobs': 'Recent jobs',
                 'enterprise.logs.title': 'Proof of Service (Recent logs)',
                 'enterprise.logs.loading': 'Loading proofs...',
-                'enterprise.description': 'The Enterprise API allows you to execute web control <strong>jobs</strong>, light analysis, and basic data processing via a secure <strong>API key</strong>. Create a job, track its status, and retrieve the result when ready. Integrations are simple with the <code>x-api-key</code> header.',
+                'enterprise.description': 'The Enterprise API allows you to execute web control <strong>jobs</strong> and analysis. <strong>Free tier:</strong> 3 GB/week, max 0.5 GB per job, video forbidden. Upgrade to Premium to remove these limits.',
                 'enterprise.step1': '1) Create a job',
                 'enterprise.step2': '2) List your jobs',
                 'enterprise.step3': '3) Retrieve the result',
@@ -733,16 +733,16 @@
                 'enterprise.api_key': 'API Key',
                 'enterprise.copy': 'Copy',
                 'enterprise.regen': 'Regenerate',
-                'enterprise.credits': 'Credits',
+                'enterprise.credits': 'Credits (GB)',
                 'enterprise.credits.used_remaining': 'used / remaining',
                 'enterprise.jobs.supported': 'Supported job types',
                 'enterprise.jobs.image': 'Image:',
-                'enterprise.jobs.video': 'Video:',
+                'enterprise.jobs.video': 'Video (Premium):',
                 'enterprise.jobs.audio': 'Audio:',
                 'enterprise.jobs.text': 'Text:',
                 'enterprise.jobs.code': 'Code:',
                 'enterprise.jobs.image.desc': 'image_svg_generate (generates SVG with text)',
-                'enterprise.jobs.video.desc': 'video_transcode (via ffmpeg if present)',
+                'enterprise.jobs.video.desc': 'video_transcode (Premium members only)',
                 'enterprise.jobs.audio.desc': 'audio_convert (via ffmpeg)',
                 'enterprise.jobs.text.desc': 'text_transform, text_generate_template',
                 'enterprise.jobs.code.desc': 'code_run_js (sandbox VM, timeout)',
@@ -1269,7 +1269,7 @@
                 'shop.points': 'puntos',
                 'shop.per_minute': '/ minuto',
                 'shop.from': 'a partir de',
-                'enterprise.title': 'API Empresa',
+                'enterprise.title': 'API',
                 'enterprise.intro': 'Presentación',
                 'enterprise.tutorial': 'Tutorial de integración',
                 'enterprise.stats.bandwidth': 'Ancho de banda disponible',
@@ -1776,16 +1776,11 @@
                       }).catch(()=>{});
                     const apiCred = document.querySelector('.api-credits');
                     if (apiCred) apiCred.style.display = 'inline-flex';
-                    fetch(`${API_BASE}/api/enterprise/me`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }})
+                    fetch(`${API_BASE}/v1/me/credits`, { headers: { 'X-API-Key': localStorage.getItem('apiKey') || '', 'Authorization': `Bearer ${localStorage.getItem('token')}` }})
                       .then(r=>r.json()).then(j=>{
                         const ac = document.getElementById('header-api-credits');
                         if (ac) {
-                            let val = '0.00';
-                            if (j.usage && j.usage.remainingGB !== undefined) {
-                                val = Number(j.usage.remainingGB).toFixed(2);
-                            } else if (j.credits_balance !== undefined) {
-                                val = (Number(j.credits_balance) / 1024).toFixed(2);
-                            }
+                            let val = (j.balance || 0).toFixed(2);
                             ac.textContent = `API: ${val} GB`;
                         }
                       }).catch(()=>{});
@@ -3477,26 +3472,26 @@
                                 <h4 style="margin:0 0 8px 0;">${t('enterprise.tutorial')}</h4>
                                 <div style="color:#9ca3af; line-height:1.6;">
                                     <strong>${t('enterprise.step1')}</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:8px; overflow:auto;"><code>curl -X POST https://votre-backend/api/enterprise/v1/jobs \
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:8px; overflow:auto;"><code>curl -X POST ${API_BASE}/v1/job \
 -H "Content-Type: application/json" \
 -H "x-api-key: VOTRE_CLE" \
--d '{"type":"http_get","params":{"url":"https://example.com"}}'</code></pre>
+-d '{"type":"code_run_js","input_payload":{"code":"return 1+1;"}}'</code></pre>
                                     <strong>${t('enterprise.step2')}</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:8px; overflow:auto;"><code>curl -X GET https://votre-backend/api/enterprise/v1/jobs \
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:8px; overflow:auto;"><code>curl -X GET ${API_BASE}/v1/jobs \
 -H "x-api-key: VOTRE_CLE"</code></pre>
                                     <strong>${t('enterprise.step3')}</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:8px; overflow:auto;"><code>curl -X GET https://votre-backend/api/enterprise/v1/jobs/ID/result \
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:8px; overflow:auto;"><code>curl -X GET ${API_BASE}/v1/job/ID \
 -H "x-api-key: VOTRE_CLE"</code></pre>
                                     <strong>${t('enterprise.example.node')}</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:8px; overflow:auto;"><code>await fetch('/api/enterprise/v1/jobs', {
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:8px; overflow:auto;"><code>await fetch('${API_BASE}/v1/job', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json', 'x-api-key': 'VOTRE_CLE' },
-  body: JSON.stringify({ type: 'http_get', params: { url: 'https://example.com' } })
+  body: JSON.stringify({ type: 'code_run_js', input_payload: { code: 'return Date.now();' } })
 });</code></pre>
                                     <strong>${t('enterprise.example.python')}</strong><br>
                                     <pre style="background:#0b0f14; padding:12px; border-radius:8px; overflow:auto;"><code>import requests
-r = requests.post('https://votre-backend/api/enterprise/v1/jobs',
-  json={'type':'http_get','params':{'url':'https://example.com'}},
+r = requests.post('${API_BASE}/v1/job',
+  json={'type':'code_run_js','input_payload':{'code':'return "hello"'}},
   headers={'x-api-key':'VOTRE_CLE'})
 print(r.json())</code></pre>
                                 </div>
@@ -3524,22 +3519,22 @@ print(r.json())</code></pre>
                             <h3 style="margin:0 0 8px 0;">${t('enterprise.jobs.supported')}</h3>
                             <div style="background:#0b0f14; border:1px solid #1f2937; border-radius:8px; padding:12px; color:#9ca3af;">
                                 <ul style="margin:0; padding-left:18px; line-height:1.8;">
-                                    <li><strong>${t('enterprise.jobs.image')}</strong> ${t('enterprise.jobs.image.desc')}</li>
-                                    <li><strong>${t('enterprise.jobs.video')}</strong> ${t('enterprise.jobs.video.desc')}</li>
-                                    <li><strong>${t('enterprise.jobs.audio')}</strong> ${t('enterprise.jobs.audio.desc')}</li>
-                                    <li><strong>${t('enterprise.jobs.text')}</strong> ${t('enterprise.jobs.text.desc')}</li>
-                                    <li><strong>${t('enterprise.jobs.code')}</strong> ${t('enterprise.jobs.code.desc')}</li>
+                                <li><strong>video_transcode</strong> (via ffmpeg)</li>
+                                    <li><strong>audio_convert</strong> (via ffmpeg)</li>
+                                    <li><strong>code_run_js</strong> (sandbox isolated-vm)</li>
+                                    <li><strong>svg_generate</strong> (générateur SVG)</li>
+                                    <li><strong>text_generate</strong> (générateur texte)</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="api-docs">
                             <h3>${t('enterprise.endpoints')}</h3>
                             <div class="doc-list">
-                                <div class="doc-item"><span>POST</span> /api/enterprise/v1/jobs</div>
-                                <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs</div>
-                                <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs/:id</div>
-                                <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs/:id/result</div>
-                                <div class="doc-item"><span>GET</span> /api/enterprise/me</div>
+                                <div class="doc-item"><span>POST</span> /v1/job</div>
+                                <div class="doc-item"><span>GET</span> /v1/jobs</div>
+                                <div class="doc-item"><span>GET</span> /v1/job/:id</div>
+                                <div class="doc-item"><span>GET</span> /v1/me/credits</div>
+                                <div class="doc-item"><span>POST</span> /v1/webhooks/stripe</div>
                             </div>
                             <div class="doc-auth">${t('enterprise.auth_header')}</div>
                         </div>
@@ -3555,55 +3550,71 @@ print(r.json())</code></pre>
             if (window.enterpriseStatsInterval) clearInterval(window.enterpriseStatsInterval);
 
             function fetchAll() {
-                // 1. Network Stats (Bandwidth, Uptime, Proofs)
-                fetch(`${API_BASE}/api/enterprise/dashboard-stats`, { headers: { 'Authorization': `Bearer ${token}` }})
+                // 1. Jobs List (Proof of Service)
+                fetch(`${API_BASE}/v1/jobs`, { headers: { 'Authorization': `Bearer ${token}` }})
                 .then(r => r.json())
                 .then(data => {
-                    console.log('Dashboard Stats Received:', data);
-                    const bw = document.getElementById('ent-bandwidth-val');
-                    if (bw && data.availableBandwidth) {
-                        // Ensure we never show 0 if the node is active
-                        const val = (data.availableBandwidth === '0 Mbps') ? '50 Mbps' : data.availableBandwidth;
-                        bw.textContent = val;
-                        // For debug, we can log the node count
-                        if (data.debug) {
-                            const label = bw.parentElement.querySelector('.stat-label');
-                            if (label) label.textContent = `${data.debug.activeNodes || 1} ${t('enterprise.stats.activeNodes')}`;
-                        }
-                    }
-                    if (data.uptime) document.getElementById('ent-uptime-val').textContent = data.uptime;
-                    
                     const proofBody = document.getElementById('ent-proof-body');
                     const proofCount = document.getElementById('ent-proof-count');
-                    if (data.proofOfService) {
-                        proofCount.textContent = data.proofOfService.length;
-                        if (data.proofOfService.length > 0) {
-                            proofBody.innerHTML = data.proofOfService.map(p => `
+                    if (Array.isArray(data)) {
+                        proofCount.textContent = data.length;
+                        if (data.length > 0) {
+                            proofBody.innerHTML = data.map(p => `
                                 <tr>
-                                    <td>#${p.id}</td>
+                                    <td>#${p.job_id.slice(-4).toUpperCase()}</td>
                                     <td>${p.type}</td>
-                                    <td><span class="status-badge ${p.status}">${p.status}</span></td>
-                                    <td>${new Date(p.timestamp).toLocaleString()}</td>
-                                    <td>${p.hasResult ? t('enterprise.verification.verified') : t('enterprise.verification.pending')}</td>
+                                    <td><span class="status-badge ${p.status}">${p.status.charAt(0).toUpperCase() + p.status.slice(1)}</span></td>
+                                    <td>${new Date(p.created_at).toLocaleString()}</td>
+                                    <td>${p.has_result ? t('enterprise.verification.verified') : t('enterprise.verification.pending')}</td>
                                 </tr>
                             `).join('');
                         } else {
                             proofBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:#9ca3af;">${t('enterprise.no_jobs')}</td></tr>`;
                         }
                     }
-                }).catch(e => console.error('Dashboard stats error:', e));
+                }).catch(e => console.error('Jobs list error:', e));
 
-                // 2. Account Info (API Key, Quota, Priority)
-                fetch(`${API_BASE}/api/enterprise/me`, { headers: { 'Authorization': `Bearer ${token}` }})
+                // 2. Account Info (Credits & API Key)
+                fetch(`${API_BASE}/v1/me`, { headers: { 'Authorization': `Bearer ${token}` }})
                 .then(r => r.json())
                 .then(data => {
                     const k = document.getElementById('api-key-value');
-                    if (k && data.apiKeyMasked) k.textContent = data.apiKeyMasked;
+                    if (k && data.api_key_masked) k.textContent = data.api_key_masked;
                     
                     const cred = document.getElementById('api-credits');
-                    if (cred && data.usage) {
-                        cred.textContent = `${data.usage.usedGB} ${t('enterprise.credits.used_remaining')} ${data.usage.remainingGB}`;
+                    if (cred) {
+                        const free = (data.free_balance || 0).toFixed(2);
+                        const paid = (data.balance || 0).toFixed(2);
+                        cred.innerHTML = `<span title="Quota Gratuit">${free} GB (Free)</span> | <span title="Crédits Payants">${paid} GB (Paid)</span>`;
                     }
+                }).catch(e => console.error('Enterprise me error:', e));
+
+                // 3. Regen API Key
+                const regenBtn = document.getElementById('regen-api-key');
+                if (regenBtn) {
+                    regenBtn.onclick = () => {
+                        if (!confirm('Voulez-vous vraiment régénérer votre clé API ? L’ancienne clé sera immédiatement invalide.')) return;
+                        fetch(`${API_BASE}/v1/me/api-key/regenerate`, { 
+                            method: 'POST',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            alert(`Nouvelle clé API : ${data.api_key}\n\nATTENTION : Copiez-la bien, elle ne sera plus jamais affichée en clair.`);
+                            const k = document.getElementById('api-key-value');
+                            if (k) k.textContent = `${data.prefix}••••-••••-••••`;
+                        });
+                    };
+                }
+
+                // 4. Copy API Key (Masked for now, but we can't copy masked)
+                const copyBtn = document.getElementById('copy-api-key');
+                if (copyBtn) {
+                    copyBtn.onclick = () => {
+                        alert('Pour des raisons de sécurité, vous ne pouvez copier la clé qu’au moment de sa génération.');
+                    };
+                }
+
                     
                     if (data.requireSubscription && !document.getElementById('subscription-modal')) {
                         const modalHtml = getEnterpriseSubscriptionModalHTML(data.plans || []);
