@@ -390,6 +390,11 @@
                 'profile.solana': 'Adresse Solana',
                 'profile.save': 'Enregistrer',
                 'profile.logout': 'Se déconnecter',
+                'profile.subscription.title': 'Abonnement',
+                'profile.subscription.manage': 'Gérer mon abonnement',
+                'profile.subscription.hint': 'Ouvrir la gestion Stripe (paiement, annulation, factures).',
+                'profile.subscription.no_customer': "Aucun abonnement Stripe trouvé pour ce compte.",
+                'profile.subscription.unavailable': "Gestion d'abonnement indisponible pour le moment.",
                 'profile.referrals.total': 'Parrainages',
                 'profile.referrals.active': 'Actifs',
                 'profile.rank.progress': 'Progression de rang',
@@ -547,7 +552,7 @@
                 'download.points.note': 'Les points rendent éligible au futur airdrop.',
                 'download.install': 'Download Node (.exe)',
                 'download.guide': 'Aide',
-                'download.direct_link': '/api/download/node',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/REVO/Revolution.Network.Node.Setup.1.0.0.exe',
                 'download.faq.title': 'FAQ',
                 'download.faq.q1': 'Pourquoi une application desktop ?',
                 'download.faq.a1': 'Elle permet un minage plus stable et performant directement depuis votre PC Windows.',
@@ -722,6 +727,11 @@
                 'profile.solana': 'Solana Address',
                 'profile.save': 'Save',
                 'profile.logout': 'Logout',
+                'profile.subscription.title': 'Subscription',
+                'profile.subscription.manage': 'Manage my subscription',
+                'profile.subscription.hint': 'Open Stripe billing portal (payment, cancel, invoices).',
+                'profile.subscription.no_customer': 'No Stripe subscription found for this account.',
+                'profile.subscription.unavailable': 'Subscription management is unavailable right now.',
                 'profile.referrals.total': 'Referrals',
                 'profile.referrals.active': 'Active',
                 'profile.rank.progress': 'Rank progress',
@@ -879,7 +889,7 @@
                 'download.points.note': 'Points make you eligible for the future airdrop.',
                 'download.install': 'Start Installation (.exe)',
                 'download.guide': 'Help',
-                'download.direct_link': '/api/download/node',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/REVO/Revolution.Network.Node.Setup.1.0.0.exe',
                 'download.faq.title': 'FAQ',
                 'download.faq.q1': 'Why a desktop app?',
                 'download.faq.a1': 'It allows for more stable and efficient mining directly from your Windows PC.',
@@ -966,6 +976,11 @@
                 'profile.solana': 'Solana address',
                 'profile.save': 'Save',
                 'profile.logout': 'Log out',
+                'profile.subscription.title': 'Subscription',
+                'profile.subscription.manage': 'Manage my subscription',
+                'profile.subscription.hint': 'Open Stripe billing portal (payment, cancel, invoices).',
+                'profile.subscription.no_customer': 'No Stripe subscription found for this account.',
+                'profile.subscription.unavailable': 'Subscription management is unavailable right now.',
                 'profile.referrals.total': 'Referrals',
                 'profile.referrals.active': 'Active',
                 'profile.rank.progress': 'Rank progress',
@@ -1138,7 +1153,7 @@
                 'download.recommended.step4': 'A shortcut will be created on your desktop.',
                 'download.recommended.step5': 'Launch the app and sign in via the “Sign in via website” button.',
                 'download.recommended.step6': 'Press the ▶ button to start earning points.',
-                'download.direct_link': '/api/download/node',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/REVO/Revolution.Network.Node.Setup.1.0.0.exe',
                 'tasks.title': 'Tasks',
                 'tasks.validate': 'Validate',
                 'tasks.validated': 'Validated',
@@ -1292,6 +1307,11 @@
                 'profile.solana': 'Dirección Solana',
                 'profile.save': 'Guardar',
                 'profile.logout': 'Cerrar sesión',
+                'profile.subscription.title': 'Suscripción',
+                'profile.subscription.manage': 'Gestionar mi suscripción',
+                'profile.subscription.hint': 'Abrir el portal de Stripe (pago, cancelar, facturas).',
+                'profile.subscription.no_customer': 'No se encontró una suscripción Stripe para esta cuenta.',
+                'profile.subscription.unavailable': 'La gestión de suscripción no está disponible ahora.',
                 'profile.referrals.total': 'Referidos',
                 'profile.referrals.active': 'Activos',
                 'profile.rank.progress': 'Progreso de rango',
@@ -1463,9 +1483,8 @@
                 'download.recommended.step3': 'Elige la carpeta de instalación si es necesario.',
                 'download.recommended.step4': 'Se creará un acceso directo en tu escritorio.',
                 'download.recommended.step5': 'Inicia la aplicación y conéctate a través del botón “Sign in via website”.',
-                'download.install': 'Download Node (.exe)',
-                'download.guide': 'Ayuda',
-                'download.direct_link': '/api/download/node',
+                'download.recommended.step6': 'Presiona el botón ▶ para empezar a ganar puntos.',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/REVO/Revolution.Network.Node.Setup.1.0.0.exe',
                 'download.security.title': '🛡️ Seguridad y Windows SmartScreen',
                 'download.security.desc': "Durante la instalación, Windows puede mostrar un mensaje de advertencia (\"Windows protegió su PC\"). **Tenga la seguridad de que esto es completamente normal.** Como desarrolladores independientes, nuestra aplicación aún no es \"conocida\" por los servidores de Microsoft. La aplicación es 100% segura y no contiene malware.",
                 'download.security.procedure': 'Para continuar con la instalación, simplemente haga clic en **"Más información"** y luego en el botón **"Ejecutar de todas formas"**.',
@@ -2359,6 +2378,33 @@ main();</code></pre>
                     });
                 });
             }
+            const manageSubscriptionBtn = document.getElementById('manage-subscription-btn');
+            if (manageSubscriptionBtn) {
+                manageSubscriptionBtn.addEventListener('click', async () => {
+                    try {
+                        const token = localStorage.getItem('token');
+                        const r = await fetch(`${API_BASE}/api/enterprise/billing/portal`, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        const j = await r.json().catch(() => ({}));
+                        if (!r.ok) {
+                            if (j && j.error === 'no_stripe_customer') {
+                                alert(t('profile.subscription.no_customer'));
+                                return;
+                            }
+                            alert(t('profile.subscription.unavailable'));
+                            return;
+                        }
+                        if (j && j.url) {
+                            window.open(j.url, '_blank');
+                        } else {
+                            alert(t('profile.subscription.unavailable'));
+                        }
+                    } catch {
+                        alert(t('profile.subscription.unavailable'));
+                    }
+                });
+            }
         }
 
         // Overview page
@@ -3172,6 +3218,12 @@ main();</code></pre>
                                     </div>
 
                                     <div class="profile-section-card">
+                                        <h3 class="profile-section-title">${t('profile.subscription.title')}</h3>
+                                        <div class="section-info-bubble profile-info-bubble">${t('profile.subscription.hint')}</div>
+                                        <button type="button" id="manage-subscription-btn" class="profile-btn primary">${t('profile.subscription.manage')}</button>
+                                    </div>
+
+                                    <div class="profile-section-card">
                                         <h3 class="profile-section-title">${t('profile.2fa.title')}</h3>
                                         <div id="twofa-info" class="section-info-bubble profile-info-bubble">
                                             ${t('profile.2fa.info')}
@@ -3231,6 +3283,7 @@ main();</code></pre>
             const twofaManual = document.getElementById('twofa-manual');
             const twofaSecretEl = document.getElementById('twofa-secret');
             const twofaCopySecret = document.getElementById('twofa-copy-secret');
+            const manageSubscriptionBtn = document.getElementById('manage-subscription-btn');
 
             function formatPoints(n) {
                 const v = Number(n || 0);
@@ -4032,7 +4085,7 @@ main();</code></pre>
                 let eaStatus = { isEarlyAdopter: false, isGold: false, spotsLeft: 50 };
                 if (token) {
                     try {
-                        const eaRes = await fetch(`${API_BASE}/api/tasks/early-adopter/status`, {
+                        const eaRes = await fetch(`${API_BASE}/api/early-adopter/status`, {
                             headers: { 'Authorization': `Bearer ${token}` }
                         });
                         if (eaRes.ok) eaStatus = await eaRes.json();
@@ -4076,7 +4129,7 @@ main();</code></pre>
                                     }
                                 </style>
                             `;
-                        } else if (eaStatus.isEarlyAdopter) {
+                        } else if (eaStatus.isEarlyAdopter && Number(eaStatus.spotsLeft || 0) <= 0) {
                             statusLabel = 'Non éligible (Limite atteinte)';
                             btnStyle = 'background-color: #374151; border-color: #374151; opacity: 0.7;';
                             isDisabled = true;
@@ -4763,7 +4816,8 @@ main();</code></pre>
             const btnExe = document.getElementById('btn-download-exe');
             const btnHow = document.getElementById('btn-howto');
             if (btnExe) btnExe.addEventListener('click', () => {
-                const downloadUrl = `${API_BASE}/api/download/node`;
+                const direct = String(t('download.direct_link') || '');
+                const downloadUrl = /^https?:\/\//i.test(direct) ? direct : `${API_BASE}${direct}`;
                 window.location.href = downloadUrl;
             });
             if (btnHow) btnHow.addEventListener('click', () => {
