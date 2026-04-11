@@ -182,8 +182,11 @@ router.get('/me', authenticateToken, async (req, res) => {
     const subscribed = await hasActiveSubscription(userId);
     
     // Convert MB to GB for display
-    const usedGB = (credits.credits_used_month / 1024).toFixed(2);
-    const remainingGB = (credits.credits_balance / 1024).toFixed(2);
+    const usedMB = Number(credits.credits_used_month || 0);
+    const balanceMB = Number(credits.credits_balance || 0);
+    
+    const usedGB = (usedMB / 1024).toFixed(2);
+    const remainingGB = (balanceMB / 1024).toFixed(2);
     const limitGB = credits.bandwidth_limit_gb || 0;
 
     const payload = {

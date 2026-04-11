@@ -1657,14 +1657,11 @@
                       .then(r=>r.json()).then(j=>{
                         const ac = document.getElementById('header-api-credits');
                         if (ac) {
-                            // On affiche la valeur brute si usage n'existe pas encore
-                            let val = 0;
+                            let val = '0.00';
                             if (j.usage && j.usage.remainingGB !== undefined) {
-                                val = j.usage.remainingGB;
+                                val = Number(j.usage.remainingGB).toFixed(2);
                             } else if (j.credits_balance !== undefined) {
-                                val = (j.credits_balance / 1024).toFixed(2);
-                            } else if (j.credits && j.credits.remaining !== undefined) {
-                                val = j.credits.remaining;
+                                val = (Number(j.credits_balance) / 1024).toFixed(2);
                             }
                             ac.textContent = `API: ${val} GB`;
                         }
@@ -4222,13 +4219,11 @@ print(r.json())</code></pre>
                         fetch(`${API_BASE}/api/enterprise/me`, { headers: { 'Authorization': `Bearer ${token}` }})
                             .then(r => r.json())
                             .then(j => { 
-                                let val = 0;
+                                let val = '0.00';
                                 if (j && j.usage && j.usage.remainingGB !== undefined) {
-                                    val = j.usage.remainingGB;
+                                    val = Number(j.usage.remainingGB).toFixed(2);
                                 } else if (j && j.credits_balance !== undefined) {
-                                    val = (j.credits_balance / 1024).toFixed(2);
-                                } else if (j && j.credits && j.credits.remaining !== undefined) {
-                                    val = j.credits.remaining;
+                                    val = (Number(j.credits_balance) / 1024).toFixed(2);
                                 }
                                 ac.textContent = `API: ${val} GB`; 
                             })

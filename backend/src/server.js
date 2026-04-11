@@ -1025,11 +1025,21 @@ async function ensureMySqlSchema() {
         user_id BIGINT UNSIGNED NOT NULL,
         credits_balance BIGINT DEFAULT 0,
         credits_used_month BIGINT DEFAULT 0,
+        bandwidth_limit_gb INTEGER DEFAULT 0,
+        priority_level INTEGER DEFAULT 1,
         reset_date TIMESTAMP NULL,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (user_id),
         CONSTRAINT fk_enterprise_credits_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+
+      // Migration : Ajout des colonnes si elles manquent (pour MySQL existant)
+      try {
+        await client.query("ALTER TABLE enterprise_credits ADD COLUMN bandwidth_limit_gb INTEGER DEFAULT 0");
+      } catch (e) {}
+      try {
+        await client.query("ALTER TABLE enterprise_credits ADD COLUMN priority_level INTEGER DEFAULT 1");
+      } catch (e) {}
 
       await client.query(`CREATE TABLE IF NOT EXISTS jobs (
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
