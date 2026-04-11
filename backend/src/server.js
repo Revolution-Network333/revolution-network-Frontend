@@ -19,6 +19,7 @@ const shopRoutes = require('./routes/shop');
 const walletRoutes = require('./routes/wallet');
 const tasksRoutes = require('./routes/tasks');
 const supportRoutes = require('./routes/support');
+const notificationsRoutes = require('./routes/notifications');
 
 // Services
 const SignalingService = require('./services/signaling');
@@ -1974,8 +1975,9 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/enterprise', enterpriseRoutes);
 app.use('/api/shop', shopRoutes);
 app.use('/api/wallet', walletRoutes);
-app.use('/api', tasksRoutes);
+app.use('/api/tasks', tasksRoutes);
 app.use('/api/support', supportRoutes);
+app.use('/api/notifications', notificationsRoutes);
 app.get('/api/public/config', (req, res) => {
   res.json({
     googleClientId: process.env.GOOGLE_CLIENT_ID || null

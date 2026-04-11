@@ -66,6 +66,15 @@ router.post('/tickets', authenticateToken, upload.single('image'), async (req, r
       [ticketId, userId, 'user', message, attachmentUrl]
     );
 
+    // Notify admins about new support ticket
+    try {
+      await db.query(
+        `INSERT INTO notifications (title, message, target_user_id, target_role, created_by)
+         VALUES ($1, $2, NULL, 'admin', $3)`,
+        ['Support', `Nouveau ticket support: ${subject || 'Support Request'}`, userId]
+      );
+    } catch {}
+
     res.status(201).json({ id: ticketId, message: 'Ticket créé avec succès' });
   } catch (error) {
     console.error('Create ticket error:', error);
@@ -182,13 +191,15 @@ router.post('/tickets/:id/messages', authenticateToken, upload.single('image'), 
     // Vérifier l'accès au ticket
     let ticketCheck;
     if (isAdmin) {
-        ticketCheck = await db.query('SELECT id, status FROM support_tickets WHERE id = $1', [ticketId]);
+        ticketCheck = await db.query('SELECT id, status, user_id, subject FROM support_tickets WHERE id = $1', [ticketId]);
     } else {
-        ticketCheck = await db.query('SELECT id, status FROM support_tickets WHERE id = $1 AND user_id = $2', [ticketId, userId]);
+        ticketCheck = await db.query('SELECT id, status, user_id, subject FROM support_tickets WHERE id = $1 AND user_id = $2', [ticketId, userId]);
     }
 
     if (ticketCheck.rows.length === 0) return res.status(404).json({ error: 'Ticket non trouvé' });
     const currentStatus = ticketCheck.rows[0].status;
+    const ticketOwnerId = ticketCheck.rows[0].user_id;
+    const ticketSubject = ticketCheck.rows[0].subject;
 
     if (!message && !req.file) return res.status(400).json({ error: 'Message ou image requis' });
 
@@ -215,6 +226,25 @@ router.post('/tickets/:id/messages', authenticateToken, upload.single('image'), 
     }
 
     await db.query('UPDATE support_tickets SET updated_at = CURRENT_TIMESTAMP, status = $1 WHERE id = $2', [newStatus, ticketId]);
+
+    // Create a notification for the receiving side
+    try {
+      if (isAdmin) {
+        // Admin replied -> notify the ticket owner
+        await db.query(
+          `INSERT INTO notifications (title, message, target_user_id, target_role, created_by)
+           VALUES ($1, $2, $3, NULL, $4)`,
+          ['Support', `Vous avez reçu un message du support (${ticketSubject || 'Ticket'})`, ticketOwnerId, userId]
+        );
+      } else {
+        // User replied -> notify admins
+        await db.query(
+          `INSERT INTO notifications (title, message, target_user_id, target_role, created_by)
+           VALUES ($1, $2, NULL, 'admin', $3)`,
+          ['Support', `Nouveau message support: ${ticketSubject || 'Ticket'}`, userId]
+        );
+      }
+    } catch {}
     
     res.json({ success: true, newStatus });
   } catch (error) {
