@@ -331,6 +331,7 @@
                 'common.error_loading': 'Erreur lors du chargement.',
                 'common.edit': 'Modifier',
                 'common.close': 'Fermer',
+                'common.included': 'Inclus',
                 'profile.title': 'Profil',
                 'profile.username': "Nom d'utilisateur",
                 'profile.email': 'Email',
@@ -387,10 +388,15 @@
                 'shop.points': 'points',
                 'shop.per_minute': '/ minute',
                 'shop.from': 'à partir de',
-                'enterprise.title': 'API Entreprise',
+                'enterprise.title': 'API',
                 'enterprise.intro': 'Présentation',
                 'enterprise.tutorial': 'Tutoriel d’intégration',
-                'enterprise.subscriptions.title': 'Abonnements Entreprise (Système de Points)',
+                'enterprise.subscriptions.title': 'Abonnements API',
+                'enterprise.free_tier.title': 'Forfait Free (inclus)',
+                'enterprise.free_tier.weekly': '3 GB compute / semaine (réinitialisation hebdo)',
+                'enterprise.free_tier.max_job': 'Max 0.2 GB par job',
+                'enterprise.free_tier.rate': 'Limite 30 requêtes / minute',
+                'enterprise.free_tier.video': 'Jobs vidéo désactivés',
                 'enterprise.topup.title': 'Achat de points supplémentaires (top-up)',
                 'shop.title': 'Boutique',
                 'shop.warning.banner': '⚠️ 90% des bénéfices du shop sont reversés au marketcap de la crypto pour renforcer le projet.',
@@ -615,6 +621,7 @@
                 'common.error_loading': 'Error loading.',
                 'common.edit': 'Edit',
                 'common.close': 'Close',
+                'common.included': 'Included',
                 'profile.title': 'Profile',
                 'profile.username': 'Username',
                 'profile.email': 'Email',
@@ -671,10 +678,15 @@
                 'shop.points': 'points',
                 'shop.per_minute': '/ minute',
                 'shop.from': 'starting at',
-                'enterprise.title': 'Enterprise API',
+                'enterprise.title': 'API',
                 'enterprise.intro': 'Introduction',
                 'enterprise.tutorial': 'Integration Tutorial',
-                'enterprise.subscriptions.title': 'Enterprise Subscriptions (Point system)',
+                'enterprise.subscriptions.title': 'API Plans',
+                'enterprise.free_tier.title': 'Free tier (included)',
+                'enterprise.free_tier.weekly': '3 GB compute / week (weekly reset)',
+                'enterprise.free_tier.max_job': 'Max 0.2 GB per job',
+                'enterprise.free_tier.rate': '30 requests / minute limit',
+                'enterprise.free_tier.video': 'Video jobs disabled',
                 'enterprise.topup.title': 'Buy extra points (top-up)',
                 'shop.title': 'Shop',
                 'shop.warning.banner': '⚠️ 90% of shop profit is reinvested to strengthen the project.',
@@ -853,6 +865,7 @@
                 'common.error_loading': 'Error loading.',
                 'common.edit': 'Edit',
                 'common.close': 'Close',
+                'common.included': 'Included',
                 'profile.title': 'Profile',
                 'profile.username': 'Username',
                 'profile.email': 'Email',
@@ -1131,6 +1144,7 @@
                 'common.error_loading': 'Error al cargar.',
                 'common.edit': 'Editar',
                 'common.close': 'Cerrar',
+                'common.included': 'Incluido',
                 'profile.title': 'Perfil',
                 'profile.username': 'Nombre de usuario',
                 'profile.email': 'Correo',
@@ -1187,10 +1201,15 @@
                 'shop.points': 'puntos',
                 'shop.per_minute': '/ minuto',
                 'shop.from': 'a partir de',
-                'enterprise.title': 'API Empresa',
+                'enterprise.title': 'API',
                 'enterprise.intro': 'Presentación',
                 'enterprise.tutorial': 'Tutorial de integración',
-                'enterprise.subscriptions.title': 'Suscripciones de empresa (Sistema de puntos)',
+                'enterprise.subscriptions.title': 'Planes de API',
+                'enterprise.free_tier.title': 'Plan Free (incluido)',
+                'enterprise.free_tier.weekly': '3 GB compute / semana (reinicio semanal)',
+                'enterprise.free_tier.max_job': 'Máx 0.2 GB por job',
+                'enterprise.free_tier.rate': 'Límite 30 solicitudes / minuto',
+                'enterprise.free_tier.video': 'Jobs de video desactivados',
                 'enterprise.topup.title': 'Comprar puntos extra (top-up)',
                 'shop.title': 'Tienda',
                 'shop.warning.banner': '⚠️ El 90% del beneficio de la tienda se reinvierte para fortalecer el proyecto.',
@@ -3264,6 +3283,23 @@
                         <h1 class="page-title">${t('enterprise.title')}</h1>
                     </div>
 
+                    <div class="glass-card" style="margin-bottom: 24px; padding: 16px 18px; border: 1px solid #1f2937; border-radius: 14px; background: rgba(17, 24, 39, 0.45);">
+                        <div style="display:flex; align-items:center; gap:10px; margin-bottom: 8px;">
+                            <div style="width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.35);color:#22c55e;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2l7 4v6c0 5-3 9-7 10-4-1-7-5-7-10V6l7-4z"></path>
+                                </svg>
+                            </div>
+                            <div style="font-weight:700; color:#e5e7eb;">${t('enterprise.free_tier.title')}</div>
+                        </div>
+                        <div style="color:#9ca3af; line-height:1.7;">
+                            <div>1) ${t('enterprise.free_tier.weekly')}</div>
+                            <div>2) ${t('enterprise.free_tier.max_job')}</div>
+                            <div>3) ${t('enterprise.free_tier.rate')}</div>
+                            <div>4) ${t('enterprise.free_tier.video')}</div>
+                        </div>
+                    </div>
+
                     <!-- Dashboard Stats Section -->
                     <div class="stats-grid" style="margin-bottom: 24px;">
                         <div class="stat-card glass-card neon-border-green">
@@ -3348,7 +3384,7 @@
                         <div class="api-card glass-card" style="margin-bottom:16px;">
                             <h3 style="margin:0 0 8px 0;">${t('enterprise.intro')}</h3>
                             <div style="color:#9ca3af; line-height:1.6;">
-                                L’API Entreprise permet d’exécuter des <strong>jobs</strong> de contrôle web, d’analyse légère et de traitement basique des données via une <strong>clé API</strong> sécurisée. 
+                                L’API permet d’exécuter des <strong>jobs</strong> de contrôle web, d’analyse légère et de traitement basique des données via une <strong>clé API</strong> sécurisée. 
                                 Créez un job, suivez son statut, puis récupérez le résultat quand il est prêt. Les intégrations se font simplement avec le header <code>x-api-key</code>.
                             </div>
                             <div style="margin-top:12px; border-top:1px solid #1f2937; padding-top:12px;">
@@ -3605,6 +3641,20 @@ print(r.json())</code></pre>
                     return new Intl.NumberFormat(currentLocale, { style: 'currency', currency: (currency || 'EUR') }).format(num).replace(/\u00A0/g,' ');
                 } catch { return `${v} ${currency || 'EUR'}`; }
             }
+            const freeTierCard = `
+                <div class="plan-card" style="border:1px solid rgba(34,197,94,0.35); box-shadow: 0 0 0 1px rgba(34,197,94,0.15) inset;">
+                    <div class="plan-name">${t('enterprise.free_tier.title')}</div>
+                    <div class="plan-price">${formatPrice(0, 'EUR')}</div>
+                    <ul class="plan-features">
+                        <li>${t('enterprise.free_tier.weekly')}</li>
+                        <li>${t('enterprise.free_tier.max_job')}</li>
+                        <li>${t('enterprise.free_tier.rate')}</li>
+                        <li>${t('enterprise.free_tier.video')}</li>
+                    </ul>
+                    <button class="profile-btn" style="font-size: 0.85em; padding: 8px 12px; background: rgba(34,197,94,0.15); border-color: rgba(34,197,94,0.35); color: #bbf7d0;" disabled>${t('common.included') || 'Included'}</button>
+                </div>
+            `;
+
             const planCards = (plans || []).map(p => {
                 const priceLabel = (p.price == null) ? t('shop.plan.quote_price') : formatPrice(p.price, p.currency || 'EUR');
                 const gbLabel = p.gbPerMonth ? `${Number(p.gbPerMonth).toLocaleString(currentLocale)} GB / ${t('common.month') || 'mois'}` : '';
@@ -3639,6 +3689,7 @@ print(r.json())</code></pre>
                         </div>
                         <div class="modal-content">
                             <div class="plans-grid">
+                                ${freeTierCard}
                                 ${planCards}
                             </div>
                             <div class="topup-section">
