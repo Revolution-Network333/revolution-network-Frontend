@@ -4032,7 +4032,7 @@ main();</code></pre>
                 let eaStatus = { isEarlyAdopter: false, isGold: false, spotsLeft: 50 };
                 if (token) {
                     try {
-                        const eaRes = await fetch(`${API_BASE}/api/tasks/early-adopter/status`, {
+                        const eaRes = await fetch(`${API_BASE}/api/early-adopter/status`, {
                             headers: { 'Authorization': `Bearer ${token}` }
                         });
                         if (eaRes.ok) eaStatus = await eaRes.json();
@@ -4076,7 +4076,7 @@ main();</code></pre>
                                     }
                                 </style>
                             `;
-                        } else if (eaStatus.isEarlyAdopter) {
+                        } else if (eaStatus.isEarlyAdopter && Number(eaStatus.spotsLeft || 0) <= 0) {
                             statusLabel = 'Non éligible (Limite atteinte)';
                             btnStyle = 'background-color: #374151; border-color: #374151; opacity: 0.7;';
                             isDisabled = true;
