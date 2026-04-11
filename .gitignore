@@ -1,0 +1,43 @@
+# Electron / Desktop App
+desktop-app/dist/
+desktop-app/node_modules/
+*.exe
+*.zip
+*.crx
+*.pem
+
+# Backend - garder en local
+*.env
+*.db
+*.db-shm
+*.db-wal
+
+# Fichiers temporaires et logs
+node_modules/
+*.log
+npm-debug.log*
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Fichiers de backup
+*.backup
+*.bak
+
+# Fichiers de test locaux
+test-*.html
+check-*.js
+update-database-*.js
+create-*.js
+
+# Images temporaires
+téléchargement*.jpg
+back.jpeg
+*.png
+!chrome-extension/assets/*.png
+!chrome-extension/assets/*.jpg
+
+# Anciens fichiers
+index.html.backup
+assets
