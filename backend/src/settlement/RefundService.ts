@@ -33,18 +33,20 @@ export class RefundService {
 
       // 1. Rembourser dans le bon réservoir
       if (isFree) {
-        let col = 'free_media_jobs_remaining';
-        if (job.type === 'text_generate') col = 'free_text_jobs_remaining';
-        if (job.type === 'code_run_js') col = 'free_code_runs_remaining';
+        const [jobTypeConfig] = await trx('job_types')
+          .where({ type: job.type })
+          .select('gb_cost_internal')
+          .limit(1);
         
-        await trx('users').where({ id: job.user_id }).increment(col, 1);
+        const gbCost = parseFloat(jobTypeConfig?.gb_cost_internal || '0');
+        await trx('users').where({ id: job.user_id }).increment('free_gb_remaining', gbCost);
       } else {
         await trx('users').where({ id: job.user_id }).increment('credits_balance', cost); 
       }
  
       // 2. Refetch du solde global
       const [[updated]] = await trx.raw( 
-        'SELECT credits_balance, free_text_jobs_remaining, free_code_runs_remaining, free_media_jobs_remaining FROM users WHERE id = ?', 
+        'SELECT credits_balance, free_gb_remaining FROM users WHERE id = ?', 
         [job.user_id] 
       ); 
  

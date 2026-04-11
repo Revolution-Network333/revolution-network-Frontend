@@ -32,7 +32,7 @@ export async function creditRoutes(fastify: FastifyInstance, options: FastifyPlu
 
     const user = await db('users')
       .where({ id: userId })
-      .select('id', 'email', 'api_key_prefix', 'credits_balance', 'free_credits_balance')
+      .select('id', 'email', 'api_key_prefix', 'credits_balance', 'free_gb_remaining')
       .first();
 
     if (!user) {
@@ -44,7 +44,7 @@ export async function creditRoutes(fastify: FastifyInstance, options: FastifyPlu
       email: user.email,
       api_key_masked: `${user.api_key_prefix}••••-••••-••••`,
       balance: parseFloat(user.credits_balance),
-      free_balance: parseFloat(user.free_credits_balance)
+      free_balance_gb: parseFloat(user.free_gb_remaining)
     };
   });
 
