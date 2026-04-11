@@ -357,8 +357,22 @@ async function ensureSqliteMigrations() {
       user_id INTEGER PRIMARY KEY,
       credits_balance INTEGER DEFAULT 0,
       credits_used_month INTEGER DEFAULT 0,
+      free_credits_balance INTEGER DEFAULT 0,
+      free_credits_used_week INTEGER DEFAULT 0,
+      free_week_start TEXT,
       updated_at TEXT DEFAULT CURRENT_TIMESTAMP
     )`);
+
+    // Ensure missing columns for free tier weekly reset
+    try {
+      const ecInfo = await db.query("PRAGMA table_info('enterprise_credits')");
+      const ecCols = (ecInfo.rows || []).map(r => r.name);
+      if (!ecCols.includes('free_credits_balance')) await run("ALTER TABLE enterprise_credits ADD COLUMN free_credits_balance INTEGER DEFAULT 0");
+      if (!ecCols.includes('free_credits_used_week')) await run("ALTER TABLE enterprise_credits ADD COLUMN free_credits_used_week INTEGER DEFAULT 0");
+      if (!ecCols.includes('free_week_start')) await run("ALTER TABLE enterprise_credits ADD COLUMN free_week_start TEXT");
+    } catch (e) {
+      // ignore
+    }
     await run(`CREATE TABLE IF NOT EXISTS jobs (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER NOT NULL,
@@ -609,6 +623,9 @@ async function ensurePostgresSchema() {
         )`);
       // Ensure missing columns on existing installations
       try { await client.query(`ALTER TABLE enterprise_credits ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP`); } catch (e) { if (e.code !== '42701') throw e; }
+      try { await client.query(`ALTER TABLE enterprise_credits ADD COLUMN free_credits_balance INTEGER DEFAULT 0`); } catch (e) { if (e.code !== '42701') throw e; }
+      try { await client.query(`ALTER TABLE enterprise_credits ADD COLUMN free_credits_used_week INTEGER DEFAULT 0`); } catch (e) { if (e.code !== '42701') throw e; }
+      try { await client.query(`ALTER TABLE enterprise_credits ADD COLUMN free_week_start TIMESTAMP`); } catch (e) { if (e.code !== '42701') throw e; }
       await client.query(`
         CREATE TABLE IF NOT EXISTS orders (
           id SERIAL PRIMARY KEY,

@@ -1,10 +1,14 @@
 const express = require('express');
 const crypto = require('crypto');
+const rateLimit = require('express-rate-limit');
 const db = require('../config/database');
 const config = require('../config');
 const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
+
+const FREE_TIER_WEEKLY_MB = 3 * 1024;
+const FREE_TIER_MAX_JOB_MB = Math.floor(0.2 * 1024); // 0.2 GB
 
 function generateKey() {
   return [
@@ -22,7 +26,10 @@ async function ensureEnterpriseRecords(userId) {
   // Ensure credits row
   const credits = await db.query('SELECT * FROM enterprise_credits WHERE user_id = $1', [userId]);
   if (credits.rows.length === 0) {
-    await db.query('INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month) VALUES ($1, $2, $3)', [userId, 0, 0]);
+    await db.query(
+      'INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month, free_credits_balance, free_credits_used_week, free_week_start) VALUES ($1, $2, $3, $4, $5, $6)',
+      [userId, 0, 0, FREE_TIER_WEEKLY_MB, 0, startOfWeekUTCISO(new Date())]
+    );
   }
   // Ensure api key exists (masked only)
   const keyRes = await db.query('SELECT * FROM api_keys WHERE user_id = $1 AND active = 1', [userId]);
@@ -33,6 +40,35 @@ async function ensureEnterpriseRecords(userId) {
     return { createdNew: true, fullKey: full };
   }
   return { createdNew: false };
+}
+
+function startOfWeekUTCISO(date) {
+  const d = new Date(date);
+  const day = d.getUTCDay();
+  const diffToMonday = (day + 6) % 7;
+  d.setUTCDate(d.getUTCDate() - diffToMonday);
+  d.setUTCHours(0, 0, 0, 0);
+  return d.toISOString();
+}
+
+async function ensureFreeTierWeek(userId) {
+  const nowWeekStart = startOfWeekUTCISO(new Date());
+  const r = await db.query('SELECT free_week_start FROM enterprise_credits WHERE user_id = $1', [userId]);
+  const current = r.rows[0]?.free_week_start;
+  if (!current) {
+    await db.query(
+      'UPDATE enterprise_credits SET free_week_start = $1, free_credits_balance = $2, free_credits_used_week = $3 WHERE user_id = $4',
+      [nowWeekStart, FREE_TIER_WEEKLY_MB, 0, userId]
+    );
+    return;
+  }
+  const currentStart = new Date(current).toISOString();
+  if (currentStart !== nowWeekStart) {
+    await db.query(
+      'UPDATE enterprise_credits SET free_week_start = $1, free_credits_balance = $2, free_credits_used_week = $3 WHERE user_id = $4',
+      [nowWeekStart, FREE_TIER_WEEKLY_MB, 0, userId]
+    );
+  }
 }
 
 async function getUserIdFromApiKey(req) {
@@ -198,9 +234,8 @@ router.get('/me', authenticateToken, async (req, res) => {
         percentUsed: limitGB > 0 ? Math.min(100, (parseFloat(usedGB) / limitGB) * 100).toFixed(1) : 0
       },
       priority: credits.priority_level === 3 ? 'Ultra' : (credits.priority_level === 2 ? 'Haute' : 'Standard'),
-      requireSubscription: !subscribed && !isAdmin, // Admins don't need sub for /me view
+      requireSubscription: false,
     };
-    if (!subscribed && !isAdmin) payload.plans = await getSubscriptionPlans();
     res.json(payload);
   } catch (e) {
     console.error('Enterprise /me error:', e);
@@ -212,13 +247,6 @@ router.get('/me', authenticateToken, async (req, res) => {
 router.post('/api-key', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    const u = await db.query('SELECT username, role FROM users WHERE id = $1', [userId]);
-    const isAdmin = (u.rows[0]?.username === 'korn666') || ((u.rows[0]?.role || '').toLowerCase() === 'admin');
-    
-    const subscribed = await hasActiveSubscription(userId);
-    if (!subscribed && !isAdmin) {
-      return res.status(402).json({ error: 'subscription_required', plans: await getSubscriptionPlans() });
-    }
     // deactivate previous keys
     await db.query('UPDATE api_keys SET active = 0 WHERE user_id = $1', [userId]);
     // create new
@@ -243,25 +271,84 @@ router.get('/plans', authenticateToken, async (req, res) => {
 });
 
 // Jobs API v1
-router.post('/v1/jobs', async (req, res) => {
+
+// Resolve API authentication for /v1/* routes (token or x-api-key)
+router.use('/v1', async (req, res, next) => {
   try {
     let userId = req.user?.userId;
     if (!userId) userId = await getUserIdFromApiKey(req);
     if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+    req.enterpriseUserId = userId;
+
+    const u = await db.query('SELECT username, role FROM users WHERE id = $1', [userId]);
+    const isAdmin = (u.rows[0]?.username === 'korn666') || ((u.rows[0]?.role || '').toLowerCase() === 'admin');
+    const subscribed = isAdmin ? true : await hasActiveSubscription(userId);
+    req.enterpriseIsPremium = !!subscribed;
+    next();
+  } catch (e) {
+    console.error('Enterprise v1 auth error:', e);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+const freeTierLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => String(req.enterpriseUserId || req.ip || 'unknown'),
+  skip: (req) => !!req.enterpriseIsPremium,
+  message: { error: 'too_many_requests', message: 'Free tier limit: 30 requests per minute.' }
+});
+
+router.post('/v1/jobs', freeTierLimiter, async (req, res) => {
+  try {
+    const userId = req.enterpriseUserId;
     const { type, params } = req.body || {};
     if (!type) return res.status(400).json({ error: 'type requis' });
     const supp = ['http_get','http_post','ping','dns_lookup','content_check','csv_stats','image_svg_generate','audio_convert','video_transcode','text_transform','text_generate_template','code_run_js', 'ocr_pdf', 'data_job'];
     if (!supp.includes(type)) return res.status(400).json({ error: 'type inconnu' });
+
+    if (!req.enterpriseIsPremium) {
+      if (type === 'video_transcode') {
+        return res.status(403).json({ error: 'forbidden', message: 'video jobs disabled on free tier' });
+      }
+    }
+
     const cost = costFor(type, params || {});
+
+    if (!req.enterpriseIsPremium && cost > FREE_TIER_MAX_JOB_MB) {
+      return res.status(403).json({ error: 'forbidden', message: `free tier max 0.2 GB per job (${FREE_TIER_MAX_JOB_MB} MB)` });
+    }
+
     const cRes = await db.query('SELECT credits_balance, credits_used_month FROM enterprise_credits WHERE user_id = $1', [userId]);
     let c = cRes.rows[0];
     if (!c) {
-      await db.query('INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month) VALUES ($1, 0, 0)', [userId]);
-      c = { credits_balance: 0, credits_used_month: 0 };
+      await db.query(
+        'INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month, free_credits_balance, free_credits_used_week, free_week_start) VALUES ($1, 0, 0, $2, 0, $3)',
+        [userId, FREE_TIER_WEEKLY_MB, startOfWeekUTCISO(new Date())]
+      );
+      c = { credits_balance: 0, credits_used_month: 0, free_credits_balance: FREE_TIER_WEEKLY_MB, free_credits_used_week: 0 };
     }
-    if ((c.credits_balance || 0) < cost) return res.status(402).json({ error: 'insufficient_credits', required: cost, balance: c.credits_balance || 0 });
-    await db.query('UPDATE enterprise_credits SET credits_balance = credits_balance - $1, credits_used_month = credits_used_month + $2, updated_at = CURRENT_TIMESTAMP WHERE user_id = $3', [cost, cost, userId]);
-    await db.query('INSERT INTO credit_ledger (user_id, amount, reason) VALUES ($1, $2, $3)', [userId, -cost, 'job_reserve']);
+
+    if (!req.enterpriseIsPremium) {
+      await ensureFreeTierWeek(userId);
+      const f = await db.query('SELECT free_credits_balance, free_credits_used_week, free_week_start FROM enterprise_credits WHERE user_id = $1', [userId]);
+      const freeBal = Number(f.rows[0]?.free_credits_balance || 0);
+      if (freeBal < cost) {
+        return res.status(402).json({ error: 'free_quota_exceeded', required: cost, balance: freeBal, weekly_limit: FREE_TIER_WEEKLY_MB });
+      }
+      await db.query(
+        'UPDATE enterprise_credits SET free_credits_balance = free_credits_balance - $1, free_credits_used_week = free_credits_used_week + $2, updated_at = CURRENT_TIMESTAMP WHERE user_id = $3',
+        [cost, cost, userId]
+      );
+      await db.query('INSERT INTO credit_ledger (user_id, amount, reason) VALUES ($1, $2, $3)', [userId, -cost, 'free_job_reserve']);
+    } else {
+      if ((c.credits_balance || 0) < cost) return res.status(402).json({ error: 'insufficient_credits', required: cost, balance: c.credits_balance || 0 });
+      await db.query('UPDATE enterprise_credits SET credits_balance = credits_balance - $1, credits_used_month = credits_used_month + $2, updated_at = CURRENT_TIMESTAMP WHERE user_id = $3', [cost, cost, userId]);
+      await db.query('INSERT INTO credit_ledger (user_id, amount, reason) VALUES ($1, $2, $3)', [userId, -cost, 'job_reserve']);
+    }
+
     const r = await db.query('INSERT INTO jobs (user_id, type, status, params_json) VALUES ($1, $2, $3, $4) RETURNING id', [userId, type, 'queued', JSON.stringify(params||{})]);
     res.json({ id: r.rows[0].id, status: 'queued' });
   } catch (e) {
@@ -270,11 +357,9 @@ router.post('/v1/jobs', async (req, res) => {
   }
 });
 
-router.get('/v1/jobs', async (req, res) => {
+router.get('/v1/jobs', freeTierLimiter, async (req, res) => {
   try {
-    let userId = req.user?.userId;
-    if (!userId) userId = await getUserIdFromApiKey(req);
-    if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+    const userId = req.enterpriseUserId;
     const r = await db.query('SELECT id, type, status, created_at, updated_at FROM jobs WHERE user_id = $1 ORDER BY created_at DESC', [userId]);
     res.json({ jobs: r.rows });
   } catch (e) {
@@ -283,11 +368,9 @@ router.get('/v1/jobs', async (req, res) => {
   }
 });
 
-router.get('/v1/jobs/:id', async (req, res) => {
+router.get('/v1/jobs/:id', freeTierLimiter, async (req, res) => {
   try {
-    let userId = req.user?.userId;
-    if (!userId) userId = await getUserIdFromApiKey(req);
-    if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+    const userId = req.enterpriseUserId;
     const id = parseInt(req.params.id);
     const r = await db.query('SELECT id, type, status, created_at, updated_at, params_json FROM jobs WHERE id = $1 AND user_id = $2', [id, userId]);
     if (r.rows.length === 0) return res.status(404).json({ error: 'Not found' });
@@ -298,11 +381,9 @@ router.get('/v1/jobs/:id', async (req, res) => {
   }
 });
 
-router.get('/v1/jobs/:id/result', async (req, res) => {
+router.get('/v1/jobs/:id/result', freeTierLimiter, async (req, res) => {
   try {
-    let userId = req.user?.userId;
-    if (!userId) userId = await getUserIdFromApiKey(req);
-    if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+    const userId = req.enterpriseUserId;
     const id = parseInt(req.params.id);
     const owner = await db.query('SELECT user_id FROM jobs WHERE id = $1', [id]);
     if (owner.rows[0]?.user_id !== userId) return res.status(403).json({ error: 'Forbidden' });

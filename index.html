@@ -71,7 +71,7 @@
                     </svg>
                     <span data-i18n="menu.profile">Profil</span>
                 </button>
-                <button id="menu-enterprise-api" class="menu-item" onclick="setPage('enterpriseApi')" style="display:none;">
+                <button id="menu-enterprise-api" class="menu-item" onclick="setPage('enterpriseApi')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="16" rx="2"></rect>
                         <path d="M7 8h10"></path>
@@ -1628,7 +1628,7 @@
                     }
                     
                     if (enterpriseBtn) {
-                        enterpriseBtn.style.display = (role === 'entreprise' || role === 'admin' || isKornAdmin) ? 'flex' : 'none';
+                        enterpriseBtn.style.display = 'flex';
                     }
                     if (adminBtn) {
                         adminBtn.style.display = (role === 'admin' || isKornAdmin) ? 'flex' : 'none';

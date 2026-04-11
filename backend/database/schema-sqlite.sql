@@ -162,6 +162,9 @@ CREATE TABLE IF NOT EXISTS enterprise_credits (
     user_id INTEGER NOT NULL,
     credits_balance INTEGER DEFAULT 0,
     credits_used_month INTEGER DEFAULT 0,
+    free_credits_balance INTEGER DEFAULT 0,
+    free_credits_used_week INTEGER DEFAULT 0,
+    free_week_start TEXT,
     reset_date TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

@@ -197,6 +197,9 @@ CREATE TABLE IF NOT EXISTS enterprise_credits (
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     credits_balance BIGINT DEFAULT 0, -- Total GB remaining (in MB or actual GB, let's use MB for precision)
     credits_used_month BIGINT DEFAULT 0, -- Total MB used this month
+    free_credits_balance BIGINT DEFAULT 0, -- Free tier weekly MB remaining
+    free_credits_used_week BIGINT DEFAULT 0, -- Free tier MB used this week
+    free_week_start TIMESTAMP, -- Start of the current free tier week (UTC)
     bandwidth_limit_gb INTEGER DEFAULT 0, -- Monthly quota in GB
     priority_level INTEGER DEFAULT 1, -- 1: Normal, 2: High, 3: Ultra
     reset_date TIMESTAMP
