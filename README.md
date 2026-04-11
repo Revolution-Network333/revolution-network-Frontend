@@ -97,6 +97,72 @@ Ready to join the network?
 
 ---
 
+## 🔌 Enterprise API (Developer Access)
+
+### Base URL
+
+- Local: `http://localhost:3000/api/enterprise`
+- Production: `https://revolution-backend-sal2.onrender.com/api/enterprise`
+
+### Authentication
+
+There are 2 ways to authenticate, depending on the endpoint:
+
+#### 1) User session (JWT) for account endpoints
+
+Use `Authorization: Bearer <token>` for:
+
+- `GET /api/enterprise/me`
+- `POST /api/enterprise/api-key` (regenerate and reveal the full key for copy)
+
+Example:
+
+```bash
+curl -s "http://localhost:3000/api/enterprise/me" \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+To generate/copy your API key:
+
+```bash
+curl -s -X POST "http://localhost:3000/api/enterprise/api-key" \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+This returns `fullKey` once so you can store it securely.
+
+#### 2) API key for /v1 endpoints
+
+Use `x-api-key: <your_api_key>` for all `/api/enterprise/v1/*` endpoints.
+
+Example:
+
+```bash
+curl -s -X POST "http://localhost:3000/api/enterprise/v1/jobs" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $ENTERPRISE_API_KEY" \
+  -d '{"type":"ping","params":{}}'
+```
+
+### Free tier limits
+
+When you do not have an active subscription (Free tier):
+
+- **3 GB compute / week** (auto-reset at the start of each week)
+- **Max 0.2 GB per job**
+- **30 requests / minute**
+- **Video jobs disabled** (`type = video_transcode`)
+
+### Main endpoints
+
+- `POST /api/enterprise/v1/jobs`
+  - Body: `{ "type": "ping", "params": { ... } }`
+- `GET /api/enterprise/v1/jobs`
+- `GET /api/enterprise/v1/jobs/:id`
+- `GET /api/enterprise/v1/jobs/:id/result`
+
+---
+
 ## ☁️ Deployment (Render)
 
 To deploy on Render, use the following settings:
