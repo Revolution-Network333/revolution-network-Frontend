@@ -578,6 +578,7 @@ function startOfWeekUTCISO(date) {
 async function backfillFreeTierCredits() {
   try {
     const weekStart = startOfWeekUTCISO(new Date());
+    const weekStartMySql = weekStart.replace('T', ' ').replace(/\.\d{3}Z$/, '');
     const weeklyMb = 3 * 1024;
 
     if (db.isSQLite) {
@@ -591,6 +592,18 @@ async function backfillFreeTierCredits() {
              free_credits_used_week = COALESCE(free_credits_used_week, 0)
          WHERE free_week_start IS NULL OR free_credits_balance IS NULL OR free_credits_balance = 0`,
         [weekStart, weeklyMb]
+      );
+    } else if (db.isMySQL) {
+      await db.query(
+        `UPDATE enterprise_credits
+         SET free_week_start = COALESCE(free_week_start, $1),
+             free_credits_balance = CASE
+               WHEN free_credits_balance IS NULL OR free_credits_balance = 0 THEN $2
+               ELSE free_credits_balance
+             END,
+             free_credits_used_week = COALESCE(free_credits_used_week, 0)
+         WHERE free_week_start IS NULL OR free_credits_balance IS NULL OR free_credits_balance = 0`,
+        [weekStartMySql, weeklyMb]
       );
     } else {
       await db.query(
