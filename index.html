@@ -1817,13 +1817,23 @@
                       .then(r=>r.json()).then(j=>{
                         const ac = document.getElementById('header-api-credits');
                         if (ac) {
-                            let val = '0.00';
-                            if (j.usage && j.usage.remainingGB !== undefined) {
-                                val = Number(j.usage.remainingGB).toFixed(2);
-                            } else if (j.credits_balance !== undefined) {
-                                val = (Number(j.credits_balance) / 1024).toFixed(2);
+                            let paidRemainingGB = 0;
+                            let freeRemainingGB = 0;
+
+                            if (j.usage && j.usage.remainingGB !== undefined && j.usage.remainingGB !== null) {
+                                paidRemainingGB = Number(j.usage.remainingGB) || 0;
+                            } else if (j.credits_balance !== undefined && j.credits_balance !== null) {
+                                paidRemainingGB = (Number(j.credits_balance) || 0) / 1024;
                             }
-                            ac.textContent = `API: ${val} GB`;
+
+                            if (j.freeTier && j.freeTier.remainingGB !== undefined && j.freeTier.remainingGB !== null) {
+                                freeRemainingGB = Number(j.freeTier.remainingGB) || 0;
+                            } else if (j.free_credits_balance !== undefined && j.free_credits_balance !== null) {
+                                freeRemainingGB = (Number(j.free_credits_balance) || 0) / 1024;
+                            }
+
+                            const totalGB = paidRemainingGB + freeRemainingGB;
+                            ac.textContent = `API: ${Number(totalGB).toFixed(2)} GB`;
                         }
                       }).catch(()=>{});
                 }
