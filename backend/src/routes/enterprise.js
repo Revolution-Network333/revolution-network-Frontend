@@ -304,14 +304,29 @@ router.get('/billing/portal', authenticateToken, async (req, res) => {
     }
 
     const userId = req.user.userId;
+    const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
     const u = await db.query('SELECT email, stripe_customer_id FROM users WHERE id = $1', [userId]);
-    const customerId = u.rows[0]?.stripe_customer_id || null;
+    const email = u.rows[0]?.email || null;
+    let customerId = u.rows[0]?.stripe_customer_id || null;
+
+    // Support Payment Links: if we don't have a stored customer id, try to find it by email
+    if (!customerId && email) {
+      try {
+        const customers = await stripe.customers.list({ email: String(email), limit: 1 });
+        const found = customers?.data?.[0]?.id || null;
+        if (found) {
+          customerId = found;
+          try {
+            await db.query('UPDATE users SET stripe_customer_id = $1 WHERE id = $2', [customerId, userId]);
+          } catch (_) {}
+        }
+      } catch (_) {}
+    }
 
     if (!customerId) {
       return res.status(404).json({ error: 'no_stripe_customer' });
     }
 
-    const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
     const frontendUrl = (config?.cors?.frontendUrl || process.env.FRONTEND_URL || '').replace(/\/+$/, '');
     const returnUrl = frontendUrl ? `${frontendUrl}/?page=profile` : undefined;
 

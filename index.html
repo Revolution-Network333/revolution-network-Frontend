@@ -3253,6 +3253,49 @@ main();</code></pre>
             const twofaCopySecret = document.getElementById('twofa-copy-secret');
             const manageSubscriptionBtn = document.getElementById('manage-subscription-btn');
 
+            if (manageSubscriptionBtn) {
+                manageSubscriptionBtn.addEventListener('click', async () => {
+                    try {
+                        // If user has no active subscription, open subscription panel instead of Stripe portal
+                        try {
+                            const meRes = await fetch(`${API_BASE}/api/enterprise/me`, {
+                                headers: { 'Authorization': `Bearer ${token}` }
+                            });
+                            const me = await meRes.json().catch(() => ({}));
+                            if (meRes.ok && me && me.subscribed === false) {
+                                if (typeof setPage === 'function') {
+                                    await setPage('shop');
+                                    setTimeout(() => {
+                                        try { if (typeof openPlansModal === 'function') openPlansModal(); } catch {}
+                                    }, 150);
+                                }
+                                return;
+                            }
+                        } catch {}
+
+                        const r = await fetch(`${API_BASE}/api/enterprise/billing/portal`, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        const j = await r.json().catch(() => ({}));
+                        if (!r.ok) {
+                            if (j && j.error === 'no_stripe_customer') {
+                                alert(t('profile.subscription.no_customer'));
+                                return;
+                            }
+                            alert(t('profile.subscription.unavailable'));
+                            return;
+                        }
+                        if (j && j.url) {
+                            window.open(j.url, '_blank');
+                        } else {
+                            alert(t('profile.subscription.unavailable'));
+                        }
+                    } catch {
+                        alert(t('profile.subscription.unavailable'));
+                    }
+                });
+            }
+
             function formatPoints(n) {
                 const v = Number(n || 0);
                 if (!Number.isFinite(v)) return '0';
