@@ -216,6 +216,13 @@
                         <span id="header-api-credits" style="color:#a78bfa;font-weight:600;font-size:0.85rem;">API: 0 GB</span>
                     </div>
                     <div class="header-user-rank" id="header-rank-badge" style="display:none;"></div>
+                    <button id="header-notifications-btn" class="profile-btn" style="position:relative;padding:8px 10px;display:none;" title="Notifications" onclick="openNotificationsModal()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        <span id="header-notifications-dot" style="position:absolute;right:6px;bottom:6px;width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 8px rgba(239,68,68,0.7);display:none;"></span>
+                    </button>
                     <div class="user-avatar">M</div>
                     <button id="header-login-btn" class="profile-btn primary" style="display:none;" onclick="setPage('login')">Sign in</button>
                     <select id="lang-switch" style="margin-left:10px;padding:6px 8px;border-radius:8px;background:#0b0f14;color:#fff;border:1px solid #1f2937;">
@@ -243,6 +250,41 @@
                     </div>
                 </div>
             </footer>
+
+            <div class="modal" id="notifications-modal" style="display:none;">
+                <div class="modal-content" style="max-width:560px;">
+                    <div class="modal-header">
+                        <h2 class="section-title">Notifications</h2>
+                        <button class="close-btn" onclick="closeNotificationsModal()">&times;</button>
+                    </div>
+                    <div id="notifications-modal-body" style="margin-top:10px;max-height:60vh;overflow:auto;"></div>
+                    <div style="margin-top:16px;display:flex;justify-content:flex-end;gap:8px;">
+                        <button class="profile-btn" onclick="closeNotificationsModal()">Fermer</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal" id="admin-notification-modal" style="display:none;">
+                <div class="modal-content" style="max-width:560px;">
+                    <div class="modal-header">
+                        <h2 class="section-title">Créer une notification</h2>
+                        <button class="close-btn" onclick="closeAdminNotificationModal()">&times;</button>
+                    </div>
+                    <div class="form-grid">
+                        <div style="grid-column:1/-1;">
+                            <label>Titre</label>
+                            <input id="admin-notif-title" type="text" placeholder="Titre..." />
+                        </div>
+                        <div style="grid-column:1/-1;">
+                            <label>Message</label>
+                            <textarea id="admin-notif-message" rows="5" placeholder="Message..."></textarea>
+                        </div>
+                        <div style="grid-column:1/-1;text-align:right;margin-top:8px;">
+                            <button class="profile-btn primary" onclick="submitAdminNotification()">Envoyer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -1801,6 +1843,7 @@
                         adminSupportBtn.style.display = isAdmin ? 'flex' : 'none';
                         if (isAdmin) refreshAdminSupportNotification();
                     }
+                    try { refreshNotificationsBell(); } catch {}
                     
                     if (enterpriseBtn) {
                         enterpriseBtn.style.display = 'flex';
@@ -1932,6 +1975,99 @@
             if (supportBtn && supportBtn.style.display !== 'none') {
                 refreshSupportNotification();
             }
+        }, 60000);
+
+        // --- Notifications bell ---
+        async function refreshNotificationsBell() {
+            const token = localStorage.getItem('token');
+            const btn = document.getElementById('header-notifications-btn');
+            const dot = document.getElementById('header-notifications-dot');
+            if (!btn || !dot) return;
+
+            if (!token) {
+                btn.style.display = 'none';
+                dot.style.display = 'none';
+                return;
+            }
+
+            btn.style.display = 'inline-flex';
+
+            try {
+                const res = await fetch(`${API_BASE}/api/notifications/unread-count`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) {
+                    dot.style.display = 'none';
+                    return;
+                }
+                const data = await res.json().catch(() => ({}));
+                const unread = parseInt(data.unread_count || 0);
+                dot.style.display = unread > 0 ? 'inline-block' : 'none';
+            } catch {
+                // ignore
+            }
+        }
+
+        async function openNotificationsModal() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            const modal = document.getElementById('notifications-modal');
+            const body = document.getElementById('notifications-modal-body');
+            if (!modal || !body) return;
+
+            modal.style.display = 'flex';
+            body.innerHTML = '<div style="padding:10px;color:#9ca3af;">Chargement...</div>';
+
+            try {
+                const res = await fetch(`${API_BASE}/api/notifications?limit=30`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = res.ok ? await res.json().catch(() => ({})) : {};
+                const notifs = Array.isArray(data.notifications) ? data.notifications : [];
+
+                if (notifs.length === 0) {
+                    body.innerHTML = '<div style="padding:10px;color:#9ca3af;">Aucune notification.</div>';
+                } else {
+                    body.innerHTML = notifs.map(n => {
+                        const isRead = (n.is_read === true || n.is_read === 1 || String(n.is_read) === 'true');
+                        const dt = n.created_at ? new Date(n.created_at).toLocaleString() : '';
+                        return `
+                            <div style="padding:12px;border:1px solid #1f2937;border-radius:10px;margin-bottom:10px;background:${isRead ? '#0b0f14' : 'rgba(239,68,68,0.08)'};">
+                                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                                    <div style="font-weight:700;color:#fff;">${(n.title || '').replace(/</g,'&lt;')}</div>
+                                    <div style="font-size:0.75rem;color:#9ca3af;white-space:nowrap;">${dt}</div>
+                                </div>
+                                <div style="margin-top:6px;color:#d1d5db;white-space:pre-wrap;">${(n.message || '').replace(/</g,'&lt;')}</div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                // mark all as read when opened
+                try {
+                    await fetch(`${API_BASE}/api/notifications/mark-all-read`, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                } catch {}
+
+                try {
+                    const dot = document.getElementById('header-notifications-dot');
+                    if (dot) dot.style.display = 'none';
+                } catch {}
+            } catch {
+                body.innerHTML = '<div style="padding:10px;color:#ef4444;">Erreur de chargement.</div>';
+            }
+        }
+
+        function closeNotificationsModal() {
+            const modal = document.getElementById('notifications-modal');
+            if (modal) modal.style.display = 'none';
+            try { refreshNotificationsBell(); } catch {}
+        }
+
+        setInterval(() => {
+            refreshNotificationsBell();
         }, 60000);
 
         function maskUsername(name) {
@@ -2108,8 +2244,57 @@
                             </form>
                         </div>
                     </div>
+
                 </div>
             `;
+        }
+
+        function openAdminNotificationModal() {
+            const modal = document.getElementById('admin-notification-modal');
+            if (!modal) return;
+            modal.style.display = 'flex';
+            const t1 = document.getElementById('admin-notif-title');
+            const t2 = document.getElementById('admin-notif-message');
+            if (t1) t1.value = '';
+            if (t2) t2.value = '';
+        }
+
+        function closeAdminNotificationModal() {
+            const modal = document.getElementById('admin-notification-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        async function submitAdminNotification() {
+            const token = localStorage.getItem('token');
+            const titleEl = document.getElementById('admin-notif-title');
+            const msgEl = document.getElementById('admin-notif-message');
+            const title = (titleEl ? titleEl.value : '').trim();
+            const message = (msgEl ? msgEl.value : '').trim();
+            if (!title || !message) {
+                alert('Titre et message requis');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/api/notifications`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ title, message })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || (data && data.error)) {
+                    alert(data.error || 'Erreur');
+                    return;
+                }
+                closeAdminNotificationModal();
+                try { refreshNotificationsBell(); } catch {}
+                alert('Notification envoyée');
+            } catch {
+                alert('Erreur');
+            }
         }
 
         function getDocsHTML() {
@@ -4427,6 +4612,7 @@ main();</code></pre>
                                    style="padding:8px;border:1px solid #374151;border-radius:6px;background:#111827;color:#e5e7eb;min-width:260px;">
                             <button class="profile-btn" id="admin-search-btn">Rechercher</button>
                             <button class="profile-btn primary" onclick="currentPage='adminAirdrop'; renderPage();" title="Aller à la page des bonus globaux">🎁 Bonus Général</button>
+                            <button class="profile-btn" onclick="openAdminNotificationModal()" title="Créer une notification">📣 Notification</button>
                         </div>
                     </div>
                     <table class="data-table" id="admin-leaderboard-table">
