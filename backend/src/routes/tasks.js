@@ -65,7 +65,7 @@ router.get('/early-adopter/status', authenticateToken, async (req, res) => {
 });
 
 // Utilisateur: déclarer une task à valider (mise en file - usage unique)
-router.post('/user/tasks/approve', authenticateToken, async (req, res) => {
+router.post('/approve', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
     const { taskId } = req.body || {};
@@ -126,7 +126,7 @@ router.post('/user/tasks/approve', authenticateToken, async (req, res) => {
 });
 
 // Utilisateur: récupérer le statut des tasks (pour affichage "Validée")
-router.get('/user/tasks/status', authenticateToken, async (req, res) => {
+router.get('/status', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
     const r = await db.query(
@@ -153,7 +153,7 @@ router.get('/user/tasks/status', authenticateToken, async (req, res) => {
 });
 
 // Bonus de minage cumulé via les tasks approuvées
-router.get('/user/tasks/bonus', authenticateToken, async (req, res) => {
+router.get('/bonus', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
     const r = await db.query(
