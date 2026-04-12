@@ -1,6 +1,6 @@
 {
   "name": "revolution-network-backend",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Backend P2P avec système de récompenses pour Révolution Network",
   "main": "src/server.js",
   "scripts": {
