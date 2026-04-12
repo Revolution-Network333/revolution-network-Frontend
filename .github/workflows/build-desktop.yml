@@ -74,11 +74,12 @@ jobs:
       run: mkdir -p dist
     
     - name: Create Mac icon (placeholder)
-      working-directory: ./desktop-app/assets
+      working-directory: ./desktop-app
       run: |
-        if [ ! -f icon.icns ]; then
+        mkdir -p assets
+        if [ ! -f assets/icon.icns ]; then
           echo "Creating placeholder icon"
-          cp logo.jpg icon.icns 2>/dev/null || touch icon.icns
+          cp assets/logo.jpg assets/icon.icns 2>/dev/null || touch assets/icon.icns
         fi
     
     - name: Build macOS app
