@@ -4342,11 +4342,16 @@ main();</code></pre>
                             sessionStorage.setItem('wasGold', 'true');
                         }
                         
+                        // Fallback: vérifier le rang local si l'API ne retourne pas isGold
+                        const localUser = JSON.parse(localStorage.getItem('user') || '{}');
+                        const localRank = (localUser.rank || '').toLowerCase();
+                        const isEligibleRank = ['gold', 'platinum', 'diamond'].includes(localRank) || currentlyGold;
+
                         eaStatus = {
-                            isEarlyAdopter: eaData.isEarlyAdopter || false,
-                            isGold: currentlyGold,
+                            isEarlyAdopter: eaData.isEarlyAdopter || isEligibleRank,
+                            isGold: isEligibleRank,
                             spotsLeft: eaData.spotsLeft || 50,
-                            newlyGold: newlyGold
+                            newlyGold: newlyGold || (isEligibleRank && !previousGold)
                         };
                     } catch (e) {
                         console.error('Early adopter status fetch error:', e);
@@ -4365,12 +4370,21 @@ main();</code></pre>
 
                     if (task.type === 'early_adopter') {
                         // Source d'autorité: le rang Gold ou le statut eaStatus
-                        const isGold = eaStatus.isGold || (user && (user.rank === 'Gold' || user.role === 'Gold'));
+                        const eligibleRanks = ['Gold', 'Platinum', 'Diamond'];
+                        const isGold = eaStatus.isGold || (user && eligibleRanks.includes(user.rank));
                         
                         if (isGold) {
                             statusLabel = t('tasks.validated');
                             btnStyle = 'background-color: #fbbf24; border-color: #fbbf24; color: #000; font-weight: bold;';
                             isDisabled = true;
+                            // Auto-valider via API sans attendre admin
+                            if (token) {
+                                fetch(`${API_BASE}/api/tasks/approve`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                                    body: JSON.stringify({ taskId: task.id })
+                                }).catch(() => {});
+                            }
                             
                             // Show full congratulations message for all Gold users
                             const congratsDiv = document.createElement('div');
