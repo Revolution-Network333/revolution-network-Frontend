@@ -643,6 +643,23 @@ router.post('/early-adopter/backfill', authenticateToken, checkAdmin, async (req
   }
 });
 
+// Public tasks endpoint (temporary fix for Render deployment issue)
+router.get('/public/tasks', async (req, res) => {
+  try {
+    const activeClause = db.isSQLite ? 'active = 1' : 'active = TRUE';
+    const result = await db.query(
+      `SELECT id, title, description, type, link_url, reward_points, reward_airdrop_bonus_percent
+       FROM tasks
+       WHERE ${activeClause}
+       ORDER BY created_at DESC`
+    );
+    res.json({ tasks: result.rows });
+  } catch (e) {
+    console.error('Public tasks error:', e);
+    res.status(500).json({ error: 'Erreur interne du serveur' });
+  }
+});
+
 // Gestion des tasks (CRUD)
 router.get('/tasks', authenticateToken, checkAdmin, async (req, res) => {
   try {
