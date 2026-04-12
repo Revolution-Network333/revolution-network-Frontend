@@ -82,14 +82,18 @@ router.post('/approve', authenticateToken, async (req, res) => {
     const taskType = t.rows[0].type;
     const rewardPoints = parseInt(t.rows[0].reward_points || 0);
 
-    // Early Adopter: validation automatique pour les utilisateurs Gold
+    // Early Adopter: validation automatique pour les utilisateurs Gold et rangs supérieurs
     if (taskType === 'early_adopter') {
-      // Vérifier si l'utilisateur est déjà Gold
+      // Vérifier si l'utilisateur est déjà Gold ou rang supérieur
       const userRes = await db.query('SELECT rank, is_rank_locked FROM users WHERE id = $1', [userId]);
       const userRank = userRes.rows[0]?.rank;
       const isRankLocked = userRes.rows[0]?.is_rank_locked;
       
-      if (userRank === 'Gold' && isRankLocked) {
+      // Rangs qui valident automatiquement : Gold, Platinum, Diamond, et tous les rangs supérieurs
+      const autoApproveRanks = ['Gold', 'Platinum', 'Diamond'];
+      const shouldAutoApprove = autoApproveRanks.includes(userRank) && isRankLocked;
+      
+      if (shouldAutoApprove) {
         // L'utilisateur est déjà Gold - valider automatiquement la task
         const existingAny = await db.query(
           `SELECT id, status FROM user_tasks WHERE user_id = $1 AND task_id = $2 ORDER BY created_at DESC LIMIT 1`,
@@ -124,7 +128,7 @@ router.post('/approve', authenticateToken, async (req, res) => {
           } catch (_) {}
         }
         
-        return res.json({ success: true, userTaskId: ins.rows[0].id, status: 'approved', message: 'Early Adopter validé automatiquement (Gold)' });
+        return res.json({ success: true, userTaskId: ins.rows[0].id, status: 'approved', message: `Early Adopter validé automatiquement (${userRank})` });
       }
     }
 
