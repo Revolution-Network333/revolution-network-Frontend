@@ -5947,7 +5947,7 @@ function initializeShopPage() {
                         <h1 class="page-title">Admin Tasks</h1>
                         <div>
                             <button class="profile-btn" id="add-task-btn">Ajouter une task</button>
-                            <button class="profile-btn secondary" id="repair-user-tasks" title="Réparer schéma user_tasks (si ancien déploiement)">Réparer schéma</button>
+                            <button class="profile-btn secondary" id="repair-user-tasks" title="Réparation complète des tables et tâches">Réparer tout</button>
                         </div>
                     </div>
                     <table class="data-table" id="admin-tasks-table">
@@ -6117,19 +6117,46 @@ function initializeShopPage() {
                         repairBtn.disabled = true;
                         repairBtn.classList.remove('primary','danger');
                         repairBtn.classList.add('secondary');
-                        repairBtn.textContent = 'Réparation…';
-                        const r = await fetch(`${API_BASE}/api/admin/tasks/fix-schema`, { method:'POST', headers:{ 'Authorization': `Bearer ${token}` }});
+                        repairBtn.textContent = 'Réparation complète...';
+                        
+                        const r = await fetch(`${API_BASE}/api/admin/tasks/repair-all`, { 
+                            method:'POST', 
+                            headers:{ 'Authorization': `Bearer ${token}` }
+                        });
                         const j = await r.json().catch(()=>({}));
-                        repairBtn.textContent = (j && j.repaired) ? 'Schéma réparé' : 'Terminé';
+                        
+                        if (j.success) {
+                            let message = `Réparation terminée!\n`;
+                            message += `Tables: ${j.results.tables.length}\n`;
+                            message += `Tasks fixed: ${j.results.tasks.length}\n`;
+                            message += `Total tasks: ${j.results.summary.total_tasks}\n`;
+                            message += `Active tasks: ${j.results.summary.active_tasks}`;
+                            
+                            alert(message);
+                            repairBtn.textContent = 'Réparation réussie';
+                            repairBtn.classList.remove('secondary');
+                            repairBtn.classList.add('primary');
+                            
+                            // Reload tasks to show updated data
+                            loadTasks();
+                        } else {
+                            alert(`Erreur: ${j.error || 'Échec de la réparation'}`);
+                            repairBtn.textContent = 'Échec';
+                            repairBtn.classList.remove('secondary');
+                            repairBtn.classList.add('danger');
+                        }
                     } catch (e) {
+                        alert(`Erreur: ${e.message}`);
                         repairBtn.textContent = t('common.error');
+                        repairBtn.classList.remove('secondary');
+                        repairBtn.classList.add('danger');
                     } finally {
                         setTimeout(()=>{
                             repairBtn.textContent = originalText;
                             repairBtn.disabled = false;
                             repairBtn.classList.remove('primary','danger');
                             repairBtn.classList.add('secondary');
-                        }, 1800);
+                        }, 3000);
                     }
                 });
             }
