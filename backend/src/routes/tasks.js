@@ -4,6 +4,8 @@ const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
+console.log('TASKS ROUTES LOADED - Revolution Network Backend');
+
 // Admin: réparation de schéma user_tasks (en cas d'ancien déploiement)
 router.post('/admin/tasks/fix-schema', authenticateToken, async (req, res) => {
   try {
