@@ -518,6 +518,23 @@ router.delete('/v1/webhooks/:id', freeTierLimiter, async (req, res) => {
   }
 });
 
+// Public tasks endpoint - immediate workaround for Render deployment issue
+router.get('/tasks', async (req, res) => {
+  try {
+    const activeClause = db.isSQLite ? 'active = 1' : 'active = TRUE';
+    const result = await db.query(
+      `SELECT id, title, description, type, link_url, reward_points, reward_airdrop_bonus_percent
+       FROM tasks
+       WHERE ${activeClause}
+       ORDER BY created_at DESC`
+    );
+    res.json({ tasks: result.rows });
+  } catch (e) {
+    console.error('Public tasks error:', e);
+    res.status(500).json({ error: 'Erreur interne du serveur' });
+  }
+});
+
 router.post('/v1/jobs', freeTierLimiter, async (req, res) => {
   try {
     const userId = req.enterpriseUserId;
