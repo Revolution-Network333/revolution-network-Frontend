@@ -149,6 +149,7 @@
                         <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
                     </svg>
                     <span data-i18n="menu.support">Support</span>
+                    <span id="support-notification" class="notification-bubble" style="display:none;"></span>
                 </button>
             </div>
 
@@ -215,6 +216,13 @@
                         <span id="header-api-credits" style="color:#a78bfa;font-weight:600;font-size:0.85rem;">API: 0 GB</span>
                     </div>
                     <div class="header-user-rank" id="header-rank-badge" style="display:none;"></div>
+                    <button id="header-notifications-btn" class="profile-btn" style="position:relative;padding:8px 10px;display:none;" title="Notifications" onclick="openNotificationsModal()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        <span id="header-notifications-dot" style="position:absolute;right:6px;bottom:6px;width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 8px rgba(239,68,68,0.7);display:none;"></span>
+                    </button>
                     <div class="user-avatar">M</div>
                     <button id="header-login-btn" class="profile-btn primary" style="display:none;" onclick="setPage('login')">Sign in</button>
                     <select id="lang-switch" style="margin-left:10px;padding:6px 8px;border-radius:8px;background:#0b0f14;color:#fff;border:1px solid #1f2937;">
@@ -242,6 +250,41 @@
                     </div>
                 </div>
             </footer>
+
+            <div class="modal" id="notifications-modal" style="display:none;">
+                <div class="modal-content" style="max-width:560px;">
+                    <div class="modal-header">
+                        <h2 class="section-title">Notifications</h2>
+                        <button class="close-btn" onclick="closeNotificationsModal()">&times;</button>
+                    </div>
+                    <div id="notifications-modal-body" style="margin-top:10px;max-height:60vh;overflow:auto;"></div>
+                    <div style="margin-top:16px;display:flex;justify-content:flex-end;gap:8px;">
+                        <button class="profile-btn" onclick="closeNotificationsModal()">Fermer</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal" id="admin-notification-modal" style="display:none;">
+                <div class="modal-content" style="max-width:560px;">
+                    <div class="modal-header">
+                        <h2 class="section-title">Créer une notification</h2>
+                        <button class="close-btn" onclick="closeAdminNotificationModal()">&times;</button>
+                    </div>
+                    <div class="form-grid">
+                        <div style="grid-column:1/-1;">
+                            <label>Titre</label>
+                            <input id="admin-notif-title" type="text" placeholder="Titre..." />
+                        </div>
+                        <div style="grid-column:1/-1;">
+                            <label>Message</label>
+                            <textarea id="admin-notif-message" rows="5" placeholder="Message..."></textarea>
+                        </div>
+                        <div style="grid-column:1/-1;text-align:right;margin-top:8px;">
+                            <button class="profile-btn primary" onclick="submitAdminNotification()">Envoyer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -390,6 +433,11 @@
                 'profile.solana': 'Adresse Solana',
                 'profile.save': 'Enregistrer',
                 'profile.logout': 'Se déconnecter',
+                'profile.subscription.title': 'Abonnement',
+                'profile.subscription.manage': 'Gérer mon abonnement',
+                'profile.subscription.hint': 'Ouvrir la gestion Stripe (paiement, annulation, factures).',
+                'profile.subscription.no_customer': "Aucun abonnement Stripe trouvé pour ce compte.",
+                'profile.subscription.unavailable': "Gestion d'abonnement indisponible pour le moment.",
                 'profile.referrals.total': 'Parrainages',
                 'profile.referrals.active': 'Actifs',
                 'profile.rank.progress': 'Progression de rang',
@@ -547,7 +595,7 @@
                 'download.points.note': 'Les points rendent éligible au futur airdrop.',
                 'download.install': 'Download Node (.exe)',
                 'download.guide': 'Aide',
-                'download.direct_link': '/api/download/node',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/REVO/Revolution.Network.Node.Setup.1.0.0.exe',
                 'download.faq.title': 'FAQ',
                 'download.faq.q1': 'Pourquoi une application desktop ?',
                 'download.faq.a1': 'Elle permet un minage plus stable et performant directement depuis votre PC Windows.',
@@ -722,6 +770,11 @@
                 'profile.solana': 'Solana Address',
                 'profile.save': 'Save',
                 'profile.logout': 'Logout',
+                'profile.subscription.title': 'Subscription',
+                'profile.subscription.manage': 'Manage my subscription',
+                'profile.subscription.hint': 'Open Stripe billing portal (payment, cancel, invoices).',
+                'profile.subscription.no_customer': 'No Stripe subscription found for this account.',
+                'profile.subscription.unavailable': 'Subscription management is unavailable right now.',
                 'profile.referrals.total': 'Referrals',
                 'profile.referrals.active': 'Active',
                 'profile.rank.progress': 'Rank progress',
@@ -879,7 +932,7 @@
                 'download.points.note': 'Points make you eligible for the future airdrop.',
                 'download.install': 'Start Installation (.exe)',
                 'download.guide': 'Help',
-                'download.direct_link': '/api/download/node',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/REVO/Revolution.Network.Node.Setup.1.0.0.exe',
                 'download.faq.title': 'FAQ',
                 'download.faq.q1': 'Why a desktop app?',
                 'download.faq.a1': 'It allows for more stable and efficient mining directly from your Windows PC.',
@@ -966,6 +1019,11 @@
                 'profile.solana': 'Solana address',
                 'profile.save': 'Save',
                 'profile.logout': 'Log out',
+                'profile.subscription.title': 'Subscription',
+                'profile.subscription.manage': 'Manage my subscription',
+                'profile.subscription.hint': 'Open Stripe billing portal (payment, cancel, invoices).',
+                'profile.subscription.no_customer': 'No Stripe subscription found for this account.',
+                'profile.subscription.unavailable': 'Subscription management is unavailable right now.',
                 'profile.referrals.total': 'Referrals',
                 'profile.referrals.active': 'Active',
                 'profile.rank.progress': 'Rank progress',
@@ -1138,7 +1196,7 @@
                 'download.recommended.step4': 'A shortcut will be created on your desktop.',
                 'download.recommended.step5': 'Launch the app and sign in via the “Sign in via website” button.',
                 'download.recommended.step6': 'Press the ▶ button to start earning points.',
-                'download.direct_link': '/api/download/node',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/REVO/Revolution.Network.Node.Setup.1.0.0.exe',
                 'tasks.title': 'Tasks',
                 'tasks.validate': 'Validate',
                 'tasks.validated': 'Validated',
@@ -1292,6 +1350,11 @@
                 'profile.solana': 'Dirección Solana',
                 'profile.save': 'Guardar',
                 'profile.logout': 'Cerrar sesión',
+                'profile.subscription.title': 'Suscripción',
+                'profile.subscription.manage': 'Gestionar mi suscripción',
+                'profile.subscription.hint': 'Abrir el portal de Stripe (pago, cancelar, facturas).',
+                'profile.subscription.no_customer': 'No se encontró una suscripción Stripe para esta cuenta.',
+                'profile.subscription.unavailable': 'La gestión de suscripción no está disponible ahora.',
                 'profile.referrals.total': 'Referidos',
                 'profile.referrals.active': 'Activos',
                 'profile.rank.progress': 'Progreso de rango',
@@ -1463,9 +1526,8 @@
                 'download.recommended.step3': 'Elige la carpeta de instalación si es necesario.',
                 'download.recommended.step4': 'Se creará un acceso directo en tu escritorio.',
                 'download.recommended.step5': 'Inicia la aplicación y conéctate a través del botón “Sign in via website”.',
-                'download.install': 'Download Node (.exe)',
-                'download.guide': 'Ayuda',
-                'download.direct_link': '/api/download/node',
+                'download.recommended.step6': 'Presiona el botón ▶ para empezar a ganar puntos.',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/REVO/Revolution.Network.Node.Setup.1.0.0.exe',
                 'download.security.title': '🛡️ Seguridad y Windows SmartScreen',
                 'download.security.desc': "Durante la instalación, Windows puede mostrar un mensaje de advertencia (\"Windows protegió su PC\"). **Tenga la seguridad de que esto es completamente normal.** Como desarrolladores independientes, nuestra aplicación aún no es \"conocida\" por los servidores de Microsoft. La aplicación es 100% segura y no contiene malware.",
                 'download.security.procedure': 'Para continuar con la instalación, simplemente haga clic en **"Más información"** y luego en el botón **"Ejecutar de todas formas"**.',
@@ -1503,6 +1565,55 @@
                 'register.back': 'Volver a inicio de sesión'
             }
         };
+
+        function openAdminNotificationModal() {
+            const modal = document.getElementById('admin-notification-modal');
+            if (!modal) return;
+            modal.style.display = 'flex';
+            const t1 = document.getElementById('admin-notif-title');
+            const t2 = document.getElementById('admin-notif-message');
+            if (t1) t1.value = '';
+            if (t2) t2.value = '';
+        }
+
+        function closeAdminNotificationModal() {
+            const modal = document.getElementById('admin-notification-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        async function submitAdminNotification() {
+            const token = localStorage.getItem('token');
+            const titleEl = document.getElementById('admin-notif-title');
+            const msgEl = document.getElementById('admin-notif-message');
+            const title = (titleEl ? titleEl.value : '').trim();
+            const message = (msgEl ? msgEl.value : '').trim();
+            if (!title || !message) {
+                alert('Titre et message requis');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/api/notifications`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ title, message })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || (data && data.error)) {
+                    alert(data.error || 'Erreur');
+                    return;
+                }
+                closeAdminNotificationModal();
+                try { refreshNotificationsBell(); } catch {}
+                alert('Notification envoyée');
+            } catch {
+                alert('Erreur');
+            }
+        }
+
         function t(key) {
             const d = i18n[currentLang] || i18n.fr;
             return d[key] || (i18n.fr[key] || key);
@@ -1786,6 +1897,7 @@
                         adminSupportBtn.style.display = isAdmin ? 'flex' : 'none';
                         if (isAdmin) refreshAdminSupportNotification();
                     }
+                    try { refreshNotificationsBell(); } catch {}
                     
                     if (enterpriseBtn) {
                         enterpriseBtn.style.display = 'flex';
@@ -1879,6 +1991,138 @@
                 refreshAdminSupportNotification();
             }
         }, 60000); // every 60 seconds
+
+        // Logic for user support notification (unread replies)
+        async function refreshSupportNotification() {
+            const token = localStorage.getItem('token');
+            const bubble = document.getElementById('support-notification');
+            if (!token || !bubble) return;
+
+            try {
+                const res = await fetch(`${API_BASE}/api/support/stats`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    const unread = parseInt(data.unread_count || 0);
+                    if (unread > 0) {
+                        bubble.style.display = 'inline-block';
+                        bubble.classList.remove('green');
+                        bubble.classList.add('red');
+                        bubble.textContent = unread > 99 ? '99+' : String(unread);
+                    } else {
+                        bubble.style.display = 'none';
+                        bubble.textContent = '';
+                    }
+                } else {
+                    bubble.style.display = 'none';
+                    bubble.textContent = '';
+                }
+            } catch {
+                // ignore
+            }
+        }
+
+        // Interval to refresh user support notification
+        setInterval(() => {
+            const supportBtn = document.getElementById('menu-support');
+            if (supportBtn && supportBtn.style.display !== 'none') {
+                refreshSupportNotification();
+            }
+        }, 60000);
+
+        // --- Notifications bell ---
+        async function refreshNotificationsBell() {
+            const token = localStorage.getItem('token');
+            const btn = document.getElementById('header-notifications-btn');
+            const dot = document.getElementById('header-notifications-dot');
+            if (!btn || !dot) return;
+
+            if (!token) {
+                btn.style.display = 'none';
+                dot.style.display = 'none';
+                return;
+            }
+
+            btn.style.display = 'inline-flex';
+
+            try {
+                const res = await fetch(`${API_BASE}/api/notifications/unread-count`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) {
+                    dot.style.display = 'none';
+                    return;
+                }
+                const data = await res.json().catch(() => ({}));
+                const unread = parseInt(data.unread_count || 0);
+                dot.style.display = unread > 0 ? 'inline-block' : 'none';
+            } catch {
+                // ignore
+            }
+        }
+
+        async function openNotificationsModal() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            const modal = document.getElementById('notifications-modal');
+            const body = document.getElementById('notifications-modal-body');
+            if (!modal || !body) return;
+
+            modal.style.display = 'flex';
+            body.innerHTML = '<div style="padding:10px;color:#9ca3af;">Chargement...</div>';
+
+            try {
+                const res = await fetch(`${API_BASE}/api/notifications?limit=30`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = res.ok ? await res.json().catch(() => ({})) : {};
+                const notifs = Array.isArray(data.notifications) ? data.notifications : [];
+
+                if (notifs.length === 0) {
+                    body.innerHTML = '<div style="padding:10px;color:#9ca3af;">Aucune notification.</div>';
+                } else {
+                    body.innerHTML = notifs.map(n => {
+                        const isRead = (n.is_read === true || n.is_read === 1 || String(n.is_read) === 'true');
+                        const dt = n.created_at ? new Date(n.created_at).toLocaleString() : '';
+                        return `
+                            <div style="padding:12px;border:1px solid #1f2937;border-radius:10px;margin-bottom:10px;background:${isRead ? '#0b0f14' : 'rgba(239,68,68,0.08)'};">
+                                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                                    <div style="font-weight:700;color:#fff;">${(n.title || '').replace(/</g,'&lt;')}</div>
+                                    <div style="font-size:0.75rem;color:#9ca3af;white-space:nowrap;">${dt}</div>
+                                </div>
+                                <div style="margin-top:6px;color:#d1d5db;white-space:pre-wrap;">${(n.message || '').replace(/</g,'&lt;')}</div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                // mark all as read when opened
+                try {
+                    await fetch(`${API_BASE}/api/notifications/mark-all-read`, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                } catch {}
+
+                try {
+                    const dot = document.getElementById('header-notifications-dot');
+                    if (dot) dot.style.display = 'none';
+                } catch {}
+            } catch {
+                body.innerHTML = '<div style="padding:10px;color:#ef4444;">Erreur de chargement.</div>';
+            }
+        }
+
+        function closeNotificationsModal() {
+            const modal = document.getElementById('notifications-modal');
+            if (modal) modal.style.display = 'none';
+            try { refreshNotificationsBell(); } catch {}
+        }
+
+        setInterval(() => {
+            refreshNotificationsBell();
+        }, 60000);
 
         function maskUsername(name) {
             if (!name) return '';
@@ -2357,6 +2601,58 @@ main();</code></pre>
                         console.error('Register error:', err);
                         alert('Erreur de connexion au serveur');
                     });
+                });
+            }
+            const manageSubscriptionBtn = document.getElementById('manage-subscription-btn');
+            if (manageSubscriptionBtn) {
+                manageSubscriptionBtn.addEventListener('click', async () => {
+                    try {
+                        const token = localStorage.getItem('token');
+
+                        // If user has no active subscription, open subscription panel instead of Stripe portal
+                        try {
+                            const meRes = await fetch(`${API_BASE}/api/enterprise/me`, {
+                                headers: { 'Authorization': `Bearer ${token}` }
+                            });
+                            const me = await meRes.json().catch(() => ({}));
+                            if (meRes.ok && me && me.subscribed === false) {
+                                if (typeof setPage === 'function') {
+                                    await setPage('shop');
+                                    setTimeout(() => {
+                                        try { if (typeof openPlansModal === 'function') openPlansModal(); } catch {}
+                                    }, 150);
+                                }
+                                return;
+                            }
+                        } catch {}
+
+                        const r = await fetch(`${API_BASE}/api/enterprise/billing/portal`, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        const j = await r.json().catch(() => ({}));
+                        if (!r.ok) {
+                            if (j && j.error === 'no_stripe_customer') {
+                                try {
+                                    if (typeof setPage === 'function') {
+                                        await setPage('shop');
+                                        setTimeout(() => {
+                                            try { if (typeof openPlansModal === 'function') openPlansModal(); } catch {}
+                                        }, 150);
+                                    }
+                                } catch {}
+                                return;
+                            }
+                            alert(t('profile.subscription.unavailable'));
+                            return;
+                        }
+                        if (j && j.url) {
+                            window.open(j.url, '_blank');
+                        } else {
+                            alert(t('profile.subscription.unavailable'));
+                        }
+                    } catch {
+                        alert(t('profile.subscription.unavailable'));
+                    }
                 });
             }
         }
@@ -3172,6 +3468,12 @@ main();</code></pre>
                                     </div>
 
                                     <div class="profile-section-card">
+                                        <h3 class="profile-section-title">${t('profile.subscription.title')}</h3>
+                                        <div class="section-info-bubble profile-info-bubble">${t('profile.subscription.hint')}</div>
+                                        <button type="button" id="manage-subscription-btn" class="profile-btn primary">${t('profile.subscription.manage')}</button>
+                                    </div>
+
+                                    <div class="profile-section-card">
                                         <h3 class="profile-section-title">${t('profile.2fa.title')}</h3>
                                         <div id="twofa-info" class="section-info-bubble profile-info-bubble">
                                             ${t('profile.2fa.info')}
@@ -3231,6 +3533,7 @@ main();</code></pre>
             const twofaManual = document.getElementById('twofa-manual');
             const twofaSecretEl = document.getElementById('twofa-secret');
             const twofaCopySecret = document.getElementById('twofa-copy-secret');
+            const manageSubscriptionBtn = document.getElementById('manage-subscription-btn');
 
             function formatPoints(n) {
                 const v = Number(n || 0);
@@ -4014,7 +4317,49 @@ main();</code></pre>
                             data = { tasks: [] };
                         }
                     } catch {
-                        data = { tasks: [] };
+                        // Hardcoded tasks as immediate fallback
+                        data = { tasks: [
+                            {
+                                id: 1,
+                                title: "Suivre sur X",
+                                description: "Suivez notre compte X et postez un tweet avec le hashtag #RevolutionNetwork",
+                                type: "social",
+                                link_url: "https://x.com/revo_network_",
+                                reward_points: 20,
+                                reward_airdrop_bonus_percent: 7,
+                                active: true
+                            },
+                            {
+                                id: 2,
+                                title: "Rejoindre Discord",
+                                description: "Rejoignez notre serveur Discord et participez à la communauté",
+                                type: "social",
+                                link_url: "https://discord.com/invite/eadE7uK6ss",
+                                reward_points: 15,
+                                reward_airdrop_bonus_percent: 5,
+                                active: true
+                            },
+                            {
+                                id: 3,
+                                title: "Rejoindre Telegram",
+                                description: "Rejoignez notre groupe Telegram pour suivre les actualités",
+                                type: "social",
+                                link_url: "https://t.me/+sWtih46Yg91kNWQ0",
+                                reward_points: 15,
+                                reward_airdrop_bonus_percent: 5,
+                                active: true
+                            },
+                            {
+                                id: 4,
+                                title: "Early User",
+                                description: "Pour les 50 premiers utilisateurs ayant activé le node et gagné des points - Rang Gold + 100 Aether",
+                                type: "early_adopter",
+                                link_url: "",
+                                reward_points: 100,
+                                reward_airdrop_bonus_percent: 2,
+                                active: true
+                            }
+                        ]};
                     }
                 }
                 const list = document.getElementById('tasks-list');
@@ -4032,7 +4377,7 @@ main();</code></pre>
                 let eaStatus = { isEarlyAdopter: false, isGold: false, spotsLeft: 50 };
                 if (token) {
                     try {
-                        const eaRes = await fetch(`${API_BASE}/api/tasks/early-adopter/status`, {
+                        const eaRes = await fetch(`${API_BASE}/api/early-adopter/status`, {
                             headers: { 'Authorization': `Bearer ${token}` }
                         });
                         if (eaRes.ok) eaStatus = await eaRes.json();
@@ -4076,7 +4421,7 @@ main();</code></pre>
                                     }
                                 </style>
                             `;
-                        } else if (eaStatus.isEarlyAdopter) {
+                        } else if (eaStatus.isEarlyAdopter && Number(eaStatus.spotsLeft || 0) <= 0) {
                             statusLabel = 'Non éligible (Limite atteinte)';
                             btnStyle = 'background-color: #374151; border-color: #374151; opacity: 0.7;';
                             isDisabled = true;
@@ -4316,6 +4661,7 @@ main();</code></pre>
                                    style="padding:8px;border:1px solid #374151;border-radius:6px;background:#111827;color:#e5e7eb;min-width:260px;">
                             <button class="profile-btn" id="admin-search-btn">Rechercher</button>
                             <button class="profile-btn primary" onclick="currentPage='adminAirdrop'; renderPage();" title="Aller à la page des bonus globaux">🎁 Bonus Général</button>
+                            <button class="profile-btn" onclick="openAdminNotificationModal()" title="Créer une notification">📣 Notification</button>
                         </div>
                     </div>
                     <table class="data-table" id="admin-leaderboard-table">
@@ -4706,40 +5052,74 @@ main();</code></pre>
                     <div class="page-header">
                         <h1 class="page-title">${t('download.title')}</h1>
                     </div>
-                    <div class="info-grid">
-                        <div class="api-card">
-                            <h3>${t('download.p2p.title')}</h3>
-                            <p>${t('download.p2p.desc')}</p>
-                            <ul class="points-examples">
-                                <li>${t('download.p2p.list.resilience')}</li>
-                                <li>${t('download.p2p.list.scalability')}</li>
-                                <li>${t('download.p2p.list.privacy')}</li>
-                            </ul>
-                            <p>${t('download.p2p.note')}</p>
+                    <div class="api-card" style="padding:18px 18px 16px 18px;background:radial-gradient(1200px 400px at 0% 0%, rgba(124,58,237,0.18), transparent 60%), radial-gradient(900px 400px at 100% 0%, rgba(16,185,129,0.10), transparent 60%), rgba(17,24,39,0.75); border:1px solid rgba(255,255,255,0.06);">
+                        <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start;">
+                            <div style="min-width:240px;flex:1 1 340px;">
+                                <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                                    <div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.25);">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><line x1="12" y1="22" x2="12" y2="12"></line></svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:1.05rem;font-weight:800;color:#fff;">${t('download.start.title')}</div>
+                                        <div style="font-size:0.85rem;color:#9ca3af;">${t('download.points.note')}</div>
+                                    </div>
+                                </div>
+                                <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;">
+                                    <button id="btn-download-exe" class="profile-btn primary" style="padding:10px 14px;">${t('download.install')}</button>
+                                    <button id="btn-howto" class="profile-btn" style="padding:10px 14px;">${t('download.guide')}</button>
+                                </div>
+                            </div>
+                            <div style="min-width:240px;flex:1 1 360px;">
+                                <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;">
+                                    <div style="border:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.18);border-radius:12px;padding:12px;">
+                                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                                            <div style="width:24px;height:24px;border-radius:8px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.25);display:flex;align-items:center;justify-content:center;color:#86efac;font-weight:800;font-size:0.85rem;">1</div>
+                                            <div style="font-weight:700;color:#fff;font-size:0.9rem;">${t('download.start.step1')}</div>
+                                        </div>
+                                    </div>
+                                    <div style="border:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.18);border-radius:12px;padding:12px;">
+                                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                                            <div style="width:24px;height:24px;border-radius:8px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.25);display:flex;align-items:center;justify-content:center;color:#86efac;font-weight:800;font-size:0.85rem;">2</div>
+                                            <div style="font-weight:700;color:#fff;font-size:0.9rem;">${t('download.start.step2')}</div>
+                                        </div>
+                                    </div>
+                                    <div style="border:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.18);border-radius:12px;padding:12px;">
+                                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                                            <div style="width:24px;height:24px;border-radius:8px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.25);display:flex;align-items:center;justify-content:center;color:#86efac;font-weight:800;font-size:0.85rem;">3</div>
+                                            <div style="font-weight:700;color:#fff;font-size:0.9rem;">${t('download.start.step3')}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <details style="margin-top:12px;border:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.12);border-radius:12px;padding:12px;">
+                                    <summary style="cursor:pointer;color:#e5e7eb;font-weight:700;">${t('download.recommended.title')}</summary>
+                                    <ol class="points-examples" style="margin:10px 0 0 0;">
+                                        <li>${t('download.recommended.step1')}</li>
+                                        <li>${t('download.recommended.step2')}</li>
+                                        <li>${t('download.recommended.step3')}</li>
+                                        <li>${t('download.recommended.step4')}</li>
+                                        <li>${t('download.recommended.step5')}</li>
+                                        <li>${t('download.recommended.step6')}</li>
+                                    </ol>
+                                </details>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="info-grid" style="margin-top:14px;">
                         <div class="api-card">
-                            <h3>${t('download.start.title')}</h3>
-                            <ol class="points-examples">
-                                <li>${t('download.start.step1')}</li>
-                                <li>${t('download.start.step2')}</li>
-                                <li>${t('download.start.step3')}</li>
-                            </ol>
-                            <p>${t('download.points.note')}</p>
-                            <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:12px;">
-                                <button id="btn-download-exe" class="profile-btn primary">${t('download.install')}</button>
-                                <button id="btn-howto" class="profile-btn">${t('download.guide')}</button>
+                            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                                <div style="width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                                </div>
+                                <h3 style="margin:0;">${t('download.p2p.title')}</h3>
                             </div>
-                            <div class="section-info-bubble" style="margin-top:10px;">
-                                <div style="font-weight:600;margin-bottom:6px;">${t('download.recommended.title')}</div>
-                                <ol class="points-examples" style="margin:0;">
-                                    <li>${t('download.recommended.step1')}</li>
-                                    <li>${t('download.recommended.step2')}</li>
-                                    <li>${t('download.recommended.step3')}</li>
-                                    <li>${t('download.recommended.step4')}</li>
-                                    <li>${t('download.recommended.step5')}</li>
-                                    <li>${t('download.recommended.step6')}</li>
-                                </ol>
+                            <p style="margin-top:0;">${t('download.p2p.desc')}</p>
+                            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+                                <span style="padding:6px 10px;border-radius:9999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);color:#e5e7eb;font-size:0.85rem;">${t('download.p2p.list.resilience')}</span>
+                                <span style="padding:6px 10px;border-radius:9999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);color:#e5e7eb;font-size:0.85rem;">${t('download.p2p.list.scalability')}</span>
+                                <span style="padding:6px 10px;border-radius:9999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);color:#e5e7eb;font-size:0.85rem;">${t('download.p2p.list.privacy')}</span>
                             </div>
+                            <p style="margin-top:12px;opacity:0.9;">${t('download.p2p.note')}</p>
                         </div>
                         <div class="api-card">
                             <h3>${t('download.security.title')}</h3>
@@ -4748,11 +5128,11 @@ main();</code></pre>
                                 ${t('download.security.procedure')}
                             </div>
                         </div>
-                        <div class="api-card">
+                        <div class="api-card" style="grid-column:1/-1;">
                             <h3>${t('download.faq.title')}</h3>
-                            <div class="faq-item"><div class="faq-q">${t('download.faq.q1')}</div><div class="faq-a">${t('download.faq.a1')}</div></div>
-                            <div class="faq-item"><div class="faq-q">${t('download.faq.q2')}</div><div class="faq-a">${t('download.faq.a2')}</div></div>
-                            <div class="faq-item"><div class="faq-q">${t('download.faq.q3')}</div><div class="faq-a">${t('download.faq.a3')}</div></div>
+                            <details style="border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;margin-top:10px;background:rgba(0,0,0,0.12);"><summary style="cursor:pointer;font-weight:700;color:#fff;">${t('download.faq.q1')}</summary><div style="margin-top:8px;color:#d1d5db;">${t('download.faq.a1')}</div></details>
+                            <details style="border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;margin-top:10px;background:rgba(0,0,0,0.12);"><summary style="cursor:pointer;font-weight:700;color:#fff;">${t('download.faq.q2')}</summary><div style="margin-top:8px;color:#d1d5db;">${t('download.faq.a2')}</div></details>
+                            <details style="border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;margin-top:10px;background:rgba(0,0,0,0.12);"><summary style="cursor:pointer;font-weight:700;color:#fff;">${t('download.faq.q3')}</summary><div style="margin-top:8px;color:#d1d5db;">${t('download.faq.a3')}</div></details>
                         </div>
                     </div>
                 </div>
@@ -4763,7 +5143,8 @@ main();</code></pre>
             const btnExe = document.getElementById('btn-download-exe');
             const btnHow = document.getElementById('btn-howto');
             if (btnExe) btnExe.addEventListener('click', () => {
-                const downloadUrl = `${API_BASE}/api/download/node`;
+                const direct = String(t('download.direct_link') || '');
+                const downloadUrl = /^https?:\/\//i.test(direct) ? direct : `${API_BASE}${direct}`;
                 window.location.href = downloadUrl;
             });
             if (btnHow) btnHow.addEventListener('click', () => {
@@ -5084,7 +5465,8 @@ function initializeShopPage() {
                         link = 'https://buy.stripe.com/3cIaEZgrw7c58mGaKk4gg08';
                     }
                     
-                    const buttonHTML = `<button class="profile-btn ${isPro || isEnterprise ? 'primary' : ''}" data-link="${link}" style="font-size:0.85em;padding:8px 12px;width:auto;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${btnLabel}</button>`;
+                    const priceIdAttr = p.stripePriceId ? `data-priceid="${String(p.stripePriceId).replace(/"/g,'') }"` : '';
+                    const buttonHTML = `<button class="profile-btn ${isPro || isEnterprise ? 'primary' : ''}" data-link="${link}" ${priceIdAttr} style="font-size:0.85em;padding:8px 12px;width:auto;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${btnLabel}</button>`;
 
                     let displayName = name;
                     if (isStandard) displayName = 'Standard Plan – 500 GB';
@@ -5116,14 +5498,31 @@ function initializeShopPage() {
                 subs.innerHTML = (freeTierCard + cards) || `<p style="color:#9ca3af;">${t('shop.plans.empty')}</p>`;
                 
                 document.querySelectorAll('#shop-subscriptions .plan-card button').forEach(btn => {
-                    btn.addEventListener('click', () => {
+                    btn.addEventListener('click', async () => {
                         const link = btn.getAttribute('data-link');
+                        const priceId = btn.getAttribute('data-priceid');
                         const isQuote = btn.textContent.includes('devis') || btn.textContent.includes('demander') || btn.textContent.includes('quote');
                         
                         if (isQuote) {
                             closePlansModal();
                             try { setPage('support'); } catch(e) { console.error(e); }
                             return;
+                        }
+
+                        const token = localStorage.getItem('token');
+                        if (priceId && token) {
+                            try {
+                                const r = await fetch(`${API_BASE}/api/enterprise/billing/checkout-session`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                                    body: JSON.stringify({ priceId })
+                                });
+                                const j = await r.json().catch(() => ({}));
+                                if (r.ok && j && j.url) {
+                                    window.open(j.url, '_blank', 'noopener,noreferrer');
+                                    return;
+                                }
+                            } catch {}
                         }
 
                         if (!link) {
@@ -5133,7 +5532,7 @@ function initializeShopPage() {
                         if (link.startsWith('mailto:')) {
                             window.location.href = link;
                         } else {
-                            window.open(link, '_blank');
+                            window.open(link, '_blank', 'noopener,noreferrer');
                         }
                     });
                 });
@@ -5223,6 +5622,10 @@ function initializeShopPage() {
                                     <input type="text" id="shop-payment-link" placeholder="https://buy.stripe.com/...">
                                 </div>
                                 <div>
+                                    <label>Stripe Price ID (abonnement)</label>
+                                    <input type="text" id="shop-stripe-price-id" placeholder="price_...">
+                                </div>
+                                <div>
                                     <label>Proxy host (VPN)</label>
                                     <input type="text" id="shop-proxy-host" placeholder="vpn.example.com">
                                 </div>
@@ -5287,6 +5690,7 @@ function initializeShopPage() {
                 show('#shop-gb', false);
                 show('#shop-priority', false);
                 show('#shop-payment-link', false);
+                show('#shop-stripe-price-id', false);
                 show('#shop-proxy-host', false);
                 show('#shop-proxy-port', false);
                 show('#shop-token-symbol', false);
@@ -5301,6 +5705,7 @@ function initializeShopPage() {
                     show('#shop-gb', true);
                     show('#shop-priority', true);
                     show('#shop-payment-link', true);
+                    show('#shop-stripe-price-id', true);
                 } else if (type === 'vpn') {
                     show('#shop-proxy-host', true);
                     show('#shop-proxy-port', true);
@@ -5464,6 +5869,7 @@ function initializeShopPage() {
                 const gb = document.getElementById('shop-gb');
                 const priority = document.getElementById('shop-priority');
                 const payment = document.getElementById('shop-payment-link');
+                const stripePriceId = document.getElementById('shop-stripe-price-id');
                 const isPack = document.getElementById('shop-is-pack');
                 const packAmount = document.getElementById('shop-pack-amount');
                 title.value = tr.querySelector('[data-field="title"]').textContent.trim();
@@ -5475,6 +5881,7 @@ function initializeShopPage() {
                 gb.value = '';
                 priority.value = '1';
                 payment.value = '';
+                stripePriceId.value = '';
                 isPack.value = '0';
                 packAmount.value = '';
                 try {
@@ -5484,6 +5891,7 @@ function initializeShopPage() {
                         gb.value = meta.gbPerMonth || '';
                         priority.value = meta.priority_level || '1';
                         payment.value = meta.paymentLink || '';
+                        stripePriceId.value = meta.stripePriceId || meta.priceId || meta.stripe_price_id || '';
                         document.getElementById('shop-token-symbol').value = meta.tokenSymbol || '';
                         document.getElementById('shop-unit-price').value = meta.unitPrice || '';
                         document.getElementById('shop-min-qty').value = meta.minQty || '';
@@ -5530,6 +5938,7 @@ function initializeShopPage() {
                         priority_level: parseInt(document.getElementById('shop-priority').value || '1') || 1,
                         paymentLink: (document.getElementById('shop-payment-link').value || '').trim() || undefined,
                         stripeLink: (document.getElementById('shop-payment-link').value || '').trim() || undefined,
+                        stripePriceId: (document.getElementById('shop-stripe-price-id').value || '').trim() || undefined,
                         proxyHost: (document.getElementById('shop-proxy-host').value || '').trim() || undefined,
                         proxyPort: parseInt(document.getElementById('shop-proxy-port').value || '0') || undefined,
                         tokenSymbol: (document.getElementById('shop-token-symbol').value || '').trim() || undefined,
@@ -6750,11 +7159,15 @@ function initializeShopPage() {
                     else if ((t.status||'').toLowerCase().includes('pending')) statusClass = 'status-pending';
                     const date = new Date(t.updated_at).toLocaleString();
                     const subject = (t.subject||'').replace(/'/g, "\\'");
+                    const hasUnread = String(t.status || '').toLowerCase() === 'pending_user';
                     
                     html += `
                         <div class="ticket-item" onclick="openUserTicket('${t.id}', '${subject}')">
                             <div>
-                                <div style="font-weight:600;margin-bottom:4px;">${t.subject}</div>
+                                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                                    ${hasUnread ? `<span style="width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;flex:0 0 auto;"></span>` : ''}
+                                    <div style="font-weight:600;">${t.subject}</div>
+                                </div>
                                 <div style="font-size:0.8rem;color:#9ca3af;">${date}</div>
                             </div>
                             <div class="ticket-status ${statusClass}">${t.status}</div>
@@ -6836,7 +7249,10 @@ function initializeShopPage() {
                 list.innerHTML = tickets.map(t => `
                     <div class="ticket-item ${t.status === 'closed' ? 'closed' : ''}" data-id="${t.id}" onclick="openAdminTicket(${t.id})">
                         <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-                            <span style="font-weight:600;color:#fff;">${t.subject || 'Sans titre'}</span>
+                            <span style="display:flex;align-items:center;gap:8px;font-weight:600;color:#fff;">
+                                ${String(t.status || '').toLowerCase() === 'pending_admin' ? `<span style="width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;flex:0 0 auto;"></span>` : ''}
+                                <span>${t.subject || 'Sans titre'}</span>
+                            </span>
                             <span class="ticket-status status-${t.status}">${t.status}</span>
                         </div>
                         <div style="font-size:0.8rem;color:#9ca3af;margin-bottom:4px;">
@@ -6986,6 +7402,10 @@ function initializeShopPage() {
                         if(payload.userId == m.sender_id) isMe = true;
                     } catch(e) {}
 
+                    const role = String(m.sender_role || '').toLowerCase();
+                    const label = isMe ? (t('common.you') || 'Vous') : (role === 'admin' ? 'Support' : (m.username || 'User'));
+                    const time = m.created_at ? new Date(m.created_at).toLocaleString() : '';
+
                     let content = `<div style="white-space:pre-wrap;">${m.message || ''}</div>`;
                     if (m.attachment_url || m.image_url) {
                         const rawUrl = m.attachment_url || m.image_url;
@@ -6994,7 +7414,10 @@ function initializeShopPage() {
                     }
                     
                     return `<div class="message ${isMe ? 'message-user' : 'message-admin'}">
-                        <div style="font-size:0.7rem;opacity:0.7;margin-bottom:2px;">${m.sender_role} - ${new Date(m.created_at).toLocaleTimeString()}</div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px;">
+                            <div style="font-size:0.75rem;opacity:0.85;font-weight:600;">${label}</div>
+                            <div style="font-size:0.7rem;opacity:0.6;white-space:nowrap;">${time}</div>
+                        </div>
                         ${content}
                     </div>`;
                 }).join('');
