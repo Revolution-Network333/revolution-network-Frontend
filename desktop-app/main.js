@@ -78,6 +78,7 @@ let sessionId = store.get('sessionId') || null;
 let isActive = store.get('isActive') || false;
 let sessionPoints = store.get('sessionPoints') || 0;
 let miningRunning = false;
+let jobPollInterval = null;
 let logs = [];
 
 async function resolveApiUrl() {
@@ -160,6 +161,10 @@ async function startMiningSession(token) {
     addLog(`Session active: ${data.name || sessionId}`);
     new Notification({ title: 'Revolution Network', body: 'Mining started!' }).show();
     if (!miningRunning) mine();
+    if (!jobPollInterval) {
+      jobPollInterval = setInterval(pollAndRunJobs, 8000);
+      addLog('Job polling enabled (8s interval).');
+    }
   } catch (error) {
     addLog(`Error: ${error.message}`);
     isActive = false;
@@ -171,6 +176,11 @@ async function stopMiningSession() {
   addLog('Stopping mining...');
   isActive = false;
   miningRunning = false;
+  if (jobPollInterval) {
+    clearInterval(jobPollInterval);
+    jobPollInterval = null;
+    addLog('Job polling stopped.');
+  }
   const token = store.get('token');
   if (sessionId && token) {
     try {
@@ -210,6 +220,61 @@ async function mine() {
     }
   }
   miningRunning = false;
+}
+
+async function pollAndRunJobs() {
+  if (!isActive || !sessionId) return;
+  try {
+    const res = await fetchWithAuth(`${API_URL}/api/node/v1/jobs/poll`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId, capabilities: ['cpu_hash'] })
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok) {
+      addLog(`Job poll error: ${(data && data.error) || 'server_error'}`);
+      return;
+    }
+    const job = data && data.job;
+    if (!job) return;
+    addLog(`Job assigned: ${job.type} (${job.id})`);
+    await executeJob(job);
+  } catch (e) {
+    addLog(`Job poll exception: ${e.message}`);
+  }
+}
+
+async function executeJob(job) {
+  try {
+    if (job.type === 'cpu_hash') {
+      const input = job.params && job.params.input;
+      if (typeof input !== 'string') throw new Error('Invalid input');
+      const result = crypto.createHash('sha256').update(input).digest('hex');
+      addLog(`Hash computed: ${result}`);
+      const res = await fetchWithAuth(`${API_URL}/api/node/v1/jobs/${job.id}/complete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, result })
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data && data.success) {
+        addLog(`Job ${job.id} completed`);
+      } else {
+        addLog(`Job completion error: ${(data && data.error) || 'server_error'}`);
+      }
+    } else {
+      throw new Error('Unsupported job type');
+    }
+  } catch (e) {
+    addLog(`Job execution error: ${e.message}`);
+    try {
+      await fetchWithAuth(`${API_URL}/api/node/v1/jobs/${job.id}/complete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, error: e.message })
+      });
+    } catch (_) {}
+  }
 }
 
 async function submitProof(challenge, nonce) {

@@ -62,6 +62,41 @@ const initDatabase = () => {
       );
     `);
     db.exec(`CREATE INDEX IF NOT EXISTS idx_admin_logs_admin ON admin_logs(admin_id)`);
+
+    // Ensure tasks table exists (idempotent)
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS tasks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        description TEXT,
+        type TEXT NOT NULL,
+        link_url TEXT,
+        reward_points INTEGER DEFAULT 0,
+        reward_airdrop_bonus_percent INTEGER DEFAULT 0,
+        active INTEGER DEFAULT 1,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    db.exec(`CREATE INDEX IF NOT EXISTS idx_tasks_type ON tasks(type)`);
+    db.exec(`CREATE INDEX IF NOT EXISTS idx_tasks_active ON tasks(active)`);
+
+    // Ensure user_tasks table exists (idempotent)
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS user_tasks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        task_id INTEGER NOT NULL,
+        status TEXT DEFAULT 'not_started',
+        timestamp_click TEXT,
+        timestamp_approved TEXT,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
+      )
+    `);
+    db.exec(`CREATE INDEX IF NOT EXISTS idx_user_tasks_user ON user_tasks(user_id)`);
+    db.exec(`CREATE INDEX IF NOT EXISTS idx_user_tasks_task ON user_tasks(task_id)`);
   } catch (error) {
     console.error('❌ Error initializing database:', error);
     throw error;
