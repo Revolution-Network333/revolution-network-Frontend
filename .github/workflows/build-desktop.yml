@@ -73,13 +73,18 @@ jobs:
       working-directory: ./desktop-app
       run: mkdir -p dist
     
-    - name: Create Mac icon (placeholder)
+    - name: Create Mac icon and background (placeholder)
       working-directory: ./desktop-app
       run: |
         mkdir -p assets
         if [ ! -f assets/icon.icns ]; then
           echo "Creating placeholder icon"
           cp assets/logo.jpg assets/icon.icns 2>/dev/null || touch assets/icon.icns
+        fi
+        if [ ! -f assets/dmg-background.png ]; then
+          echo "Creating placeholder DMG background"
+          # Create a simple 1x1 pixel PNG as placeholder
+          echo "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" | base64 -d > assets/dmg-background.png
         fi
     
     - name: Build macOS app
