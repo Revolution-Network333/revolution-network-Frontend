@@ -793,7 +793,7 @@ router.post('/tasks', authenticateToken, checkAdmin, async (req, res) => {
       `INSERT INTO tasks (title, description, type, link_url, reward_points, reward_airdrop_bonus_percent, active)
        VALUES ($1,$2,$3,$4,$5,$6,$7)
        RETURNING *`,
-       [title, description || null, type, link_url || null, reward_points || 0, reward_airdrop_bonus_percent || 0, !!active]
+      [title, description || null, type, link_url || null, reward_points || 0, reward_airdrop_bonus_percent || 0, (active === true || active === 1 || active === '1') ? 1 : 0]
     );
     res.status(201).json({ task: result.rows[0] });
   } catch (e) {
@@ -808,7 +808,7 @@ router.put('/tasks/:id', authenticateToken, checkAdmin, async (req, res) => {
     const set = []; const vals = []; let idx = 1;
     for (const f of fields) if (f in req.body) {
       let v = req.body[f];
-      if (f === 'active') v = (v === true || v === 1 || v === '1');
+      if (f === 'active') v = (v === true || v === 1 || v === '1') ? 1 : 0;
       set.push(`${f} = $${idx++}`); vals.push(v);
     }
     if (set.length === 0) return res.json({ success: true });
