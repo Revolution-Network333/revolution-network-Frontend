@@ -658,12 +658,11 @@ router.post('/tasks', authenticateToken, checkAdmin, async (req, res) => {
     const { title, description, type, link_url, reward_points, reward_airdrop_bonus_percent, active } = req.body;
     const result = await db.query(
       `INSERT INTO tasks (title, description, type, link_url, reward_points, reward_airdrop_bonus_percent, active)
-       VALUES ($1,$2,$3,$4,$5,$6,$7)`,
-      [title, description || null, type, link_url || null, reward_points || 0, reward_airdrop_bonus_percent || 0, !!active]
+       VALUES ($1,$2,$3,$4,$5,$6,$7)
+       RETURNING *`,
+       [title, description || null, type, link_url || null, reward_points || 0, reward_airdrop_bonus_percent || 0, !!active]
     );
-    // Fetch inserted row for SQLite/Postgres compatibility
-    const inserted = await db.query('SELECT * FROM tasks WHERE id = $1', [result.rows[0].id]);
-    res.status(201).json({ task: inserted.rows[0] });
+    res.status(201).json({ task: result.rows[0] });
   } catch (e) {
     console.error(e); res.status(500).json({ error: 'Erreur interne du serveur' });
   }
