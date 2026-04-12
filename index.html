@@ -4383,12 +4383,12 @@ main();</code></pre>
                             statusLabel = 'Non éligible (Limite atteinte)';
                             btnStyle = 'background-color: #374151; border-color: #374151; opacity: 0.7;';
                             isDisabled = true;
-                            extraInfo = `<div style="margin-top:8px; color:#94a3b8; font-size:0.85em;">Désolé, les 50 places Gold ont déjà été attribuées.</div>`;
+                            extraInfo = '<div style="margin-top:8px; color:#94a3b8; font-size:0.85em;">Désolé, les 50 places Gold ont déjà été attribuées.</div>';
                         } else {
                             statusLabel = 'En attente du premier Ping...';
                             btnStyle = 'background-color: #1e3a8a; border-color: #1e3a8a;';
                             isDisabled = true;
-                            extraInfo = `<div style="margin-top:8px; color:#93c5fd; font-size:0.85em;">Places restantes : ${eaStatus.spotsLeft}/50. Installez l'app et lancez un ping pour valider !</div>`;
+                            extraInfo = '<div style="margin-top:8px; color:#93c5fd; font-size:0.85em;">Places restantes : ' + eaStatus.spotsLeft + '/50. Installez l\'app et lancez un ping pour valider !</div>';
                         }
                     }
 
