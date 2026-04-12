@@ -30,11 +30,10 @@ router.post('/admin/tasks/fix-schema', authenticateToken, async (req, res) => {
 // Public: lister les tasks actives
 router.get('/tasks', async (req, res) => {
   try {
-    const activeClause = db.isSQLite ? 'active = 1' : 'active = TRUE';
     const result = await db.query(
       `SELECT id, title, description, type, link_url, reward_points, reward_airdrop_bonus_percent
        FROM tasks
-       WHERE ${activeClause}
+       WHERE active = 1 OR active = TRUE OR active = '1'
        ORDER BY created_at DESC`
     );
     res.json({ tasks: result.rows });
