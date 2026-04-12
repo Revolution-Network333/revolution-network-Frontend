@@ -1,0 +1,94 @@
+name: Build Desktop App
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'desktop-app/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'desktop-app/**'
+  release:
+    types: [ published ]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: desktop-app/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./desktop-app
+      run: npm ci
+    
+    - name: Build Windows app
+      working-directory: ./desktop-app
+      run: npm run build
+    
+    - name: Upload Windows artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: revolution-network-windows
+        path: desktop-app/dist/*.exe
+        retention-days: 30
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: desktop-app/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./desktop-app
+      run: npm ci
+    
+    - name: Build macOS app
+      working-directory: ./desktop-app
+      run: npm run build-mac
+    
+    - name: Upload macOS artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: revolution-network-macos
+        path: desktop-app/dist/*.dmg
+        retention-days: 30
+
+  create-release:
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    steps:
+    - name: Download Windows artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: revolution-network-windows
+        path: ./windows
+    
+    - name: Download macOS artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: revolution-network-macos
+        path: ./macos
+    
+    - name: Upload release assets
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ./windows/*.exe
+          ./macos/*.dmg
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
