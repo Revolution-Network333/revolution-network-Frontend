@@ -727,9 +727,61 @@ router.post('/tasks/repair-all', authenticateToken, checkAdmin, async (req, res)
       results.errors.push(`Index creation error: ${e.message}`);
     }
     
-    // 4. Get final status
+    // 4. Add default tasks if database is empty
     try {
       const taskCount = await db.query('SELECT COUNT(*) as count FROM tasks');
+      
+      if (taskCount.rows[0].count === 0) {
+        // Add default tasks
+        const defaultTasks = [
+          {
+            title: "Suivre sur X",
+            description: "Suivez notre compte X et postez un tweet avec le hashtag #RevolutionNetwork",
+            type: "social",
+            link_url: "https://x.com/revo_network_",
+            reward_points: 20,
+            reward_airdrop_bonus_percent: 7,
+            active: 1
+          },
+          {
+            title: "Rejoindre Discord",
+            description: "Rejoignez notre serveur Discord et participez à la communauté",
+            type: "social", 
+            link_url: "https://discord.com/invite/eadE7uK6ss",
+            reward_points: 15,
+            reward_airdrop_bonus_percent: 5,
+            active: 1
+          },
+          {
+            title: "Rejoindre Telegram",
+            description: "Rejoignez notre groupe Telegram pour suivre les actualités",
+            type: "social",
+            link_url: "https://t.me/+sWtih46Yg91kNWQ0", 
+            reward_points: 15,
+            reward_airdrop_bonus_percent: 5,
+            active: 1
+          },
+          {
+            title: "Early User",
+            description: "Pour les 50 premiers utilisateurs ayant activé le node et gagné des points - Rang Gold + 100 Aether",
+            type: "early_adopter",
+            link_url: "",
+            reward_points: 100,
+            reward_airdrop_bonus_percent: 2,
+            active: 1
+          }
+        ];
+        
+        for (const task of defaultTasks) {
+          await db.query(`
+            INSERT INTO tasks (title, description, type, link_url, reward_points, reward_airdrop_bonus_percent, active)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+          `, [task.title, task.description, task.type, task.link_url, task.reward_points, task.reward_airdrop_bonus_percent, task.active]);
+        }
+        
+        results.tasks.push(`Added ${defaultTasks.length} default tasks`);
+      }
+      
       const activeTaskCount = await db.query('SELECT COUNT(*) as count FROM tasks WHERE active = 1');
       const userTaskCount = await db.query('SELECT COUNT(*) as count FROM user_tasks');
       
