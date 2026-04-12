@@ -6255,10 +6255,28 @@ function initializeShopPage() {
                     active: document.getElementById('task-active').value === '1',
                     description: document.getElementById('task-desc').value
                 };
+                
+                console.log('Saving task:', payload);
+                
                 const method = id ? 'PUT' : 'POST';
                 const url = id ? `${API_BASE}/api/admin/tasks/${id}` : `${API_BASE}/api/admin/tasks`;
+                
                 fetch(url, { method, headers:{ 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(payload) })
-                .then(()=>{ closeTaskModal(); loadTasks(); });
+                .then(async (res) => {
+                    console.log('Task save response:', res.status);
+                    if (!res.ok) {
+                        const error = await res.json().catch(() => ({}));
+                        console.error('Task save error:', error);
+                        alert(`Erreur: ${error.error || 'Échec de la sauvegarde'}`);
+                        return;
+                    }
+                    closeTaskModal(); 
+                    loadTasks();
+                })
+                .catch(err => {
+                    console.error('Task save fetch error:', err);
+                    alert(`Erreur réseau: ${err.message}`);
+                });
             }
             function loadPendingUserTasks() {
                 const tbody = document.querySelector('#pending-user-tasks tbody');
