@@ -419,7 +419,7 @@ private fun WindowsStyleDashboard(
                     color = Color(0xFF60A5FA),
                     fontSize = 14.sp,
                     modifier = Modifier.clickable { 
-                        // Open website
+                        // Open Revolution Network dashboard
                         val intent = android.content.Intent(android.content.Intent.ACTION_VIEW)
                         intent.data = android.net.Uri.parse("https://revolution-network.fr/dashboard")
                         context.startActivity(intent)
