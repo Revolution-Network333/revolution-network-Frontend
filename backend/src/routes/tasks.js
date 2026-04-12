@@ -28,7 +28,7 @@ router.post('/admin/tasks/fix-schema', authenticateToken, async (req, res) => {
 });
 
 // Public: lister les tasks actives
-router.get('/tasks', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const result = await db.query(
       `SELECT id, title, description, type, link_url, reward_points, reward_airdrop_bonus_percent
