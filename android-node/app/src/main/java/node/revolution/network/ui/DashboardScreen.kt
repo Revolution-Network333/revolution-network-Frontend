@@ -421,7 +421,7 @@ private fun WindowsStyleDashboard(
                     modifier = Modifier.clickable { 
                         // Open Revolution Network dashboard
                         val intent = android.content.Intent(android.content.Intent.ACTION_VIEW)
-                        intent.data = android.net.Uri.parse("https://revolution-network.fr/dashboard")
+                        intent.data = android.net.Uri.parse("https://revolution-network.fr/")
                         context.startActivity(intent)
                     }
                 )
