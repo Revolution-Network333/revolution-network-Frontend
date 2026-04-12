@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test API Entreprise</title>
+  <style>
+    body{font-family:Inter,system-ui,Arial;background:#0b0f14;color:#e5e7eb;margin:0;padding:24px}
+    h1{margin:0 0 12px 0;font-size:22px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:16px}
+    label{display:block;font-size:12px;color:#9ca3af;margin-bottom:6px}
+    input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #1f2937;background:#0b0f14;color:#e5e7eb}
+    button{padding:10px 14px;border-radius:8px;border:1px solid #1f2937;background:#111827;color:#e5e7eb;cursor:pointer}
+    .row{display:flex;gap:8px;align-items:center}
+    .small{font-size:12px;color:#9ca3af}
+    .list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .out{white-space:pre-wrap;background:#0b0f14;border:1px solid #1f2937;border-radius:8px;padding:12px;min-height:120px}
+  </style>
+</head>
+<body>
+  <h1>Test API Entreprise</h1>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div style="flex:1">
+          <label>Backend</label>
+          <input id="base" value="https://revolution-backend-sal2.onrender.com"/>
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <button id="btnMe">Infos</button>
+        </div>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <div style="flex:1">
+          <label>API Key</label>
+          <input id="apiKey" placeholder="xxxx-xxxx-xxxx-xxxx"/>
+        </div>
+        <div style="flex:1">
+          <label>Bearer Token</label>
+          <input id="bearer" placeholder="JWT (optionnel)"/>
+        </div>
+      </div>
+      <div class="small" style="margin-top:8px">Tu peux tester par clé (x-api-key) ou par token (Authorization)</div>
+    </div>
+    <div class="card">
+      <label>Résultat</label>
+      <div id="out" class="out"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="list">
+      <button data-type="http_get">HTTP GET</button>
+      <button data-type="content_check">Content Check</button>
+      <button data-type="csv_stats">CSV Stats</button>
+      <button data-type="image_svg_generate">Image SVG</button>
+      <button data-type="audio_convert">Audio Convert</button>
+      <button data-type="video_transcode">Video Transcode</button>
+      <button data-type="text_transform">Text Transform</button>
+      <button data-type="text_generate_template">Text Generate</button>
+      <button data-type="code_run_js">Run JS</button>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <div style="flex:2">
+        <label>Paramètres JSON</label>
+        <textarea id="params" rows="6">{}</textarea>
+      </div>
+      <div style="flex:1">
+        <label>&nbsp;</label>
+        <button id="btnRun">Créer Job</button>
+        <div style="margin-top:8px" class="small">Le job est traité puis tu peux récupérer le résultat</div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <div style="flex:1">
+        <label>Job ID</label>
+        <input id="jobId" readonly/>
+      </div>
+      <div>
+        <label>&nbsp;</label>
+        <button id="btnStatus">Status</button>
+        <button id="btnResult" style="margin-left:8px">Résultat</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="row">
+      <div style="flex:1">
+        <label>Sélection de scénarios</label>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+          <label><input type="checkbox" class="chk" data-type="http_get" checked> HTTP GET</label>
+          <label><input type="checkbox" class="chk" data-type="content_check" checked> Content Check</label>
+          <label><input type="checkbox" class="chk" data-type="csv_stats" checked> CSV Stats</label>
+          <label><input type="checkbox" class="chk" data-type="image_svg_generate" checked> Image SVG</label>
+          <label><input type="checkbox" class="chk" data-type="text_transform" checked> Text Transform</label>
+          <label><input type="checkbox" class="chk" data-type="code_run_js" checked> Run JS</label>
+          <label><input type="checkbox" class="chk" data-type="csv_stats_fail" checked> CSV Stats (échec)</label>
+          <label><input type="checkbox" class="chk" data-type="http_get_fail" checked> HTTP GET (échec)</label>
+        </div>
+      </div>
+      <div>
+        <label>&nbsp;</label>
+        <button id="btnRunAll">Run All</button>
+      </div>
+    </div>
+    <div style="margin-top:12px">
+      <label>Rapport</label>
+      <div id="report" class="out"></div>
+    </div>
+  </div>
+
+  <script>
+    const out = document.getElementById('out');
+    function show(o){ out.textContent = typeof o==='string' ? o : JSON.stringify(o,null,2); }
+    function hdrs(){
+      const h = { 'Content-Type':'application/json' };
+      const apiKey = document.getElementById('apiKey').value.trim();
+      const bearer = document.getElementById('bearer').value.trim();
+      if (apiKey) h['x-api-key'] = apiKey;
+      if (bearer) h['Authorization'] = `Bearer ${bearer}`;
+      return h;
+    }
+    function base(){ return document.getElementById('base').value.trim().replace(/\/+$/,''); }
+    document.getElementById('btnMe').addEventListener('click', async ()=>{
+      try {
+        const r = await fetch(`${base()}/api/enterprise/me`, { headers: hdrs() });
+        show(await r.json());
+      } catch(e){ show(String(e)); }
+    });
+    const paramPresets = {
+      http_get: { url: 'https://example.com', insecure: true, timeoutMs: 8000 },
+      content_check: { url: 'https://example.com', pattern: 'Example Domain', insecure: true, timeoutMs: 8000 },
+      csv_stats: { csvText: 'id,name\\n1,Alice\\n2,Bob' },
+      image_svg_generate: { text: 'Hello Revolution', width: 800, height: 400, color: '#22c55e' },
+      audio_convert: { inputUrl: 'https://file-examples.com/storage/fe9b6d8b3b9c53a0f1b1d0a/2017/11/file_example_MP3_700KB.mp3', outputFormat: 'mp3' },
+      video_transcode: { inputUrl: 'https://file-examples.com/storage/fe9b6d8b3b9c53a0f1b1d0a/2017/04/file_example_MP4_480_1_5MG.mp4', outputFormat: 'mp4' },
+      text_transform: { operation: 'upper', text: 'revolution network' },
+      text_generate_template: { prompt: 'Generate short intro' },
+      code_run_js: { code: '1+2+3' }
+    };
+    document.querySelectorAll('[data-type]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const t = btn.getAttribute('data-type');
+        document.getElementById('params').value = JSON.stringify(paramPresets[t]||{}, null, 2);
+        document.getElementById('params').dataset.type = t;
+      });
+    });
+    document.getElementById('btnRun').addEventListener('click', async ()=>{
+      try {
+        const type = document.getElementById('params').dataset.type || 'http_get';
+        const p = JSON.parse(document.getElementById('params').value||'{}');
+        const r = await fetch(`${base()}/api/enterprise/v1/jobs`, { method:'POST', headers: hdrs(), body: JSON.stringify({ type, params: p }) });
+        const j = await r.json();
+        show(j);
+        if (j.id) document.getElementById('jobId').value = j.id;
+      } catch(e){ show(String(e)); }
+    });
+    document.getElementById('btnStatus').addEventListener('click', async ()=>{
+      try {
+        const id = document.getElementById('jobId').value;
+        const r = await fetch(`${base()}/api/enterprise/v1/jobs/${id}`, { headers: hdrs() });
+        show(await r.json());
+      } catch(e){ show(String(e)); }
+    });
+    document.getElementById('btnResult').addEventListener('click', async ()=>{
+      try {
+        const id = document.getElementById('jobId').value;
+        const r = await fetch(`${base()}/api/enterprise/v1/jobs/${id}/result`, { headers: hdrs() });
+        show(await r.json());
+      } catch(e){ show(String(e)); }
+    });
+    const costs = { http_get:5, content_check:20, csv_stats:30, image_svg_generate:10, audio_convert:200, video_transcode:500, ocr_pdf:300, data_job:1000, text_transform:5, text_generate_template:10, code_run_js:50 };
+    async function createJob(type, params){
+      const r = await fetch(`${base()}/api/enterprise/v1/jobs`, { method:'POST', headers: hdrs(), body: JSON.stringify({ type, params }) });
+      const j = await r.json();
+      return j.id ? j.id : null;
+    }
+    async function getStatus(id){
+      const r = await fetch(`${base()}/api/enterprise/v1/jobs/${id}`, { headers: hdrs() });
+      const j = await r.json();
+      return j.job?.status || 'unknown';
+    }
+    async function getResult(id){
+      const r = await fetch(`${base()}/api/enterprise/v1/jobs/${id}/result`, { headers: hdrs() });
+      return await r.json();
+    }
+    async function waitForDone(id, timeoutMs=40000){
+      const start = Date.now();
+      while (Date.now()-start < timeoutMs) {
+        const s = await getStatus(id);
+        if (s === 'completed' || s === 'failed') return s;
+        await new Promise(r=>setTimeout(r, 1200));
+      }
+      return 'timeout';
+    }
+    function presetFor(t){
+      if (t === 'csv_stats_fail') return {};
+      if (t === 'http_get_fail') return {};
+      const m = { http_get:'http_get', content_check:'content_check', csv_stats:'csv_stats', image_svg_generate:'image_svg_generate', text_transform:'text_transform', code_run_js:'code_run_js' }[t];
+      return paramPresets[m] || {};
+    }
+    function costFor(t){
+      if (t === 'csv_stats_fail') return costs['csv_stats'];
+      if (t === 'http_get_fail') return costs['http_get'];
+      return costs[t] || 0;
+    }
+    document.getElementById('btnRunAll').addEventListener('click', async ()=>{
+      const report = document.getElementById('report');
+      const selected = Array.from(document.querySelectorAll('.chk')).filter(x=>x.checked).map(x=>x.getAttribute('data-type'));
+      const meBefore = await (await fetch(`${base()}/api/enterprise/me`, { headers: hdrs() })).json();
+      const beforeBal = meBefore?.credits?.remaining || 0;
+      const jobs = [];
+      let expectedReserve = 0;
+      for (const t of selected) {
+        expectedReserve += costFor(t);
+        const id = await createJob(t.replace('_fail',''), presetFor(t));
+        jobs.push({ type: t, id });
+      }
+      const statuses = [];
+      for (const j of jobs) {
+        const st = j.id ? await waitForDone(j.id) : 'create_failed';
+        let res = null;
+        if (j.id && (st === 'completed' || st === 'failed')) res = await getResult(j.id);
+        statuses.push({ type: j.type, id: j.id, status: st, result: res });
+      }
+      const meAfter = await (await fetch(`${base()}/api/enterprise/me`, { headers: hdrs() })).json();
+      const afterBal = meAfter?.credits?.remaining || 0;
+      const summary = {
+        beforeCredits: beforeBal,
+        afterCredits: afterBal,
+        expectedReserved: expectedReserve,
+        netChange: beforeBal - afterBal,
+        jobs: statuses
+      };
+      report.textContent = JSON.stringify(summary, null, 2);
+    });
+  </script>
+</body>
+</html>
