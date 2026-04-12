@@ -4485,13 +4485,19 @@ main();</code></pre>
                                     const tid = k.slice(prefix.length);
                                     const btn = list.querySelector(`button.profile-btn[data-id="${tid}"]`);
                                     if (btn) {
-                                        btn.textContent = t('tasks.validated');
-                                        btn.style.backgroundColor = '#14532d';
-                                        btn.style.borderColor = '#14532d';
+                                        // Lire le statut réel depuis localStorage
+                                        const storedStatus = localStorage.getItem(k);
+                                        const isApproved = storedStatus === 'approved';
+                                        const isPending = storedStatus === 'pending';
+                                        
+                                        // Afficher selon le statut réel
+                                        btn.textContent = isApproved ? t('tasks.validated') : (isPending ? 'Soumise' : t('tasks.validated'));
+                                        btn.style.backgroundColor = isApproved ? '#14532d' : (isPending ? '#1e3a8a' : '#14532d');
+                                        btn.style.borderColor = isApproved ? '#14532d' : (isPending ? '#1e3a8a' : '#14532d');
                                         btn.style.cursor = 'default';
                                         btn.disabled = true;
                                         const timerEl = document.getElementById(`task-timer-${tid}`);
-                                        if (timerEl) timerEl.textContent = t('tasks.validated');
+                                        if (timerEl) timerEl.textContent = isApproved ? t('tasks.validated') : (isPending ? 'En attente de validation' : t('tasks.validated'));
                                         
                                         // Ajouter félicitations Early Adopter si c'est la bonne task
                                         const taskType = btn.getAttribute('data-type');
@@ -4582,22 +4588,38 @@ main();</code></pre>
                                     let ok = r.ok;
                                     let j = null;
                                     try { j = await r.json(); } catch {}
+                                    
                                     if (!ok || (j && j.error)) {
                                         timerEl.textContent = t('tasks.error');
                                         return;
                                     }
-                                    const approved = j && (j.status === 'approved' || j.success === true);
-                                    if (!approved) { timerEl.textContent = t('tasks.error'); return; }
-                                    timerEl.textContent = t('tasks.validated');
-                                    btn.textContent = t('tasks.validated');
-                                    btn.style.backgroundColor = '#14532d';
-                                    btn.style.borderColor = '#14532d';
+                                    
+                                    // FIX: accepter pending ET approved comme "soumis avec succès"
+                                    const submitted = j && (
+                                        j.status === 'approved' || 
+                                        j.status === 'pending' || 
+                                        j.success === true ||
+                                        j.message  // toute réponse positive
+                                    );
+                                    
+                                    if (!submitted) { 
+                                        timerEl.textContent = t('tasks.error'); 
+                                        return; 
+                                    }
+                                    
+                                    // Afficher selon le statut réel
+                                    const isApproved = j.status === 'approved';
+                                    timerEl.textContent = isApproved ? t('tasks.validated') : 'En attente de validation';
+                                    btn.textContent = isApproved ? t('tasks.validated') : 'Soumise';
+                                    btn.style.backgroundColor = isApproved ? '#14532d' : '#1e3a8a';
+                                    btn.style.borderColor = isApproved ? '#14532d' : '#1e3a8a';
                                     btn.style.cursor = 'default';
                                     btn.disabled = true;
+                                    
                                     try { refreshHeader(); } catch {}
                                     try { 
                                         const uid = (window.currentUserId != null) ? String(window.currentUserId) : (currentUsername || 'anon');
-                                        localStorage.setItem(`task_approved_${uid}_${id}`, '1'); 
+                                        localStorage.setItem(`task_approved_${uid}_${id}`, j.status || 'pending'); 
                                     } catch {}
                                 }).catch(() => {
                                     timerEl.textContent = t('tasks.error');
