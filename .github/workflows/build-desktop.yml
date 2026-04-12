@@ -3,14 +3,11 @@ name: Build Desktop App
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'desktop-app/**'
   pull_request:
     branches: [ main ]
-    paths:
-      - 'desktop-app/**'
   release:
     types: [ published ]
+  workflow_dispatch:
 
 jobs:
   build-windows:
