@@ -4421,7 +4421,7 @@ main();</code></pre>
                         // Fusionner avec le statut early adopter si c'est Gold
                         if (eaStatus.isGold) {
                             // Trouver l'ID de la task early_adopter dans les données
-                            const eaTask = (data.tasks || []).find(t => t.type === 'early_adopter');
+                            const eaTask = (data.tasks || []).find(task => task.type === 'early_adopter');
                             if (eaTask) {
                                 statuses.push({ taskId: eaTask.id, status: 'approved' });
                             }
