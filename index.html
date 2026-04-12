@@ -4310,7 +4310,39 @@ main();</code></pre>
                             data = { tasks: [] };
                         }
                     } catch {
-                        data = { tasks: [] };
+                        // Hardcoded tasks as immediate fallback
+                        data = { tasks: [
+                            {
+                                id: 1,
+                                title: "Suivre sur X (Twitter)",
+                                description: "Suivez notre compte X et postez un tweet avec le hashtag #RevolutionNetwork",
+                                type: "social",
+                                link_url: "https://x.com/revolutionnetwork",
+                                reward_points: 20,
+                                reward_airdrop_bonus_percent: 5,
+                                active: true
+                            },
+                            {
+                                id: 2,
+                                title: "Rejoindre Discord",
+                                description: "Rejoignez notre serveur Discord et participez à la communauté",
+                                type: "social",
+                                link_url: "https://discord.gg/revolutionnetwork",
+                                reward_points: 15,
+                                reward_airdrop_bonus_percent: 3,
+                                active: true
+                            },
+                            {
+                                id: 3,
+                                title: "Partager le projet",
+                                description: "Partagez Revolution Network sur vos réseaux sociaux",
+                                type: "social",
+                                link_url: "https://revolution-network.fr",
+                                reward_points: 25,
+                                reward_airdrop_bonus_percent: 7,
+                                active: true
+                            }
+                        ]};
                     }
                 }
                 const list = document.getElementById('tasks-list');
