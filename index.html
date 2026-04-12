@@ -1791,7 +1791,7 @@
                     const mb = document.getElementById('header-mining-bonus');
                     const token = localStorage.getItem('token');
                     if (token && mb) {
-                        fetch(`${API_BASE}/api/user/tasks/bonus`, { headers: { 'Authorization': `Bearer ${token}` }})
+                        fetch(`${API_BASE}/api/tasks/bonus`, { headers: { 'Authorization': `Bearer ${token}` }})
                         .then(r=>r.json()).then(j=>{
                             const p = Number(j.bonusPercent)||0;
                             if (p > 0) { mb.style.display='inline-block'; mb.textContent = `+${p}% ${t('tasks.miningBonusLabel')}`; }
@@ -4407,7 +4407,7 @@ main();</code></pre>
 
                 // Appliquer l'état en fonction des user_tasks existants (source d'autorité)
                 if (token) {
-                    fetch(`${API_BASE}/api/user/tasks/status`, {
+                    fetch(`${API_BASE}/api/tasks/status`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     }).then(r => r.json()).then(j => {
                         const statuses = j.statuses || [];
@@ -4476,7 +4476,7 @@ main();</code></pre>
                                     alert('Activez la 2FA dans votre Profil pour valider cette task.');
                                     return;
                                 }
-                                fetch(`${API_BASE}/api/user/tasks/approve`, {
+                                fetch(`${API_BASE}/api/tasks/approve`, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                                     body: JSON.stringify({ taskId: id })
@@ -4502,7 +4502,7 @@ main();</code></pre>
                             s--; timerEl.textContent = `${s}s`;
                             if (s <= 0) {
                                 clearInterval(iv);
-                                fetch(`${API_BASE}/api/user/tasks/approve`, {
+                                fetch(`${API_BASE}/api/tasks/approve`, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                                     body: JSON.stringify({ taskId: id })
