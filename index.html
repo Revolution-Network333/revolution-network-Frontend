@@ -4325,20 +4325,32 @@ main();</code></pre>
                 };
                 
                 // Fetch early adopter status for current user
-                let eaStatus = { isEarlyAdopter: false, isGold: false, spotsLeft: 50 };
+                let eaStatus = { isEarlyAdopter: false, isGold: false, spotsLeft: 50, newlyGold: false };
                 if (token) {
                     try {
                         const eaRes = await fetch(`${API_BASE}/api/early-adopter/status`, {
                             headers: { 'Authorization': `Bearer ${token}` }
                         });
-                        if (eaRes.ok) eaStatus = await eaRes.json();
+                        const eaData = await eaRes.json();
                         
-                        // Fallback: if user is already Gold in localStorage, consider them as Gold early adopter
-                        const cachedUser = JSON.parse(localStorage.getItem('user') || '{}');
-                        if (cachedUser.rank === 'Gold' || cachedUser.role === 'Gold') {
-                            eaStatus.isGold = true;
+                        // Check if user just became Gold (compare with previous session)
+                        const previousGold = sessionStorage.getItem('wasGold') === 'true';
+                        const currentlyGold = eaData.isGold || false;
+                        const newlyGold = currentlyGold && !previousGold;
+                        
+                        if (newlyGold) {
+                            sessionStorage.setItem('wasGold', 'true');
                         }
-                    } catch (e) {}
+                        
+                        eaStatus = {
+                            isEarlyAdopter: eaData.isEarlyAdopter || false,
+                            isGold: currentlyGold,
+                            spotsLeft: eaData.spotsLeft || 50,
+                            newlyGold: newlyGold
+                        };
+                    } catch (e) {
+                        console.error('Early adopter status fetch error:', e);
+                    }
                 }
 
                 const items = (data.tasks || []).map(task => {
@@ -4359,6 +4371,8 @@ main();</code></pre>
                             statusLabel = t('tasks.validated');
                             btnStyle = 'background-color: #fbbf24; border-color: #fbbf24; color: #000; font-weight: bold;';
                             isDisabled = true;
+                            
+                            // Show full congratulations message for all Gold users
                             extraInfo = `
                                 <div class="glass-card" style="margin-top:12px; padding:12px; border:1px solid #fbbf24; background:rgba(251, 191, 36, 0.1); border-radius:12px; animation: pulse-gold 2s infinite;">
                                     <div style="color:#fbbf24; font-size:1.1em; font-weight:bold; margin-bottom:4px;">🎊 Félicitations Early Adopter !</div>
@@ -4372,6 +4386,7 @@ main();</code></pre>
                                     }
                                 </style>
                             `;
+                        }
                         } else if (eaStatus.isEarlyAdopter && Number(eaStatus.spotsLeft || 0) <= 0) {
                             statusLabel = 'Non éligible (Limite atteinte)';
                             btnStyle = 'background-color: #374151; border-color: #374151; opacity: 0.7;';
@@ -4432,6 +4447,34 @@ main();</code></pre>
                                 btn.disabled = true;
                                 const timerEl = document.getElementById(`task-timer-${st.taskId}`);
                                 if (timerEl) timerEl.textContent = t('tasks.validated');
+
+                                // Si c'est early_adopter → afficher félicitations basé sur approved (source de vérité)
+                                const taskType = btn.getAttribute('data-type');
+                                if (taskType === 'early_adopter') {
+                                    const taskItem = btn.closest('.task-item');
+                                    if (taskItem && !taskItem.querySelector('.ea-congrats')) {
+                                        const extraInfo = taskItem.querySelector('.task-info');
+                                        if (extraInfo) {
+                                            // Supprimer le message "attente de ping" s'il existe
+                                            const pendingMsg = extraInfo.querySelector('div[style*="93c5fd"]');
+                                            if (pendingMsg) pendingMsg.remove();
+
+                                            extraInfo.insertAdjacentHTML('beforeend', `
+                                                <div class="ea-congrats glass-card" style="margin-top:12px;padding:12px;border:1px solid #fbbf24;background:rgba(251,191,36,0.1);border-radius:12px;animation:pulse-gold 2s infinite;">
+                                                    <div style="color:#fbbf24;font-size:1.1em;font-weight:bold;margin-bottom:4px;">🎊 Félicitations Early Adopter !</div>
+                                                    <div style="color:#e5e7eb;font-size:0.85em;margin-top:4px;">Vous êtes l'un des 50 premiers utilisateurs. Votre grade <span style="color:#fbbf24;font-weight:bold;">GOLD</span> et vos <span style="color:#fbbf24;font-weight:bold;">100 Aether</span> ont été crédités !</div>
+                                                </div>
+                                                <style>
+                                                    @keyframes pulse-gold {
+                                                        0% { box-shadow:0 0 0 0 rgba(251,191,36,0.4); }
+                                                        70% { box-shadow:0 0 0 10px rgba(251,191,36,0); }
+                                                        100% { box-shadow:0 0 0 0 rgba(251,191,36,0); }
+                                                    }
+                                                </style>
+                                            `);
+                                        }
+                                    }
+                                }
                             }
                         });
                     }).catch(()=>{
