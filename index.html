@@ -4373,19 +4373,11 @@ main();</code></pre>
                             isDisabled = true;
                             
                             // Show full congratulations message for all Gold users
-                            extraInfo = `
-                                <div class="glass-card" style="margin-top:12px; padding:12px; border:1px solid #fbbf24; background:rgba(251, 191, 36, 0.1); border-radius:12px; animation: pulse-gold 2s infinite;">
-                                    <div style="color:#fbbf24; font-size:1.1em; font-weight:bold; margin-bottom:4px;">🎊 Félicitations Early Adopter !</div>
-                                    <div style="color:#e5e7eb; font-size:0.85em;">Vous êtes l'un des 50 premiers utilisateurs. Votre grade <span style="color:#fbbf24; font-weight:bold;">GOLD</span> et vos <span style="color:#fbbf24; font-weight:bold;">100 Aether</span> ont été crédités !</div>
-                                </div>
-                                <style>
-                                    @keyframes pulse-gold {
-                                        0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
-                                        70% { box-shadow: 0 0 0 10px rgba(251, 191, 36, 0); }
-                                        100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
-                                    }
-                                </style>
-                            `;
+                            const congratsDiv = document.createElement('div');
+                            congratsDiv.className = 'glass-card';
+                            congratsDiv.style.cssText = 'margin-top:12px; padding:12px; border:1px solid #fbbf24; background:rgba(251, 191, 36, 0.1); border-radius:12px; animation: pulse-gold 2s infinite;';
+                            congratsDiv.innerHTML = '<div style="color:#fbbf24; font-size:1.1em; font-weight:bold; margin-bottom:4px;">🎊 Félicitations Early Adopter !</div><div style="color:#e5e7eb; font-size:0.85em;">Vous êtes l\'un des 50 premiers utilisateurs. Votre grade <span style="color:#fbbf24; font-weight:bold;">GOLD</span> et vos <span style="color:#fbbf24; font-weight:bold;">100 Aether</span> ont été crédités !</div>';
+                            extraInfo = congratsDiv;
                         }
                         } else if (eaStatus.isEarlyAdopter && Number(eaStatus.spotsLeft || 0) <= 0) {
                             statusLabel = 'Non éligible (Limite atteinte)';
