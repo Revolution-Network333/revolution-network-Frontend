@@ -74,12 +74,59 @@ router.post('/approve', authenticateToken, async (req, res) => {
     // Task doit exister et être active
     const activeClause = db.isSQLite ? 'active = 1' : 'active = TRUE';
     const t = await db.query(
-      `SELECT id, reward_points, reward_airdrop_bonus_percent 
+      `SELECT id, type, reward_points, reward_airdrop_bonus_percent 
        FROM tasks WHERE id = $1 AND ${activeClause}`, 
       [parseInt(taskId)]
     );
     if (t.rows.length === 0) return res.status(404).json({ error: 'Task introuvable' });
+    const taskType = t.rows[0].type;
     const rewardPoints = parseInt(t.rows[0].reward_points || 0);
+
+    // Early Adopter: validation automatique pour les utilisateurs Gold
+    if (taskType === 'early_adopter') {
+      // Vérifier si l'utilisateur est déjà Gold
+      const userRes = await db.query('SELECT rank, is_rank_locked FROM users WHERE id = $1', [userId]);
+      const userRank = userRes.rows[0]?.rank;
+      const isRankLocked = userRes.rows[0]?.is_rank_locked;
+      
+      if (userRank === 'Gold' && isRankLocked) {
+        // L'utilisateur est déjà Gold - valider automatiquement la task
+        const existingAny = await db.query(
+          `SELECT id, status FROM user_tasks WHERE user_id = $1 AND task_id = $2 ORDER BY created_at DESC LIMIT 1`,
+          [userId, parseInt(taskId)]
+        );
+        
+        if (existingAny.rows.length > 0) {
+          const st = existingAny.rows[0].status;
+          if (st === 'approved') {
+            return res.json({ success: true, userTaskId: existingAny.rows[0].id, status: 'approved', message: 'Déjà validé' });
+          }
+          // Mettre à jour vers approved si c'était pending
+          await db.query('UPDATE user_tasks SET status = $1, timestamp_approved = CURRENT_TIMESTAMP WHERE id = $2', ['approved', existingAny.rows[0].id]);
+          return res.json({ success: true, userTaskId: existingAny.rows[0].id, status: 'approved', message: 'Validé automatiquement (Gold)' });
+        }
+        
+        // Créer nouvelle entrée approved
+        const ins = await db.query(
+          `INSERT INTO user_tasks (user_id, task_id, status, timestamp_approved)
+           VALUES ($1, $2, 'approved', CURRENT_TIMESTAMP)
+           RETURNING id`,
+          [userId, parseInt(taskId)]
+        );
+        
+        if (rewardPoints > 0) {
+          await db.query('UPDATE users SET total_points = COALESCE(total_points, 0) + $1 WHERE id = $2', [rewardPoints, userId]);
+          try {
+            await db.query(
+              'INSERT INTO rewards_ledger (user_id, amount, reason, details) VALUES ($1, $2, $3, $4)',
+              [userId, rewardPoints, 'task', JSON.stringify({ task_id: parseInt(taskId), type: 'early_adopter', auto_approved: true })]
+            );
+          } catch (_) {}
+        }
+        
+        return res.json({ success: true, userTaskId: ins.rows[0].id, status: 'approved', message: 'Early Adopter validé automatiquement (Gold)' });
+      }
+    }
 
     // Empêcher multiples enregistrements (usage unique)
     const existingAny = await db.query(
