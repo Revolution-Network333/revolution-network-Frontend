@@ -1791,7 +1791,7 @@
                     const mb = document.getElementById('header-mining-bonus');
                     const token = localStorage.getItem('token');
                     if (token && mb) {
-                        fetch(`${API_BASE}/api/tasks/bonus`, { headers: { 'Authorization': `Bearer ${token}` }})
+                        fetch(`${API_BASE}/api/user/tasks/bonus`, { headers: { 'Authorization': `Bearer ${token}` }})
                         .then(r=>r.json()).then(j=>{
                             const p = Number(j.bonusPercent)||0;
                             if (p > 0) { mb.style.display='inline-block'; mb.textContent = `+${p}% ${t('tasks.miningBonusLabel')}`; }
@@ -4325,32 +4325,20 @@ main();</code></pre>
                 };
                 
                 // Fetch early adopter status for current user
-                let eaStatus = { isEarlyAdopter: false, isGold: false, spotsLeft: 50, newlyGold: false };
+                let eaStatus = { isEarlyAdopter: false, isGold: false, spotsLeft: 50 };
                 if (token) {
                     try {
                         const eaRes = await fetch(`${API_BASE}/api/early-adopter/status`, {
                             headers: { 'Authorization': `Bearer ${token}` }
                         });
-                        const eaData = await eaRes.json();
+                        if (eaRes.ok) eaStatus = await eaRes.json();
                         
-                        // Check if user just became Gold (compare with previous session)
-                        const previousGold = sessionStorage.getItem('wasGold') === 'true';
-                        const currentlyGold = eaData.isGold || false;
-                        const newlyGold = currentlyGold && !previousGold;
-                        
-                        if (newlyGold) {
-                            sessionStorage.setItem('wasGold', 'true');
+                        // Fallback: if user is already Gold in localStorage, consider them as Gold early adopter
+                        const cachedUser = JSON.parse(localStorage.getItem('user') || '{}');
+                        if (cachedUser.rank === 'Gold' || cachedUser.role === 'Gold') {
+                            eaStatus.isGold = true;
                         }
-                        
-                        eaStatus = {
-                            isEarlyAdopter: eaData.isEarlyAdopter || false,
-                            isGold: currentlyGold,
-                            spotsLeft: eaData.spotsLeft || 50,
-                            newlyGold: newlyGold
-                        };
-                    } catch (e) {
-                        console.error('Early adopter status fetch error:', e);
-                    }
+                    } catch (e) {}
                 }
 
                 const items = (data.tasks || []).map(task => {
@@ -4371,14 +4359,19 @@ main();</code></pre>
                             statusLabel = t('tasks.validated');
                             btnStyle = 'background-color: #fbbf24; border-color: #fbbf24; color: #000; font-weight: bold;';
                             isDisabled = true;
-                            
-                            // Show full congratulations message for all Gold users
-                            const congratsDiv = document.createElement('div');
-                            congratsDiv.className = 'glass-card';
-                            congratsDiv.style.cssText = 'margin-top:12px; padding:12px; border:1px solid #fbbf24; background:rgba(251, 191, 36, 0.1); border-radius:12px; animation: pulse-gold 2s infinite;';
-                            congratsDiv.innerHTML = '<div style="color:#fbbf24; font-size:1.1em; font-weight:bold; margin-bottom:4px;">🎊 Félicitations Early Adopter !</div><div style="color:#e5e7eb; font-size:0.85em;">Vous êtes l\'un des 50 premiers utilisateurs. Votre grade <span style="color:#fbbf24; font-weight:bold;">GOLD</span> et vos <span style="color:#fbbf24; font-weight:bold;">100 Aether</span> ont été crédités !</div>';
-                            extraInfo = congratsDiv;
-                        }
+                            extraInfo = `
+                                <div class="glass-card" style="margin-top:12px; padding:12px; border:1px solid #fbbf24; background:rgba(251, 191, 36, 0.1); border-radius:12px; animation: pulse-gold 2s infinite;">
+                                    <div style="color:#fbbf24; font-size:1.1em; font-weight:bold; margin-bottom:4px;">🎊 Félicitations Early Adopter !</div>
+                                    <div style="color:#e5e7eb; font-size:0.85em;">Vous êtes l'un des 50 premiers utilisateurs. Votre grade <span style="color:#fbbf24; font-weight:bold;">GOLD</span> et vos <span style="color:#fbbf24; font-weight:bold;">100 Aether</span> ont été crédités !</div>
+                                </div>
+                                <style>
+                                    @keyframes pulse-gold {
+                                        0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
+                                        70% { box-shadow: 0 0 0 10px rgba(251, 191, 36, 0); }
+                                        100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
+                                    }
+                                </style>
+                            `;
                         } else if (eaStatus.isEarlyAdopter && Number(eaStatus.spotsLeft || 0) <= 0) {
                             statusLabel = 'Non éligible (Limite atteinte)';
                             btnStyle = 'background-color: #374151; border-color: #374151; opacity: 0.7;';
@@ -4414,7 +4407,7 @@ main();</code></pre>
 
                 // Appliquer l'état en fonction des user_tasks existants (source d'autorité)
                 if (token) {
-                    fetch(`${API_BASE}/api/tasks/status`, {
+                    fetch(`${API_BASE}/api/user/tasks/status`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     }).then(r => r.json()).then(j => {
                         const statuses = j.statuses || [];
@@ -4439,35 +4432,6 @@ main();</code></pre>
                                 btn.disabled = true;
                                 const timerEl = document.getElementById(`task-timer-${st.taskId}`);
                                 if (timerEl) timerEl.textContent = t('tasks.validated');
-
-                                // Si c'est early_adopter → afficher félicitations basé sur approved (source de vérité)
-                                const taskType = btn.getAttribute('data-type');
-                                if (taskType === 'early_adopter') {
-                                    const taskItem = btn.closest('.task-item');
-                                    if (taskItem && !taskItem.querySelector('.ea-congrats')) {
-                                        const extraInfo = taskItem.querySelector('.task-info');
-                                        if (extraInfo) {
-                                            // Supprimer le message "attente de ping" s'il existe
-                                            const pendingMsg = extraInfo.querySelector('div[style*="93c5fd"]');
-                                            if (pendingMsg) pendingMsg.remove();
-
-                                            // Afficher félicitations avec template simple pour éviter les erreurs de syntaxe
-                                            extraInfo.innerHTML += `
-                                                <div class="ea-congrats glass-card" style="margin-top:12px;padding:12px;border:1px solid #fbbf24;background:rgba(251,191,36,0.1);border-radius:12px;animation:pulse-gold 2s infinite;">
-                                                    <div style="color:#fbbf24;font-size:1.1em;font-weight:bold;margin-bottom:4px;">🎊 Félicitations Early Adopter !</div>
-                                                    <div style="color:#e5e7eb;font-size:0.85em;margin-top:4px;">Vous êtes l'un des 50 premiers utilisateurs. Votre grade <span style="color:#fbbf24;font-weight:bold;">GOLD</span> et vos <span style="color:#fbbf24;font-weight:bold;">100 Aether</span> ont été crédités !</div>
-                                                </div>
-                                                <style>
-                                                    @keyframes pulse-gold {
-                                                        0% { box-shadow:0 0 0 0 rgba(251,191,36,0.4); }
-                                                        70% { box-shadow:0 0 0 10px rgba(251,191,36,0); }
-                                                        100% { box-shadow:0 0 0 0 rgba(251,191,36,0); }
-                                                    }
-                                                </style>
-                                            `;
-                                        }
-                                    }
-                                }
                             }
                         });
                     }).catch(()=>{
@@ -4512,7 +4476,7 @@ main();</code></pre>
                                     alert('Activez la 2FA dans votre Profil pour valider cette task.');
                                     return;
                                 }
-                                fetch(`${API_BASE}/api/tasks/approve`, {
+                                fetch(`${API_BASE}/api/user/tasks/approve`, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                                     body: JSON.stringify({ taskId: id })
@@ -4538,7 +4502,7 @@ main();</code></pre>
                             s--; timerEl.textContent = `${s}s`;
                             if (s <= 0) {
                                 clearInterval(iv);
-                                fetch(`${API_BASE}/api/tasks/approve`, {
+                                fetch(`${API_BASE}/api/user/tasks/approve`, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                                     body: JSON.stringify({ taskId: id })
@@ -5983,7 +5947,7 @@ function initializeShopPage() {
                         <h1 class="page-title">Admin Tasks</h1>
                         <div>
                             <button class="profile-btn" id="add-task-btn">Ajouter une task</button>
-                            <button class="profile-btn secondary" id="repair-user-tasks" title="Réparation complète des tables et tâches">Réparer tout</button>
+                            <button class="profile-btn secondary" id="repair-user-tasks" title="Réparer schéma user_tasks (si ancien déploiement)">Réparer schéma</button>
                         </div>
                     </div>
                     <table class="data-table" id="admin-tasks-table">
@@ -6153,46 +6117,19 @@ function initializeShopPage() {
                         repairBtn.disabled = true;
                         repairBtn.classList.remove('primary','danger');
                         repairBtn.classList.add('secondary');
-                        repairBtn.textContent = 'Réparation complète...';
-                        
-                        const r = await fetch(`${API_BASE}/api/admin/tasks/repair-all`, { 
-                            method:'POST', 
-                            headers:{ 'Authorization': `Bearer ${token}` }
-                        });
+                        repairBtn.textContent = 'Réparation…';
+                        const r = await fetch(`${API_BASE}/api/admin/tasks/fix-schema`, { method:'POST', headers:{ 'Authorization': `Bearer ${token}` }});
                         const j = await r.json().catch(()=>({}));
-                        
-                        if (j.success) {
-                            let message = `Réparation terminée!\n`;
-                            message += `Tables: ${j.results.tables.length}\n`;
-                            message += `Tasks fixed: ${j.results.tasks.length}\n`;
-                            message += `Total tasks: ${j.results.summary.total_tasks}\n`;
-                            message += `Active tasks: ${j.results.summary.active_tasks}`;
-                            
-                            alert(message);
-                            repairBtn.textContent = 'Réparation réussie';
-                            repairBtn.classList.remove('secondary');
-                            repairBtn.classList.add('primary');
-                            
-                            // Reload tasks to show updated data
-                            loadTasks();
-                        } else {
-                            alert(`Erreur: ${j.error || 'Échec de la réparation'}`);
-                            repairBtn.textContent = 'Échec';
-                            repairBtn.classList.remove('secondary');
-                            repairBtn.classList.add('danger');
-                        }
+                        repairBtn.textContent = (j && j.repaired) ? 'Schéma réparé' : 'Terminé';
                     } catch (e) {
-                        alert(`Erreur: ${e.message}`);
                         repairBtn.textContent = t('common.error');
-                        repairBtn.classList.remove('secondary');
-                        repairBtn.classList.add('danger');
                     } finally {
                         setTimeout(()=>{
                             repairBtn.textContent = originalText;
                             repairBtn.disabled = false;
                             repairBtn.classList.remove('primary','danger');
                             repairBtn.classList.add('secondary');
-                        }, 3000);
+                        }, 1800);
                     }
                 });
             }
@@ -6291,28 +6228,10 @@ function initializeShopPage() {
                     active: document.getElementById('task-active').value === '1',
                     description: document.getElementById('task-desc').value
                 };
-                
-                console.log('Saving task:', payload);
-                
                 const method = id ? 'PUT' : 'POST';
                 const url = id ? `${API_BASE}/api/admin/tasks/${id}` : `${API_BASE}/api/admin/tasks`;
-                
                 fetch(url, { method, headers:{ 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(payload) })
-                .then(async (res) => {
-                    console.log('Task save response:', res.status);
-                    if (!res.ok) {
-                        const error = await res.json().catch(() => ({}));
-                        console.error('Task save error:', error);
-                        alert(`Erreur: ${error.error || 'Échec de la sauvegarde'}`);
-                        return;
-                    }
-                    closeTaskModal(); 
-                    loadTasks();
-                })
-                .catch(err => {
-                    console.error('Task save fetch error:', err);
-                    alert(`Erreur réseau: ${err.message}`);
-                });
+                .then(()=>{ closeTaskModal(); loadTasks(); });
             }
             function loadPendingUserTasks() {
                 const tbody = document.querySelector('#pending-user-tasks tbody');
