@@ -233,12 +233,13 @@ async function submitProof(challenge, nonce) {
 
 function createWindow() {
   const isHidden = process.argv.includes('--hidden');
+  const isDev = !app.isPackaged; // Force show in development
   mainWindow = new BrowserWindow({
     width: 400,
     height: 600,
     resizable: false,
     autoHideMenuBar: true,
-    show: !isHidden, // Don't show window if started with --hidden
+    show: !isHidden || isDev, // Always show in development
     icon: path.join(__dirname, 'assets/icon.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

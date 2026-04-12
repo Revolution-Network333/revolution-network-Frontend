@@ -49,13 +49,18 @@ class MainActivity : ComponentActivity() {
                         }
                         startService(intent)
                     },
-                    onSaveToken = { t -> SecurePrefs(this).setToken(t) },
+                    onSaveToken = { t -> 
+                        SecurePrefs(this).setToken(t)
+                        // Trigger recomposition to check login state
+                        NodeServiceState.log("[TOKEN] Token saved, updating UI")
+                    },
                     onClearToken = { SecurePrefs(this).clear() },
                     onSignInViaWebsite = {
                         val url = Uri.parse("https://revolution-network.fr/?desktop=true")
                         startActivity(Intent(Intent.ACTION_VIEW, url))
                     },
-                    stateFlow = NodeServiceState.state
+                    stateFlow = NodeServiceState.state,
+                    context = this
                 )
             }
         }
