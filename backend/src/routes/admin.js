@@ -643,6 +643,122 @@ router.post('/early-adopter/backfill', authenticateToken, checkAdmin, async (req
   }
 });
 
+// Comprehensive repair endpoint for tasks
+router.post('/tasks/repair-all', authenticateToken, checkAdmin, async (req, res) => {
+  try {
+    const results = { tables: [], tasks: [], errors: [] };
+    
+    // 1. Ensure tables exist
+    try {
+      await db.query(`
+        CREATE TABLE IF NOT EXISTS tasks (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          title VARCHAR(255) NOT NULL,
+          description TEXT,
+          type VARCHAR(50) NOT NULL,
+          link_url TEXT,
+          reward_points INTEGER DEFAULT 0,
+          reward_airdrop_bonus_percent INTEGER DEFAULT 0,
+          active BOOLEAN DEFAULT 1,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+      results.tables.push('tasks table created/verified');
+    } catch (e) {
+      results.errors.push(`tasks table error: ${e.message}`);
+    }
+    
+    try {
+      await db.query(`
+        CREATE TABLE IF NOT EXISTS user_tasks (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id INTEGER NOT NULL,
+          task_id INTEGER NOT NULL,
+          status VARCHAR(20) DEFAULT 'pending',
+          timestamp_started TIMESTAMP,
+          timestamp_approved TIMESTAMP,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (user_id) REFERENCES users(id),
+          FOREIGN KEY (task_id) REFERENCES tasks(id)
+        )
+      `);
+      results.tables.push('user_tasks table created/verified');
+    } catch (e) {
+      results.errors.push(`user_tasks table error: ${e.message}`);
+    }
+    
+    // 2. Fix existing tasks - ensure active field has correct value
+    try {
+      // Convert all truthy active values to 1
+      await db.query(`
+        UPDATE tasks 
+        SET active = 1 
+        WHERE active = TRUE OR active = 'true' OR active = '1'
+      `);
+      
+      // Convert all falsy active values to 0
+      await db.query(`
+        UPDATE tasks 
+        SET active = 0 
+        WHERE active = FALSE OR active = 'false' OR active = '0' OR active IS NULL
+      `);
+      
+      // Ensure all tasks have required fields
+      await db.query(`
+        UPDATE tasks 
+        SET reward_points = COALESCE(reward_points, 0),
+            reward_airdrop_bonus_percent = COALESCE(reward_airdrop_bonus_percent, 0)
+      `);
+      
+      results.tasks.push('Active field normalized for all tasks');
+      results.tasks.push('Default values applied where missing');
+    } catch (e) {
+      results.errors.push(`Tasks repair error: ${e.message}`);
+    }
+    
+    // 3. Create unique index for user_tasks
+    try {
+      await db.query(`
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_user_tasks_unique 
+        ON user_tasks (user_id, task_id)
+      `);
+      results.tables.push('user_tasks unique index created/verified');
+    } catch (e) {
+      results.errors.push(`Index creation error: ${e.message}`);
+    }
+    
+    // 4. Get final status
+    try {
+      const taskCount = await db.query('SELECT COUNT(*) as count FROM tasks');
+      const activeTaskCount = await db.query('SELECT COUNT(*) as count FROM tasks WHERE active = 1');
+      const userTaskCount = await db.query('SELECT COUNT(*) as count FROM user_tasks');
+      
+      results.summary = {
+        total_tasks: taskCount.rows[0].count,
+        active_tasks: activeTaskCount.rows[0].count,
+        user_tasks: userTaskCount.rows[0].count,
+        repaired_at: new Date().toISOString()
+      };
+    } catch (e) {
+      results.errors.push(`Status check error: ${e.message}`);
+    }
+    
+    res.json({ 
+      success: true, 
+      message: 'Tasks repair completed',
+      results 
+    });
+    
+  } catch (e) {
+    console.error('Tasks repair error:', e);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Erreur lors de la réparation des tâches',
+      details: e.message 
+    });
+  }
+});
+
 // Public tasks endpoint (temporary fix for Render deployment issue)
 router.get('/public/tasks', async (req, res) => {
   try {
