@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title>Révolution Network - Dashboard</title>
     <link rel="icon" type="image/x-icon" href="nexon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="chrome-extension/assets/icon-32.png">
@@ -1650,6 +1651,22 @@
         async function setPage(page) {
             console.log('Navigating to:', page);
             window.scrollTo(0, 0);
+            
+            // Protection des pages admin - vérifier l'authentification et les droits
+            const adminPages = ['adminLeaderboard', 'adminShop', 'adminTasks', 'adminAirdrop', 'adminSupport', 'admin'];
+            if (adminPages.includes(page)) {
+                const token = localStorage.getItem('token');
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                
+                // Vérifier si l'utilisateur est connecté et est admin
+                if (!token || !user || user.role !== 'admin') {
+                    console.warn('Accès admin refusé - utilisateur non authentifié ou non admin');
+                    alert('Accès non autorisé. Veuillez vous connecter avec un compte administrateur.');
+                    setPage('overview');
+                    return;
+                }
+            }
+            
             // Clear intervals from previous pages
             if (overviewInterval) {
                 clearInterval(overviewInterval);

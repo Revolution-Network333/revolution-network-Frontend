@@ -1,0 +1,14 @@
+User-agent: *
+Disallow: /
+
+# Bloquer l'indexation du dashboard
+User-agent: Googlebot
+Disallow: /
+
+# Autoriser les ressources statiques
+Allow: /styles.css
+Allow: /nexon.ico
+Allow: /chrome-extension/
+Allow: /image__4_-removebg-preview.jpg
+
+Sitemap: https://revolution-network.fr/sitemap.xml
