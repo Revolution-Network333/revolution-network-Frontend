@@ -1581,10 +1581,13 @@ router.post('/emergency/fix-all-gb', authenticateToken, checkAdmin, async (req, 
     console.log('=== EMERGENCY GB REPAIR STARTED ===');
     
     // Get all users with 0GB or NULL free_gb_remaining (DECIMAL-safe comparison)
-    const users = await db('users')
-      .select('id', 'email', 'free_gb_remaining')
-      .whereRaw('CAST(free_gb_remaining AS DECIMAL(14,2)) <= 0 OR free_gb_remaining IS NULL');
+    const usersResult = await db.query(`
+      SELECT id, email, free_gb_remaining 
+      FROM users 
+      WHERE CAST(COALESCE(free_gb_remaining, 0) AS DECIMAL(14,2)) <= 0
+    `);
     
+    const users = usersResult.rows;
     console.log(`Found ${users.length} users with 0GB`);
     
     if (users.length === 0) {
@@ -1598,18 +1601,20 @@ router.post('/emergency/fix-all-gb', authenticateToken, checkAdmin, async (req, 
     for (const user of users) {
       try {
         // Add 3GB to free_gb_remaining
-        await db('users').where({ id: user.id }).update({
-          free_gb_remaining: db.raw(`COALESCE(free_gb_remaining, 0) + ?`, [weeklyGB]),
-          free_credits_last_reset: db.fn.now(6)
-        });
+        await db.query(
+          `UPDATE users 
+           SET free_gb_remaining = COALESCE(free_gb_remaining, 0) + $1,
+               free_credits_last_reset = CURRENT_TIMESTAMP 
+           WHERE id = $2`,
+          [weeklyGB, user.id]
+        );
         
         // Log the repair
         const amountMb = Math.round(weeklyGB * 1024);
-        await db('credit_ledger').insert({
-          user_id: user.id,
-          amount: amountMb,
-          reason: 'emergency_gb_repair'
-        });
+        await db.query(
+          'INSERT INTO credit_ledger (user_id, amount, reason) VALUES ($1, $2, $3)',
+          [user.id, amountMb, 'emergency_gb_repair']
+        );
         
         console.log(`+${weeklyGB}GB added for user ${user.id} (${user.email})`);
         fixedCount++;
