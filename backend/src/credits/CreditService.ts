@@ -56,7 +56,9 @@ export class CreditService {
           .where('key', 'free_quota_gb_weekly')
           .first();
         
-        freeGB = parseFloat(config?.value || '3');
+        const weeklyGB = parseFloat(config?.value || '3');
+        // AJOUTER les 3GB hebdomadaires au lieu de remplacer
+        freeGB += weeklyGB;
         
         await trx('users').where({ id: userId }).update({
           free_gb_remaining: freeGB,
