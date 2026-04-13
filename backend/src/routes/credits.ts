@@ -11,9 +11,10 @@ export async function creditRoutes(fastify: FastifyInstance, options: FastifyPlu
   fastify.get('/me/credits', { preHandler: [authenticateApiKey] }, async (request, reply) => {
     const userId = request.user.id;
 
-    const user = await db('users')
-      .where({ id: userId })
-      .select('credits_balance')
+    const user = await db('users as u')
+      .leftJoin('enterprise_credits as ec', 'ec.user_id', 'u.id')
+      .where({ 'u.id': userId })
+      .select('ec.credits_balance')
       .first();
 
     if (!user) {
