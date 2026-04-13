@@ -190,20 +190,6 @@
                     break;
                 case 'tasks':
                     content.innerHTML = getTasksHTML();
-                    initializeTasksPage();
-                    break;
-                case 'leaderboard':
-                    content.innerHTML = getLeaderboardHTML();
-                    initializeLeaderboardPage();
-                    break;
-                case 'adminLeaderboard':
-                    content.innerHTML = getAdminLeaderboardHTML();
-                    initializeAdminLeaderboardPage();
-                    break;
-                case 'adminShop':
-                    content.innerHTML = getAdminShopHTML();
-                    initializeAdminShopPage();
-                    break;
                 case 'adminTasks':
                     content.innerHTML = getAdminTasksHTML();
                     initializeAdminTasksPage();
@@ -1556,6 +1542,54 @@ print(r.json())</code></pre>
                     });
                 }
             }).catch(() => {});
+        }
+
+        function initializeEmergencyRepairPage() {
+            const repairBtn = document.getElementById('direct-emergency-repair');
+            const statusDiv = document.getElementById('repair-status');
+            
+            if (!repairBtn || !statusDiv) return;
+            
+            repairBtn.addEventListener('click', async () => {
+                if (!confirm('Êtes-vous sûr de vouloir lancer la réparation GB d\'urgence ?\n\nCela va ajouter 3GB à tous les utilisateurs ayant 0GB.')) {
+                    return;
+                }
+                
+                const originalText = repairBtn.innerHTML;
+                repairBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg> Réparation en cours...';
+                repairBtn.disabled = true;
+                statusDiv.textContent = '⏳ Lancement de la réparation...';
+                
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`${API_BASE}/api/admin/emergency/fix-all-gb`, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        repairBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Réparation terminée !';
+                        repairBtn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+                        statusDiv.textContent = `✅ ${result.message}\n🎯 Utilisateurs réparés : ${result.fixed}`;
+                        statusDiv.style.color = '#22c55e';
+                    } else {
+                        throw new Error(result.error || 'Erreur inconnue');
+                    }
+                } catch (error) {
+                    repairBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"></path></svg> Erreur';
+                    repairBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                    statusDiv.textContent = `❌ Erreur : ${error.message}`;
+                    statusDiv.style.color = '#ef4444';
+                }
+                
+                setTimeout(() => {
+                    repairBtn.innerHTML = originalText;
+                    repairBtn.disabled = false;
+                    repairBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                }, 5000);
+            });
         }
 
         function showUserDetail(id) {
