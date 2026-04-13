@@ -16,8 +16,8 @@ router.get('/profile', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
     
     let result = await db.query(
-      `SELECT id, email, username, role, wallet_address, solana_address, profile_picture_url, total_points, trust_score, 
-              created_at, last_login, referral_code, referrer_id, rank
+      `SELECT id, email, username, role, wallet_address, solana_address, profile_picture_url, total_points, trust_score,
+              created_at, last_login, referral_code, referrer_id, rank, free_gb_remaining
        FROM users
        WHERE id = $1`,
       [userId]

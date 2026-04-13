@@ -204,6 +204,7 @@
                             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
                         </svg>
                         <span id="header-total-points">Total: 0 pt</span>
+                        <span id="header-gb-balance" style="margin-left:8px;padding:2px 8px;border:1px solid #1e40af;border-radius:9999px;background:#1e3a8a;color:#93c5fd;font-size:.78rem;">0 GB</span>
                         <span id="header-mining-bonus" style="margin-left:8px;display:none;padding:2px 6px;border:1px solid #14532d;border-radius:9999px;background:#052e16;color:#86efac;font-size:.78rem;"></span>
                     </div>
                     <div class="wallet-balance">
@@ -1810,6 +1811,9 @@
                     } catch {}
                     const tp = document.getElementById('header-total-points');
                     if (tp) tp.textContent = `Total: ${data.user.total_points} pt`;
+                    // Afficher les GB gratuits
+                    const gbEl = document.getElementById('header-gb-balance');
+                    if (gbEl) gbEl.textContent = `${parseFloat(data.user.free_gb_remaining || 0).toFixed(1)} GB`;
                     // Afficher le bonus de minage
                     const mb = document.getElementById('header-mining-bonus');
                     const token = localStorage.getItem('token');
