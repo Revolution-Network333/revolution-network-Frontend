@@ -1575,6 +1575,71 @@ router.post('/users/:id/bonus', authenticateToken, checkAdmin, async (req, res) 
   }
 });
 
+// Emergency endpoint to fix all users with 0GB
+router.post('/emergency/fix-all-gb', authenticateToken, checkAdmin, async (req, res) => {
+  try {
+    console.log('=== EMERGENCY GB REPAIR STARTED ===');
+    
+    // Get all users with 0GB or NULL free_gb_remaining
+    const users = await db.query(`
+      SELECT id, email, free_gb_remaining 
+      FROM users 
+      WHERE free_gb_remaining = 0 OR free_gb_remaining IS NULL
+    `);
+    
+    console.log(`Found ${users.rows.length} users with 0GB`);
+    
+    if (users.rows.length === 0) {
+      return res.json({ success: true, message: 'No users need GB repair', fixed: 0 });
+    }
+    
+    let fixedCount = 0;
+    const weeklyGB = 3; // 3GB per week
+    
+    // Fix each user by adding 3GB
+    for (const user of users.rows) {
+      try {
+        // Add 3GB using the existing points_api system
+        const amountMb = Math.round(weeklyGB * 1024);
+        
+        await db.query(
+          'UPDATE enterprise_credits SET credits_balance = credits_balance + $1, updated_at = CURRENT_TIMESTAMP WHERE user_id = $2',
+          [amountMb, user.id]
+        );
+        
+        // Also update free_gb_remaining for consistency
+        await db.query(
+          'UPDATE users SET free_gb_remaining = free_gb_remaining + $1, free_credits_last_reset = CURRENT_TIMESTAMP WHERE id = $2',
+          [weeklyGB, user.id]
+        );
+        
+        // Log the repair
+        await db.query('INSERT INTO credit_ledger (user_id, amount, reason) VALUES ($1, $2, $3)', 
+          [user.id, amountMb, 'emergency_gb_repair']);
+        
+        console.log(`+${weeklyGB}GB added for user ${user.id} (${user.email})`);
+        fixedCount++;
+        
+      } catch (error) {
+        console.error(`Error fixing user ${user.id}:`, error.message);
+      }
+    }
+    
+    console.log(`=== EMERGENCY GB REPAIR COMPLETED: ${fixedCount} users fixed ===`);
+    
+    res.json({ 
+      success: true, 
+      message: `Successfully repaired ${fixedCount} users`,
+      fixed: fixedCount,
+      total: users.rows.length
+    });
+    
+  } catch (error) {
+    console.error('Emergency GB repair error:', error);
+    res.status(500).json({ error: 'Emergency repair failed' });
+  }
+});
+
 router.post('/users/:id/set-points', authenticateToken, checkAdmin, async (req, res) => {
   try {
     const userId = parseInt(req.params.id);
