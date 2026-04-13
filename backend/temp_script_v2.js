@@ -1420,11 +1420,11 @@ print(r.json())</code></pre>
                     <div class="page-header">
                         <h1 class="page-title">Admin Leaderboard</h1>
                         <div class="header-actions">
-                            <button id="emergency-gb-repair" class="profile-btn danger" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                            <button id="emergency-gb-repair-v2" class="profile-btn danger" style="background: linear-gradient(135deg, #ef4444, #dc2626); font-size: 14px; padding: 12px 20px;">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
                                 </svg>
-                                Réparer GB d'urgence
+                                🚨 RÉPARER GB D'URGENCE
                             </button>
                         </div>
                     </div>
@@ -1503,46 +1503,20 @@ print(r.json())</code></pre>
 
                 // Emergency GB repair button
                 const emergencyBtn = document.getElementById('emergency-gb-repair');
-                if (emergencyBtn) {
-                    emergencyBtn.addEventListener('click', async () => {
-                        if (!confirm('Êtes-vous sûr de vouloir réparer les GB de tous les utilisateurs ?\n\nCela va ajouter 3GB à tous les utilisateurs ayant 0GB.')) {
+                const emergencyBtnV2 = document.getElementById('emergency-gb-repair-v2');
+                
+                // New V2 button (more visible)
+                if (emergencyBtnV2) {
+                    emergencyBtnV2.addEventListener('click', async () => {
+                        if (!confirm('🚨 RÉPARATION GB D\'URGENCE 🚨\n\nÊtes-vous sûr de vouloir réparer les GB de tous les utilisateurs ?\n\nCela va ajouter 3GB à tous les utilisateurs ayant 0GB.')) {
                             return;
-                        }
-                        
-                        const originalText = emergencyBtn.innerHTML;
-                        emergencyBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg> Réparation en cours...';
-                        emergencyBtn.disabled = true;
-                        
-                        try {
-                            const response = await fetch(`${API_BASE}/api/admin/emergency/fix-all-gb`, {
-                                method: 'POST',
-                                headers: { 'Authorization': `Bearer ${token}` }
-                            });
-                            
-                            const result = await response.json();
-                            
-                            if (result.success) {
-                                emergencyBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> ' + result.message;
-                                emergencyBtn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
-                                alert(`Réparation terminée !\n${result.message}\nUtilisateurs réparés : ${result.fixed}`);
-                            } else {
-                                throw new Error(result.error || 'Erreur inconnue');
-                            }
-                        } catch (error) {
-                            emergencyBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"></path></svg> Erreur';
-                            emergencyBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
-                            alert('Erreur lors de la réparation : ' + error.message);
-                        }
-                        
-                        setTimeout(() => {
-                            emergencyBtn.innerHTML = originalText;
-                            emergencyBtn.disabled = false;
-                            emergencyBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
-                        }, 5000);
-                    });
                 }
-            }).catch(() => {});
-        }
+            });
+        });
+        const closeBtn = document.getElementById('close-user-detail');
+        if (closeBtn) closeBtn.addEventListener('click', () => {
+            document.getElementById('user-detail-modal').classList.remove('open');
+        });
 
         function initializeEmergencyRepairPage() {
             const repairBtn = document.getElementById('direct-emergency-repair');
