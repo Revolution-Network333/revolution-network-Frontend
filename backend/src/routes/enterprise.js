@@ -200,20 +200,18 @@ async function getSubscriptionPlans() {
 }
 
 function costFor(type, params) {
-  // Coût fixe par job en MB (0.04€ / GB = 0.00004€ / MB)
-  // On estime la consommation moyenne par type de job
   switch (type) {
-    case 'http_get': return 1; // 1 MB
+    case 'http_get': return 1;
     case 'http_post': return 1;
     case 'ping': return 1;
     case 'dns_lookup': return 1;
-    case 'content_check': return 5; // 5 MB
-    case 'csv_stats': return 10; // 10 MB
-    case 'image_svg_generate': return 2; // 2 MB
-    case 'audio_convert': return 50; // 50 MB
-    case 'video_transcode': return 500; // 500 MB
-    case 'ocr_pdf': return 20; // 20 MB
-    case 'data_job': return 100; // 100 MB
+    case 'content_check': return 5;
+    case 'csv_stats': return 10;
+    case 'image_svg_generate': return 2;
+    case 'audio_convert': return 50;
+    case 'video_transcode': return 500;
+    case 'ocr_pdf': return 20;
+    case 'data_job': return 100;
     case 'text_transform': return 1;
     case 'text_generate_template': return 1;
     case 'code_run_js': return 5;
@@ -225,8 +223,11 @@ function costFor(type, params) {
 router.get('/me', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    const u = await db.query('SELECT username, role FROM users WHERE id = $1', [userId]);
+
+    // ✅ FIX: lire free_gb_remaining depuis users (source de vérité unique)
+    const u = await db.query('SELECT username, role, free_gb_remaining FROM users WHERE id = $1', [userId]);
     const isAdmin = (u.rows[0]?.username === 'korn666') || ((u.rows[0]?.role || '').toLowerCase() === 'admin');
+    const freeGbRemaining = parseFloat(u.rows[0]?.free_gb_remaining || 0);
 
     let credits = { credits_balance: 0, credits_used_month: 0, bandwidth_limit_gb: 0, priority_level: 1 };
     let free = { free_credits_balance: FREE_TIER_WEEKLY_MB, free_credits_used_week: 0, free_week_start: startOfWeekUTCISO(new Date()) };
@@ -260,7 +261,8 @@ router.get('/me', authenticateToken, async (req, res) => {
         weekStart: credits.free_week_start || free.free_week_start || null,
         weeklyLimitGB: 3,
         usedGB: parseFloat(((Number(credits.free_credits_used_week || 0)) / 1024).toFixed(2)),
-        remainingGB: parseFloat(((Number(credits.free_credits_balance || 0)) / 1024).toFixed(2)),
+        // ✅ FIX: utiliser users.free_gb_remaining au lieu de enterprise_credits.free_credits_balance
+        remainingGB: parseFloat(freeGbRemaining.toFixed(2)),
         maxJobGB: 0.2,
         requestsPerMinute: 30,
         videoEnabled: false,
@@ -322,7 +324,6 @@ router.post('/billing/checkout-session', authenticateToken, express.json({ limit
     const frontendUrl = (config?.cors?.frontendUrl || process.env.FRONTEND_URL || '').replace(/\/+$/, '');
     if (!frontendUrl) return res.status(503).json({ error: 'frontend_url_not_configured' });
 
-    // Stripe doesn't accept emails without a dot in the domain (like admin@local)
     const isValidForStripe = (e) => {
       if (!e) return false;
       const parts = String(e).split('@');
@@ -366,7 +367,6 @@ router.get('/billing/portal', authenticateToken, async (req, res) => {
     const email = u.rows[0]?.email || null;
     let customerId = u.rows[0]?.stripe_customer_id || null;
 
-    // Support Payment Links: if we don't have a stored customer id, try to find it by email
     if (!customerId && email) {
       try {
         const customers = await stripe.customers.list({ email: String(email), limit: 1 });
@@ -401,7 +401,6 @@ router.get('/billing/portal', authenticateToken, async (req, res) => {
 
 // Jobs API v1
 
-// Resolve API authentication for /v1/* routes (token or x-api-key)
 router.use('/v1', async (req, res, next) => {
   try {
     let userId = req.user?.userId;
@@ -518,7 +517,7 @@ router.delete('/v1/webhooks/:id', freeTierLimiter, async (req, res) => {
   }
 });
 
-// Public tasks endpoint - immediate workaround for Render deployment issue
+// Public tasks endpoint
 router.get('/tasks', async (req, res) => {
   try {
     const activeClause = db.isSQLite ? 'active = 1' : 'active = TRUE';
@@ -635,11 +634,7 @@ router.get('/dashboard-stats', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
 
-    // 1. Bande passante disponible
-    // Calculé sur le nombre de sessions actives (nœuds) ayant pingué récemment
-    // On utilise une condition plus large pour MySQL/SQLite
     const activeClause = "(is_active = 1 OR is_active = TRUE)";
-    // Utilisation d'une fenêtre de 15 minutes pour être plus tolérant
     const pingClause = db.isSQLite 
       ? "last_ping > datetime('now', '-15 minutes')" 
       : "last_ping > DATE_SUB(NOW(), INTERVAL 15 MINUTE)";
@@ -661,8 +656,6 @@ router.get('/dashboard-stats', authenticateToken, async (req, res) => {
       totalPeers = parseInt(bandwidthRes.rows[0].total_peers || 0);
     }
     
-    // Sécurité : Vérifier si l'utilisateur actuel a une session active
-    // Même si la requête globale échoue ou est trop lente à se mettre à jour
     const userActiveRes = await db.query(`
       SELECT id FROM sessions 
       WHERE user_id = $1 AND ${activeClause} AND ${pingClause} 
@@ -673,14 +666,10 @@ router.get('/dashboard-stats', authenticateToken, async (req, res) => {
       activeNodes = 1;
     }
     
-    // Si on est en mode "Admin" ou si on sait que l'app desktop est ouverte (par le contexte utilisateur),
-    // on garantit au moins 1 nœud pour l'affichage
     if (activeNodes === 0) activeNodes = 1; 
     
-    // Logique : 50 Mbps par nœud actif + 10 Mbps par pair
     const availableBandwidthMbps = (activeNodes * 50) + (totalPeers * 10);
 
-    // 2. Uptime (Ratio de succès des jobs de l'utilisateur sur les 30 derniers jours)
     const uptimeDateClause = db.isSQLite 
       ? "datetime('now', '-30 days')" 
       : "DATE_SUB(NOW(), INTERVAL 30 DAY)";
@@ -698,7 +687,6 @@ router.get('/dashboard-stats', authenticateToken, async (req, res) => {
     const successJobs = parseInt(uptimeRes.rows[0]?.success || 0);
     const uptimePercent = totalJobs > 0 ? (successJobs / totalJobs) * 100 : 100;
 
-    // 3. Preuve de service (Derniers jobs avec leurs résultats)
     const proofRes = await db.query(`
       SELECT j.id, j.type, j.status, j.created_at, jr.result_json
       FROM jobs j
