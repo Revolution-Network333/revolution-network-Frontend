@@ -190,6 +190,8 @@
                     break;
                 case 'tasks':
                     content.innerHTML = getTasksHTML();
+                    initializeTasksPage();
+                    break;
                 case 'adminTasks':
                     content.innerHTML = getAdminTasksHTML();
                     initializeAdminTasksPage();
@@ -1502,26 +1504,17 @@ print(r.json())</code></pre>
                 });
 
                 // Emergency GB repair button
-                const emergencyBtn = document.getElementById('emergency-gb-repair');
                 const emergencyBtnV2 = document.getElementById('emergency-gb-repair-v2');
-                
-                // New V2 button (more visible)
+
                 if (emergencyBtnV2) {
                     emergencyBtnV2.addEventListener('click', async () => {
                         if (!confirm('🚨 RÉPARATION GB D\'URGENCE 🚨\n\nÊtes-vous sûr de vouloir réparer les GB de tous les utilisateurs ?\n\nCela va ajouter 3GB à tous les utilisateurs ayant 0GB.')) {
                             return;
-                }
-            });
-        });
-        const closeBtn = document.getElementById('close-user-detail');
-        if (closeBtn) closeBtn.addEventListener('click', () => {
-            document.getElementById('user-detail-modal').classList.remove('open');
-        });
+                        }
 
-        function initializeEmergencyRepairPage() {
-            const repairBtn = document.getElementById('direct-emergency-repair');
-            const statusDiv = document.getElementById('repair-status');
-            
+                        const originalText = emergencyBtnV2.innerHTML;
+                        emergencyBtnV2.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg> Réparation en cours...';
+                        emergencyBtnV2.disabled = true;
             if (!repairBtn || !statusDiv) return;
             
             repairBtn.addEventListener('click', async () => {
