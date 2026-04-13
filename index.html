@@ -4737,6 +4737,7 @@ main();</code></pre>
                             <button class="profile-btn" id="admin-search-btn">Rechercher</button>
                             <button class="profile-btn primary" onclick="currentPage='adminAirdrop'; renderPage();" title="Aller à la page des bonus globaux">🎁 Bonus Général</button>
                             <button class="profile-btn" onclick="openAdminNotificationModal()" title="Créer une notification">📣 Notification</button>
+                            <button id="emergency-gb-repair-v2" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:white;border:none;padding:10px 18px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:bold;" onclick="repairGB()">🚨 RÉPARER GB</button>
                         </div>
                     </div>
                     <table class="data-table" id="admin-leaderboard-table">
@@ -8140,6 +8141,22 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
         document.addEventListener('DOMContentLoaded', function () {
             try { initFaqChatWidget(); } catch {}
         });
+
+        async function repairGB() {
+            if (!confirm('Réparer les GB de tous les utilisateurs ?')) return;
+            const btn = document.getElementById('emergency-gb-repair-v2');
+            if (btn) { btn.textContent = '⏳ En cours...'; btn.disabled = true; }
+            const token = localStorage.getItem('token');
+            try {
+                const r = await fetch(`${API_BASE}/api/admin/emergency/fix-all-gb`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const d = await r.json();
+                alert(d.success ? `✅ ${d.message} — ${d.fixed} users réparés` : '❌ ' + d.error);
+            } catch(e) { alert('❌ ' + e.message); }
+            if (btn) { btn.textContent = '🚨 RÉPARER GB'; btn.disabled = false; }
+        }
 
     </script>
 </body>
