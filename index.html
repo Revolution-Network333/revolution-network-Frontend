@@ -4953,21 +4953,6 @@ main();</code></pre>
                 alert('Bonus appliqué avec succès');
                 closeBonusModal();
                 if (type === 'points_api') {
-                    const ac = document.getElementById('header-api-credits');
-                    if (ac) {
-                        fetch(`${API_BASE}/api/enterprise/me`, { headers: { 'Authorization': `Bearer ${token}` }})
-                            .then(r => r.json())
-                            .then(j => { 
-                                let val = '0.00';
-                                if (j && j.usage && j.usage.remainingGB !== undefined) {
-                                    val = Number(j.usage.remainingGB).toFixed(2);
-                                } else if (j && j.credits_balance !== undefined) {
-                                    val = (Number(j.credits_balance) / 1024).toFixed(2);
-                                }
-                                ac.textContent = `API: ${val} GB`; 
-                            })
-                            .catch(()=>{});
-                    }
                     try { if (typeof refreshHeader === 'function') refreshHeader(); } catch {}
                     const body = document.getElementById('user-detail-body');
                     if (body && body.closest('#user-detail-modal')?.classList.contains('open')) {
