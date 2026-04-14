@@ -1521,40 +1521,35 @@ router.post('/users/:id/bonus', authenticateToken, checkAdmin, async (req, res) 
             [userId, 'credit', qty, JSON.stringify({ reason: 'admin_bonus' })]);
 
     } else if (type === 'points_api') {
-        // Ajouter Points API (convertir GB en MB car credits_balance est en MB)
-        const amountMb = Math.round(qty * 1024);
-        console.log(`Applying API bonus: ${qty} GB (${amountMb} MB) to user ${userId}`);
+        // Ajouter Points API en GB directement à users.free_gb_remaining (source de vérité unique)
+        console.log(`Applying API bonus: ${qty} GB to user ${userId}`);
         
+        // 1. Ajouter à users.free_gb_remaining (source de vérité pour CreditService + header)
+        await db.query(
+            'UPDATE users SET free_gb_remaining = COALESCE(free_gb_remaining, 0) + $1 WHERE id = $2',
+            [qty, userId]
+        );
+        
+        // 2. Aussi ajouter à enterprise_credits.credits_balance pour compatibilité API
+        const amountMb = Math.round(qty * 1024);
         try {
-            // Approche portable : Update d'abord, Insert si nécessaire
             const updateRes = await db.query(
                 'UPDATE enterprise_credits SET credits_balance = credits_balance + $1, updated_at = CURRENT_TIMESTAMP WHERE user_id = $2',
                 [amountMb, userId]
             );
-            
             if (updateRes.rowCount === 0) {
                 await db.query(
                     'INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month) VALUES ($1, $2, 0)',
                     [userId, amountMb]
                 );
             }
-            
-            await db.query('INSERT INTO credit_ledger (user_id, amount, reason) VALUES ($1, $2, $3)', 
-                [userId, amountMb, 'admin_bonus']);
-                
         } catch (sqlErr) {
-            console.error('SQL Bonus error details:', sqlErr);
-            // Fallback syntaxe spécifique si l'approche portable échoue
-            if (db.isMySQL) {
-                await db.query(`
-                    INSERT INTO enterprise_credits (user_id, credits_balance, credits_used_month)
-                    VALUES (?, ?, 0)
-                    ON DUPLICATE KEY UPDATE credits_balance = credits_balance + VALUES(credits_balance)
-                `, [userId, amountMb]);
-            } else {
-                throw sqlErr;
-            }
+            console.error('SQL Bonus enterprise_credits error:', sqlErr);
         }
+        
+        // 3. Log
+        await db.query('INSERT INTO credit_ledger (user_id, amount, reason) VALUES ($1, $2, $3)', 
+            [userId, amountMb, 'admin_bonus']);
 
     } else if (type === 'points_leaderboard') {
         // Ajouter Points Leaderboard
