@@ -1810,9 +1810,6 @@
                     } catch {}
                     const tp = document.getElementById('header-total-points');
                     if (tp) tp.textContent = `Total: ${data.user.total_points} pt`;
-                    // Afficher les GB gratuits
-                    const gbEl = document.getElementById('header-gb-balance');
-                    if (gbEl) gbEl.textContent = `${parseFloat(data.user.free_gb_remaining || 0).toFixed(1)} GB`;
                     // Afficher le bonus de minage
                     const mb = document.getElementById('header-mining-bonus');
                     const token = localStorage.getItem('token');
@@ -4429,11 +4426,9 @@ main();</code></pre>
                         <div class="task-info">
                             <div class="task-title">${task.title}</div>
                             <div class="task-desc">${task.description || ''}</div>
-                            <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-                                <span style="display:inline-block;padding:3px 8px;border:1px solid #334155;border-radius:9999px;background:#0b1220;color:#e5e7eb;font-size:.78rem;">${typeLabel}</span>
-                                ${bonus > 0 ? `<span style="display:inline-block;padding:3px 8px;border:1px solid #14532d;border-radius:9999px;background:#052e16;color:#86efac;font-size:.78rem;">+${bonus}%</span>` : ''}
-                                <span style="display:inline-block;padding:3px 8px;border:1px solid #1e3a8a;border-radius:9999px;background:#0a1229;color:#93c5fd;font-size:.78rem;">${points} pts</span>
-                            </div>
+                            <span id="header-total-points">Total: 0 pt</span>
+                            <span style="display:inline-block;padding:3px 8px;border:1px solid #1e3a8a;border-radius:9999px;background:#0a1229;color:#93c5fd;font-size:.78rem;">${points} pts</span>
+                            ${bonus > 0 ? `<span style="display:inline-block;padding:3px 8px;border:1px solid #14532d;border-radius:9999px;background:#052e16;color:#86efac;font-size:.78rem;">+${bonus}%</span>` : ''}
                             ${extraInfo}
                         </div>
                         <div class="task-actions">
@@ -5186,7 +5181,6 @@ main();</code></pre>
                                         <ol style="margin:0;padding-left:16px;font-size:0.85rem;color:#d1d5db;line-height:1.4;">
                                             <li>Scannez le QR code</li>
                                             <li>Téléchargez le fichier .APK</li>
-                                            <li>Activez "Sources inconnues" dans les paramètres</li>
                                             <li>Installez l'application</li>
                                             <li>Lancez et connectez-vous</li>
                                         </ol>

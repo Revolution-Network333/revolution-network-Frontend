@@ -56,17 +56,28 @@ async function ensureFreeTierWeek(userId) {
   const r = await db.query('SELECT free_week_start FROM enterprise_credits WHERE user_id = $1', [userId]);
   const current = r.rows[0]?.free_week_start;
   if (!current) {
+    // First time: set initial free credits and also sync users.free_gb_remaining
     await db.query(
-      'UPDATE enterprise_credits SET free_week_start = $1, free_credits_balance = $2, free_credits_used_week = $3 WHERE user_id = $4',
-      [nowWeekStart, FREE_TIER_WEEKLY_MB, 0, userId]
+      'UPDATE enterprise_credits SET free_week_start = $1, free_credits_balance = free_credits_balance + $2, free_credits_used_week = 0 WHERE user_id = $3',
+      [nowWeekStart, FREE_TIER_WEEKLY_MB, userId]
+    );
+    await db.query(
+      'UPDATE users SET free_gb_remaining = COALESCE(free_gb_remaining, 0) + 3, free_credits_last_reset = CURRENT_TIMESTAMP WHERE id = $1 AND (free_credits_last_reset IS NULL OR free_credits_last_reset < CURRENT_TIMESTAMP - INTERVAL \'6 days\')',
+      [userId]
     );
     return;
   }
   const currentStart = new Date(current).toISOString();
   if (currentStart !== nowWeekStart) {
+    // New week: ADD weekly free credits (don't replace!) and reset usage counter
     await db.query(
-      'UPDATE enterprise_credits SET free_week_start = $1, free_credits_balance = $2, free_credits_used_week = $3 WHERE user_id = $4',
-      [nowWeekStart, FREE_TIER_WEEKLY_MB, 0, userId]
+      'UPDATE enterprise_credits SET free_week_start = $1, free_credits_balance = free_credits_balance + $2, free_credits_used_week = 0 WHERE user_id = $3',
+      [nowWeekStart, FREE_TIER_WEEKLY_MB, userId]
+    );
+    // Also add 3GB to users.free_gb_remaining for CreditService consistency
+    await db.query(
+      'UPDATE users SET free_gb_remaining = COALESCE(free_gb_remaining, 0) + 3, free_credits_last_reset = CURRENT_TIMESTAMP WHERE id = $1',
+      [userId]
     );
   }
 }
