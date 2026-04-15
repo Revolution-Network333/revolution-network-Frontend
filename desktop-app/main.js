@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, shell, Tray, Menu, Notification } = require
 const path = require('path');
 const Store = require('electron-store');
 const crypto = require('crypto');
+const { initAutoUpdater } = require('./js/auto-updater');
 
 // Register custom protocol
 if (process.defaultApp) {
@@ -292,6 +293,9 @@ app.whenReady().then(async () => {
   createTray();
   enableAutoStart();
   if (isActive) mine();
+  
+  // Initialize auto-updater after window is created
+  initAutoUpdater(mainWindow);
 });
 
 app.on('window-all-closed', () => {

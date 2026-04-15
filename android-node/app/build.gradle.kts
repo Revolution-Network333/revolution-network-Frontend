@@ -81,4 +81,10 @@ dependencies {
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+    
+    // Google Play In-App Updates API
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
+    
+    // JSON parsing
+    implementation("org.json:json:20231013")
 }

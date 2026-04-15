@@ -20,7 +20,8 @@
   "author": "Revolution Network",
   "license": "ISC",
   "dependencies": {
-    "electron-store": "^8.1.0"
+    "electron-store": "^8.1.0",
+    "electron-updater": "^6.1.7"
   },
   "devDependencies": {
     "electron": "^28.2.0",
@@ -30,6 +31,12 @@
     "appId": "com.revolution.network",
     "productName": "Revolution Network Node",
     "copyright": "Copyright © 2026 Revolution Network",
+    "publish": {
+      "provider": "github",
+      "owner": "Revolution-Network333",
+      "repo": "Revolution-Network",
+      "releaseType": "release"
+    },
     "win": {
       "target": [
         "nsis"
