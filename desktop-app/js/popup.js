@@ -13,9 +13,16 @@ const statusDot = document.getElementById('statusDot');
 const statusText = document.getElementById('statusText');
 const sessionPoints = document.getElementById('sessionPoints');
 const terminalLogs = document.getElementById('terminalLogs');
+const appVersion = document.getElementById('appVersion');
 
 // Initialization
 document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const v = await window.electronAPI.getAppVersion();
+    if (appVersion) appVersion.textContent = v ? `v${v}` : '';
+  } catch {
+    if (appVersion) appVersion.textContent = '';
+  }
   const storedToken = await window.electronAPI.getStoreValue('token');
   if (storedToken) {
     token = storedToken;
