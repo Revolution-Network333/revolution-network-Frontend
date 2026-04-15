@@ -19,7 +19,7 @@ module.exports = {
   // GitHub settings (if provider is 'github')
   github: {
     owner: 'Revolution-Network333',
-    repo: 'Revolution-Network',
+    repo: 'revolution-network-Frontend',
     private: false,
     releaseType: 'release'
   },

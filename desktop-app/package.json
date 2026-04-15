@@ -34,7 +34,7 @@
     "publish": {
       "provider": "github",
       "owner": "Revolution-Network333",
-      "repo": "Revolution-Network",
+      "repo": "revolution-network-Frontend",
       "releaseType": "release"
     },
     "win": {
