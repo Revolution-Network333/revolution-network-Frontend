@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title>Révolution Network - Dashboard</title>
     <link rel="icon" type="image/x-icon" href="nexon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="chrome-extension/assets/icon-32.png">
@@ -19,7 +20,7 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <img src="image__4_-removebg-preview.jpg" alt="Logo" class="logo-icon">
+                    <img src="image__4_-removebg-preview.jpg" alt="Logo" class="logo-icon" onclick="setPage('overview')" style="cursor: pointer;">
                 </div>
                 <button class="mobile-close" onclick="toggleMobileMenu()">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -136,6 +137,12 @@
                     </svg>
                     <span data-i18n="menu.admin_support">Admin Support</span>
                     <span id="admin-support-notification" class="notification-bubble" style="display:none;"></span>
+                </button>
+                <button id="menu-emergency-repair" class="menu-item" onclick="setPage('emergencyRepair')" style="display:none; background: linear-gradient(135deg, rgba(239,68,68,0.2), rgba(220,38,38,0.1)); border: 1px solid rgba(239,68,68,0.3);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                    </svg>
+                    <span>🚨 Réparation GB</span>
                 </button>
                 <button id="menu-wallet" class="menu-item" onclick="setPage('wallet')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -595,7 +602,7 @@
                 'download.points.note': 'Les points rendent éligible au futur airdrop.',
                 'download.install': 'Download Node (.exe)',
                 'download.guide': 'Aide',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/REVO/Revolution.Network.Node.Setup.1.0.0.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.11/Revolution-Network-Node-Setup-1.0.11.exe',
                 'download.faq.title': 'FAQ',
                 'download.faq.q1': 'Pourquoi une application desktop ?',
                 'download.faq.a1': 'Elle permet un minage plus stable et performant directement depuis votre PC Windows.',
@@ -770,11 +777,6 @@
                 'profile.solana': 'Solana Address',
                 'profile.save': 'Save',
                 'profile.logout': 'Logout',
-                'profile.subscription.title': 'Subscription',
-                'profile.subscription.manage': 'Manage my subscription',
-                'profile.subscription.hint': 'Open Stripe billing portal (payment, cancel, invoices).',
-                'profile.subscription.no_customer': 'No Stripe subscription found for this account.',
-                'profile.subscription.unavailable': 'Subscription management is unavailable right now.',
                 'profile.referrals.total': 'Referrals',
                 'profile.referrals.active': 'Active',
                 'profile.rank.progress': 'Rank progress',
@@ -932,7 +934,7 @@
                 'download.points.note': 'Points make you eligible for the future airdrop.',
                 'download.install': 'Start Installation (.exe)',
                 'download.guide': 'Help',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/REVO/Revolution.Network.Node.Setup.1.0.0.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.11/Revolution-Network-Node-Setup-1.0.11.exe',
                 'download.faq.title': 'FAQ',
                 'download.faq.q1': 'Why a desktop app?',
                 'download.faq.a1': 'It allows for more stable and efficient mining directly from your Windows PC.',
@@ -1196,7 +1198,7 @@
                 'download.recommended.step4': 'A shortcut will be created on your desktop.',
                 'download.recommended.step5': 'Launch the app and sign in via the “Sign in via website” button.',
                 'download.recommended.step6': 'Press the ▶ button to start earning points.',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/REVO/Revolution.Network.Node.Setup.1.0.0.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.11/Revolution-Network-Node-Setup-1.0.11.exe',
                 'tasks.title': 'Tasks',
                 'tasks.validate': 'Validate',
                 'tasks.validated': 'Validated',
@@ -1527,7 +1529,7 @@
                 'download.recommended.step4': 'Se creará un acceso directo en tu escritorio.',
                 'download.recommended.step5': 'Inicia la aplicación y conéctate a través del botón “Sign in via website”.',
                 'download.recommended.step6': 'Presiona el botón ▶ para empezar a ganar puntos.',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/REVO/Revolution.Network.Node.Setup.1.0.0.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.11/Revolution-Network-Node-Setup-1.0.11.exe',
                 'download.security.title': '🛡️ Seguridad y Windows SmartScreen',
                 'download.security.desc': "Durante la instalación, Windows puede mostrar un mensaje de advertencia (\"Windows protegió su PC\"). **Tenga la seguridad de que esto es completamente normal.** Como desarrolladores independientes, nuestra aplicación aún no es \"conocida\" por los servidores de Microsoft. La aplicación es 100% segura y no contiene malware.",
                 'download.security.procedure': 'Para continuar con la instalación, simplemente haga clic en **"Más información"** y luego en el botón **"Ejecutar de todas formas"**.',
@@ -1565,55 +1567,6 @@
                 'register.back': 'Volver a inicio de sesión'
             }
         };
-
-        function openAdminNotificationModal() {
-            const modal = document.getElementById('admin-notification-modal');
-            if (!modal) return;
-            modal.style.display = 'flex';
-            const t1 = document.getElementById('admin-notif-title');
-            const t2 = document.getElementById('admin-notif-message');
-            if (t1) t1.value = '';
-            if (t2) t2.value = '';
-        }
-
-        function closeAdminNotificationModal() {
-            const modal = document.getElementById('admin-notification-modal');
-            if (modal) modal.style.display = 'none';
-        }
-
-        async function submitAdminNotification() {
-            const token = localStorage.getItem('token');
-            const titleEl = document.getElementById('admin-notif-title');
-            const msgEl = document.getElementById('admin-notif-message');
-            const title = (titleEl ? titleEl.value : '').trim();
-            const message = (msgEl ? msgEl.value : '').trim();
-            if (!title || !message) {
-                alert('Titre et message requis');
-                return;
-            }
-
-            try {
-                const res = await fetch(`${API_BASE}/api/notifications`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ title, message })
-                });
-                const data = await res.json().catch(() => ({}));
-                if (!res.ok || (data && data.error)) {
-                    alert(data.error || 'Erreur');
-                    return;
-                }
-                closeAdminNotificationModal();
-                try { refreshNotificationsBell(); } catch {}
-                alert('Notification envoyée');
-            } catch {
-                alert('Erreur');
-            }
-        }
-
         function t(key) {
             const d = i18n[currentLang] || i18n.fr;
             return d[key] || (i18n.fr[key] || key);
@@ -1704,6 +1657,22 @@
         async function setPage(page) {
             console.log('Navigating to:', page);
             window.scrollTo(0, 0);
+            
+            // Protection des pages admin - vérifier l'authentification et les droits
+            const adminPages = ['adminLeaderboard', 'adminShop', 'adminTasks', 'adminAirdrop', 'adminSupport', 'admin'];
+            if (adminPages.includes(page)) {
+                const token = localStorage.getItem('token');
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                
+                // Vérifier si l'utilisateur est connecté et est admin
+                if (!token || !user || user.role !== 'admin') {
+                    console.warn('Accès admin refusé - utilisateur non authentifié ou non admin');
+                    alert('Accès non autorisé. Veuillez vous connecter avec un compte administrateur.');
+                    setPage('overview');
+                    return;
+                }
+            }
+            
             // Clear intervals from previous pages
             if (overviewInterval) {
                 clearInterval(overviewInterval);
@@ -1845,7 +1814,7 @@
                     const mb = document.getElementById('header-mining-bonus');
                     const token = localStorage.getItem('token');
                     if (token && mb) {
-                        fetch(`${API_BASE}/api/user/tasks/bonus`, { headers: { 'Authorization': `Bearer ${token}` }})
+                        fetch(`${API_BASE}/api/tasks/bonus`, { headers: { 'Authorization': `Bearer ${token}` }})
                         .then(r=>r.json()).then(j=>{
                             const p = Number(j.bonusPercent)||0;
                             if (p > 0) { mb.style.display='inline-block'; mb.textContent = `+${p}% ${t('tasks.miningBonusLabel')}`; }
@@ -2298,8 +2267,57 @@
                             </form>
                         </div>
                     </div>
+
                 </div>
             `;
+        }
+
+        function openAdminNotificationModal() {
+            const modal = document.getElementById('admin-notification-modal');
+            if (!modal) return;
+            modal.style.display = 'flex';
+            const t1 = document.getElementById('admin-notif-title');
+            const t2 = document.getElementById('admin-notif-message');
+            if (t1) t1.value = '';
+            if (t2) t2.value = '';
+        }
+
+        function closeAdminNotificationModal() {
+            const modal = document.getElementById('admin-notification-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        async function submitAdminNotification() {
+            const token = localStorage.getItem('token');
+            const titleEl = document.getElementById('admin-notif-title');
+            const msgEl = document.getElementById('admin-notif-message');
+            const title = (titleEl ? titleEl.value : '').trim();
+            const message = (msgEl ? msgEl.value : '').trim();
+            if (!title || !message) {
+                alert('Titre et message requis');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/api/notifications`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ title, message })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || (data && data.error)) {
+                    alert(data.error || 'Erreur');
+                    return;
+                }
+                closeAdminNotificationModal();
+                try { refreshNotificationsBell(); } catch {}
+                alert('Notification envoyée');
+            } catch {
+                alert('Erreur');
+            }
         }
 
         function getDocsHTML() {
@@ -2601,58 +2619,6 @@ main();</code></pre>
                         console.error('Register error:', err);
                         alert('Erreur de connexion au serveur');
                     });
-                });
-            }
-            const manageSubscriptionBtn = document.getElementById('manage-subscription-btn');
-            if (manageSubscriptionBtn) {
-                manageSubscriptionBtn.addEventListener('click', async () => {
-                    try {
-                        const token = localStorage.getItem('token');
-
-                        // If user has no active subscription, open subscription panel instead of Stripe portal
-                        try {
-                            const meRes = await fetch(`${API_BASE}/api/enterprise/me`, {
-                                headers: { 'Authorization': `Bearer ${token}` }
-                            });
-                            const me = await meRes.json().catch(() => ({}));
-                            if (meRes.ok && me && me.subscribed === false) {
-                                if (typeof setPage === 'function') {
-                                    await setPage('shop');
-                                    setTimeout(() => {
-                                        try { if (typeof openPlansModal === 'function') openPlansModal(); } catch {}
-                                    }, 150);
-                                }
-                                return;
-                            }
-                        } catch {}
-
-                        const r = await fetch(`${API_BASE}/api/enterprise/billing/portal`, {
-                            headers: { 'Authorization': `Bearer ${token}` }
-                        });
-                        const j = await r.json().catch(() => ({}));
-                        if (!r.ok) {
-                            if (j && j.error === 'no_stripe_customer') {
-                                try {
-                                    if (typeof setPage === 'function') {
-                                        await setPage('shop');
-                                        setTimeout(() => {
-                                            try { if (typeof openPlansModal === 'function') openPlansModal(); } catch {}
-                                        }, 150);
-                                    }
-                                } catch {}
-                                return;
-                            }
-                            alert(t('profile.subscription.unavailable'));
-                            return;
-                        }
-                        if (j && j.url) {
-                            window.open(j.url, '_blank');
-                        } else {
-                            alert(t('profile.subscription.unavailable'));
-                        }
-                    } catch {
-                        alert(t('profile.subscription.unavailable'));
-                    }
                 });
             }
         }
@@ -3535,6 +3501,56 @@ main();</code></pre>
             const twofaCopySecret = document.getElementById('twofa-copy-secret');
             const manageSubscriptionBtn = document.getElementById('manage-subscription-btn');
 
+            if (manageSubscriptionBtn) {
+                manageSubscriptionBtn.addEventListener('click', async () => {
+                    try {
+                        // If user has no active subscription, open subscription panel instead of Stripe portal
+                        try {
+                            const meRes = await fetch(`${API_BASE}/api/enterprise/me`, {
+                                headers: { 'Authorization': `Bearer ${token}` }
+                            });
+                            const me = await meRes.json().catch(() => ({}));
+                            if (meRes.ok && me && me.subscribed === false) {
+                                if (typeof setPage === 'function') {
+                                    await setPage('shop');
+                                    setTimeout(() => {
+                                        try { if (typeof openPlansModal === 'function') openPlansModal(); } catch {}
+                                    }, 150);
+                                }
+                                return;
+                            }
+                        } catch {}
+
+                        const r = await fetch(`${API_BASE}/api/enterprise/billing/portal`, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        const j = await r.json().catch(() => ({}));
+                        if (!r.ok) {
+                            if (j && j.error === 'no_stripe_customer') {
+                                try {
+                                    if (typeof setPage === 'function') {
+                                        await setPage('shop');
+                                        setTimeout(() => {
+                                            try { if (typeof openPlansModal === 'function') openPlansModal(); } catch {}
+                                        }, 150);
+                                    }
+                                } catch {}
+                                return;
+                            }
+                            alert(t('profile.subscription.unavailable'));
+                            return;
+                        }
+                        if (j && j.url) {
+                            window.open(j.url, '_blank');
+                        } else {
+                            alert(t('profile.subscription.unavailable'));
+                        }
+                    } catch {
+                        alert(t('profile.subscription.unavailable'));
+                    }
+                });
+            }
+
             function formatPoints(n) {
                 const v = Number(n || 0);
                 if (!Number.isFinite(v)) return '0';
@@ -4317,49 +4333,7 @@ main();</code></pre>
                             data = { tasks: [] };
                         }
                     } catch {
-                        // Hardcoded tasks as immediate fallback
-                        data = { tasks: [
-                            {
-                                id: 1,
-                                title: "Suivre sur X",
-                                description: "Suivez notre compte X et postez un tweet avec le hashtag #RevolutionNetwork",
-                                type: "social",
-                                link_url: "https://x.com/revo_network_",
-                                reward_points: 20,
-                                reward_airdrop_bonus_percent: 7,
-                                active: true
-                            },
-                            {
-                                id: 2,
-                                title: "Rejoindre Discord",
-                                description: "Rejoignez notre serveur Discord et participez à la communauté",
-                                type: "social",
-                                link_url: "https://discord.com/invite/eadE7uK6ss",
-                                reward_points: 15,
-                                reward_airdrop_bonus_percent: 5,
-                                active: true
-                            },
-                            {
-                                id: 3,
-                                title: "Rejoindre Telegram",
-                                description: "Rejoignez notre groupe Telegram pour suivre les actualités",
-                                type: "social",
-                                link_url: "https://t.me/+sWtih46Yg91kNWQ0",
-                                reward_points: 15,
-                                reward_airdrop_bonus_percent: 5,
-                                active: true
-                            },
-                            {
-                                id: 4,
-                                title: "Early User",
-                                description: "Pour les 50 premiers utilisateurs ayant activé le node et gagné des points - Rang Gold + 100 Aether",
-                                type: "early_adopter",
-                                link_url: "",
-                                reward_points: 100,
-                                reward_airdrop_bonus_percent: 2,
-                                active: true
-                            }
-                        ]};
+                        data = { tasks: [] };
                     }
                 }
                 const list = document.getElementById('tasks-list');
@@ -4374,20 +4348,37 @@ main();</code></pre>
                 };
                 
                 // Fetch early adopter status for current user
-                let eaStatus = { isEarlyAdopter: false, isGold: false, spotsLeft: 50 };
+                let eaStatus = { isEarlyAdopter: false, isGold: false, spotsLeft: 50, newlyGold: false };
                 if (token) {
                     try {
                         const eaRes = await fetch(`${API_BASE}/api/early-adopter/status`, {
                             headers: { 'Authorization': `Bearer ${token}` }
                         });
-                        if (eaRes.ok) eaStatus = await eaRes.json();
+                        const eaData = await eaRes.json();
                         
-                        // Fallback: if user is already Gold in localStorage, consider them as Gold early adopter
-                        const cachedUser = JSON.parse(localStorage.getItem('user') || '{}');
-                        if (cachedUser.rank === 'Gold' || cachedUser.role === 'Gold') {
-                            eaStatus.isGold = true;
+                        // Check if user just became Gold (compare with previous session)
+                        const previousGold = sessionStorage.getItem('wasGold') === 'true';
+                        const currentlyGold = eaData.isGold || false;
+                        const newlyGold = currentlyGold && !previousGold;
+                        
+                        if (newlyGold) {
+                            sessionStorage.setItem('wasGold', 'true');
                         }
-                    } catch (e) {}
+                        
+                        // Fallback: vérifier le rang local si l'API ne retourne pas isGold
+                        const localUser = JSON.parse(localStorage.getItem('user') || '{}');
+                        const localRank = (localUser.rank || '').toLowerCase();
+                        const isEligibleRank = ['gold', 'platinum', 'diamond'].includes(localRank) || currentlyGold;
+
+                        eaStatus = {
+                            isEarlyAdopter: eaData.isEarlyAdopter || isEligibleRank,
+                            isGold: isEligibleRank,
+                            spotsLeft: eaData.spotsLeft || 50,
+                            newlyGold: newlyGold || (isEligibleRank && !previousGold)
+                        };
+                    } catch (e) {
+                        console.error('Early adopter status fetch error:', e);
+                    }
                 }
 
                 const items = (data.tasks || []).map(task => {
@@ -4402,35 +4393,31 @@ main();</code></pre>
 
                     if (task.type === 'early_adopter') {
                         // Source d'autorité: le rang Gold ou le statut eaStatus
-                        const isGold = eaStatus.isGold || (user && (user.rank === 'Gold' || user.role === 'Gold'));
+                        const eligibleRanks = ['Gold', 'Platinum', 'Diamond'];
+                        const isGold = eaStatus.isGold || (user && eligibleRanks.includes(user.rank));
                         
                         if (isGold) {
                             statusLabel = t('tasks.validated');
                             btnStyle = 'background-color: #fbbf24; border-color: #fbbf24; color: #000; font-weight: bold;';
                             isDisabled = true;
-                            extraInfo = `
-                                <div class="glass-card" style="margin-top:12px; padding:12px; border:1px solid #fbbf24; background:rgba(251, 191, 36, 0.1); border-radius:12px; animation: pulse-gold 2s infinite;">
-                                    <div style="color:#fbbf24; font-size:1.1em; font-weight:bold; margin-bottom:4px;">🎊 Félicitations Early Adopter !</div>
-                                    <div style="color:#e5e7eb; font-size:0.85em;">Vous êtes l'un des 50 premiers utilisateurs. Votre grade <span style="color:#fbbf24; font-weight:bold;">GOLD</span> et vos <span style="color:#fbbf24; font-weight:bold;">100 Aether</span> ont été crédités !</div>
-                                </div>
-                                <style>
-                                    @keyframes pulse-gold {
-                                        0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
-                                        70% { box-shadow: 0 0 0 10px rgba(251, 191, 36, 0); }
-                                        100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
-                                    }
-                                </style>
-                            `;
+                            // Auto-valider via API sans attendre admin
+                            if (token) {
+                                fetch(`${API_BASE}/api/tasks/approve`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                                    body: JSON.stringify({ taskId: task.id })
+                                }).catch(() => {});
+                            }
                         } else if (eaStatus.isEarlyAdopter && Number(eaStatus.spotsLeft || 0) <= 0) {
                             statusLabel = 'Non éligible (Limite atteinte)';
                             btnStyle = 'background-color: #374151; border-color: #374151; opacity: 0.7;';
                             isDisabled = true;
-                            extraInfo = `<div style="margin-top:8px; color:#94a3b8; font-size:0.85em;">Désolé, les 50 places Gold ont déjà été attribuées.</div>`;
+                            extraInfo = '<div style="margin-top:8px; color:#94a3b8; font-size:0.85em;">Désolé, les 50 places Gold ont déjà été attribuées.</div>';
                         } else {
                             statusLabel = 'En attente du premier Ping...';
                             btnStyle = 'background-color: #1e3a8a; border-color: #1e3a8a;';
                             isDisabled = true;
-                            extraInfo = `<div style="margin-top:8px; color:#93c5fd; font-size:0.85em;">Places restantes : ${eaStatus.spotsLeft}/50. Installez l'app et lancez un ping pour valider !</div>`;
+                            extraInfo = '<div style="margin-top:8px; color:#93c5fd; font-size:0.85em;">Places restantes : ' + eaStatus.spotsLeft + '/50. Installez l\'app et lancez un ping pour valider !</div>';
                         }
                     }
 
@@ -4439,11 +4426,9 @@ main();</code></pre>
                         <div class="task-info">
                             <div class="task-title">${task.title}</div>
                             <div class="task-desc">${task.description || ''}</div>
-                            <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">
-                                <span style="display:inline-block;padding:3px 8px;border:1px solid #334155;border-radius:9999px;background:#0b1220;color:#e5e7eb;font-size:.78rem;">${typeLabel}</span>
-                                ${bonus > 0 ? `<span style="display:inline-block;padding:3px 8px;border:1px solid #14532d;border-radius:9999px;background:#052e16;color:#86efac;font-size:.78rem;">+${bonus}%</span>` : ''}
-                                <span style="display:inline-block;padding:3px 8px;border:1px solid #1e3a8a;border-radius:9999px;background:#0a1229;color:#93c5fd;font-size:.78rem;">${points} pts</span>
-                            </div>
+                            <span id="header-total-points">Total: 0 pt</span>
+                            <span style="display:inline-block;padding:3px 8px;border:1px solid #1e3a8a;border-radius:9999px;background:#0a1229;color:#93c5fd;font-size:.78rem;">${points} pts</span>
+                            ${bonus > 0 ? `<span style="display:inline-block;padding:3px 8px;border:1px solid #14532d;border-radius:9999px;background:#052e16;color:#86efac;font-size:.78rem;">+${bonus}%</span>` : ''}
                             ${extraInfo}
                         </div>
                         <div class="task-actions">
@@ -4456,7 +4441,7 @@ main();</code></pre>
 
                 // Appliquer l'état en fonction des user_tasks existants (source d'autorité)
                 if (token) {
-                    fetch(`${API_BASE}/api/user/tasks/status`, {
+                    fetch(`${API_BASE}/api/tasks/status`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     }).then(r => r.json()).then(j => {
                         const statuses = j.statuses || [];
@@ -4464,7 +4449,7 @@ main();</code></pre>
                         // Fusionner avec le statut early adopter si c'est Gold
                         if (eaStatus.isGold) {
                             // Trouver l'ID de la task early_adopter dans les données
-                            const eaTask = (data.tasks || []).find(t => t.type === 'early_adopter');
+                            const eaTask = (data.tasks || []).find(task => task.type === 'early_adopter');
                             if (eaTask) {
                                 statuses.push({ taskId: eaTask.id, status: 'approved' });
                             }
@@ -4481,6 +4466,42 @@ main();</code></pre>
                                 btn.disabled = true;
                                 const timerEl = document.getElementById(`task-timer-${st.taskId}`);
                                 if (timerEl) timerEl.textContent = t('tasks.validated');
+
+                                // Si c'est early_adopter → afficher félicitations basé sur approved (source de vérité)
+                                const taskType = btn.getAttribute('data-type');
+                                if (taskType === 'early_adopter') {
+                                    const taskItem = btn.closest('.task-item');
+                                    if (taskItem && !taskItem.querySelector('.ea-congrats')) {
+                                        const extraInfo = taskItem.querySelector('.task-info');
+                                        if (extraInfo) {
+                                            // Supprimer tous les messages d'attente existants
+                                            const pendingMsgs = extraInfo.querySelectorAll('div[style*="93c5fd"], div[style*="94a3b8"]');
+                                            pendingMsgs.forEach(msg => msg.remove());
+
+                                            // Afficher félicitations permanentes
+                                            const congratsDiv = document.createElement('div');
+                                            congratsDiv.className = 'ea-congrats glass-card';
+                                            congratsDiv.style.cssText = 'margin-top:12px;padding:12px;border:1px solid #fbbf24;background:rgba(251,191,36,0.1);border-radius:12px;animation:pulse-gold 2s infinite;';
+                                            congratsDiv.innerHTML = '<div style="color:#fbbf24;font-size:1.1em;font-weight:bold;margin-bottom:4px;">🎊 Félicitations Early Adopter !</div><div style="color:#e5e7eb;font-size:0.85em;margin-top:4px;">Vous êtes l\'un des 50 premiers utilisateurs. Votre grade <span style="color:#fbbf24;font-weight:bold;">GOLD</span> et vos <span style="color:#fbbf24;font-weight:bold;">100 Aether</span> ont été crédités !</div>';
+                                            
+                                            extraInfo.appendChild(congratsDiv);
+                                            
+                                            // Ajouter le style CSS une seule fois
+                                            if (!document.querySelector('#ea-congrats-style')) {
+                                                const styleEl = document.createElement('style');
+                                                styleEl.id = 'ea-congrats-style';
+                                                styleEl.textContent = `
+                                                    @keyframes pulse-gold {
+                                                        0% { box-shadow:0 0 0 0 rgba(251,191,36,0.4); }
+                                                        70% { box-shadow:0 0 0 10px rgba(251,191,36,0); }
+                                                        100% { box-shadow:0 0 0 0 rgba(251,191,36,0); }
+                                                    }
+                                                `;
+                                                document.head.appendChild(styleEl);
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         });
                     }).catch(()=>{
@@ -4492,13 +4513,49 @@ main();</code></pre>
                                     const tid = k.slice(prefix.length);
                                     const btn = list.querySelector(`button.profile-btn[data-id="${tid}"]`);
                                     if (btn) {
-                                        btn.textContent = t('tasks.validated');
-                                        btn.style.backgroundColor = '#14532d';
-                                        btn.style.borderColor = '#14532d';
+                                        // Lire le statut réel depuis localStorage
+                                        const storedStatus = localStorage.getItem(k);
+                                        const isApproved = storedStatus === 'approved';
+                                        const isPending = storedStatus === 'pending';
+                                        
+                                        // Afficher selon le statut réel
+                                        btn.textContent = isApproved ? t('tasks.validated') : (isPending ? 'Soumise' : t('tasks.validated'));
+                                        btn.style.backgroundColor = isApproved ? '#14532d' : (isPending ? '#1e3a8a' : '#14532d');
+                                        btn.style.borderColor = isApproved ? '#14532d' : (isPending ? '#1e3a8a' : '#14532d');
                                         btn.style.cursor = 'default';
                                         btn.disabled = true;
                                         const timerEl = document.getElementById(`task-timer-${tid}`);
-                                        if (timerEl) timerEl.textContent = t('tasks.validated');
+                                        if (timerEl) timerEl.textContent = isApproved ? t('tasks.validated') : (isPending ? 'En attente de validation' : t('tasks.validated'));
+                                        
+                                        // Ajouter félicitations Early Adopter si c'est la bonne task
+                                        const taskType = btn.getAttribute('data-type');
+                                        if (taskType === 'early_adopter') {
+                                            const taskItem = btn.closest('.task-item');
+                                            if (taskItem && !taskItem.querySelector('.ea-congrats')) {
+                                                const extraInfo = taskItem.querySelector('.task-info');
+                                                if (extraInfo) {
+                                                    // Supprimer messages d'attente
+                                                    const pendingMsgs = extraInfo.querySelectorAll('div[style*="93c5fd"], div[style*="94a3b8"]');
+                                                    pendingMsgs.forEach(msg => msg.remove());
+                                                    
+                                                    // Afficher félicitations
+                                                    const congratsDiv = document.createElement('div');
+                                                    congratsDiv.className = 'ea-congrats glass-card';
+                                                    congratsDiv.style.cssText = 'margin-top:12px;padding:12px;border:1px solid #fbbf24;background:rgba(251,191,36,0.1);border-radius:12px;animation:pulse-gold 2s infinite;';
+                                                    congratsDiv.innerHTML = '<div style="color:#fbbf24;font-size:1.1em;font-weight:bold;margin-bottom:4px;">🎊 Félicitations Early Adopter !</div><div style="color:#e5e7eb;font-size:0.85em;margin-top:4px;">Vous êtes l\'un des 50 premiers utilisateurs. Votre grade <span style="color:#fbbf24;font-weight:bold;">GOLD</span> et vos <span style="color:#fbbf24;font-weight:bold;">100 Aether</span> ont été crédités !</div>';
+                                                    
+                                                    extraInfo.appendChild(congratsDiv);
+                                                    
+                                                    // Ajouter style CSS si besoin
+                                                    if (!document.querySelector('#ea-congrats-style')) {
+                                                        const styleEl = document.createElement('style');
+                                                        styleEl.id = 'ea-congrats-style';
+                                                        styleEl.textContent = '@keyframes pulse-gold { 0% { box-shadow:0 0 0 0 rgba(251,191,36,0.4); } 70% { box-shadow:0 0 0 10px rgba(251,191,36,0); } 100% { box-shadow:0 0 0 0 rgba(251,191,36,0); } }';
+                                                        document.head.appendChild(styleEl);
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             });
@@ -4525,7 +4582,7 @@ main();</code></pre>
                                     alert('Activez la 2FA dans votre Profil pour valider cette task.');
                                     return;
                                 }
-                                fetch(`${API_BASE}/api/user/tasks/approve`, {
+                                fetch(`${API_BASE}/api/tasks/approve`, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                                     body: JSON.stringify({ taskId: id })
@@ -4551,7 +4608,7 @@ main();</code></pre>
                             s--; timerEl.textContent = `${s}s`;
                             if (s <= 0) {
                                 clearInterval(iv);
-                                fetch(`${API_BASE}/api/user/tasks/approve`, {
+                                fetch(`${API_BASE}/api/tasks/approve`, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                                     body: JSON.stringify({ taskId: id })
@@ -4559,22 +4616,38 @@ main();</code></pre>
                                     let ok = r.ok;
                                     let j = null;
                                     try { j = await r.json(); } catch {}
+                                    
                                     if (!ok || (j && j.error)) {
                                         timerEl.textContent = t('tasks.error');
                                         return;
                                     }
-                                    const approved = j && (j.status === 'approved' || j.success === true);
-                                    if (!approved) { timerEl.textContent = t('tasks.error'); return; }
-                                    timerEl.textContent = t('tasks.validated');
-                                    btn.textContent = t('tasks.validated');
-                                    btn.style.backgroundColor = '#14532d';
-                                    btn.style.borderColor = '#14532d';
+                                    
+                                    // FIX: accepter pending ET approved comme "soumis avec succès"
+                                    const submitted = j && (
+                                        j.status === 'approved' || 
+                                        j.status === 'pending' || 
+                                        j.success === true ||
+                                        j.message  // toute réponse positive
+                                    );
+                                    
+                                    if (!submitted) { 
+                                        timerEl.textContent = t('tasks.error'); 
+                                        return; 
+                                    }
+                                    
+                                    // Afficher selon le statut réel
+                                    const isApproved = j.status === 'approved';
+                                    timerEl.textContent = isApproved ? t('tasks.validated') : 'En attente de validation';
+                                    btn.textContent = isApproved ? t('tasks.validated') : 'Soumise';
+                                    btn.style.backgroundColor = isApproved ? '#14532d' : '#1e3a8a';
+                                    btn.style.borderColor = isApproved ? '#14532d' : '#1e3a8a';
                                     btn.style.cursor = 'default';
                                     btn.disabled = true;
+                                    
                                     try { refreshHeader(); } catch {}
                                     try { 
                                         const uid = (window.currentUserId != null) ? String(window.currentUserId) : (currentUsername || 'anon');
-                                        localStorage.setItem(`task_approved_${uid}_${id}`, '1'); 
+                                        localStorage.setItem(`task_approved_${uid}_${id}`, j.status || 'pending'); 
                                     } catch {}
                                 }).catch(() => {
                                     timerEl.textContent = t('tasks.error');
@@ -4662,6 +4735,7 @@ main();</code></pre>
                             <button class="profile-btn" id="admin-search-btn">Rechercher</button>
                             <button class="profile-btn primary" onclick="currentPage='adminAirdrop'; renderPage();" title="Aller à la page des bonus globaux">🎁 Bonus Général</button>
                             <button class="profile-btn" onclick="openAdminNotificationModal()" title="Créer une notification">📣 Notification</button>
+                            <button id="emergency-gb-repair-v2" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:white;border:none;padding:10px 18px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:bold;" onclick="repairGB()">🚨 RÉPARER GB</button>
                         </div>
                     </div>
                     <table class="data-table" id="admin-leaderboard-table">
@@ -4879,21 +4953,6 @@ main();</code></pre>
                 alert('Bonus appliqué avec succès');
                 closeBonusModal();
                 if (type === 'points_api') {
-                    const ac = document.getElementById('header-api-credits');
-                    if (ac) {
-                        fetch(`${API_BASE}/api/enterprise/me`, { headers: { 'Authorization': `Bearer ${token}` }})
-                            .then(r => r.json())
-                            .then(j => { 
-                                let val = '0.00';
-                                if (j && j.usage && j.usage.remainingGB !== undefined) {
-                                    val = Number(j.usage.remainingGB).toFixed(2);
-                                } else if (j && j.credits_balance !== undefined) {
-                                    val = (Number(j.credits_balance) / 1024).toFixed(2);
-                                }
-                                ac.textContent = `API: ${val} GB`; 
-                            })
-                            .catch(()=>{});
-                    }
                     try { if (typeof refreshHeader === 'function') refreshHeader(); } catch {}
                     const body = document.getElementById('user-detail-body');
                     if (body && body.closest('#user-detail-modal')?.classList.contains('open')) {
@@ -5056,17 +5115,64 @@ main();</code></pre>
                         <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start;">
                             <div style="min-width:240px;flex:1 1 340px;">
                                 <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-                                    <div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.25);">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><line x1="12" y1="22" x2="12" y2="12"></line></svg>
+                                    <div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.25);">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                     </div>
                                     <div>
-                                        <div style="font-size:1.05rem;font-weight:800;color:#fff;">${t('download.start.title')}</div>
+                                        <div style="font-size:1.05rem;font-weight:800;color:#fff;">Windows</div>
                                         <div style="font-size:0.85rem;color:#9ca3af;">${t('download.points.note')}</div>
                                     </div>
                                 </div>
                                 <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;">
                                     <button id="btn-download-exe" class="profile-btn primary" style="padding:10px 14px;">${t('download.install')}</button>
                                     <button id="btn-howto" class="profile-btn" style="padding:10px 14px;">${t('download.guide')}</button>
+                                </div>
+                            </div>
+                            <div style="min-width:240px;flex:1 1 340px;">
+                                <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                                    <div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.25);">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:1.05rem;font-weight:800;color:#fff;">macOS</div>
+                                        <div style="font-size:0.85rem;color:#9ca3af;">Compatible Apple Silicon (M1/M2/M3)</div>
+                                    </div>
+                                </div>
+                                <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;">
+<button class="profile-btn" style="padding:10px 14px; background:linear-gradient(135deg, rgba(107,114,128,0.2), rgba(107,114,128,0.1)); border:1px solid rgba(107,114,128,0.3); cursor: not-allowed; opacity: 0.6;" disabled>Soon available</button>
+                                    <button id="btn-howto-mac" class="profile-btn" style="padding:10px 14px;">${t('download.guide')}</button>
+                                </div>
+                            </div>
+                            <div style="min-width:240px;flex:1 1 340px;">
+                                <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                                    <div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.25);">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"></path><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-size:1.05rem;font-weight:800;color:#fff;">Android <span style="font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:9999px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;vertical-align:middle;margin-left:6px;letter-spacing:0.5px;">BÊTA</span></div>
+                                        <div style="font-size:0.85rem;color:#9ca3af;">Application mobile native</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top:8px;padding:8px 12px;border-radius:8px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);font-size:0.8rem;color:#fbbf24;line-height:1.4;">
+                                    🧪 <strong>Programme Bêta</strong> — Cette version est en test. Des bugs peuvent survenir. Vos retours nous aident à améliorer l'app !
+                                </div>
+                                <div style="display:flex; align-items:center; gap:16px; margin-top:12px;">
+                                    <div style="text-align:center;">
+                                        <div style="width:120px;height:120px;background:#fff;border-radius:12px;padding:8px;margin-bottom:8px;cursor:pointer;position:relative;" onclick="window.open('QR code mobile.png', '_blank')">
+                                            <img src="QR code mobile.png" alt="QR Code Android" style="width:100%;height:100%;object-fit:contain;display:block!important;" onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #10b981, #059669)'; this.parentElement.innerHTML='<div style=\\'text-align:center;color:white;height:100%;display:flex;align-items:center;justify-content:center;\\'><div><div style=\\'font-size:2rem;font-weight:bold;\\'>QR</div><div style=\\'font-size:0.7rem;\\'>Android</div></div></div>';">
+                                            <div style="position:absolute;bottom:2px;right:2px;background:rgba(0,0,0,0.7);color:white;border-radius:4px;padding:2px 6px;font-size:0.6rem;">+ Agrandir</div>
+                                        </div>
+                                        <div style="font-size:0.75rem;color:#9ca3af;">Cliquez pour agrandir</div>
+                                    </div>
+                                    <div style="flex:1;">
+                                        <div style="font-weight:700;color:#fff;margin-bottom:8px;">Installation Android :</div>
+                                        <ol style="margin:0;padding-left:16px;font-size:0.85rem;color:#d1d5db;line-height:1.4;">
+                                            <li>Scannez le QR code</li>
+                                            <li>Téléchargez le fichier .APK</li>
+                                            <li>Installez l'application</li>
+                                            <li>Lancez et connectez-vous</li>
+                                        </ol>
+                                    </div>
                                 </div>
                             </div>
                             <div style="min-width:240px;flex:1 1 360px;">
@@ -5142,13 +5248,26 @@ main();</code></pre>
         function initializeDownloadPage() {
             const btnExe = document.getElementById('btn-download-exe');
             const btnHow = document.getElementById('btn-howto');
+            const btnDmg = document.getElementById('btn-download-dmg');
+            const btnHowMac = document.getElementById('btn-howto-mac');
+            
             if (btnExe) btnExe.addEventListener('click', () => {
                 const direct = String(t('download.direct_link') || '');
                 const downloadUrl = /^https?:\/\//i.test(direct) ? direct : `${API_BASE}${direct}`;
                 window.location.href = downloadUrl;
             });
+            
+            if (btnDmg) btnDmg.addEventListener('click', () => {
+                // Open GitHub release page instead of direct download
+                window.open('https://github.com/Revolution-Network333/revolution-network-Frontend/releases/tag/Nodemacios', '_blank');
+            });
+            
             if (btnHow) btnHow.addEventListener('click', () => {
                 alert(t('download.quickGuideMessage'));
+            });
+            
+            if (btnHowMac) btnHowMac.addEventListener('click', () => {
+                alert('macOS: 1. Download the .dmg file 2. Double-click to open 3. Drag Revolution Network Node to Applications 4. Launch from Applications folder 5. Sign in with your website credentials');
             });
         }
 
@@ -5996,7 +6115,7 @@ function initializeShopPage() {
                         <h1 class="page-title">Admin Tasks</h1>
                         <div>
                             <button class="profile-btn" id="add-task-btn">Ajouter une task</button>
-                            <button class="profile-btn secondary" id="repair-user-tasks" title="Réparer schéma user_tasks (si ancien déploiement)">Réparer schéma</button>
+                            <button class="profile-btn secondary" id="repair-user-tasks" title="Réparation complète des tables et tâches">Réparer tout</button>
                         </div>
                     </div>
                     <table class="data-table" id="admin-tasks-table">
@@ -6166,19 +6285,46 @@ function initializeShopPage() {
                         repairBtn.disabled = true;
                         repairBtn.classList.remove('primary','danger');
                         repairBtn.classList.add('secondary');
-                        repairBtn.textContent = 'Réparation…';
-                        const r = await fetch(`${API_BASE}/api/admin/tasks/fix-schema`, { method:'POST', headers:{ 'Authorization': `Bearer ${token}` }});
+                        repairBtn.textContent = 'Réparation complète...';
+                        
+                        const r = await fetch(`${API_BASE}/api/admin/tasks/repair-all`, { 
+                            method:'POST', 
+                            headers:{ 'Authorization': `Bearer ${token}` }
+                        });
                         const j = await r.json().catch(()=>({}));
-                        repairBtn.textContent = (j && j.repaired) ? 'Schéma réparé' : 'Terminé';
+                        
+                        if (j.success) {
+                            let message = `Réparation terminée!\n`;
+                            message += `Tables: ${j.results.tables.length}\n`;
+                            message += `Tasks fixed: ${j.results.tasks.length}\n`;
+                            message += `Total tasks: ${j.results.summary.total_tasks}\n`;
+                            message += `Active tasks: ${j.results.summary.active_tasks}`;
+                            
+                            alert(message);
+                            repairBtn.textContent = 'Réparation réussie';
+                            repairBtn.classList.remove('secondary');
+                            repairBtn.classList.add('primary');
+                            
+                            // Reload tasks to show updated data
+                            loadTasks();
+                        } else {
+                            alert(`Erreur: ${j.error || 'Échec de la réparation'}`);
+                            repairBtn.textContent = 'Échec';
+                            repairBtn.classList.remove('secondary');
+                            repairBtn.classList.add('danger');
+                        }
                     } catch (e) {
+                        alert(`Erreur: ${e.message}`);
                         repairBtn.textContent = t('common.error');
+                        repairBtn.classList.remove('secondary');
+                        repairBtn.classList.add('danger');
                     } finally {
                         setTimeout(()=>{
                             repairBtn.textContent = originalText;
                             repairBtn.disabled = false;
                             repairBtn.classList.remove('primary','danger');
                             repairBtn.classList.add('secondary');
-                        }, 1800);
+                        }, 3000);
                     }
                 });
             }
@@ -6277,10 +6423,28 @@ function initializeShopPage() {
                     active: document.getElementById('task-active').value === '1',
                     description: document.getElementById('task-desc').value
                 };
+                
+                console.log('Saving task:', payload);
+                
                 const method = id ? 'PUT' : 'POST';
                 const url = id ? `${API_BASE}/api/admin/tasks/${id}` : `${API_BASE}/api/admin/tasks`;
+                
                 fetch(url, { method, headers:{ 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(payload) })
-                .then(()=>{ closeTaskModal(); loadTasks(); });
+                .then(async (res) => {
+                    console.log('Task save response:', res.status);
+                    if (!res.ok) {
+                        const error = await res.json().catch(() => ({}));
+                        console.error('Task save error:', error);
+                        alert(`Erreur: ${error.error || 'Échec de la sauvegarde'}`);
+                        return;
+                    }
+                    closeTaskModal(); 
+                    loadTasks();
+                })
+                .catch(err => {
+                    console.error('Task save fetch error:', err);
+                    alert(`Erreur réseau: ${err.message}`);
+                });
             }
             function loadPendingUserTasks() {
                 const tbody = document.querySelector('#pending-user-tasks tbody');
@@ -7962,6 +8126,22 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
         document.addEventListener('DOMContentLoaded', function () {
             try { initFaqChatWidget(); } catch {}
         });
+
+        async function repairGB() {
+            if (!confirm('Réparer les GB de tous les utilisateurs ?')) return;
+            const btn = document.getElementById('emergency-gb-repair-v2');
+            if (btn) { btn.textContent = '⏳ En cours...'; btn.disabled = true; }
+            const token = localStorage.getItem('token');
+            try {
+                const r = await fetch(`${API_BASE}/api/admin/emergency/fix-all-gb`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const d = await r.json();
+                alert(d.success ? `✅ ${d.message} — ${d.fixed} users réparés` : '❌ ' + d.error);
+            } catch(e) { alert('❌ ' + e.message); }
+            if (btn) { btn.textContent = '🚨 RÉPARER GB'; btn.disabled = false; }
+        }
 
     </script>
 </body>
