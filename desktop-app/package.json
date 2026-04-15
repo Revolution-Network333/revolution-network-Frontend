@@ -1,0 +1,97 @@
+{
+  "name": "revolution-network-desktop",
+  "version": "1.0.3",
+  "description": "Revolution Network Desktop Node",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win",
+    "build-mac": "electron-builder --mac",
+    "build-all": "electron-builder --win --mac",
+    "dist": "electron-builder",
+    "sign": "electron-builder build --win --publish never -c.win.certificateFile=cert.pfx -c.win.certificatePassword=YOUR_PASSWORD"
+  },
+  "keywords": [
+    "electron",
+    "revolution",
+    "network",
+    "node"
+  ],
+  "author": "Revolution Network",
+  "license": "ISC",
+  "dependencies": {
+    "electron-store": "^8.1.0",
+    "electron-updater": "^6.1.7"
+  },
+  "devDependencies": {
+    "electron": "^28.2.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.revolution.network",
+    "productName": "Revolution Network Node",
+    "artifactName": "Revolution-Network-Node-Setup-${version}.${ext}",
+    "copyright": "Copyright © 2026 Revolution Network",
+    "publish": {
+      "provider": "github",
+      "owner": "Revolution-Network333",
+      "repo": "revolution-network-Frontend",
+      "releaseType": "release"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "../nexon.ico",
+      "publisherName": "Revolution Network"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.utilities",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "assets/entitlements.mac.plist",
+      "entitlementsInherit": "assets/entitlements.mac.plist"
+    },
+    "dmg": {
+      "title": "Revolution Network Node",
+      "icon": "assets/icon.icns",
+      "background": "assets/dmg-background.png",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Revolution Network Node",
+      "installerIcon": "../nexon.ico",
+      "uninstallerIcon": "../nexon.ico",
+      "runAfterFinish": true,
+      "perMachine": true
+    },
+    "extraResources": [
+      {
+        "from": "../nexon.ico",
+        "to": "assets/icon.ico"
+      }
+    ],
+    "directories": {
+      "output": "dist"
+    }
+  }
+}
