@@ -15,7 +15,9 @@ env:
 jobs:
   build-windows:
     runs-on: windows-latest
-    continue-on-error: true
+    env:
+      WIN_CERT_BASE64: ${{ secrets.WIN_CERT_BASE64 }}
+      WIN_CERT_PASSWORD: ${{ secrets.WIN_CERT_PASSWORD }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -32,6 +34,20 @@ jobs:
       run: |
         ls -la
         npm ci --verbose
+
+    - name: Prepare Windows code signing certificate (optional)
+      if: github.event_name == 'release'
+      shell: pwsh
+      run: |
+        if ([string]::IsNullOrWhiteSpace($env:WIN_CERT_BASE64) -or [string]::IsNullOrWhiteSpace($env:WIN_CERT_PASSWORD)) {
+          Write-Host "Windows code signing secrets not configured. Building unsigned installer."
+          exit 0
+        }
+
+        $bytes = [Convert]::FromBase64String($env:WIN_CERT_BASE64)
+        [IO.File]::WriteAllBytes("$env:GITHUB_WORKSPACE\desktop-app\cert.pfx", $bytes)
+        "CSC_LINK=cert.pfx" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        "CSC_KEY_PASSWORD=$env:WIN_CERT_PASSWORD" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     
     - name: Create dist directory
       working-directory: ./desktop-app
@@ -40,7 +56,7 @@ jobs:
     - name: Build Windows app
       working-directory: ./desktop-app
       run: |
-        npm run build || true
+        npm run build
         ls -la dist/
     
     - name: Upload Windows artifact
@@ -106,7 +122,6 @@ jobs:
     needs: [build-windows, build-macos]
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
-    continue-on-error: true
     steps:
     - name: Download Windows artifact
       uses: actions/download-artifact@v4
@@ -130,4 +145,3 @@ jobs:
           ./macos/**/*
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      continue-on-error: true

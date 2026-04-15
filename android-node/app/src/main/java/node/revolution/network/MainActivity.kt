@@ -17,10 +17,13 @@ import kotlinx.coroutines.launch
 import node.revolution.network.node.NodeService
 import node.revolution.network.node.NodeServiceState
 import node.revolution.network.storage.SecurePrefs
+import node.revolution.network.update.AppUpdateManager
 import node.revolution.network.ui.AppTheme
 import node.revolution.network.ui.DashboardScreen
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var appUpdateManager: AppUpdateManager
 
     private val requestNotifications = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -28,6 +31,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        appUpdateManager = AppUpdateManager(this)
 
         if (Build.VERSION.SDK_INT >= 33) {
             val granted = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
@@ -68,8 +73,17 @@ class MainActivity : ComponentActivity() {
         handleDeepLink(intent)
 
         lifecycleScope.launch {
+            appUpdateManager.checkForUpdates(this@MainActivity)
+        }
+
+        lifecycleScope.launch {
             NodeServiceState.events.collectLatest { /* reserved for one-shot events */ }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        appUpdateManager.resumeUpdateCheck(this)
     }
 
     override fun onNewIntent(intent: Intent) {

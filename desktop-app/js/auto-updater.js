@@ -3,7 +3,7 @@
  * Handles automatic updates with silent download and user-friendly install
  */
 
-const { ipcMain, dialog, BrowserWindow } = require('electron');
+const { ipcMain, BrowserWindow } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const updateConfig = require('../config/update');
 const https = require('https');
@@ -97,6 +97,10 @@ function initAutoUpdater(win) {
       transferred: progressObj.transferred,
       total: progressObj.total
     });
+
+    if (updateWindow && !updateWindow.isDestroyed()) {
+      updateWindow.webContents.send('update-progress', { progress: updateState.progress });
+    }
   });
   
   // Event: Update downloaded
@@ -109,6 +113,13 @@ function initAutoUpdater(win) {
       // Force update - install immediately
       autoUpdater.quitAndInstall(true, true);
     } else {
+      if (updateConfig.autoInstall) {
+        setTimeout(() => {
+          autoUpdater.quitAndInstall(true, true);
+        }, 800);
+        return;
+      }
+
       // Normal update - notify user
       sendUpdateStatus('ready', {
         version: updateState.version,
@@ -310,9 +321,7 @@ function getForceUpdateHTML() {
       <button id="update-btn" disabled>Installation...</button>
       
       <script>
-        const { ipcRenderer } = require('electron');
-        
-        ipcRenderer.on('update-progress', (event, data) => {
+        window.electronAPI.receive('update-progress', (data) => {
           document.getElementById('progress-bar').style.display = 'block';
           document.getElementById('progress-fill').style.width = data.progress + '%';
           document.getElementById('status').textContent = 
@@ -325,7 +334,7 @@ function getForceUpdateHTML() {
         });
         
         document.getElementById('update-btn').addEventListener('click', () => {
-          ipcRenderer.send('force-update-install');
+          window.electronAPI.send('force-update-install');
         });
       </script>
     </body>

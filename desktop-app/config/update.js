@@ -10,8 +10,8 @@ module.exports = {
   // Automatically download updates in background
   autoDownload: true,
   
-  // Don't force install - let user restart when ready
-  autoInstall: false,
+  // Install automatically when the update is ready
+  autoInstall: true,
   
   // Update provider (github, s3, or generic)
   provider: 'github',

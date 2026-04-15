@@ -28,6 +28,7 @@ class AppUpdateManager(private val context: Context) {
     private val CHECK_INTERVAL_HOURS = 6L
     
     private val appUpdateManager: AppUpdateManager = AppUpdateManagerFactory.create(context)
+    private var completeTriggered: Boolean = false
     private val httpClient = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS)
         .readTimeout(10, TimeUnit.SECONDS)
@@ -181,6 +182,12 @@ class AppUpdateManager(private val context: Context) {
                     _updateState.value = _updateState.value.copy(updateDownloaded = true)
                     // Show completion notification
                     popupSnackbarForCompleteUpdate()
+                    if (!completeTriggered) {
+                        completeTriggered = true
+                        activity.runOnUiThread {
+                            completeUpdate()
+                        }
+                    }
                 }
             }
             
@@ -227,6 +234,12 @@ class AppUpdateManager(private val context: Context) {
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
                 _updateState.value = _updateState.value.copy(updateDownloaded = true)
+                if (!completeTriggered) {
+                    completeTriggered = true
+                    activity.runOnUiThread {
+                        completeUpdate()
+                    }
+                }
             }
         }
     }
