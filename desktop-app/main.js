@@ -18,6 +18,10 @@ const store = new Store();
 let mainWindow;
 let tray;
 let API_URL = 'https://revolution-backend-sal2.onrender.com';
+const getAppIconPath = () => {
+  if (app.isPackaged) return path.join(process.resourcesPath, 'assets', 'icon.ico');
+  return path.join(__dirname, '..', 'nexon.ico');
+};
 
 // Handle deep links
 function handleDeepLink(url) {
@@ -241,7 +245,7 @@ function createWindow() {
     resizable: false,
     autoHideMenuBar: true,
     show: !isHidden || isDev, // Always show in development
-    icon: path.join(__dirname, 'assets/icon.ico'),
+    icon: getAppIconPath(),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -263,7 +267,7 @@ function createLoginWindow() {
 }
 
 function createTray() {
-  tray = new Tray(path.join(__dirname, 'assets/icon.ico'));
+  tray = new Tray(getAppIconPath());
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Show App', click: () => mainWindow.show() },
     { label: 'Quit', click: () => { app.isQuitting = true; app.quit(); } }

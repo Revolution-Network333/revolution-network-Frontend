@@ -41,7 +41,7 @@
       "target": [
         "nsis"
       ],
-      "icon": "assets/icon.ico",
+      "icon": "../nexon.ico",
       "publisherName": "Revolution Network"
     },
     "mac": {
@@ -78,11 +78,17 @@
       "createDesktopShortcut": "always",
       "createStartMenuShortcut": true,
       "shortcutName": "Revolution Network Node",
-      "installerIcon": "assets/icon.ico",
-      "uninstallerIcon": "assets/icon.ico",
+      "installerIcon": "../nexon.ico",
+      "uninstallerIcon": "../nexon.ico",
       "runAfterFinish": true,
       "perMachine": true
     },
+    "extraResources": [
+      {
+        "from": "../nexon.ico",
+        "to": "assets/icon.ico"
+      }
+    ],
     "directories": {
       "output": "dist"
     }
