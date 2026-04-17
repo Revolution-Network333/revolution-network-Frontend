@@ -1,6 +1,6 @@
 {
   "name": "revolution-network-desktop",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Revolution Network Desktop Node",
   "main": "main.js",
   "scripts": {
