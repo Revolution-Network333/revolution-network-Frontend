@@ -24,8 +24,14 @@ const getAppIconPath = () => {
 };
 
 const getLogoPath = () => {
-  if (app.isPackaged) return path.join(process.resourcesPath, 'assets', 'logo.jpg');
-  return path.join(__dirname, 'assets', 'logo.jpg');
+  let logoPath;
+  if (app.isPackaged) {
+    logoPath = path.join(process.resourcesPath, 'assets', 'logo.jpg');
+  } else {
+    logoPath = path.join(__dirname, 'assets', 'logo.jpg');
+  }
+  // Convert to file:// URL for renderer
+  return `file://${logoPath}`;
 };
 
 // Handle deep links
