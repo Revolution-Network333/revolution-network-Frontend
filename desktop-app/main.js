@@ -23,6 +23,11 @@ const getAppIconPath = () => {
   return path.join(__dirname, '..', 'nexon.ico');
 };
 
+const getLogoPath = () => {
+  if (app.isPackaged) return path.join(process.resourcesPath, 'assets', 'logo.jpg');
+  return path.join(__dirname, 'assets', 'logo.jpg');
+};
+
 // Handle deep links
 function handleDeepLink(url) {
   try {
@@ -351,6 +356,7 @@ ipcMain.on('logout', async () => {
 });
 
 ipcMain.handle('get-store-value', (event, key) => store.get(key));
+ipcMain.handle('get-logo-path', () => getLogoPath());
 ipcMain.on('set-store-value', (event, key, value) => store.set(key, value));
 ipcMain.on('remove-store-value', (event, key) => store.delete(key));
 ipcMain.on('open-external', (event, url) => shell.openExternal(url));

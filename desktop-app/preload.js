@@ -3,6 +3,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('electronAPI', {
   getStatus: () => ipcRenderer.invoke('get-status'),
   getAppVersion: () => ipcRenderer.invoke('get-app-version'),
+  getLogoPath: () => ipcRenderer.invoke('get-logo-path'),
   startMining: (token) => ipcRenderer.send('start-mining', token),
   stopMining: () => ipcRenderer.send('stop-mining'),
   logout: () => ipcRenderer.send('logout'),

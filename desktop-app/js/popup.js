@@ -14,6 +14,7 @@ const statusText = document.getElementById('statusText');
 const sessionPoints = document.getElementById('sessionPoints');
 const terminalLogs = document.getElementById('terminalLogs');
 const appVersion = document.getElementById('appVersion');
+const logoImg = document.getElementById('logoImg');
 
 // Initialization
 document.addEventListener('DOMContentLoaded', async () => {
@@ -23,6 +24,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch {
     if (appVersion) appVersion.textContent = '';
   }
+
+  // Load logo with absolute path
+  try {
+    const logoPath = await window.electronAPI.getLogoPath();
+    if (logoImg && logoPath) {
+      logoImg.src = logoPath;
+    }
+  } catch (e) {
+    console.error('Failed to load logo:', e);
+  }
+
   const storedToken = await window.electronAPI.getStoreValue('token');
   if (storedToken) {
     token = storedToken;

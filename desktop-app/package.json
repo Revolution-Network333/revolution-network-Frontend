@@ -88,6 +88,10 @@
       {
         "from": "../nexon.ico",
         "to": "assets/icon.ico"
+      },
+      {
+        "from": "assets/logo.jpg",
+        "to": "assets/logo.jpg"
       }
     ],
     "directories": {
