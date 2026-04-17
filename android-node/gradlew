@@ -1,5 +1,0 @@
-@rem Simplified Gradle wrapper stub for repo distribution
-@rem If this script doesn't work on your machine, re-generate wrapper via Android Studio.
-@echo off
-set DIR=%~dp0
-"%DIR%\gradle\wrapper\gradle-wrapper.jar" %*

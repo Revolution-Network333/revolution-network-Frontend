@@ -6,6 +6,12 @@ desktop-app/node_modules/
 *.crx
 *.pem
 
+# Backend - NE PAS PUSHER
+backend/
+android-node/
+mobile-update-service/
+revolution-sdk/
+
 # Backend - garder en local
 *.env
 *.db
