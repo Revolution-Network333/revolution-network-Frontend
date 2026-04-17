@@ -100,7 +100,10 @@
       "runAfterFinish": true,
       "perMachine": false,
       "differentialPackage": false,
-      "packElevateHelper": false
+      "packElevateHelper": false,
+      "deleteAppDataOnUninstall": false,
+      "allowElevation": false,
+      "artifactName": "Revolution-Network-Node-Setup-${version}.${ext}"
     },
     "extraResources": [
       {
