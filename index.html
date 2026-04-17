@@ -5183,7 +5183,7 @@ main();</code></pre>
                                     </div>
                                 </div>
                                 <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;">
-<button class="profile-btn" style="padding:10px 14px; background:linear-gradient(135deg, rgba(107,114,128,0.2), rgba(107,114,128,0.1)); border:1px solid rgba(107,114,128,0.3); cursor: not-allowed; opacity: 0.6;" disabled>Soon available</button>
+                                    <button id="btn-download-dmg" class="profile-btn primary" style="padding:10px 14px;">${t('download.mac.install')}</button>
                                     <button id="btn-howto-mac" class="profile-btn" style="padding:10px 14px;">${t('download.guide')}</button>
                                 </div>
                             </div>
@@ -5302,8 +5302,9 @@ main();</code></pre>
             });
             
             if (btnDmg) btnDmg.addEventListener('click', () => {
-                // Open GitHub release page instead of direct download
-                window.open('https://github.com/Revolution-Network333/revolution-network-Frontend/releases/tag/Nodemacios', '_blank');
+                const direct = String(t('download.mac_link') || '');
+                const downloadUrl = /^https?:\/\//i.test(direct) ? direct : `${API_BASE}${direct}`;
+                window.location.href = downloadUrl;
             });
             
             if (btnHow) btnHow.addEventListener('click', () => {
@@ -5311,7 +5312,8 @@ main();</code></pre>
             });
             
             if (btnHowMac) btnHowMac.addEventListener('click', () => {
-                alert('macOS: 1. Download the .dmg file 2. Double-click to open 3. Drag Revolution Network Node to Applications 4. Launch from Applications folder 5. Sign in with your website credentials');
+                const guide = `${t('download.mac.step1')}\n${t('download.mac.step2')}\n${t('download.mac.step3')}\n${t('download.mac.step4')}\n\n${t('download.mac.gatekeeper')}\n${t('download.mac.gatekeeper.step1')}\n${t('download.mac.gatekeeper.step2')}\n${t('download.mac.gatekeeper.step3')}`;
+                alert(guide);
             });
         }
 
