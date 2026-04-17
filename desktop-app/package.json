@@ -90,7 +90,7 @@
         "to": "assets/icon.ico"
       },
       {
-        "from": "assets/logo.jpg",
+        "from": "../logo-desktop.jpg",
         "to": "assets/logo.jpg"
       }
     ],
