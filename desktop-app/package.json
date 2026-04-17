@@ -1,6 +1,6 @@
 {
   "name": "revolution-network-desktop",
-  "version": "1.0.3",
+  "version": "1.0.12",
   "description": "Revolution Network Desktop Node",
   "main": "main.js",
   "scripts": {
@@ -21,7 +21,8 @@
   "license": "ISC",
   "dependencies": {
     "electron-store": "^8.1.0",
-    "electron-updater": "^6.1.7"
+    "electron-updater": "^6.1.7",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "electron": "^28.2.0",
@@ -43,13 +44,14 @@
         "nsis"
       ],
       "icon": "../nexon.ico",
-      "publisherName": "Revolution Network"
+      "publisherName": "Revolution Network",
+      "signAndEditExecutable": false
     },
     "mac": {
       "target": [
         "dmg"
       ],
-      "icon": "assets/icon.icns",
+      "icon": "assets/icon.png",
       "category": "public.app-category.utilities",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
@@ -58,7 +60,7 @@
     },
     "dmg": {
       "title": "Revolution Network Node",
-      "icon": "assets/icon.icns",
+      "icon": "assets/icon.png",
       "background": "assets/dmg-background.png",
       "contents": [
         {
@@ -74,15 +76,17 @@
       ]
     },
     "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
+      "oneClick": true,
+      "allowToChangeInstallationDirectory": false,
       "createDesktopShortcut": "always",
       "createStartMenuShortcut": true,
       "shortcutName": "Revolution Network Node",
       "installerIcon": "../nexon.ico",
       "uninstallerIcon": "../nexon.ico",
       "runAfterFinish": true,
-      "perMachine": true
+      "perMachine": false,
+      "differentialPackage": false,
+      "packElevateHelper": false
     },
     "extraResources": [
       {

@@ -23,21 +23,33 @@ let updateState = {
 // Main window reference
 let mainWindow = null;
 let updateWindow = null;
+let logFn = null;
+let prepareForInstallFn = null;
+let lastProgressLog = -1;
 
 /**
  * Initialize auto updater
  * @param {BrowserWindow} win - Main application window
  */
-function initAutoUpdater(win) {
+function initAutoUpdater(win, logger, prepareForInstall) {
   mainWindow = win;
+  logFn = typeof logger === 'function' ? logger : null;
+  prepareForInstallFn = typeof prepareForInstall === 'function' ? prepareForInstall : null;
+  lastProgressLog = -1;
   
   // Configure auto updater
   autoUpdater.autoDownload = updateConfig.autoDownload;
   autoUpdater.autoInstallOnAppQuit = updateConfig.autoInstall;
   autoUpdater.allowDowngrade = updateConfig.security.allowDowngrade;
+
+  if (process.platform === 'win32' && updateConfig.security && updateConfig.security.verifySignature === false) {
+    autoUpdater.verifyUpdateCodeSignature = async () => null;
+    if (logFn) logFn('Update: vérification de signature désactivée (mode non-signé)');
+  }
   
   // Set update provider based on config
   if (updateConfig.provider === 'github') {
+    if (logFn) logFn(`Update: source GitHub ${updateConfig.github.owner}/${updateConfig.github.repo}`);
     autoUpdater.setFeedURL({
       provider: 'github',
       owner: updateConfig.github.owner,
@@ -49,14 +61,14 @@ function initAutoUpdater(win) {
   
   // Event: Checking for update
   autoUpdater.on('checking-for-update', () => {
-    console.log('Checking for update...');
+    if (logFn) logFn('Update: recherche de mise à jour...');
     updateState.checking = true;
     sendUpdateStatus('checking');
   });
   
   // Event: Update available
   autoUpdater.on('update-available', (info) => {
-    console.log('Update available:', info.version);
+    if (logFn) logFn(`Update: nouvelle version disponible (${info.version})`);
     updateState.available = true;
     updateState.version = info.version;
     updateState.checking = false;
@@ -81,7 +93,7 @@ function initAutoUpdater(win) {
   
   // Event: Update not available
   autoUpdater.on('update-not-available', (info) => {
-    console.log('Update not available');
+    if (logFn) logFn('Update: aucune mise à jour disponible');
     updateState.checking = false;
     updateState.available = false;
     sendUpdateStatus('not-available');
@@ -90,7 +102,10 @@ function initAutoUpdater(win) {
   // Event: Download progress
   autoUpdater.on('download-progress', (progressObj) => {
     updateState.progress = Math.round(progressObj.percent);
-    console.log(`Download progress: ${updateState.progress}%`);
+    if (logFn && updateState.progress !== lastProgressLog && (updateState.progress === 0 || updateState.progress === 100 || updateState.progress % 10 === 0)) {
+      lastProgressLog = updateState.progress;
+      logFn(`Update: téléchargement ${updateState.progress}%`);
+    }
     sendUpdateStatus('downloading', {
       progress: updateState.progress,
       speed: progressObj.bytesPerSecond,
@@ -105,17 +120,18 @@ function initAutoUpdater(win) {
   
   // Event: Update downloaded
   autoUpdater.on('update-downloaded', (info) => {
-    console.log('Update downloaded');
+    if (logFn) logFn(`Update: téléchargée, installation ${updateConfig.autoInstall ? 'automatique' : 'manuelle'}`);
     updateState.downloaded = true;
     updateState.progress = 100;
     
     if (updateState.forceUpdate) {
       // Force update - install immediately
-      autoUpdater.quitAndInstall(true, true);
+      installDownloadedUpdate();
     } else {
       if (updateConfig.autoInstall) {
+        if (logFn) logFn('Update: redémarrage pour installer...');
         setTimeout(() => {
-          autoUpdater.quitAndInstall(true, true);
+          installDownloadedUpdate();
         }, 800);
         return;
       }
@@ -135,7 +151,7 @@ function initAutoUpdater(win) {
   
   // Event: Error
   autoUpdater.on('error', (err) => {
-    console.error('Update error:', err);
+    if (logFn) logFn(`Update: erreur (${err && err.message ? err.message : String(err)})`);
     updateState.error = err.message;
     updateState.checking = false;
     sendUpdateStatus('error', { message: err.message });
@@ -376,12 +392,12 @@ function setupIpcHandlers() {
   
   // Install update
   ipcMain.handle('install-update', async () => {
-    autoUpdater.quitAndInstall(true, true);
+    installDownloadedUpdate();
   });
   
   // Force update install
   ipcMain.on('force-update-install', () => {
-    autoUpdater.quitAndInstall(true, true);
+    installDownloadedUpdate();
   });
   
   // Get current version
@@ -405,9 +421,35 @@ async function checkForUpdates() {
   try {
     await autoUpdater.checkForUpdates();
   } catch (err) {
-    console.error('Error checking for updates:', err);
+    if (logFn) logFn(`Update: erreur lors de la vérification (${err && err.message ? err.message : String(err)})`);
     updateState.error = err.message;
   }
+}
+
+function installDownloadedUpdate() {
+  const { app } = require('electron');
+
+  try {
+    if (prepareForInstallFn) {
+      prepareForInstallFn();
+    }
+  } catch (e) {
+    if (logFn) logFn(`Update: préparation installation en erreur (${e && e.message ? e.message : String(e)})`);
+  }
+
+  // Small delay to let windows/tray fully release before NSIS runs
+  setTimeout(() => {
+    try {
+      autoUpdater.quitAndInstall(false, true);
+    } catch (e) {
+      if (logFn) logFn(`Update: quitAndInstall erreur (${e && e.message ? e.message : String(e)})`);
+    }
+
+    // Safety net: if quitAndInstall didn't kill the process, force exit
+    setTimeout(() => {
+      app.exit(0);
+    }, 1000);
+  }, 500);
 }
 
 /**

@@ -95,25 +95,36 @@ jobs:
     - name: Create dist directory
       working-directory: ./desktop-app
       run: mkdir -p dist
-    
-    - name: Create Mac icon and background (placeholder)
+
+    - name: Generate Mac assets
       working-directory: ./desktop-app
       run: |
-        mkdir -p assets
-        if [ ! -f assets/icon.icns ]; then
-          echo "Creating placeholder icon"
-          cp assets/logo.jpg assets/icon.icns 2>/dev/null || touch assets/icon.icns
-        fi
-        if [ ! -f assets/dmg-background.png ]; then
-          echo "Creating placeholder DMG background"
-          # Create a simple 1x1 pixel PNG as placeholder
-          echo "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" | base64 -d > assets/dmg-background.png
-        fi
-    
+        npm install sharp
+        node -e "
+        const sharp = require('sharp');
+        const path = require('path');
+        const fs = require('fs');
+
+        (async () => {
+          const assetsDir = 'assets';
+          if (!fs.existsSync(assetsDir)) fs.mkdirSync(assetsDir, { recursive: true });
+
+          // Create icon.png
+          const iconSvg = \`<svg width=\"1024\" height=\"1024\"><defs><linearGradient id=\"g\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\"><stop offset=\"0%\" stop-color=\"#10b981\"/><stop offset=\"100%\" stop-color=\"#059669\"/></linearGradient></defs><rect width=\"100%\" height=\"100%\" fill=\"url(#g)\" rx=\"200\"/><text x=\"50%\" y=\"50%\" font-size=\"400\" font-weight=\"bold\" fill=\"white\" text-anchor=\"middle\" dominant-baseline=\"middle\">R</text></svg>\`;
+          await sharp(Buffer.from(iconSvg)).resize(1024, 1024).png().toFile(path.join(assetsDir, 'icon.png'));
+          console.log('icon.png created');
+
+          // Create dmg-background.png
+          const bgSvg = \`<svg width=\"1920\" height=\"600\"><defs><linearGradient id=\"grad\" x1=\"0%\" y1=\"0%\" x2=\"0%\" y2=\"100%\"><stop offset=\"0%\" stop-color=\"#0f172a\"/><stop offset=\"100%\" stop-color=\"#1e293b\"/></linearGradient></defs><rect width=\"100%\" height=\"100%\" fill=\"url(#grad)\"/><circle cx=\"960\" cy=\"300\" r=\"100\" fill=\"#10b981\" opacity=\"0.3\"/></svg>\`;
+          await sharp(Buffer.from(bgSvg)).resize(1920, 600).png().toFile(path.join(assetsDir, 'dmg-background.png'));
+          console.log('dmg-background.png created');
+        })();
+        "
+
     - name: Build macOS app
       working-directory: ./desktop-app
       run: |
-        npm run build-mac || true
+        npm run build-mac
         ls -la dist/
     
     - name: Upload macOS artifact

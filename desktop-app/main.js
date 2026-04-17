@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain, shell, Tray, Menu, Notification } = require
 const path = require('path');
 const Store = require('electron-store');
 const crypto = require('crypto');
-const { initAutoUpdater } = require('./js/auto-updater');
+const { initAutoUpdater, checkForUpdates } = require('./js/auto-updater');
 
 // Register custom protocol
 if (process.defaultApp) {
@@ -270,11 +270,32 @@ function createTray() {
   tray = new Tray(getAppIconPath());
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Show App', click: () => mainWindow.show() },
+    { label: 'Check updates', click: () => checkForUpdates() },
     { label: 'Quit', click: () => { app.isQuitting = true; app.quit(); } }
   ]);
   tray.setToolTip('Revolution Network Node');
   tray.setContextMenu(contextMenu);
   tray.on('click', () => mainWindow.show());
+}
+
+function prepareForUpdateInstall() {
+  app.isQuitting = true;
+
+  // Destroy tray to release the process
+  if (tray) {
+    tray.destroy();
+    tray = null;
+  }
+
+  // Force destroy all windows (not just close — close can be intercepted)
+  const allWindows = BrowserWindow.getAllWindows();
+  for (const win of allWindows) {
+    try {
+      win.removeAllListeners('close');
+      win.destroy();
+    } catch (e) {}
+  }
+  mainWindow = null;
 }
 
 function enableAutoStart() {
@@ -297,9 +318,10 @@ app.whenReady().then(async () => {
   createTray();
   enableAutoStart();
   if (isActive) mine();
+  addLog(`App version: v${app.getVersion()}`);
   
   // Initialize auto-updater after window is created
-  initAutoUpdater(mainWindow);
+  initAutoUpdater(mainWindow, addLog, prepareForUpdateInstall);
 });
 
 app.on('window-all-closed', () => {
