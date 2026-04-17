@@ -43,7 +43,7 @@ module.exports = {
     verifyChecksum: true,
     
     // Verify signature (requires code signing certificate)
-    verifySignature: true,
+    verifySignature: false,
     
     // Anti-downgrade protection
     allowDowngrade: false,
