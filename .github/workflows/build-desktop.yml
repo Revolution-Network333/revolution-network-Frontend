@@ -62,7 +62,7 @@ jobs:
     - name: Build Windows app
       working-directory: ./desktop-app
       run: |
-        npm run build
+        npm run build -- --publish never
         ls -la dist/
     
     - name: Upload Windows artifact
