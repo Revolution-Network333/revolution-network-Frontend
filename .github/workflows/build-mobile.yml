@@ -22,7 +22,8 @@ jobs:
         distribution: 'temurin'
     
     - name: Grant execute permission for gradlew
-      run: chmod +x android-node/gradlew
+      run: chmod +x gradlew
+      working-directory: ./android-node
     
     - name: Build Android APK
       run: |
