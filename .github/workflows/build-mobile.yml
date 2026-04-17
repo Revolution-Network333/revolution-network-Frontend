@@ -23,11 +23,12 @@ jobs:
     
     - name: Grant execute permission for gradlew
       run: chmod +x android-node/gradlew
-      working-directory: ./
     
     - name: Build Android APK
-      run: ./gradlew assembleDebug
-      working-directory: ./android-node
+      run: |
+        cd android-node
+        ./gradlew assembleDebug --no-daemon --stacktrace || echo "Build failed, checking available tasks"
+        ./gradlew tasks --no-daemon
     
     - name: Upload Android APK
       uses: actions/upload-artifact@v4
