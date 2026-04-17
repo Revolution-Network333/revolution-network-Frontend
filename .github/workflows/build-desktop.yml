@@ -126,12 +126,28 @@ jobs:
       run: |
         npm run build-mac -- --publish never
         ls -la dist/
-    
+
+    - name: Test app launch and screenshot
+      working-directory: ./desktop-app
+      run: |
+        open dist/mac-arm64/*.app || open dist/mac/*.app || open dist/*.app
+        sleep 5
+        screencapture -x screenshot.png
+        ls -la screenshot.png
+
     - name: Upload macOS artifact
       uses: actions/upload-artifact@v4
       with:
         name: revolution-network-macos
         path: desktop-app/dist/
+        retention-days: 30
+      continue-on-error: true
+
+    - name: Upload screenshot
+      uses: actions/upload-artifact@v4
+      with:
+        name: mac-app-screenshot
+        path: desktop-app/screenshot.png
         retention-days: 30
       continue-on-error: true
 
