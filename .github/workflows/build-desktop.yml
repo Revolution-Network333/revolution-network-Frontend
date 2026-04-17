@@ -124,7 +124,7 @@ jobs:
     - name: Build macOS app
       working-directory: ./desktop-app
       run: |
-        npm run build-mac
+        npm run build-mac -- --publish never
         ls -la dist/
     
     - name: Upload macOS artifact
