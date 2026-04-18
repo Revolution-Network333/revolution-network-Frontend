@@ -2332,7 +2332,6 @@
 
                                         <div style="display: flex; gap: 12px; width: 100%;">
                                             <button type="button" id="toggle-register" class="neon-button outline" style="flex: 1;">${t('login.register')}</button>
-                                            <button type="button" id="phantom-login-btn" class="neon-button secondary" style="flex: 1;">${t('login.phantom')}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -2541,7 +2540,6 @@ main();</code></pre>
 
             const emailInput = document.getElementById('login-email');
             const passInput = document.getElementById('login-password');
-            const phantomBtn = document.getElementById('phantom-login-btn');
             const urlParams = new URL(window.location.href).searchParams;
             const referralCodeFromUrl = urlParams.get('ref') || null;
             if (referralCodeFromUrl) {
@@ -2617,44 +2615,6 @@ main();</code></pre>
                     alert('Erreur de connexion au serveur');
                 });
             });
-
-            if (phantomBtn) {
-                phantomBtn.addEventListener('click', async () => {
-                    try {
-                        if (!window.solana || !window.solana.isPhantom) {
-                            alert('Phantom Wallet n\'est pas détecté dans ce navigateur.');
-                            return;
-                        }
-                        const resp = await window.solana.connect();
-                        const walletAddress = resp.publicKey.toString();
-                        const res = await fetch(`${API_BASE}/api/auth/phantom-login`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ walletAddress })
-                        });
-                        const data = await res.json();
-                        if (data.token) {
-                            localStorage.setItem('token', data.token);
-                            if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken);
-                            
-                            const urlParams = new URL(window.location.href).searchParams;
-                            if (urlParams.get('desktop') === 'true') {
-                                window.location.reload();
-                                return;
-                            }
-                            
-                            currentPage = 'overview';
-                            renderPage();
-                            refreshHeader();
-                        } else {
-                            alert(data.error || 'Connexion Phantom impossible');
-                        }
-                    } catch (err) {
-                        console.error(err);
-                        alert('Erreur lors de la connexion Phantom');
-                    }
-                });
-            }
 
             // Bouton Google
             const googleBtn = document.getElementById('google-login-btn');
@@ -3499,7 +3459,10 @@ main();</code></pre>
                                     </div>
                                     <div class="profile-field">
                                         <label for="solana_address">${t('profile.solana')}</label>
-                                        <input type="text" id="solana_address" name="solana_address">
+                                        <div style="display: flex; gap: 8px;">
+                                            <input type="text" id="solana_address" name="solana_address" readonly>
+                                            <button type="button" id="connect-wallet-btn" class="profile-btn secondary" style="white-space: nowrap;">Connecter Wallet</button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -3603,6 +3566,44 @@ main();</code></pre>
             const twofaSecretEl = document.getElementById('twofa-secret');
             const twofaCopySecret = document.getElementById('twofa-copy-secret');
             const manageSubscriptionBtn = document.getElementById('manage-subscription-btn');
+            const connectWalletBtn = document.getElementById('connect-wallet-btn');
+
+            if (connectWalletBtn) {
+                connectWalletBtn.addEventListener('click', async () => {
+                    try {
+                        if (!window.solana || !window.solana.isPhantom) {
+                            alert('Phantom Wallet n\'est pas détecté dans ce navigateur.');
+                            return;
+                        }
+                        const resp = await window.solana.connect();
+                        const walletAddress = resp.publicKey.toString();
+                        solanaInput.value = walletAddress;
+                        
+                        // Sauvegarder automatiquement l'adresse wallet
+                        const payload = {
+                            username: usernameInput.value,
+                            solana_address: walletAddress
+                        };
+
+                        const res = await fetch(`${API_BASE}/api/user/profile`, {
+                            method: 'PUT',
+                            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        const data = await res.json();
+                        
+                        if (data.success) {
+                            alert('Wallet connecté avec succès!');
+                        } else {
+                            alert('Erreur lors de la connexion du wallet: ' + (data.error || 'Erreur inconnue'));
+                            solanaInput.value = '';
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert('Erreur lors de la connexion Phantom');
+                    }
+                });
+            }
 
             if (manageSubscriptionBtn) {
                 manageSubscriptionBtn.addEventListener('click', async () => {
