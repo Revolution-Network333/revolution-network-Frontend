@@ -60,17 +60,17 @@ jobs:
       if: steps.check_ios.outputs.skip == 'false'
       run: |
         cd ios-node/RevolutionNetworkNode
+        
+        # Lister les schemes disponibles
+        xcodebuild -list -project RevolutionNetworkNode.xcodeproj
+        
+        # Archive
         xcodebuild \
           -project RevolutionNetworkNode.xcodeproj \
           -scheme RevolutionNetworkNode \
           -configuration Debug \
           -archivePath build/RevolutionNetworkNode.xcarchive \
-          archive || true
-        xcodebuild \
-          -exportArchive \
-          -archivePath build/RevolutionNetworkNode.xcarchive \
-          -exportPath build \
-          -exportOptionsPlist exportOptions.plist || true
+          archive
 
     - name: Upload iOS IPA
       if: steps.check_ios.outputs.skip == 'false'
