@@ -338,7 +338,7 @@ struct DashboardView: View {
 
 // MARK: - NeonCard
 struct NeonCard<Content: View>: View {
-    let content: () -> Content
+    @ViewBuilder let content: () -> Content
     var body: some View {
         ZStack(alignment: .top) {
             VStack(content: content)
