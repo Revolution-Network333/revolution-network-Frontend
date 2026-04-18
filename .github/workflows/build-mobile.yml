@@ -67,26 +67,35 @@ jobs:
       with:
         xcode-version: latest-stable
 
-    - name: Build iOS Archive
+    - name: Build iOS App
       if: steps.check_ios.outputs.skip == 'false'
       run: |
         cd ios-node/RevolutionNetworkNode
-        xcodebuild -list -project RevolutionNetworkNode.xcodeproj
         xcodebuild \
           -project RevolutionNetworkNode.xcodeproj \
           -scheme RevolutionNetworkNode \
           -configuration Debug \
-          -archivePath build/RevolutionNetworkNode.xcarchive \
-          archive \
+          -sdk iphonesimulator \
+          -derivedDataPath build/DerivedData \
+          build \
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGNING_ALLOWED=NO
+        
+        # Copier le .app dans un dossier propre
+        mkdir -p build/output
+        cp -r build/DerivedData/Build/Products/Debug-iphonesimulator/RevolutionNetworkNode.app build/output/
 
-    - name: Upload iOS artifact
+    - name: Zip .app pour Appetize
+      if: steps.check_ios.outputs.skip == 'false'
+      run: |
+        cd ios-node/RevolutionNetworkNode/build/output
+        zip -r RevolutionNetworkNode.zip RevolutionNetworkNode.app
+
+    - name: Upload iOS App
       if: steps.check_ios.outputs.skip == 'false'
       uses: actions/upload-artifact@v4
       with:
-        name: ios-archive-debug
-        path: ios-node/RevolutionNetworkNode/build/RevolutionNetworkNode.xcarchive
+        name: ios-simulator-app
+        path: ios-node/RevolutionNetworkNode/build/output/RevolutionNetworkNode.zip
         retention-days: 30
-      continue-on-error: true
