@@ -35,6 +35,7 @@ jobs:
 
   build-ios:
     runs-on: macos-latest
+    # iOS build job - skips if directory not found
     
     steps:
     - name: Checkout repository
