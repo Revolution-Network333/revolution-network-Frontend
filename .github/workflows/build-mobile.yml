@@ -76,7 +76,6 @@ jobs:
           -project RevolutionNetworkNode.xcodeproj \
           -scheme RevolutionNetworkNode \
           -configuration Debug \
-          -sdk iphonesimulator \
           -archivePath build/RevolutionNetworkNode.xcarchive \
           archive \
           CODE_SIGN_IDENTITY="" \
