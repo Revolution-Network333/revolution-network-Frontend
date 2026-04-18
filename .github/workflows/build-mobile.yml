@@ -28,7 +28,7 @@ jobs:
     - name: Build Android APK
       run: |
         cd android-node
-        ./gradlew assembleDebug --no-daemon --stacktrace
+        ./gradlew assembleDebug --no-daemon --stacktrace --warning-mode=none
     
     - name: Upload Android APK
       uses: actions/upload-artifact@v4
@@ -36,46 +36,3 @@ jobs:
         name: android-apk-debug
         path: android-node/app/build/outputs/apk/debug/app-debug.apk
         retention-days: 30
-
-  build-ios:
-    runs-on: macos-latest
-    
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-    
-    - name: Set up Xcode
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: latest-stable
-    
-    - name: Build iOS IPA (without code signing)
-      run: |
-        cd ios-node/RevolutionNetworkNode
-        xcodebuild -project RevolutionNetworkNode.xcodeproj \
-          -scheme RevolutionNetworkNode \
-          -configuration Debug \
-          -sdk iphoneos \
-          CODE_SIGN_IDENTITY="" \
-          CODE_SIGNING_REQUIRED=NO \
-          CODE_SIGNING_ALLOWED=NO \
-          -derivedDataPath build
-      continue-on-error: true
-    
-    - name: Create IPA from build
-      run: |
-        cd ios-node/RevolutionNetworkNode
-        mkdir -p build-output
-        if [ -d "build/Build/Products/Debug-iphoneos" ]; then
-          cd build/Build/Products/Debug-iphoneos
-          zip -r ../../../../build-output/RevolutionNetworkNode.ipa RevolutionNetworkNode.app
-        fi
-      continue-on-error: true
-    
-    - name: Upload iOS IPA
-      uses: actions/upload-artifact@v4
-      with:
-        name: ios-ipa-debug
-        path: ios-node/build-output/RevolutionNetworkNode.ipa
-        retention-days: 30
-      continue-on-error: true
