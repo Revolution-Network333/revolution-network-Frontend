@@ -14,6 +14,7 @@ desktop-app/node_modules/
 !ios-node/RevolutionNetworkNode/project.yml
 !ios-node/RevolutionNetworkNode/exportOptions.plist
 !ios-node/RevolutionNetworkNode/RevolutionNetworkNode/*.swift
+!ios-node/RevolutionNetworkNode/RevolutionNetworkNode/*.h
 
 # Backend - NE PAS PUSHER
 backend/

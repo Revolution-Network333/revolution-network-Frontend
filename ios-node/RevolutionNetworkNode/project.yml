@@ -2,10 +2,11 @@
 options:
   bundleIdPrefix: com.revolutionnetwork
   deploymentTarget:
-    iOS: "15.0"
+    iOS: "16.0"
 settings:
   PRODUCT_BUNDLE_IDENTIFIER: com.revolutionnetwork.node
   SWIFT_VERSION: "5.0"
+  SWIFT_OBJC_BRIDGING_HEADER: RevolutionNetworkNode/RevolutionNetworkNode-Bridging-Header.h
 targets:
   RevolutionNetworkNode:
     type: application
@@ -14,3 +15,5 @@ targets:
       - RevolutionNetworkNode
     info:
       path: RevolutionNetworkNode/Info.plist
+    settings:
+      SWIFT_OBJC_BRIDGING_HEADER: RevolutionNetworkNode/RevolutionNetworkNode-Bridging-Header.h
