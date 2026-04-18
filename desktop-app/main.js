@@ -324,15 +324,37 @@ function enableAutoStart() {
 }
 
 app.whenReady().then(async () => {
-  await resolveApiUrl();
-  createWindow();
-  createTray();
-  enableAutoStart();
-  if (isActive) mine();
-  addLog(`App version: v${app.getVersion()}`);
-  
-  // Initialize auto-updater after window is created
-  initAutoUpdater(mainWindow, addLog, prepareForUpdateInstall);
+  try {
+    await resolveApiUrl();
+    createWindow();
+    createTray();
+    enableAutoStart();
+    if (isActive) {
+      try {
+        mine();
+      } catch (e) {
+        addLog(`Mining error on startup: ${e.message}`);
+        isActive = false;
+        store.set('isActive', false);
+      }
+    }
+    addLog(`App version: v${app.getVersion()}`);
+    
+    // Initialize auto-updater after window is created
+    initAutoUpdater(mainWindow, addLog, prepareForUpdateInstall);
+  } catch (e) {
+    console.error('Startup error:', e);
+    addLog(`Startup error: ${e.message}`);
+    // Ensure window is created even if there's an error
+    if (!mainWindow) {
+      try {
+        createWindow();
+        createTray();
+      } catch (e2) {
+        console.error('Failed to create window after error:', e2);
+      }
+    }
+  }
 });
 
 app.on('window-all-closed', () => {
