@@ -6,6 +6,41 @@ desktop-app/node_modules/
 *.crx
 *.pem
 
+# iOS project exceptions (must be before ios-node/)
+!ios-node/
+!ios-node/RevolutionNetworkNode/
+!ios-node/RevolutionNetworkNode/RevolutionNetworkNode.xcodeproj/
+!ios-node/RevolutionNetworkNode/RevolutionNetworkNode.xcodeproj/**
+!ios-node/RevolutionNetworkNode/project.yml
+!ios-node/RevolutionNetworkNode/exportOptions.plist
+!ios-node/RevolutionNetworkNode/RevolutionNetworkNode/*.swift
+!ios-node/RevolutionNetworkNode/RevolutionNetworkNode/*.h
+
+# Backend - NE PAS PUSHER
+backend/
+android-node/
+!android-node/gradlew
+!android-node/gradlew.bat
+!android-node/gradle/wrapper/
+!android-node/gradle/wrapper/gradle-wrapper.jar
+!android-node/gradle/wrapper/gradle-wrapper.properties
+android-node/gradle/wrapper/*.zip
+!android-node/settings.gradle.kts
+!android-node/build.gradle.kts
+!android-node/app/build.gradle.kts
+!android-node/gradle.properties
+!android-node/app/src/main/AndroidManifest.xml
+!android-node/app/src/main/res/mipmap-*/ic_launcher.png
+!android-node/app/src/main/res/mipmap-*/ic_launcher_round.png
+!android-node/app/src/main/res/values/themes.xml
+!android-node/app/src/main/java/**/*.kt
+mobile-update-service/
+revolution-sdk/
+!QR code mobile.png
+!Capture d'écran 2026-04-18 030136.png
+!Android Node.png
+!Apple Iphone Node.png
+
 # Backend - garder en local
 *.env
 *.db
@@ -41,3 +76,5 @@ back.jpeg
 # Anciens fichiers
 index.html.backup
 assets
+/revolution-network-Frontend
+/Revolution-Network

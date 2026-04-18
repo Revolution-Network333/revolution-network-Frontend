@@ -1,0 +1,20 @@
+{
+  "name": "Aether",
+  "symbol": "ATH",
+  "description": "Token officiel de Révolution Network, Projet DePIN",
+  "image": "https://raw.githubusercontent.com/Revolution-Network333/Revolution-Network/main/1234.png",
+  "external_url": "https://revolution-network333.github.io/Revolution-Network/",
+  "attributes": [],
+  "properties": {
+    "files": [
+      {
+        "uri": "https://raw.githubusercontent.com/Revolution-Network333/Revolution-Network/main/1234.png",
+        "type": "image/png"
+      }
+    ],
+    "category": "fungible"
+  },
+  "extensions": {
+    "website": "https://revolution-network333.github.io/Revolution-Network/"
+  }
+}
