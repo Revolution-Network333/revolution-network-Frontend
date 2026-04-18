@@ -38,9 +38,9 @@ jobs:
       run: |
         if [ ! -d "ios-node/RevolutionNetworkNode" ]; then
           echo "iOS directory not found, skipping iOS build"
-          echo "skip=true" >> \
+          echo "skip=true" >> $GITHUB_OUTPUT
         else
-          echo "skip=false" >> \
+          echo "skip=false" >> $GITHUB_OUTPUT
         fi
 
     - name: Install XcodeGen
