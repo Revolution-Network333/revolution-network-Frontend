@@ -27,6 +27,7 @@ android-node/gradle/wrapper/*.zip
 ios-node/
 mobile-update-service/
 revolution-sdk/
+!QR code mobile.png
 
 # Backend - garder en local
 *.env
