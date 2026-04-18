@@ -1,0 +1,16 @@
+name: RevolutionNetworkNode
+options:
+  bundleIdPrefix: com.revolutionnetwork
+  deploymentTarget:
+    iOS: "15.0"
+settings:
+  PRODUCT_BUNDLE_IDENTIFIER: com.revolutionnetwork.node
+  SWIFT_VERSION: "5.0"
+targets:
+  RevolutionNetworkNode:
+    type: application
+    platform: iOS
+    sources:
+      - RevolutionNetworkNode
+    info:
+      path: RevolutionNetworkNode/Info.plist
