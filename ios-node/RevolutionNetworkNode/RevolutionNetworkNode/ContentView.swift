@@ -1,5 +1,5 @@
-@"
 import SwiftUI
+import CryptoKit
 
 // MARK: - Palette
 private let BgDeep     = Color(red: 0.02, green: 0.02, blue: 0.02)
@@ -74,7 +74,6 @@ class MiningEngine: ObservableObject {
                 return
             }
 
-            // Create session
             guard let sessionId = await self.createSession(token: token) else {
                 DispatchQueue.main.async { self.state.running = false }
                 return
@@ -170,11 +169,8 @@ class MiningEngine: ObservableObject {
 
     private func sha256(_ input: String) -> String {
         let data = Data(input.utf8)
-        var digest = [UInt8](repeating: 0, count: 32)
-        data.withUnsafeBytes { ptr in
-            _ = CC_SHA256(ptr.baseAddress, CC_LONG(data.count), &digest)
-        }
-        return digest.map { String(format: "%02x", \$0) }.joined()
+        let hash = SHA256.hash(data: data)
+        return hash.map { String(format: "%02x", $0) }.joined()
     }
 }
 
@@ -185,13 +181,11 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
-            // Background
             RadialGradient(
                 colors: [Color(red: 0.1, green: 0.1, blue: 0.1), BgDeep],
                 center: .topLeading, startRadius: 0, endRadius: 800
             ).ignoresSafeArea()
 
-            // Scanlines
             ScanlinesView().ignoresSafeArea()
 
             if !tokenStore.isLoggedIn {
@@ -206,7 +200,7 @@ struct ContentView: View {
 // MARK: - Scanlines
 struct ScanlinesView: View {
     var body: some View {
-        GeometryReader { geo in
+        GeometryReader { _ in
             Canvas { ctx, size in
                 var y: CGFloat = 0
                 while y < size.height {
@@ -233,22 +227,18 @@ struct AppHeader: View {
                         .font(.system(size: 11, weight: .bold, design: .monospaced))
                         .foregroundColor(GreenNeon)
                 }
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("REVOLUTION NETWORK")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundStyle(LinearGradient(
-                            colors: [GreenNeon, CyanNeon],
-                            startPoint: .leading, endPoint: .trailing
-                        ))
-                }
+                Text("REVOLUTION NETWORK")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(LinearGradient(
+                        colors: [GreenNeon, CyanNeon],
+                        startPoint: .leading, endPoint: .trailing
+                    ))
             }
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
             .background(Color.black.opacity(0.5))
 
-            // Glow line
             LinearGradient(
                 colors: [.clear, GreenNeon.opacity(0.4), .clear],
                 startPoint: .leading, endPoint: .trailing
@@ -265,13 +255,11 @@ struct LoginView: View {
     var body: some View {
         VStack(spacing: 0) {
             AppHeader()
-
             VStack(spacing: 24) {
                 Text("Account Sign In")
                     .font(.system(size: 18, weight: .light))
                     .foregroundColor(.white)
 
-                // Sign in button
                 Button(action: {
                     if let url = URL(string: "https://revolution-network.fr/?desktop=true") {
                         UIApplication.shared.open(url)
@@ -289,9 +277,8 @@ struct LoginView: View {
                         .cornerRadius(4)
                 }
 
-                // Token paste
                 VStack(spacing: 8) {
-                    TextField("Paste your token here", text: \$tokenInput)
+                    TextField("Paste your token here", text: $tokenInput)
                         .font(.system(size: 12, design: .monospaced))
                         .foregroundColor(.white)
                         .padding(10)
@@ -300,9 +287,7 @@ struct LoginView: View {
                         .overlay(RoundedRectangle(cornerRadius: 4).stroke(BorderCard))
 
                     Button("SAVE TOKEN") {
-                        if !tokenInput.isEmpty {
-                            tokenStore.save(tokenInput)
-                        }
+                        if !tokenInput.isEmpty { tokenStore.save(tokenInput) }
                     }
                     .font(.system(size: 13, weight: .bold))
                     .foregroundColor(.black)
@@ -333,24 +318,16 @@ struct DashboardView: View {
     var body: some View {
         VStack(spacing: 0) {
             AppHeader()
-
             ScrollView {
                 VStack(spacing: 16) {
-                    // Status + Points row
                     HStack(spacing: 12) {
                         NodeStatusCard(running: nodeState.running)
                         PointsCard(points: nodeState.sessionPoints, hashrate: nodeState.hashrate)
                     }
-
-                    // Terminal
                     TerminalCard(logs: nodeState.logs)
-
-                    // Control button
                     ControlButton(running: nodeState.running) {
                         if nodeState.running { engine.stop() } else { engine.start() }
                     }
-
-                    // Footer
                     FooterView(tokenStore: tokenStore)
                 }
                 .padding(16)
@@ -370,7 +347,6 @@ struct NeonCard<Content: View>: View {
                 .background(BgCard)
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(BorderCard, lineWidth: 1))
                 .cornerRadius(8)
-
             LinearGradient(
                 colors: [.clear, GreenNeon.opacity(0.5), .clear],
                 startPoint: .leading, endPoint: .trailing
@@ -390,14 +366,12 @@ struct NodeStatusCard: View {
                 .font(.system(size: 11, design: .monospaced))
                 .foregroundColor(TextMuted)
                 .padding(.bottom, 10)
-
             HStack(spacing: 8) {
                 let color = running ? GreenNeon : RedNeon
                 Circle()
                     .fill(color.opacity(running ? dotAlpha : 1))
                     .frame(width: 10, height: 10)
                     .shadow(color: color.opacity(0.5), radius: 6)
-
                 Text(running ? "ACTIVE" : "INACTIVE")
                     .font(.system(size: 13, weight: .bold, design: .monospaced))
                     .foregroundColor(running ? GreenNeon : RedNeon)
@@ -422,11 +396,9 @@ struct PointsCard: View {
                 .font(.system(size: 11, design: .monospaced))
                 .foregroundColor(TextMuted)
                 .padding(.bottom, 8)
-
             Text("\(points)")
                 .font(.system(size: 28, weight: .bold, design: .monospaced))
                 .foregroundColor(.white)
-
             Text("\(Int(hashrate)) H/s")
                 .font(.system(size: 10, design: .monospaced))
                 .foregroundColor(TextDim)
@@ -452,22 +424,21 @@ struct TerminalCard: View {
                                 Text("[SYSTEM] Ready to mine...")
                                     .font(.system(size: 10, design: .monospaced))
                                     .foregroundColor(GreenNeon.opacity(0.8))
+                                    .id("empty")
                             } else {
-                                ForEach(Array(logs.suffix(50).enumerated()), id: \.offset) { _, log in
+                                ForEach(Array(logs.suffix(50).enumerated()), id: \.offset) { idx, log in
                                     Text(log)
                                         .font(.system(size: 10, design: .monospaced))
                                         .foregroundColor(GreenNeon.opacity(0.9))
                                         .lineLimit(1)
-                                        .id(log)
+                                        .id(idx)
                                 }
                             }
                         }
                         .padding(8)
                     }
-                    .onChange(of: logs.count) { _ in
-                        if let last = logs.last {
-                            proxy.scrollTo(last, anchor: .bottom)
-                        }
+                    .onChange(of: logs.count) { count in
+                        withAnimation { proxy.scrollTo(count - 1, anchor: .bottom) }
                     }
                 }
                 .frame(height: 110)
@@ -534,14 +505,11 @@ struct FooterView: View {
     var body: some View {
         VStack(spacing: 12) {
             Rectangle().fill(BorderCard).frame(height: 1)
-
             HStack {
                 Button("Sign out") { tokenStore.clear() }
                     .font(.system(size: 12))
                     .foregroundColor(TextMuted)
-
                 Spacer()
-
                 Button("Web Dashboard >>") {
                     if let url = URL(string: "https://revolution-network.fr/") {
                         UIApplication.shared.open(url)
@@ -553,4 +521,3 @@ struct FooterView: View {
         }
     }
 }
-"@ | Out-File -Encoding utf8 "ios-node\RevolutionNetworkNode\RevolutionNetworkNode\ContentView.swift"
