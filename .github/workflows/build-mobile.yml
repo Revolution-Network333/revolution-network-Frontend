@@ -28,8 +28,7 @@ jobs:
     - name: Build Android APK
       run: |
         cd android-node
-        ./gradlew assembleDebug --no-daemon --stacktrace || echo "Build failed, checking available tasks"
-        ./gradlew tasks --no-daemon
+        ./gradlew assembleDebug --no-daemon --stacktrace
     
     - name: Upload Android APK
       uses: actions/upload-artifact@v4
