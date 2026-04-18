@@ -24,9 +24,11 @@ android-node/gradle/wrapper/*.zip
 !android-node/app/src/main/res/mipmap-*/ic_launcher_round.png
 !android-node/app/src/main/res/values/themes.xml
 !android-node/app/src/main/java/**/*.kt
-ios-node/
-!ios-node/RevolutionNetworkNode/**
+!ios-node/
+!ios-node/RevolutionNetworkNode/
+!ios-node/RevolutionNetworkNode/RevolutionNetworkNode.xcodeproj/
 !ios-node/RevolutionNetworkNode/RevolutionNetworkNode.xcodeproj/**
+ios-node/
 mobile-update-service/
 revolution-sdk/
 !QR code mobile.png
