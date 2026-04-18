@@ -35,34 +35,45 @@ jobs:
 
   build-ios:
     runs-on: macos-latest
-    # iOS build job - skips if directory not found
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    
+
     - name: Check iOS directory
+      id: check_ios
       run: |
         if [ ! -d "ios-node/RevolutionNetworkNode" ]; then
           echo "iOS directory not found, skipping iOS build"
-          exit 0
+          echo "skip=true" >> $GITHUB_OUTPUT
+        else
+          echo "skip=false" >> $GITHUB_OUTPUT
         fi
-    
+
     - name: Set up Xcode
-      if: hashFiles('ios-node/RevolutionNetworkNode/RevolutionNetworkNode.xcodeproj') != ''
+      if: steps.check_ios.outputs.skip == 'false'
       uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: latest-stable
-    
+
     - name: Build iOS IPA
-      if: hashFiles('ios-node/RevolutionNetworkNode/RevolutionNetworkNode.xcodeproj') != ''
+      if: steps.check_ios.outputs.skip == 'false'
       run: |
         cd ios-node/RevolutionNetworkNode
-        xcodebuild -project RevolutionNetworkNode.xcodeproj -scheme RevolutionNetworkNode -configuration Debug -archivePath build/RevolutionNetworkNode.xcarchive archive || true
-        xcodebuild -exportArchive -archivePath build/RevolutionNetworkNode.xcarchive -exportPath build -exportOptionsPlist exportOptions.plist || true
-    
+        xcodebuild \
+          -project RevolutionNetworkNode.xcodeproj \
+          -scheme RevolutionNetworkNode \
+          -configuration Debug \
+          -archivePath build/RevolutionNetworkNode.xcarchive \
+          archive || true
+        xcodebuild \
+          -exportArchive \
+          -archivePath build/RevolutionNetworkNode.xcarchive \
+          -exportPath build \
+          -exportOptionsPlist exportOptions.plist || true
+
     - name: Upload iOS IPA
-      if: hashFiles('ios-node/RevolutionNetworkNode/build/RevolutionNetworkNode.ipa') != ''
+      if: steps.check_ios.outputs.skip == 'false'
       uses: actions/upload-artifact@v4
       with:
         name: ios-ipa-debug
