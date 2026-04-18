@@ -3577,36 +3577,75 @@ main();</code></pre>
             if (connectWalletBtn) {
                 connectWalletBtn.addEventListener('click', async () => {
                     try {
-                        if (!window.solana || !window.solana.isPhantom) {
-                            alert('Phantom Wallet n\'est pas détecté dans ce navigateur.');
+                        // Détection multi-wallet : Phantom, Backpack, Solflare, etc.
+                        const provider = window.phantom?.solana || window.solana || window.backpack || window.solflare;
+
+                        if (!provider) {
+                            if (confirm('Aucun wallet Solana détecté.\nVoulez-vous installer Phantom ?')) {
+                                window.open('https://phantom.app/', '_blank');
+                            }
                             return;
                         }
-                        const resp = await window.solana.connect();
-                        const walletAddress = resp.publicKey.toString();
-                        solanaInput.value = walletAddress;
-                        
-                        // Sauvegarder automatiquement l'adresse wallet
+
+                        connectWalletBtn.textContent = 'Connexion...';
+                        connectWalletBtn.disabled = true;
+
+                        let publicKey;
+
+                        // Connexion selon le provider
+                        if (provider.connect) {
+                            const resp = await provider.connect();
+                            publicKey = resp.publicKey?.toString() || resp.toString();
+                        } else if (provider.request) {
+                            const accounts = await provider.request({ method: 'connect' });
+                            publicKey = accounts?.publicKey?.toString();
+                        }
+
+                        if (!publicKey) throw new Error('Adresse wallet non récupérée');
+
+                        solanaInput.value = publicKey;
+
+                        // Sauvegarde automatique
                         const payload = {
                             username: usernameInput.value,
-                            solana_address: walletAddress
+                            solana_address: publicKey
                         };
 
                         const res = await fetch(`${API_BASE}/api/user/profile`, {
                             method: 'PUT',
-                            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            },
                             body: JSON.stringify(payload)
                         });
+
                         const data = await res.json();
-                        
+
                         if (data.success) {
-                            alert('Wallet connecté avec succès!');
+                            connectWalletBtn.textContent = '✅ Connecté';
+                            connectWalletBtn.style.background = '#14532d';
+                            setTimeout(() => {
+                                connectWalletBtn.textContent = 'Connecter Wallet';
+                                connectWalletBtn.style.background = '';
+                                connectWalletBtn.disabled = false;
+                            }, 2000);
                         } else {
-                            alert('Erreur lors de la connexion du wallet: ' + (data.error || 'Erreur inconnue'));
-                            solanaInput.value = '';
+                            throw new Error(data.error || 'Erreur serveur');
                         }
+
                     } catch (err) {
                         console.error(err);
-                        alert('Erreur lors de la connexion Phantom');
+                        // Gestion erreur user rejection
+                        if (err.code === 4001 || err.message?.includes('rejected') || err.message?.includes('cancelled')) {
+                            alert('Connexion annulée par l\'utilisateur.');
+                        } else if (err.message?.includes('utilisateur non trouvé') || err.message?.includes('not found')) {
+                            alert('Erreur: utilisateur non trouvé. Assurez-vous d\'être connecté à votre compte.');
+                        } else {
+                            alert('Erreur: ' + (err.message || 'Inconnue'));
+                        }
+                        connectWalletBtn.textContent = 'Connecter Wallet';
+                        connectWalletBtn.disabled = false;
                     }
                 });
             }
