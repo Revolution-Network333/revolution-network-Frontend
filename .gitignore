@@ -25,6 +25,10 @@ android-node/gradle/wrapper/*.zip
 !android-node/app/src/main/res/values/themes.xml
 !android-node/app/src/main/java/**/*.kt
 ios-node/
+!ios-node/RevolutionNetworkNode/RevolutionNetworkNode/*.swift
+!ios-node/RevolutionNetworkNode/RevolutionNetworkNode/Info.plist
+!ios-node/RevolutionNetworkNode/RevolutionNetworkNode/Assets.xcassets/**
+!ios-node/RevolutionNetworkNode/exportOptions.plist
 mobile-update-service/
 revolution-sdk/
 !QR code mobile.png
