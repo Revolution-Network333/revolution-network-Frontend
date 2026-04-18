@@ -1,4 +1,4 @@
-name: RevolutionNetworkNode
+﻿name: RevolutionNetworkNode
 options:
   bundleIdPrefix: com.revolutionnetwork
   deploymentTarget:

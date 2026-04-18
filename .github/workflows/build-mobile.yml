@@ -1,31 +1,25 @@
-name: Build Mobile Apps
-
+﻿name: Build Mobile Apps
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
-
 jobs:
   build-android:
     runs-on: ubuntu-latest
-    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
-    
     - name: Build Android APK
       run: |
         cd android-node
         gradle assembleDebug --stacktrace --warning-mode=none
-    
     - name: Upload Android APK
       uses: actions/upload-artifact@v4
       with:
@@ -35,7 +29,6 @@ jobs:
 
   build-ios:
     runs-on: macos-latest
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -45,10 +38,28 @@ jobs:
       run: |
         if [ ! -d "ios-node/RevolutionNetworkNode" ]; then
           echo "iOS directory not found, skipping iOS build"
-          echo "skip=true" >> $GITHUB_OUTPUT
+          echo "skip=true" >> \
         else
-          echo "skip=false" >> $GITHUB_OUTPUT
+          echo "skip=false" >> \
         fi
+
+    - name: Install XcodeGen
+      if: steps.check_ios.outputs.skip == 'false'
+      run: brew install xcodegen
+
+    - name: Generate Xcode project
+      if: steps.check_ios.outputs.skip == 'false'
+      run: |
+        cd ios-node/RevolutionNetworkNode
+        echo "=== Contenu du dossier ==="
+        ls -la
+        echo "=== Contenu project.yml ==="
+        cat project.yml
+        echo "=== Generation XcodeGen ==="
+        xcodegen generate --spec project.yml --project .
+        echo "=== Verification ==="
+        ls -la
+        ls -la RevolutionNetworkNode.xcodeproj/
 
     - name: Set up Xcode
       if: steps.check_ios.outputs.skip == 'false'
@@ -56,27 +67,27 @@ jobs:
       with:
         xcode-version: latest-stable
 
-    - name: Build iOS IPA
+    - name: Build iOS Archive
       if: steps.check_ios.outputs.skip == 'false'
       run: |
         cd ios-node/RevolutionNetworkNode
-        
-        # Lister les schemes disponibles
         xcodebuild -list -project RevolutionNetworkNode.xcodeproj
-        
-        # Archive
         xcodebuild \
           -project RevolutionNetworkNode.xcodeproj \
           -scheme RevolutionNetworkNode \
           -configuration Debug \
+          -sdk iphonesimulator \
           -archivePath build/RevolutionNetworkNode.xcarchive \
-          archive
+          archive \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO
 
-    - name: Upload iOS IPA
+    - name: Upload iOS artifact
       if: steps.check_ios.outputs.skip == 'false'
       uses: actions/upload-artifact@v4
       with:
-        name: ios-ipa-debug
-        path: ios-node/RevolutionNetworkNode/build/RevolutionNetworkNode.ipa
+        name: ios-archive-debug
+        path: ios-node/RevolutionNetworkNode/build/RevolutionNetworkNode.xcarchive
         retention-days: 30
       continue-on-error: true
