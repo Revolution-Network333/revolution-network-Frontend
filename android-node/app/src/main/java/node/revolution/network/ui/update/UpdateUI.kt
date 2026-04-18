@@ -9,7 +9,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
@@ -62,13 +61,6 @@ fun UpdateBanner(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowDownward,
-                        contentDescription = "Update",
-                        tint = Color.White,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    
                     Column {
                         Text(
                             text = "Nouvelle version disponible",
@@ -237,14 +229,6 @@ fun ForceUpdateModal(
     
     AlertDialog(
         onDismissRequest = { /* Cannot dismiss force update */ },
-        icon = {
-            Icon(
-                imageVector = Icons.Default.ArrowDownward,
-                contentDescription = "Update",
-                modifier = Modifier.size(48.dp),
-                tint = MaterialTheme.colorScheme.primary
-            )
-        },
         title = {
             Text(
                 text = "Mise à jour obligatoire",
