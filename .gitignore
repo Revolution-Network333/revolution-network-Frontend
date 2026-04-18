@@ -28,6 +28,7 @@ ios-node/
 mobile-update-service/
 revolution-sdk/
 !QR code mobile.png
+!Capture d'écran 2026-04-18 030136.png
 
 # Backend - garder en local
 *.env
