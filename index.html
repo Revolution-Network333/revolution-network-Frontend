@@ -4879,6 +4879,7 @@ main();</code></pre>
                                 <th>Grade</th>
                                 <th>Points</th>
                                 <th>Referrals</th>
+                                <th>Parrainage</th>
                                 <th>Tasks</th>
                                 <th>Aether</th>
                                 <th>Jours Actifs</th>
@@ -4923,6 +4924,29 @@ main();</code></pre>
                             </div>
                         </div>
                     </div>
+                    <!-- Referral Modal -->
+                    <div class="modal" id="referral-modal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="section-title">Lier Compte Parrainage</h2>
+                                <button class="close-btn" onclick="closeReferralModal()">&times;</button>
+                            </div>
+                            <div class="form-grid">
+                                <input type="hidden" id="referral-referred-username">
+                                <div>
+                                    <label>Utilisateur Filleul</label>
+                                    <input type="text" id="referral-referred-display" readonly style="background:#374151;">
+                                </div>
+                                <div>
+                                    <label>Username Parrain</label>
+                                    <div style="display:flex;gap:8px;">
+                                        <input type="text" id="referral-referrer-username" placeholder="Username du parrain">
+                                        <button class="profile-btn" onclick="linkReferral()">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             `;
         }
@@ -4951,6 +4975,7 @@ main();</code></pre>
                         </td>
                         <td>${u.points || 0}</td>
                         <td>${u.referral_count || 0}</td>
+                        <td><button class="chip-btn" data-action="referral" data-username="${u.username}" data-id="${u.id}">Parrainage</button></td>
                         <td>${u.tasks_completed || 0}</td>
                         <td style="color:#86efac; font-weight:bold;">${parseFloat(u.balance_ath || 0).toLocaleString()} ATH</td>
                         <td>${u.active_days || 0}</td>
@@ -5023,16 +5048,16 @@ main();</code></pre>
                         } else if (action === 'bonus') {
                             openBonusModal(id);
                         } else if (action === 'edit-points') {
-                            const curCell = b.closest('tr')?.querySelector('td:nth-child(6)');
+                            const curCell = b.closest('tr')?.querySelector('td:nth-child(7)');
                             const current = curCell ? parseFloat(curCell.textContent.replace(/[^0-9.-]/g,'')) : null;
                             const v = prompt(`Nouveau total de points${current!=null?` (actuel: ${current})`:''} :`);
                             if (v !== null && v.trim() !== '') {
                                 const newPoints = parseFloat(v);
                                 if (!Number.isNaN(newPoints)) {
                                     b.disabled = true;
-                                    fetch(`${API_BASE}/api/admin/users/${id}/set-points`, { 
+                                    fetch(`${API_BASE}/api/admin/users/${id}/set-points`, {
                                         method: 'POST',
-                                        headers: { 'Content-Type':'application/json','Authorization': `Bearer ${token}` }, 
+                                        headers: { 'Content-Type':'application/json','Authorization': `Bearer ${token}` },
                                         body: JSON.stringify({ points: newPoints })
                                     })
                                     .then(async r => {
@@ -5048,6 +5073,9 @@ main();</code></pre>
                                     .finally(() => { b.disabled = false; });
                                 }
                             }
+                        } else if (action === 'referral') {
+                            const username = b.getAttribute('data-username');
+                            openReferralModal(username);
                         }
                     });
                 });
@@ -5095,6 +5123,51 @@ main();</code></pre>
             })
             .finally(()=>{ if (btn) btn.disabled = false; })
             .catch(e => alert('Erreur: ' + e.message));
+        }
+
+        window.openReferralModal = function(referredUsername) {
+            document.getElementById('referral-referred-username').value = referredUsername;
+            document.getElementById('referral-referred-display').value = referredUsername;
+            document.getElementById('referral-referrer-username').value = '';
+            document.getElementById('referral-modal').classList.add('open');
+        }
+        window.closeReferralModal = function() {
+            document.getElementById('referral-modal').classList.remove('open');
+        }
+        window.linkReferral = function() {
+            const referredUsername = document.getElementById('referral-referred-username').value;
+            const referrerUsername = document.getElementById('referral-referrer-username').value;
+            const token = localStorage.getItem('token');
+
+            if (!referrerUsername || !referrerUsername.trim()) {
+                alert('Veuillez entrer le username du parrain');
+                return;
+            }
+
+            const btn = document.querySelector('#referral-modal .modal-content button.profile-btn');
+            if (btn) btn.disabled = true;
+
+            fetch(`${API_BASE}/api/admin/link-referral`, {
+                method: 'POST',
+                headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ referredUsername, referrerUsername })
+            })
+            .then(async r => {
+                const j = await r.json().catch(()=>({}));
+                if (!r.ok) throw new Error(j.error || 'Erreur serveur');
+                return j;
+            })
+            .then(data => {
+                alert(data.message || 'Parrainage lié avec succès');
+                closeReferralModal();
+                initializeAdminLeaderboardPage();
+            })
+            .catch(err => {
+                alert(err.message || 'Erreur lors de la liaison du parrainage');
+            })
+            .finally(() => {
+                if (btn) btn.disabled = false;
+            });
         }
 
         function showUserDetail(id) {
