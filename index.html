@@ -4165,16 +4165,37 @@ main();</code></pre>
                     </div>
 
                     
-                    <div class="api-card" style="margin-top:16px;">
-                            <h3 style="margin:0 0 8px 0;">Types de jobs supportés</h3>
-                            <div style="background:#0b0f14; border:1px solid #1f2937; border-radius:8px; padding:12px; color:#9ca3af;">
-                                <ul style="margin:0; padding-left:18px; line-height:1.8;">
-                                    <li><strong>Image:</strong> image_svg_generate (génère un SVG avec texte)</li>
-                                    <li><strong>Vidéo:</strong> video_transcode (via ffmpeg si présent)</li>
-                                    <li><strong>Audio:</strong> audio_convert (via ffmpeg)</li>
-                                    <li><strong>Texte:</strong> text_transform, text_generate_template</li>
-                                    <li><strong>Code:</strong> code_run_js (sandbox VM, timeout)</li>
-                                </ul>
+                    <div class="api-card glass-card neon-border-white" style="margin-top:16px; padding:24px;">
+                            <h3 style="margin:0 0 16px 0; color:#fff; font-size:1.2rem; display:flex; align-items:center; gap:10px;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                                Coûts estimés par type de job
+                            </h3>
+                            <div style="color:#9ca3af; font-size:0.85rem; margin-bottom:14px;">La consommation est déduite de votre forfait mensuel.</div>
+                            <div class="table-container futuristic-table">
+                                <table class="data-table" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:left;">Type de Job</th>
+                                            <th style="text-align:left;">Description</th>
+                                            <th style="text-align:right;">Coût estimé</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>🖼️ <strong>image_svg_generate</strong></td><td style="color:#9ca3af;">Génération SVG avec texte</td><td style="text-align:right; color:#86efac; font-weight:600;">~2 MB</td></tr>
+                                        <tr><td>🎥 <strong>video_transcode</strong></td><td style="color:#9ca3af;">Transcodage vidéo (ffmpeg)</td><td style="text-align:right; color:#fbbf24; font-weight:600;">~500 MB / min</td></tr>
+                                        <tr><td>🎵 <strong>audio_convert</strong></td><td style="color:#9ca3af;">Conversion audio (ffmpeg)</td><td style="text-align:right; color:#fbbf24; font-weight:600;">~50 MB / min</td></tr>
+                                        <tr><td>📝 <strong>text_transform</strong></td><td style="color:#9ca3af;">Transformation de texte</td><td style="text-align:right; color:#86efac; font-weight:600;">~1 MB</td></tr>
+                                        <tr><td>📄 <strong>text_generate_template</strong></td><td style="color:#9ca3af;">Génération de template</td><td style="text-align:right; color:#86efac; font-weight:600;">~1 MB</td></tr>
+                                        <tr><td>⚙️ <strong>code_run_js</strong></td><td style="color:#9ca3af;">Exécution JS (sandbox VM)</td><td style="text-align:right; color:#86efac; font-weight:600;">~5 MB</td></tr>
+                                        <tr><td>🔍 <strong>http_get</strong></td><td style="color:#9ca3af;">Analyse Web simple</td><td style="text-align:right; color:#86efac; font-weight:600;">~1 MB</td></tr>
+                                        <tr><td>🧪 <strong>content_check</strong></td><td style="color:#9ca3af;">Vérification de contenu</td><td style="text-align:right; color:#86efac; font-weight:600;">~5 MB</td></tr>
+                                        <tr><td>📄 <strong>ocr_pdf</strong></td><td style="color:#9ca3af;">OCR / Extraction PDF</td><td style="text-align:right; color:#60a5fa; font-weight:600;">~20 MB</td></tr>
+                                        <tr><td>📊 <strong>data_processing</strong></td><td style="color:#9ca3af;">Traitement de données</td><td style="text-align:right; color:#fbbf24; font-weight:600;">~100 MB</td></tr>
+                                        <tr><td>📈 <strong>csv_stats</strong></td><td style="color:#9ca3af;">Statistiques CSV</td><td style="text-align:right; color:#60a5fa; font-weight:600;">~10 MB</td></tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -5244,69 +5265,6 @@ main();</code></pre>
 
                     
 
-                    <div class="api-section">
-                        <h2 class="section-title">Coûts estimés par volume</h2>
-                        <div class="section-info-bubble">La consommation est déduite de votre forfait mensuel.</div>
-                        <div class="api-card">
-                            <div class="costs-list">
-                                <div class="cost-item">
-                                    <span class="cost-icon">🔍</span>
-                                    <span class="cost-label">Analyse Web simple</span>
-                                    <span class="cost-value">~1 MB</span>
-                                </div>
-                                <div class="cost-item">
-                                    <span class="cost-icon">🖼️</span>
-                                    <span class="cost-label">Traitement d'image</span>
-                                    <span class="cost-value">~2 MB</span>
-                                </div>
-                                <div class="cost-item">
-                                    <span class="cost-icon">🧪</span>
-                                    <span class="cost-label">Vérification de contenu</span>
-                                    <span class="cost-value">~5 MB</span>
-                                </div>
-                                <div class="cost-item">
-                                    <span class="cost-icon">📈</span>
-                                    <span class="cost-label">Statistiques CSV</span>
-                                    <span class="cost-value">~10 MB</span>
-                                </div>
-                                <div class="cost-item">
-                                    <span class="cost-icon">🎵</span>
-                                    <span class="cost-label">Conversion Audio</span>
-                                    <span class="cost-value">~50 MB / min</span>
-                                </div>
-                                <div class="cost-item">
-                                    <span class="cost-icon">🎥</span>
-                                    <span class="cost-label">Encodage Vidéo</span>
-                                    <span class="cost-value">~500 MB / min</span>
-                                </div>
-                                <div class="cost-item">
-                                    <span class="cost-icon">📄</span>
-                                    <span class="cost-label">OCR / PDF</span>
-                                    <span class="cost-value">~20 MB</span>
-                                </div>
-                                <div class="cost-item">
-                                    <span class="cost-icon">📊</span>
-                                    <span class="cost-label">Traitement de données</span>
-                                    <span class="cost-value">~100 MB</span>
-                                </div>
-                                <div class="cost-item">
-                                    <span class="cost-icon">📝</span>
-                                    <span class="cost-label">Transformation texte</span>
-                                    <span class="cost-value">~1 MB</span>
-                                </div>
-                                <div class="cost-item">
-                                    <span class="cost-icon">📄</span>
-                                    <span class="cost-label">Génération template</span>
-                                    <span class="cost-value">~1 MB</span>
-                                </div>
-                                <div class="cost-item">
-                                    <span class="cost-icon">⚙️</span>
-                                    <span class="cost-label">Exécution de code JS</span>
-                                    <span class="cost-value">~5 MB</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             `;
         }
