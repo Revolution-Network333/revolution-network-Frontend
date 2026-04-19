@@ -3461,7 +3461,7 @@ main();</code></pre>
                                     </div>
                                     <div class="profile-field">
                                         <label for="email">${t('profile.email')}</label>
-                                        <input type="email" id="email" name="email" readonly>
+                                        <input type="email" id="email" name="email">
                                     </div>
                                     <div class="profile-field">
                                         <label for="solana_address">${t('profile.solana')}</label>
@@ -3951,6 +3951,7 @@ main();</code></pre>
                 e.preventDefault();
                 const payload = {
                     username: usernameInput.value,
+                    email: emailInput.value,
                     solana_address: solanaInput.value
                 };
 
