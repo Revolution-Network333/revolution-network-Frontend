@@ -3466,7 +3466,7 @@ main();</code></pre>
                                     <div class="profile-field">
                                         <label for="solana_address">${t('profile.solana')}</label>
                                         <div style="display: flex; gap: 8px;">
-                                            <input type="text" id="solana_address" name="solana_address" readonly>
+                                            <input type="text" id="solana_address" name="solana_address" placeholder="4P4oWnPgW9DHk251scY5ndo9J4HjEiyKPUgchwrRKC9o">
                                             <button type="button" id="connect-wallet-btn" class="profile-btn secondary" style="white-space: nowrap;">Connecter Wallet</button>
                                         </div>
                                     </div>
@@ -3578,12 +3578,12 @@ main();</code></pre>
                 connectWalletBtn.addEventListener('click', async () => {
                     try {
                         // Détection multi-wallet : Phantom, Backpack, Solflare, etc.
-                        const provider = window.phantom?.solana || window.solana || window.backpack || window.solflare;
-
+                        let provider = window.phantom?.solana || window.solana || window.backpack?.solana || window.solflare?.solana;
+                        
+                        // Si pas de provider, essayer d'ouvrir Phantom directement
                         if (!provider) {
-                            if (confirm('Aucun wallet Solana détecté.\nVoulez-vous installer Phantom ?')) {
-                                window.open('https://phantom.app/', '_blank');
-                            }
+                            alert('Aucun wallet Solana détecté. Installation de Phantom recommandée.');
+                            window.open('https://phantom.app/', '_blank');
                             return;
                         }
 
@@ -3593,15 +3593,29 @@ main();</code></pre>
                         let publicKey;
 
                         // Connexion selon le provider
-                        if (provider.connect) {
-                            const resp = await provider.connect();
-                            publicKey = resp.publicKey?.toString() || resp.toString();
-                        } else if (provider.request) {
-                            const accounts = await provider.request({ method: 'connect' });
-                            publicKey = accounts?.publicKey?.toString();
+                        try {
+                            if (provider.connect) {
+                                const resp = await provider.connect();
+                                publicKey = resp.publicKey?.toString() || resp.toString();
+                            } else if (provider.request) {
+                                const accounts = await provider.request({ method: 'connect' });
+                                publicKey = accounts?.publicKey?.toString();
+                            }
+                        } catch (connectErr) {
+                            // Si la connexion échoue, essayer d'ouvrir Phantom
+                            console.error('Wallet connection error:', connectErr);
+                            alert('Erreur de connexion au wallet. Veuillez vérifier que votre wallet est déverrouillé.');
+                            connectWalletBtn.textContent = 'Connecter Wallet';
+                            connectWalletBtn.disabled = false;
+                            return;
                         }
 
-                        if (!publicKey) throw new Error('Adresse wallet non récupérée');
+                        if (!publicKey) {
+                            alert('Impossible de récupérer l\'adresse du wallet.');
+                            connectWalletBtn.textContent = 'Connecter Wallet';
+                            connectWalletBtn.disabled = false;
+                            return;
+                        }
 
                         solanaInput.value = publicKey;
 
@@ -3631,7 +3645,10 @@ main();</code></pre>
                                 connectWalletBtn.disabled = false;
                             }, 2000);
                         } else {
-                            throw new Error(data.error || 'Erreur serveur');
+                            // Si erreur backend, on affiche quand même l'adresse dans l'input
+                            alert('Adresse connectée: ' + publicKey + '\nErreur sauvegarde: ' + (data.error || 'Erreur serveur'));
+                            connectWalletBtn.textContent = 'Connecter Wallet';
+                            connectWalletBtn.disabled = false;
                         }
 
                     } catch (err) {
@@ -3639,8 +3656,6 @@ main();</code></pre>
                         // Gestion erreur user rejection
                         if (err.code === 4001 || err.message?.includes('rejected') || err.message?.includes('cancelled')) {
                             alert('Connexion annulée par l\'utilisateur.');
-                        } else if (err.message?.includes('utilisateur non trouvé') || err.message?.includes('not found')) {
-                            alert('Erreur: utilisateur non trouvé. Assurez-vous d\'être connecté à votre compte.');
                         } else {
                             alert('Erreur: ' + (err.message || 'Inconnue'));
                         }
