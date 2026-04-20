@@ -1715,9 +1715,12 @@
                 window.enterpriseStatsInterval = null;
             }
 
-            await ensureValidSession();
+            const publicPages = ['login', 'leaderboard', 'docs', 'tasks', 'wallet', 'support', 'download'];
+            if (!publicPages.includes(page)) {
+                await ensureValidSession();
+            }
             const token = localStorage.getItem('token');
-            currentPage = (!token && page !== 'login') ? 'login' : page;
+            currentPage = (!token && !publicPages.includes(page)) ? 'login' : page;
             
             // Mettre à jour les classes active
             document.querySelectorAll('.menu-item').forEach(item => {
@@ -4754,6 +4757,12 @@ main();</code></pre>
                               }).catch(()=>{ timerEl.textContent = t('tasks.error'); });
                             return;
                         }
+                        if (!token) {
+                            if (url) window.open(url, '_blank');
+                            alert('Connectez-vous pour valider cette task.');
+                            openLoginPanel();
+                            return;
+                        }
                         try { if (url) window.open(url, '_blank'); } catch {}
                         const timerEl = document.getElementById(`task-timer-${id}`);
                         let s = 30;
@@ -6723,6 +6732,17 @@ function initializeShopPage() {
         }
         function initializeWalletPage() {
             const token = localStorage.getItem('token');
+            if (!token) {
+                const content = document.querySelector('.futuristic-wallet');
+                if (content) {
+                    content.style.position = 'relative';
+                    const overlay = document.createElement('div');
+                    overlay.style.cssText = 'position:absolute;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;border-radius:12px;';
+                    overlay.innerHTML = '<div style="text-align:center;"><h2 style="color:#e5e7eb;margin-bottom:12px;">Connectez-vous pour utiliser le Wallet</h2><p style="color:#9ca3af;margin-bottom:20px;">Vous devez être connecté pour accéder à vos fonds.</p><button class="profile-btn primary" onclick="openLoginPanel()" style="padding:12px 32px;font-size:1rem;">Se connecter</button></div>';
+                    content.appendChild(overlay);
+                }
+                return;
+            }
             const balEl = document.getElementById('wallet-balance');
             const stakeBalEl = document.getElementById('stake-wallet-balance');
             const stakeInfo = document.getElementById('stake-info');
@@ -7363,9 +7383,12 @@ function initializeShopPage() {
                 return;
             }
             
-            if (!token) {
+            const publicPages = ['leaderboard', 'docs', 'tasks', 'wallet', 'support', 'download'];
+            if (!token && pageParam && publicPages.includes(pageParam)) {
+                currentPage = pageParam;
+            } else if (!token) {
                 currentPage = 'login';
-            } else if (pageParam && ['overview', 'nodes', 'referrals', 'profile', 'shop', 'download', 'enterpriseApi', 'tasks', 'wallet', 'leaderboard'].includes(pageParam)) {
+            } else if (pageParam && ['overview', 'nodes', 'referrals', 'profile', 'shop', 'download', 'enterpriseApi', 'tasks', 'wallet', 'leaderboard', 'docs', 'support'].includes(pageParam)) {
                 currentPage = pageParam;
             }
             
@@ -7464,6 +7487,16 @@ function initializeShopPage() {
 
         function initializeSupportPage() {
             if (supportPollInterval) clearInterval(supportPollInterval);
+            const token = localStorage.getItem('token');
+            if (!token) {
+                const container = document.getElementById('support-view-container');
+                if (container) {
+                    container.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;"><h2 style="color:#e5e7eb;margin-bottom:12px;">Connectez-vous pour contacter le support</h2><p style="color:#9ca3af;margin-bottom:20px;">Vous devez être connecté pour créer un ticket.</p><button class="profile-btn primary" onclick="openLoginPanel()" style="padding:12px 32px;font-size:1rem;">Se connecter</button></div>';
+                }
+                const btn = document.getElementById('btn-new-ticket');
+                if (btn) btn.style.display = 'none';
+                return;
+            }
             loadUserTickets();
             const btn = document.getElementById('btn-new-ticket');
             if(btn) btn.addEventListener('click', () => {
