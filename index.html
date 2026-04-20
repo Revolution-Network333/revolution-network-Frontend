@@ -4258,8 +4258,19 @@ main();</code></pre>
                     const k = document.getElementById('api-key-value');
                     if (k && data.apiKeyMasked) k.textContent = data.apiKeyMasked;
                     
-                    // We can use data.usage here if we want to show quota somewhere else
-                    // For now, let's keep the dashboard focused on the 3 main cards
+                    // Update credits display
+                    const creditsEl = document.getElementById('api-credits');
+                    if (creditsEl && data.freeTier) {
+                        const usedMB = Number(data.freeTier.usedGB || 0) * 1024;
+                        const remainMB = Number(data.freeTier.remainingGB || 0) * 1024;
+                        const usedGB = Number(data.freeTier.usedGB || 0).toFixed(2);
+                        const remainGB = Number(data.freeTier.remainingGB || 0).toFixed(2);
+                        let txt = `${usedGB} GB utilisés / ${remainGB} GB restants (Free: ${data.freeTier.weeklyLimitGB || 3} GB/sem)`;
+                        if (data.usage && Number(data.usage.remainingGB || 0) > 0) {
+                            txt += ` + ${Number(data.usage.remainingGB).toFixed(2)} GB payants`;
+                        }
+                        creditsEl.textContent = txt;
+                    }
                     
                     if (data.requireSubscription && !document.getElementById('subscription-modal')) {
                         const modalHtml = getEnterpriseSubscriptionModalHTML(data.plans || []);
