@@ -1644,10 +1644,18 @@
             if (!token) return false;
 
             const expMs = getJwtExpMs(token);
-            if (!expMs || (expMs - Date.now()) > 60_000) return true;
+            const timeLeft = expMs ? (expMs - Date.now()) : null;
+            if (timeLeft === null || timeLeft > 60_000) return true;
 
             const rt = localStorage.getItem('refreshToken');
-            if (!rt) return true;
+            if (!rt) {
+                if (timeLeft !== null && timeLeft <= 0) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('refreshToken');
+                    return false;
+                }
+                return true;
+            }
 
             if (!tokenRefreshPromise) {
                 tokenRefreshPromise = fetch(`${API_BASE}/api/auth/refresh`, {
