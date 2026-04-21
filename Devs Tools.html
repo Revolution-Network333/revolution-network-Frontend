@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revolution API — Playground</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#080810;--s1:#0d0d1a;--s2:#12121f;--s3:#181828;
+  --b1:#1f1f35;--b2:#2a2a45;--b3:#35355a;
+  --acc:#00e5ff;--acc2:#00b8cc;--acc3:#007a8a;
+  --warn:#ffb020;--err:#ff4d6a;--ok:#00e5a0;
+  --txt:#dde0f0;--txt2:#8888aa;--txt3:#4a4a70;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);display:flex;flex-direction:column;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:.5;}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;gap:0;background:var(--s1);border-bottom:1px solid var(--b1);height:52px;padding:0 18px;flex-shrink:0;z-index:10;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--acc);margin-right:16px;white-space:nowrap;}
+.plan-badge{font-size:10px;font-family:'IBM Plex Mono',monospace;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);color:var(--acc);border-radius:4px;padding:3px 9px;margin-right:auto;letter-spacing:1px;text-transform:uppercase;}
+.quota-wrap{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;}
+.quota-block{display:flex;flex-direction:column;gap:3px;}
+.quota-row{display:flex;align-items:center;gap:6px;}
+.quota-label{color:var(--txt3);font-size:9px;letter-spacing:.5px;min-width:32px;}
+.quota-label.free-lbl{color:var(--acc);}
+.quota-label.paid-lbl{color:#b48aff;}
+.quota-bar-outer{width:90px;height:4px;background:var(--b2);border-radius:3px;overflow:hidden;}
+.quota-bar-inner{height:100%;background:linear-gradient(90deg,var(--acc3),var(--acc));border-radius:3px;transition:width .5s ease;}
+.quota-bar-inner.warn{background:linear-gradient(90deg,#b35a00,var(--warn));}
+.quota-bar-inner.crit{background:linear-gradient(90deg,#8a0020,var(--err));}
+.quota-bar-inner.paid{background:linear-gradient(90deg,#6a3aaa,#b48aff);}
+.quota-bar-inner.paid.crit{background:linear-gradient(90deg,#8a0020,var(--err));}
+.quota-val{color:var(--txt);min-width:80px;font-size:10px;}
+.quota-loading{font-size:9px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;animation:pulse-quota 1.2s ease-in-out infinite;}
+@keyframes pulse-quota{0%,100%{opacity:.4;}50%{opacity:1;}}
+.quota-refresh{background:none;border:none;color:var(--txt3);cursor:pointer;font-size:11px;padding:2px 4px;border-radius:3px;transition:color .15s;line-height:1;}
+.quota-refresh:hover{color:var(--acc);}
+.sep{width:1px;height:20px;background:var(--b2);margin:0 12px;}
+.key-wrap{display:flex;align-items:center;gap:6px;}
+.key-label{font-size:10px;color:var(--txt2);font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+.key-input{background:var(--s3);border:1px solid var(--b2);border-radius:6px;color:var(--txt);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:6px 10px;outline:none;width:200px;transition:border-color .2s;}
+.key-input:focus{border-color:var(--acc);}
+.key-eye{background:none;border:1px solid var(--b2);border-radius:6px;color:var(--txt2);cursor:pointer;padding:5px 8px;font-size:13px;line-height:1;transition:all .15s;}
+.key-eye:hover{border-color:var(--acc);color:var(--acc);}
+.key-status{font-size:9px;font-family:'IBM Plex Mono',monospace;padding:3px 8px;border-radius:4px;white-space:nowrap;}
+.key-status.ok{background:rgba(0,229,160,.1);color:var(--ok);}
+.key-status.err{background:rgba(255,77,106,.1);color:var(--err);}
+.key-status.none{background:rgba(255,176,32,.1);color:var(--warn);}
+
+/* BODY */
+.body{display:flex;flex:1;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{width:235px;min-width:235px;background:var(--s1);border-right:1px solid var(--b1);display:flex;flex-direction:column;overflow:hidden;}
+.sidebar-head{padding:11px 14px 8px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);font-family:'IBM Plex Mono',monospace;border-bottom:1px solid var(--b1);}
+.job-list{flex:1;overflow-y:auto;padding:5px;}
+.job-list::-webkit-scrollbar{width:2px;}
+.job-list::-webkit-scrollbar-thumb{background:var(--b2);}
+.job-btn{width:100%;display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:7px;border:1px solid transparent;background:none;cursor:pointer;text-align:left;margin-bottom:2px;transition:all .15s;position:relative;}
+.job-btn:hover{background:var(--s3);border-color:var(--b1);}
+.job-btn.active{background:rgba(0,229,255,.05);border-color:rgba(0,229,255,.2);}
+.job-btn.disabled{opacity:.3;cursor:not-allowed;}
+.job-btn.disabled::after{content:'OFF';font-size:8px;font-family:'IBM Plex Mono',monospace;background:rgba(255,77,106,.15);color:var(--err);border:1px solid rgba(255,77,106,.3);border-radius:3px;padding:1px 5px;position:absolute;right:7px;top:50%;transform:translateY(-50%);}
+.job-emoji{font-size:16px;min-width:22px;text-align:center;}
+.job-info{flex:1;min-width:0;}
+.job-name{font-size:11px;font-weight:600;color:var(--txt);font-family:'IBM Plex Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.job-btn.active .job-name{color:var(--acc);}
+.job-cost{font-size:9px;color:var(--txt3);margin-top:1px;}
+.limits-note{padding:9px 12px;border-top:1px solid var(--b1);font-size:9px;font-family:'IBM Plex Mono',monospace;color:var(--txt3);line-height:1.8;}
+.limits-note span{color:var(--warn);}
+
+/* MAIN */
+.main{flex:1;display:flex;overflow:hidden;}
+.panel{display:flex;flex-direction:column;overflow:hidden;flex:1;}
+.panel-bar{padding:9px 16px;border-bottom:1px solid var(--b1);background:var(--s1);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.panel-label{font-size:9px;font-family:'IBM Plex Mono',monospace;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);display:flex;align-items:center;gap:7px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--acc);box-shadow:0 0 6px var(--acc);}
+.dot.green{background:var(--ok);box-shadow:0 0 6px var(--ok);}
+.panel-hint{font-size:10px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;}
+.panel-divider{width:1px;background:var(--b1);flex-shrink:0;}
+
+/* FORM */
+.form-scroll{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:13px;}
+.form-scroll::-webkit-scrollbar{width:3px;}
+.form-scroll::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field-lbl{font-size:10px;color:var(--txt2);font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;gap:5px;}
+.req{color:var(--err);}
+.opt{font-size:8px;background:var(--b1);border-radius:3px;padding:1px 5px;color:var(--txt3);}
+.f-input,.f-select,.f-ta{background:var(--s3);border:1px solid var(--b2);border-radius:7px;color:var(--txt);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:9px 12px;outline:none;transition:border-color .2s,box-shadow .2s;width:100%;}
+.f-input:focus,.f-select:focus,.f-ta:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(0,229,255,.05);}
+.f-select{cursor:pointer;}
+.f-select option{background:var(--s2);}
+.f-ta{resize:vertical;min-height:78px;}
+.f-hint{font-size:10px;color:var(--txt3);}
+.range-row{display:flex;align-items:center;gap:10px;}
+.range-row input[type=range]{flex:1;-webkit-appearance:none;height:4px;background:var(--b2);border-radius:2px;outline:none;cursor:pointer;}
+.range-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--acc);cursor:pointer;box-shadow:0 0 6px var(--acc);}
+.range-val{font-size:11px;color:var(--acc);min-width:32px;text-align:right;font-family:'IBM Plex Mono',monospace;}
+.file-zone{border:1.5px dashed var(--b2);border-radius:8px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;background:var(--s2);}
+.file-zone:hover,.file-zone.over{border-color:var(--acc);background:rgba(0,229,255,.03);}
+.fz-icon{font-size:20px;margin-bottom:4px;}
+.fz-txt{font-size:11px;color:var(--txt2);}
+.fz-txt em{color:var(--acc);font-style:normal;}
+.fz-name{font-size:10px;color:var(--acc);margin-top:4px;font-family:'IBM Plex Mono',monospace;}
+
+/* FORM FOOTER */
+.form-foot{padding:11px 16px;border-top:1px solid var(--b1);background:var(--s1);display:flex;align-items:center;gap:9px;flex-shrink:0;}
+.btn-run{background:var(--acc3);color:#fff;border:none;border-radius:7px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;padding:10px 20px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s;letter-spacing:.5px;}
+.btn-run:hover{background:var(--acc2);box-shadow:0 0 16px rgba(0,229,255,.25);transform:translateY(-1px);}
+.btn-run:active{transform:translateY(0);}
+.btn-run:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.spinner{width:11px;height:11px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none;}
+.btn-run.loading .spinner{display:block;}
+.btn-run.loading .run-txt{display:none;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.btn-sec{background:none;border:1px solid var(--b2);border-radius:7px;color:var(--txt2);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:9px 13px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;}
+.btn-sec:hover{border-color:var(--acc);color:var(--acc);}
+.ep-label{font-size:10px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;margin-left:auto;}
+
+/* OUTPUT */
+.out-tabs{display:flex;background:var(--s1);border-bottom:1px solid var(--b1);padding:0 14px;gap:2px;flex-shrink:0;}
+.out-tab{font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:.5px;text-transform:uppercase;padding:9px 12px;cursor:pointer;color:var(--txt3);border-bottom:2px solid transparent;transition:all .15s;}
+.out-tab.active{color:var(--acc);border-bottom-color:var(--acc);}
+.out-tab:hover:not(.active){color:var(--txt2);}
+.out-body{flex:1;overflow:auto;position:relative;}
+.out-body::-webkit-scrollbar{width:3px;}
+.out-body::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;color:var(--txt3);}
+.empty-icon{font-size:34px;opacity:.3;}
+.empty-txt{font-size:11px;font-family:'IBM Plex Mono',monospace;}
+.json-pre{font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.75;padding:16px 18px;white-space:pre-wrap;word-break:break-all;}
+.jk{color:var(--acc);}.js{color:#ffd080;}.jn{color:#80c8ff;}.jb{color:#c080ff;}.jnull{color:var(--txt3);}
+.code-pre{font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.75;padding:16px 18px;white-space:pre;overflow-x:auto;color:var(--txt2);}
+.copy-btn{position:absolute;top:12px;right:14px;background:var(--s3);border:1px solid var(--b2);border-radius:5px;color:var(--txt2);font-size:9px;font-family:'IBM Plex Mono',monospace;padding:4px 9px;cursor:pointer;letter-spacing:.5px;z-index:2;transition:all .15s;}
+.copy-btn:hover{border-color:var(--acc);color:var(--acc);}
+.status-bar{padding:6px 16px;border-top:1px solid var(--b1);background:var(--s1);display:flex;align-items:center;gap:14px;font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--txt3);flex-shrink:0;}
+.st{display:flex;align-items:center;gap:4px;}
+.st.ok{color:var(--ok);}.st.err{color:var(--err);}.st.pending{color:var(--warn);}
+.st-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* HISTORY PANEL */
+.history-panel{width:250px;min-width:250px;background:var(--s1);border-left:1px solid var(--b1);display:flex;flex-direction:column;overflow:hidden;}
+.history-head{padding:9px 12px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;}
+.history-label{font-size:9px;font-family:'IBM Plex Mono',monospace;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);}
+.history-clear{font-size:9px;font-family:'IBM Plex Mono',monospace;background:none;border:none;color:var(--txt3);cursor:pointer;padding:2px 6px;border-radius:3px;transition:color .15s;}
+.history-clear:hover{color:var(--err);}
+.history-list{flex:1;overflow-y:auto;padding:5px;}
+.history-list::-webkit-scrollbar{width:2px;}
+.history-list::-webkit-scrollbar-thumb{background:var(--b2);}
+.hist-item{padding:9px 10px;border-radius:7px;border:1px solid var(--b1);background:var(--s2);margin-bottom:4px;cursor:pointer;transition:all .15s;}
+.hist-item:hover{border-color:var(--b3);}
+.hist-item.active-hist{border-color:rgba(0,229,255,.3);background:rgba(0,229,255,.04);}
+.hist-row1{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
+.hist-type{font-size:10px;font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--txt);}
+.hbadge{font-size:8px;font-family:'IBM Plex Mono',monospace;padding:2px 6px;border-radius:3px;letter-spacing:.5px;text-transform:uppercase;}
+.hbadge.pending{background:rgba(255,176,32,.1);color:var(--warn);}
+.hbadge.running{background:rgba(0,229,255,.1);color:var(--acc);}
+.hbadge.completed{background:rgba(0,229,160,.1);color:var(--ok);}
+.hbadge.failed{background:rgba(255,77,106,.1);color:var(--err);}
+.hist-id{font-size:9px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;margin-bottom:2px;word-break:break-all;}
+.hist-time{font-size:9px;color:var(--txt3);}
+@keyframes pulse-border{0%,100%{border-color:rgba(0,229,255,.2);}50%{border-color:rgba(0,229,255,.5);}}
+.running-anim{animation:pulse-border 1.4s ease-in-out infinite;}
+
+/* TOAST */
+.toast{position:fixed;bottom:16px;right:16px;background:var(--s3);border:1px solid var(--acc);border-radius:8px;padding:9px 15px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--acc);z-index:1000;opacity:0;transform:translateY(6px);transition:all .25s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.err{border-color:var(--err);color:var(--err);}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{animation:fadeIn .3s ease forwards;}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">REVOLUTION</div>
+  <div class="plan-badge">FREE PLAN</div>
+  <div class="quota-wrap">
+    <div class="quota-block" id="quotaBlock">
+      <div class="quota-loading" id="quotaLoading">— enter API key to load quota —</div>
+      <div id="quotaRows" style="display:none;">
+        <div class="quota-row">
+          <span class="quota-label free-lbl">FREE</span>
+          <div class="quota-bar-outer"><div class="quota-bar-inner" id="quotaBarFree" style="width:0%"></div></div>
+          <span class="quota-val" id="quotaValFree">— / 3 GB</span>
+        </div>
+        <div class="quota-row" id="paidRow" style="display:none;">
+          <span class="quota-label paid-lbl">PAID</span>
+          <div class="quota-bar-outer"><div class="quota-bar-inner paid" id="quotaBarPaid" style="width:0%"></div></div>
+          <span class="quota-val" id="quotaValPaid">— / —</span>
+        </div>
+      </div>
+    </div>
+    <button class="quota-refresh" id="quotaRefreshBtn" onclick="fetchQuota()" title="Refresh quota" style="display:none;">↻</button>
+  </div>
+  <div class="sep"></div>
+  <div class="key-wrap">
+    <span class="key-label">x-api-key</span>
+    <input type="password" class="key-input" id="keyInput" placeholder="your-api-key-here" oninput="onKeyInput()">
+    <button class="key-eye" onclick="toggleKey()">👁</button>
+    <span class="key-status none" id="keyStatus">NO KEY</span>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="body">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-head">Job Types</div>
+    <div class="job-list" id="jobList"></div>
+    <div class="limits-note">
+      <div>⚡ <span>0.2 GB</span> max / job</div>
+      <div>⏱ <span>30 req</span> / minute</div>
+      <div id="videoLimitNote">🎥 Video <span>requires paid credits</span></div>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="main">
+    <!-- FORM -->
+    <div class="panel" style="max-width:400px;min-width:300px;">
+      <div class="panel-bar">
+        <div class="panel-label"><span class="dot"></span> PARAMS</div>
+        <div class="panel-hint" id="jobCostHint">—</div>
+      </div>
+      <div class="form-scroll" id="formScroll"></div>
+      <div class="form-foot">
+        <button class="btn-run" id="runBtn" onclick="runJob()">
+          <span class="spinner"></span>
+          <span class="run-txt">▶ Create Job</span>
+        </button>
+        <button class="btn-sec" onclick="copyPayload()">{ } JSON</button>
+        <span class="ep-label">POST /api/enterprise/v1/jobs</span>
+      </div>
+    </div>
+
+    <div class="panel-divider"></div>
+
+    <!-- OUTPUT -->
+    <div class="panel">
+      <div class="panel-bar">
+        <div class="panel-label"><span class="dot green"></span> RESPONSE</div>
+        <div class="panel-hint" id="respMeta"></div>
+      </div>
+      <div class="out-tabs">
+        <div class="out-tab active" onclick="switchTab('json',this)">JSON</div>
+        <div class="out-tab" onclick="switchTab('curl',this)">cURL</div>
+        <div class="out-tab" onclick="switchTab('node',this)">Node.js</div>
+        <div class="out-tab" onclick="switchTab('python',this)">Python</div>
+      </div>
+      <div class="out-body" id="outBody">
+        <div class="empty-state">
+          <div class="empty-icon">⚡</div>
+          <div class="empty-txt">Create a job to see the response</div>
+        </div>
+      </div>
+      <div class="status-bar">
+        <span class="st" id="stMethod">POST /api/enterprise/v1/jobs</span>
+        <span class="st" id="stCode">—</span>
+        <span class="st" id="stTime">—</span>
+        <span class="st" id="stJobId" style="margin-left:auto;font-size:9px;color:var(--txt3)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="history-panel">
+    <div class="history-head">
+      <span class="history-label">Job History</span>
+      <button class="history-clear" onclick="clearHistory()">clear</button>
+    </div>
+    <div class="history-list" id="histList">
+      <div class="empty-state" style="height:100px;font-size:10px;">No jobs yet</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const BASE = 'https://revolution-backend-sal2.onrender.com';
+
+const JOBS = [
+  {id:'http_get',emoji:'🔍',name:'http_get',desc:'Analyse Web',cost:'~1 MB',disabled:false,fields:[
+    {k:'url',lbl:'URL cible',type:'text',ph:'https://example.com',req:true},
+    {k:'selector',lbl:'Sélecteur CSS',type:'text',ph:'.content, h1',hint:'Optionnel'},
+    {k:'output_format',lbl:'Format',type:'select',opts:['text','html','markdown','json']},
+  ]},
+  {id:'text_transform',emoji:'📝',name:'text_transform',desc:'Transformation texte',cost:'~1 MB',disabled:false,fields:[
+    {k:'input',lbl:'Texte source',type:'ta',ph:'Entrez votre texte…',req:true},
+    {k:'operation',lbl:'Opération',type:'select',req:true,opts:['translate','summarize','fix_grammar','to_markdown','to_html','extract_keywords','sentiment']},
+    {k:'target_lang',lbl:'Langue cible',type:'select',opts:['fr','en','es','de','it','ja','zh'],hint:'Pour "translate" uniquement'},
+  ]},
+  {id:'text_generate_template',emoji:'📄',name:'text_generate_template',desc:'Génération template',cost:'~1 MB',disabled:false,fields:[
+    {k:'template_type',lbl:'Type',type:'select',req:true,opts:['email','invoice','report','readme','changelog','api_doc','cover_letter']},
+    {k:'variables',lbl:'Variables JSON',type:'ta',ph:'{"name":"Acme","date":"2025-01-01"}',hint:'Valeurs à injecter'},
+    {k:'output_format',lbl:'Format',type:'select',opts:['markdown','html','plain']},
+  ]},
+  {id:'code_run_js',emoji:'⚙️',name:'code_run_js',desc:'Exécution JS sandbox',cost:'~5 MB',disabled:false,fields:[
+    {k:'code',lbl:'Code JavaScript',type:'ta',ph:'const result = [1,2,3].map(x=>x*2);\nreturn result;',req:true},
+    {k:'timeout',lbl:'Timeout (s)',type:'range',min:1,max:30,step:1,def:10},
+    {k:'modules',lbl:'Modules NPM',type:'text',ph:'lodash, axios',hint:'Séparés par virgules'},
+  ]},
+  {id:'content_check',emoji:'🧪',name:'content_check',desc:'Vérification contenu',cost:'~5 MB',disabled:false,fields:[
+    {k:'content',lbl:'Contenu',type:'ta',ph:'Texte ou URL à analyser…',req:true},
+    {k:'checks',lbl:'Vérifications',type:'select',opts:['all','spam','toxicity','nsfw','pii','malware_links']},
+    {k:'threshold',lbl:'Seuil (%)',type:'range',min:0,max:100,step:5,def:75},
+  ]},
+  {id:'ocr_pdf',emoji:'📋',name:'ocr_pdf',desc:'OCR / Extraction PDF',cost:'~20 MB',disabled:false,fields:[
+    {k:'file',lbl:'Fichier PDF',type:'file',accept:'.pdf',req:true},
+    {k:'pages',lbl:'Pages',type:'text',ph:'all',hint:'Ex: 1-5, 8 — vide = tout'},
+    {k:'output_format',lbl:'Format',type:'select',opts:['text','markdown','json','structured']},
+    {k:'language',lbl:'Langue',type:'select',opts:['auto','fr','en','es','de']},
+  ]},
+  {id:'csv_stats',emoji:'📈',name:'csv_stats',desc:'Statistiques CSV',cost:'~10 MB',disabled:false,fields:[
+    {k:'file',lbl:'Fichier CSV',type:'file',accept:'.csv',req:true},
+    {k:'separator',lbl:'Séparateur',type:'select',opts:[',',';','\\t','|']},
+    {k:'columns',lbl:'Colonnes',type:'text',ph:'revenue, users',hint:'Vide = toutes'},
+    {k:'stats',lbl:'Calculs',type:'select',opts:['all','basic','correlation','distribution','trends']},
+  ]},
+  {id:'data_processing',emoji:'📊',name:'data_processing',desc:'Traitement données',cost:'~100 MB',disabled:false,fields:[
+    {k:'input_format',lbl:'Format source',type:'select',req:true,opts:['json','csv','xml','yaml','ndjson']},
+    {k:'data',lbl:'Données',type:'ta',ph:'[{"id":1,"name":"Alice"}]',req:true},
+    {k:'operation',lbl:'Opération',type:'select',opts:['filter','transform','aggregate','join','deduplicate','validate']},
+    {k:'output_format',lbl:'Format sortie',type:'select',opts:['json','csv','xml','yaml']},
+  ]},
+  {id:'image_svg_generate',emoji:'🖼️',name:'image_svg_generate',desc:'Génération SVG',cost:'~2 MB',disabled:false,fields:[
+    {k:'prompt',lbl:'Description',type:'ta',ph:'Un logo hexagone bleu minimaliste…',req:true},
+    {k:'width',lbl:'Largeur (px)',type:'text',ph:'400',def:'400'},
+    {k:'height',lbl:'Hauteur (px)',type:'text',ph:'400',def:'400'},
+    {k:'style',lbl:'Style',type:'select',opts:['minimal','flat','outline','filled','gradient','duotone']},
+  ]},
+  {id:'audio_convert',emoji:'🎵',name:'audio_convert',desc:'Conversion audio',cost:'~50 MB/min',disabled:false,fields:[
+    {k:'file',lbl:'Fichier audio',type:'file',accept:'.mp3,.wav,.ogg,.flac,.m4a',req:true},
+    {k:'output_format',lbl:'Format sortie',type:'select',req:true,opts:['mp3','wav','ogg','flac','m4a','aac']},
+    {k:'bitrate',lbl:'Bitrate (kbps)',type:'select',opts:['64','128','192','256','320']},
+    {k:'sample_rate',lbl:'Sample rate',type:'select',opts:['22050','44100','48000','96000'],hint:'Hz'},
+  ]},
+  {id:'video_transcode',emoji:'🎥',name:'video_transcode',desc:'Transcodage vidéo',cost:'~500 MB/min',disabled:false,paidOnly:true,fields:[
+    {k:'file',lbl:'Fichier vidéo',type:'file',accept:'.mp4,.mov,.avi,.mkv,.webm',req:true},
+    {k:'output_format',lbl:'Format sortie',type:'select',req:true,opts:['mp4','webm','avi','mkv','mov']},
+  ]},
+];
+
+// State
+let activeJob=JOBS[0], currentTab='json', lastResponse=null;
+let uploadedFiles={}, jobHistory=[], pollingTimers={}, activeHistItem=null;
+
+// Init
+(function(){
+  const list=document.getElementById('jobList');
+  JOBS.forEach(job=>{
+    const btn=document.createElement('button');
+    btn.className='job-btn'+(job.id===activeJob.id?' active':'')+(job.disabled?' disabled':'');
+    btn.dataset.id=job.id;
+    btn.innerHTML=`<span class="job-emoji">${job.emoji}</span><div class="job-info"><div class="job-name">${job.name}</div><div class="job-cost">${job.cost}</div></div>`;
+    btn.onclick=()=>{ if(job.disabled){showToast('🎥 Job désactivé',true);return;} if(job.paidOnly&&quotaData&&!(quotaData.subscribed||(quotaData.usage&&quotaData.usage.remainingGB>0))){showToast('🎥 Crédits payants requis pour la vidéo',true);return;} selectJob(job); };
+    list.appendChild(btn);
+  });
+  renderForm(activeJob);
+  renderCodeTab(currentTab);
+})();
+
+function selectJob(job){
+  activeJob=job; uploadedFiles={};
+  document.querySelectorAll('.job-btn').forEach(b=>b.classList.toggle('active',b.dataset.id===job.id));
+  renderForm(job); clearOutput(); renderCodeTab(currentTab);
+}
+
+function renderForm(job){
+  document.getElementById('jobCostHint').textContent=job.cost;
+  const form=document.getElementById('formScroll');
+  form.innerHTML='';
+  job.fields.forEach(f=>{
+    const div=document.createElement('div');
+    div.className='field fade-in';
+    const lbl=`<div class="field-lbl">${f.lbl}${f.req?'<span class="req">*</span>':''}${f.opt?'<span class="opt">opt</span>':''}</div>`;
+    let inp='';
+    if(f.type==='ta') inp=`<textarea class="f-ta" id="f_${f.k}" placeholder="${f.ph||''}">${f.def||''}</textarea>`;
+    else if(f.type==='select') inp=`<select class="f-select" id="f_${f.k}">${(f.opts||[]).map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`;
+    else if(f.type==='range') inp=`<div class="range-row"><input type="range" id="f_${f.k}" min="${f.min}" max="${f.max}" step="${f.step}" value="${f.def}" oninput="document.getElementById('rv_${f.k}').textContent=this.value"><span class="range-val" id="rv_${f.k}">${f.def}</span></div>`;
+    else if(f.type==='file') inp=`<div class="file-zone" id="fz_${f.k}" onclick="document.getElementById('fi_${f.k}').click()" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="dropFile(event,'${f.k}')"><div class="fz-icon">📁</div><div class="fz-txt">Glissez ou <em>cliquez</em></div><div class="fz-name" id="fn_${f.k}"></div><input type="file" id="fi_${f.k}" style="display:none" accept="${f.accept||'*'}" onchange="pickFile(this,'${f.k}')"></div>`;
+    else inp=`<input type="text" class="f-input" id="f_${f.k}" placeholder="${f.ph||''}" value="${f.def||''}">`;
+    div.innerHTML=lbl+inp+(f.hint?`<div class="f-hint">${f.hint}</div>`:'');
+    form.appendChild(div);
+  });
+}
+
+function pickFile(input,k){ if(input.files[0]){ uploadedFiles[k]=input.files[0]; document.getElementById('fn_'+k).textContent=input.files[0].name; } }
+function dropFile(e,k){ e.preventDefault(); document.getElementById('fz_'+k).classList.remove('over'); const f=e.dataTransfer.files[0]; if(f){ uploadedFiles[k]=f; document.getElementById('fn_'+k).textContent=f.name; const dt=new DataTransfer();dt.items.add(f);document.getElementById('fi_'+k).files=dt.files; } }
+
+function getParams(){
+  const p={};
+  activeJob.fields.forEach(f=>{ if(f.type==='file')return; const el=document.getElementById('f_'+f.k); if(el&&el.value!=='')p[f.k]=f.type==='range'?Number(el.value):el.value; });
+  return p;
+}
+
+// Run
+async function runJob(){
+  const key=document.getElementById('keyInput').value.trim();
+  if(!key){showToast('⚠ Clé API manquante',true);return;}
+  const btn=document.getElementById('runBtn');
+  btn.classList.add('loading'); btn.disabled=true;
+  const t0=Date.now();
+  const params=getParams();
+  const hasFile=activeJob.fields.some(f=>f.type==='file'&&uploadedFiles[f.k]);
+  let opts;
+  if(hasFile){
+    // Use FormData (multipart) — backend uses multer
+    const fd=new FormData();
+    fd.append('type',activeJob.id);
+    fd.append('params',JSON.stringify(params));
+    const fileField=activeJob.fields.find(f=>f.type==='file'&&uploadedFiles[f.k]);
+    if(fileField) fd.append('file',uploadedFiles[fileField.k]);
+    opts={method:'POST',headers:{'x-api-key':key},body:fd};
+  } else {
+    opts={method:'POST',headers:{'Content-Type':'application/json','x-api-key':key},body:JSON.stringify({type:activeJob.id,params})};
+  }
+  try{
+    const res=await fetch(`${BASE}/api/enterprise/v1/jobs`,opts);
+    const elapsed=Date.now()-t0;
+    const data=await res.json();
+    lastResponse=data; renderOutput(); updateStatusBar(res.status,elapsed);
+    if(res.ok&&data.id){
+      addHistory({id:data.id,type:activeJob.id,emoji:activeJob.emoji,status:data.status||'pending',createdAt:new Date()});
+      startPolling(data.id,key);
+      fetchQuota();
+      showToast('✓ Job créé — '+data.id);
+    } else {
+      showToast('✗ '+(data.error||data.message||'Erreur'),true);
+    }
+  }catch(e){
+    updateStatusBar(0,Date.now()-t0,true); lastResponse={error:e.message}; renderOutput(); showToast('✗ '+e.message,true);
+  }
+  btn.classList.remove('loading'); btn.disabled=false;
+}
+
+// Polling
+function startPolling(jobId,key){
+  let attempts=0;
+  const timer=setInterval(async()=>{
+    if(++attempts>60){clearInterval(timer);return;}
+    try{
+      const res=await fetch(`${BASE}/api/enterprise/v1/jobs/${jobId}/result`,{headers:{'x-api-key':key}});
+      const data=await res.json();
+      const st=data.status||(res.ok?'completed':'failed');
+      updateHistItem(jobId,st,data);
+      if(st==='completed'||st==='failed'||st==='done'){
+        clearInterval(timer); delete pollingTimers[jobId];
+        if(activeHistItem===jobId){lastResponse=data;renderOutput();}
+      }
+    }catch{}
+  },2500);
+  pollingTimers[jobId]=timer;
+}
+
+// History
+function addHistory(e){ jobHistory.unshift(e); if(jobHistory.length>50)jobHistory.pop(); renderHistory(); }
+function updateHistItem(id,status,data){ const i=jobHistory.find(j=>j.id===id); if(i){i.status=status;i.data=data;} renderHistory(); }
+
+function renderHistory(){
+  const list=document.getElementById('histList');
+  if(!jobHistory.length){list.innerHTML='<div class="empty-state" style="height:100px;font-size:10px;">No jobs yet</div>';return;}
+  list.innerHTML='';
+  jobHistory.forEach(j=>{
+    const isRunning=j.status==='pending'||j.status==='running'||j.status==='processing';
+    const d=document.createElement('div');
+    d.className='hist-item'+(j.id===activeHistItem?' active-hist':'')+(isRunning?' running-anim':'');
+    d.innerHTML=`<div class="hist-row1"><span class="hist-type">${j.emoji} ${j.type}</span><span class="hbadge ${mapSt(j.status)}">${j.status}</span></div><div class="hist-id">${j.id}</div><div class="hist-time">${timeAgo(j.createdAt)}</div>`;
+    d.onclick=()=>{activeHistItem=j.id;if(j.data){lastResponse=j.data;renderOutput();}document.getElementById('stJobId').textContent=j.id;renderHistory();};
+    list.appendChild(d);
+  });
+}
+function mapSt(s){ if(!s)return'pending'; if(s==='completed'||s==='done')return'completed'; if(s==='failed'||s==='error')return'failed'; if(s==='running'||s==='processing')return'running'; return'pending'; }
+function clearHistory(){ Object.values(pollingTimers).forEach(t=>clearInterval(t)); pollingTimers={}; jobHistory=[]; activeHistItem=null; renderHistory(); }
+
+// Quota
+let quotaData = null;
+
+async function fetchQuota(){
+  const key = document.getElementById('keyInput').value.trim();
+  if(!key || key.length < 8) return;
+  document.getElementById('quotaLoading').style.display='block';
+  document.getElementById('quotaLoading').textContent='loading quota…';
+  document.getElementById('quotaRows').style.display='none';
+  document.getElementById('quotaRefreshBtn').style.display='none';
+  try {
+    const res = await fetch(`${BASE}/api/enterprise/v1/balance`, {
+      headers: {'x-api-key': key}
+    });
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data = await res.json();
+    quotaData = data;
+    renderQuota(data);
+  } catch(e) {
+    document.getElementById('quotaLoading').textContent='quota unavailable';
+    document.getElementById('quotaRefreshBtn').style.display='block';
+  }
+}
+
+function fmtGB(mb){
+  if(mb === null || mb === undefined) return '?';
+  if(mb >= 1024) return (mb/1024).toFixed(2)+' GB';
+  return mb.toFixed(0)+' MB';
+}
+
+function renderQuota(data){
+  // Real shape from /v1/balance (mirrors /me response):
+  // data.freeTier.remainingGB, data.freeTier.weeklyLimitGB, data.freeTier.usedGB
+  // data.usage.remainingGB, data.usage.limitGB, data.usage.usedGB
+  // data.subscribed (bool)
+
+  document.getElementById('quotaLoading').style.display='none';
+  document.getElementById('quotaRows').style.display='block';
+  document.getElementById('quotaRefreshBtn').style.display='block';
+
+  // Plan badge
+  const badge = document.querySelector('.plan-badge');
+  if(badge){
+    if(data.subscribed) badge.textContent='PREMIUM PLAN';
+    else badge.textContent='FREE PLAN';
+  }
+
+  // Free bar — freeTier values are in GB
+  const ft = data.freeTier || {};
+  const freeRemGB = ft.remainingGB ?? null;
+  const freeTotalGB = ft.weeklyLimitGB ?? 3;
+  const freeUsedGB = ft.usedGB ?? (freeTotalGB - (freeRemGB ?? freeTotalGB));
+
+  if(freeRemGB !== null){
+    const pct = Math.min(100, (freeUsedGB / freeTotalGB) * 100);
+    const bar = document.getElementById('quotaBarFree');
+    bar.style.width = pct+'%';
+    bar.className = 'quota-bar-inner'+(pct>90?' crit':pct>70?' warn':'');
+    document.getElementById('quotaValFree').textContent = `${freeRemGB.toFixed(3)} GB left / ${freeTotalGB} GB`;
+  } else {
+    document.getElementById('quotaValFree').textContent = 'n/a';
+  }
+
+  // Paid bar — usage.remainingGB = solde payant disponible, limitGB=0 = pay-as-you-go (pas de plafond fixe)
+  const u = data.usage || {};
+  const paidRemGB = u.remainingGB ?? null;
+  const paidUsedGB = u.usedGB ?? 0;
+  const paidTotalGB = u.limitGB ?? 0;
+  const paidRow = document.getElementById('paidRow');
+
+  // Afficher la barre paid si on a un solde payant (remainingGB > 0) ou qu'on en a utilisé
+  if(paidRemGB !== null && (paidRemGB > 0 || paidUsedGB > 0)){
+    paidRow.style.display='flex';
+    // Si pas de limite fixe (pay-as-you-go), la barre montre l'usage vs total rechargé
+    const totalPaid = paidTotalGB > 0 ? paidTotalGB : (paidRemGB + paidUsedGB);
+    const pct = totalPaid > 0 ? Math.min(100, (paidUsedGB / totalPaid) * 100) : 0;
+    const bar = document.getElementById('quotaBarPaid');
+    bar.style.width = pct+'%';
+    bar.className = 'quota-bar-inner paid'+(pct>90?' crit':pct>70?' warn':'');
+    document.getElementById('quotaValPaid').textContent = `${parseFloat(paidRemGB).toFixed(2)} GB left`;
+  } else {
+    paidRow.style.display='none';
+  }
+}
+
+// Key
+function onKeyInput(){
+  const v=document.getElementById('keyInput').value.trim();
+  const el=document.getElementById('keyStatus');
+  if(!v){el.className='key-status none';el.textContent='NO KEY';}
+  else if(v.length<8){el.className='key-status err';el.textContent='INVALID';}
+  else{el.className='key-status ok';el.textContent='SET';}
+  renderCodeTab(currentTab);
+  if(v.length>=8) fetchQuota();
+}
+function toggleKey(){ const i=document.getElementById('keyInput'); i.type=i.type==='password'?'text':'password'; }
+
+// Output
+function renderOutput(){ if(currentTab==='json')renderJson(); else renderCodeTab(currentTab); }
+
+function renderJson(){
+  if(!lastResponse)return;
+  document.getElementById('outBody').innerHTML=`<div class="json-pre fade-in">${hlJson(JSON.stringify(lastResponse,null,2))}</div>`;
+}
+
+function renderCodeTab(lang){
+  if(lang==='json'){if(lastResponse)renderJson();return;}
+  const key=document.getElementById('keyInput').value||'YOUR_API_KEY';
+  const params=getParams();
+  const payload={type:activeJob.id,params};
+  let code='';
+  if(lang==='curl'){
+    code=`# 1) Create job\ncurl -X POST ${BASE}/api/enterprise/v1/jobs \\\n  -H "Content-Type: application/json" \\\n  -H "x-api-key: ${key}" \\\n  -d '${JSON.stringify(payload)}'\n\n# 2) List jobs\ncurl -X GET ${BASE}/api/enterprise/v1/jobs \\\n  -H "x-api-key: ${key}"\n\n# 3) Get result\ncurl -X GET ${BASE}/api/enterprise/v1/jobs/{JOB_ID}/result \\\n  -H "x-api-key: ${key}"`;
+  } else if(lang==='node'){
+    code=`const BASE = '${BASE}';\nconst API_KEY = '${key}';\n\n// 1) Create job\nconst res = await fetch(\`\${BASE}/api/enterprise/v1/jobs\`, {\n  method: 'POST',\n  headers: {\n    'Content-Type': 'application/json',\n    'x-api-key': API_KEY,\n  },\n  body: JSON.stringify(${JSON.stringify(payload,null,4)}),\n});\nconst { id } = await res.json();\n\n// 2) Poll until done\nasync function waitForResult(jobId) {\n  while (true) {\n    const r = await fetch(\`\${BASE}/api/enterprise/v1/jobs/\${jobId}/result\`, {\n      headers: { 'x-api-key': API_KEY },\n    });\n    const data = await r.json();\n    if (data.status === 'completed' || data.status === 'failed') return data;\n    await new Promise(ok => setTimeout(ok, 2500));\n  }\n}\n\nconst result = await waitForResult(id);\nconsole.log(result);`;
+  } else if(lang==='python'){
+    const pyPayload=JSON.stringify(payload,null,4).replace(/null/g,'None').replace(/true/g,'True').replace(/false/g,'False');
+    code=`import requests, time\n\nBASE = '${BASE}'\nAPI_KEY = '${key}'\nHEADERS = {'x-api-key': API_KEY, 'Content-Type': 'application/json'}\n\n# 1) Create job\npayload = ${pyPayload}\nresp = requests.post(f'{BASE}/api/enterprise/v1/jobs', json=payload, headers=HEADERS)\njob_id = resp.json()['id']\n\n# 2) Poll until done\ndef wait_for_result(job_id):\n    while True:\n        r = requests.get(\n            f'{BASE}/api/enterprise/v1/jobs/{job_id}/result',\n            headers={'x-api-key': API_KEY}\n        )\n        data = r.json()\n        if data.get('status') in ('completed', 'failed', 'done'):\n            return data\n        time.sleep(2.5)\n\nresult = wait_for_result(job_id)\nprint(result)`;
+  }
+  const esc=code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const safe=code.replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
+  document.getElementById('outBody').innerHTML=`<button class="copy-btn" onclick="copyText(\`${safe}\`)">COPY</button><div class="code-pre fade-in">${esc}</div>`;
+}
+
+function switchTab(tab,el){
+  currentTab=tab;
+  document.querySelectorAll('.out-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderCodeTab(tab);
+}
+
+function clearOutput(){
+  lastResponse=null;
+  document.getElementById('outBody').innerHTML='<div class="empty-state"><div class="empty-icon">⚡</div><div class="empty-txt">Create a job to see the response</div></div>';
+  document.getElementById('stCode').textContent='—'; document.getElementById('stCode').className='st';
+  document.getElementById('stTime').textContent='—'; document.getElementById('respMeta').textContent='';
+}
+
+function updateStatusBar(code,ms,isErr){
+  const el=document.getElementById('stCode');
+  if(isErr){el.className='st err';el.innerHTML='<span class="st-dot"></span> ERR';}
+  else if(code>=200&&code<300){el.className='st ok';el.innerHTML=`<span class="st-dot"></span> ${code}`;}
+  else{el.className='st err';el.innerHTML=`<span class="st-dot"></span> ${code}`;}
+  document.getElementById('stTime').textContent=`${ms}ms`;
+  document.getElementById('respMeta').textContent=`${ms}ms`;
+}
+
+function copyPayload(){ copyText(JSON.stringify({type:activeJob.id,params:getParams()},null,2)); }
+function copyText(txt){ navigator.clipboard.writeText(txt).then(()=>showToast('✓ Copié')); }
+
+function showToast(msg,isErr){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show'+(isErr?' err':'');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+function timeAgo(d){
+  const s=Math.floor((Date.now()-new Date(d))/1000);
+  if(s<5)return'just now'; if(s<60)return s+'s ago'; if(s<3600)return Math.floor(s/60)+'m ago'; return Math.floor(s/3600)+'h ago';
+}
+
+function hlJson(json){
+  return json.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,m=>{
+      if(/^"/.test(m))return/:$/.test(m)?`<span class="jk">${m}</span>`:`<span class="js">${m}</span>`;
+      if(/true|false/.test(m))return`<span class="jb">${m}</span>`;
+      if(/null/.test(m))return`<span class="jnull">${m}</span>`;
+      return`<span class="jn">${m}</span>`;
+    });
+}
+
+setInterval(()=>{if(jobHistory.length)renderHistory();},30000);
+</script>
+</body>
+</html>
