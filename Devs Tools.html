@@ -17,8 +17,6 @@
 html,body{height:100%;overflow:hidden;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);display:flex;flex-direction:column;}
 body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:.5;}
-
-/* TOPBAR */
 .topbar{display:flex;align-items:center;gap:0;background:var(--s1);border-bottom:1px solid var(--b1);height:52px;padding:0 18px;flex-shrink:0;z-index:10;}
 .logo{font-family:'Inter',sans-serif;font-size:18px;font-weight:700;letter-spacing:1px;color:#ffffff;margin-right:16px;white-space:nowrap;}
 .plan-badge{font-size:10px;font-family:'IBM Plex Mono',monospace;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--txt2);border-radius:4px;padding:3px 9px;margin-right:auto;letter-spacing:1px;text-transform:uppercase;}
@@ -50,11 +48,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .key-status.ok{background:rgba(0,229,160,.1);color:var(--ok);}
 .key-status.err{background:rgba(255,77,106,.1);color:var(--err);}
 .key-status.none{background:rgba(255,176,32,.1);color:var(--warn);}
-
-/* BODY */
 .body{display:flex;flex:1;overflow:hidden;}
-
-/* SIDEBAR */
 .sidebar{width:235px;min-width:235px;background:var(--s1);border-right:1px solid var(--b1);display:flex;flex-direction:column;overflow:hidden;}
 .sidebar-head{padding:11px 14px 8px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);font-family:'IBM Plex Mono',monospace;border-bottom:1px solid var(--b1);}
 .job-list{flex:1;overflow-y:auto;padding:5px;}
@@ -72,25 +66,19 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .job-cost{font-size:9px;color:var(--txt3);margin-top:1px;}
 .limits-note{padding:9px 12px;border-top:1px solid var(--b1);font-size:9px;font-family:'IBM Plex Mono',monospace;color:var(--txt3);line-height:1.8;}
 .limits-note span{color:var(--warn);}
-
-/* MAIN */
 .main{flex:1;display:flex;overflow:hidden;}
 .panel{display:flex;flex-direction:column;overflow:hidden;flex:1;}
 .panel-bar{padding:9px 16px;border-bottom:1px solid var(--b1);background:var(--s1);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .panel-label{font-size:9px;font-family:'IBM Plex Mono',monospace;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);display:flex;align-items:center;gap:7px;}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok);}
-.dot.green{background:var(--ok);box-shadow:0 0 6px var(--ok);}
 .panel-hint{font-size:10px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;}
 .panel-divider{width:1px;background:var(--b1);flex-shrink:0;}
-
-/* FORM */
 .form-scroll{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:13px;}
 .form-scroll::-webkit-scrollbar{width:3px;}
 .form-scroll::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
 .field{display:flex;flex-direction:column;gap:5px;}
 .field-lbl{font-size:10px;color:var(--txt2);font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;gap:5px;}
 .req{color:var(--err);}
-.opt{font-size:8px;background:var(--b1);border-radius:3px;padding:1px 5px;color:var(--txt3);}
 .f-input,.f-select,.f-ta{background:var(--s3);border:1px solid var(--b2);border-radius:7px;color:var(--txt);font-family:'IBM Plex Mono',monospace;font-size:12px;padding:9px 12px;outline:none;transition:border-color .2s,box-shadow .2s;width:100%;}
 .f-input:focus,.f-select:focus,.f-ta:focus{border-color:var(--txt2);box-shadow:0 0 0 3px rgba(255,255,255,.03);}
 .f-select{cursor:pointer;}
@@ -107,26 +95,66 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .fz-txt{font-size:11px;color:var(--txt2);}
 .fz-txt em{color:#ffffff;font-style:normal;}
 .fz-name{font-size:10px;color:var(--ok);margin-top:4px;font-family:'IBM Plex Mono',monospace;}
-
-/* FORM FOOTER */
 .form-foot{padding:11px 16px;border-top:1px solid var(--b1);background:var(--s1);display:flex;align-items:center;gap:9px;flex-shrink:0;}
 .btn-run{background:#ffffff;color:#000000;border:none;border-radius:7px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;padding:10px 20px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s;letter-spacing:.5px;}
 .btn-run:hover{background:#e5e7eb;box-shadow:0 0 16px rgba(255,255,255,.1);transform:translateY(-1px);}
 .btn-run:active{transform:translateY(0);}
 .btn-run:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
-.spinner{width:11px;height:11px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none;}
+.spinner{width:11px;height:11px;border:2px solid rgba(0,0,0,.25);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;display:none;}
 .btn-run.loading .spinner{display:block;}
 .btn-run.loading .run-txt{display:none;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .btn-sec{background:none;border:1px solid var(--b2);border-radius:7px;color:var(--txt2);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:9px 13px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;}
 .btn-sec:hover{border-color:var(--txt2);color:#ffffff;}
 .ep-label{font-size:10px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;margin-left:auto;}
-
-/* OUTPUT */
+/* OUTPUT PANEL — flex column so dl-bar stays outside scroll */
+.out-panel{display:flex;flex-direction:column;flex:1;overflow:hidden;}
 .out-tabs{display:flex;background:var(--s1);border-bottom:1px solid var(--b1);padding:0 14px;gap:2px;flex-shrink:0;}
 .out-tab{font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:.5px;text-transform:uppercase;padding:9px 12px;cursor:pointer;color:var(--txt3);border-bottom:2px solid transparent;transition:all .15s;}
 .out-tab.active{color:#ffffff;border-bottom-color:#ffffff;}
 .out-tab:hover:not(.active){color:var(--txt2);}
+/* === DOWNLOAD BAR — principal fix === */
+.dl-bar{
+  display:none;
+  padding:10px 16px;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  border-bottom:1px solid rgba(16,185,129,.25);
+  background:rgba(16,185,129,.06);
+  flex-shrink:0;
+  animation:fadeIn .25s ease forwards;
+}
+.dl-bar.visible{display:flex;}
+.dl-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:9px 18px;
+  background:var(--ok);
+  color:#000000;
+  border:none;
+  border-radius:7px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all .2s;
+  letter-spacing:.5px;
+  text-decoration:none;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.dl-btn:hover{background:#34d399;box-shadow:0 0 16px rgba(16,185,129,.4);transform:translateY(-1px);}
+.dl-url-text{
+  font-size:10px;
+  font-family:'IBM Plex Mono',monospace;
+  color:var(--txt3);
+  word-break:break-all;
+  flex:1;
+  min-width:0;
+}
+/* scroll area */
 .out-body{flex:1;overflow:auto;position:relative;}
 .out-body::-webkit-scrollbar{width:3px;}
 .out-body::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
@@ -138,14 +166,10 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .code-pre{font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.75;padding:16px 18px;white-space:pre;overflow-x:auto;color:var(--txt2);}
 .copy-btn{position:absolute;top:12px;right:14px;background:var(--s3);border:1px solid var(--b2);border-radius:5px;color:var(--txt2);font-size:9px;font-family:'IBM Plex Mono',monospace;padding:4px 9px;cursor:pointer;letter-spacing:.5px;z-index:2;transition:all .15s;}
 .copy-btn:hover{border-color:var(--acc);color:var(--acc);}
-.dl-btn{display:inline-flex;align-items:center;gap:6px;margin:12px 18px;padding:10px 18px;background:#10b981;color:#000;border:none;border-radius:7px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.5px;text-decoration:none;}
-.dl-btn:hover{background:#34d399;box-shadow:0 0 12px rgba(16,185,129,.3);transform:translateY(-1px);}
 .status-bar{padding:6px 16px;border-top:1px solid var(--b1);background:var(--s1);display:flex;align-items:center;gap:14px;font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--txt3);flex-shrink:0;}
 .st{display:flex;align-items:center;gap:4px;}
 .st.ok{color:var(--ok);}.st.err{color:var(--err);}.st.pending{color:var(--warn);}
 .st-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
-
-/* HISTORY PANEL */
 .history-panel{width:250px;min-width:250px;background:var(--s1);border-left:1px solid var(--b1);display:flex;flex-direction:column;overflow:hidden;}
 .history-head{padding:9px 12px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;}
 .history-label{font-size:9px;font-family:'IBM Plex Mono',monospace;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);}
@@ -168,8 +192,6 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .hist-time{font-size:9px;color:var(--txt3);}
 @keyframes pulse-border{0%,100%{border-color:rgba(167,139,250,.2);}50%{border-color:rgba(167,139,250,.5);}}
 .running-anim{animation:pulse-border 1.4s ease-in-out infinite;}
-
-/* TOAST */
 .toast{position:fixed;bottom:16px;right:16px;background:var(--s3);border:1px solid var(--ok);border-radius:8px;padding:9px 15px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--ok);z-index:1000;opacity:0;transform:translateY(6px);transition:all .25s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
 .toast.err{border-color:var(--err);color:var(--err);}
@@ -179,12 +201,11 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="topbar">
   <div class="logo">DEVS TOOLS</div>
-  <div class="plan-badge">FREE PLAN</div>
+  <div class="plan-badge" id="planBadge">FREE PLAN</div>
   <div class="quota-wrap">
-    <div class="quota-block" id="quotaBlock">
+    <div class="quota-block">
       <div class="quota-loading" id="quotaLoading">— enter API key to load quota —</div>
       <div id="quotaRows" style="display:none;">
         <div class="quota-row">
@@ -199,7 +220,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
         </div>
       </div>
     </div>
-    <button class="quota-refresh" id="quotaRefreshBtn" onclick="fetchQuota()" title="Refresh quota" style="display:none;">↻</button>
+    <button class="quota-refresh" id="quotaRefreshBtn" onclick="fetchQuota()" title="Refresh" style="display:none;">↻</button>
   </div>
   <div class="sep"></div>
   <div class="key-wrap">
@@ -210,22 +231,18 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   </div>
 </div>
 
-<!-- BODY -->
 <div class="body">
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sidebar-head">Job Types</div>
     <div class="job-list" id="jobList"></div>
     <div class="limits-note">
       <div>⚡ <span>0.2 GB</span> max / job</div>
       <div>⏱ <span>30 req</span> / minute</div>
-      <div id="videoLimitNote">🎥 Video <span>requires paid credits</span></div>
+      <div>🎥 Video <span>requires paid credits</span></div>
     </div>
   </div>
 
-  <!-- CENTER -->
   <div class="main">
-    <!-- FORM -->
     <div class="panel" style="max-width:400px;min-width:300px;">
       <div class="panel-bar">
         <div class="panel-label"><span class="dot"></span> PARAMS</div>
@@ -244,10 +261,10 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 
     <div class="panel-divider"></div>
 
-    <!-- OUTPUT -->
-    <div class="panel">
+    <!-- out-panel: flex column, dl-bar is OUTSIDE the scroll zone -->
+    <div class="out-panel">
       <div class="panel-bar">
-        <div class="panel-label"><span class="dot green"></span> RESPONSE</div>
+        <div class="panel-label"><span class="dot"></span> RESPONSE</div>
         <div class="panel-hint" id="respMeta"></div>
       </div>
       <div class="out-tabs">
@@ -256,6 +273,14 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
         <div class="out-tab" onclick="switchTab('node',this)">Node.js</div>
         <div class="out-tab" onclick="switchTab('python',this)">Python</div>
       </div>
+
+      <!-- ====== DOWNLOAD BAR — toujours visible, hors scroll ====== -->
+      <div class="dl-bar" id="dlBar">
+        <a class="dl-btn" id="dlAnchor" href="#" download="result" target="_blank">⬇ Download</a>
+        <button class="btn-sec" id="dlCopyUrl" style="padding:6px 10px;font-size:10px;">📋 Copy URL</button>
+        <span class="dl-url-text" id="dlUrlText"></span>
+      </div>
+
       <div class="out-body" id="outBody">
         <div class="empty-state">
           <div class="empty-icon">⚡</div>
@@ -263,7 +288,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
         </div>
       </div>
       <div class="status-bar">
-        <span class="st" id="stMethod">POST /api/enterprise/v1/jobs</span>
+        <span class="st">POST /api/enterprise/v1/jobs</span>
         <span class="st" id="stCode">—</span>
         <span class="st" id="stTime">—</span>
         <span class="st" id="stJobId" style="margin-left:auto;font-size:9px;color:var(--txt3)"></span>
@@ -271,7 +296,6 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
     </div>
   </div>
 
-  <!-- HISTORY -->
   <div class="history-panel">
     <div class="history-head">
       <span class="history-label">Job History</span>
@@ -289,107 +313,118 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 const BASE = 'https://revolution-backend-sal2.onrender.com';
 
 const JOBS = [
-  {id:'http_get',emoji:'🔍',name:'http_get',desc:'Analyse Web',cost:'~1 MB',disabled:false,fields:[
+  {id:'http_get',emoji:'🔍',name:'http_get',desc:'Analyse Web',cost:'~1 MB',fields:[
     {k:'url',lbl:'URL cible',type:'text',ph:'https://example.com',req:true},
-    {k:'selector',lbl:'Sélecteur CSS',type:'text',ph:'.content, h1',hint:'Optionnel'},
+    {k:'selector',lbl:'Selecteur CSS',type:'text',ph:'.content, h1',hint:'Optionnel'},
     {k:'output_format',lbl:'Format',type:'select',opts:['text','html','markdown','json']},
   ]},
-  {id:'text_transform',emoji:'📝',name:'text_transform',desc:'Transformation texte',cost:'~1 MB',disabled:false,fields:[
+  {id:'text_transform',emoji:'📝',name:'text_transform',desc:'Transformation texte',cost:'~1 MB',fields:[
     {k:'input',lbl:'Texte source',type:'ta',ph:'Entrez votre texte…',req:true},
-    {k:'operation',lbl:'Opération',type:'select',req:true,opts:['translate','summarize','fix_grammar','to_markdown','to_html','extract_keywords','sentiment']},
+    {k:'operation',lbl:'Operation',type:'select',req:true,opts:['translate','summarize','fix_grammar','to_markdown','to_html','extract_keywords','sentiment']},
     {k:'target_lang',lbl:'Langue cible',type:'select',opts:['fr','en','es','de','it','ja','zh'],hint:'Pour "translate" uniquement'},
   ]},
-  {id:'text_generate_template',emoji:'📄',name:'text_generate_template',desc:'Génération template',cost:'~1 MB',disabled:false,fields:[
+  {id:'text_generate_template',emoji:'📄',name:'text_generate_template',desc:'Generation template',cost:'~1 MB',fields:[
     {k:'template_type',lbl:'Type',type:'select',req:true,opts:['email','invoice','report','readme','changelog','api_doc','cover_letter']},
-    {k:'variables',lbl:'Variables JSON',type:'ta',ph:'{"name":"Acme","date":"2025-01-01"}',hint:'Valeurs à injecter'},
+    {k:'variables',lbl:'Variables JSON',type:'ta',ph:'{"name":"Acme","date":"2025-01-01"}',hint:'Valeurs a injecter'},
     {k:'output_format',lbl:'Format',type:'select',opts:['markdown','html','plain']},
   ]},
-  {id:'code_run_js',emoji:'⚙️',name:'code_run_js',desc:'Exécution JS sandbox',cost:'~5 MB',disabled:false,fields:[
+  {id:'code_run_js',emoji:'⚙️',name:'code_run_js',desc:'Execution JS sandbox',cost:'~5 MB',fields:[
     {k:'code',lbl:'Code JavaScript',type:'ta',ph:'const result = [1,2,3].map(x=>x*2);\nreturn result;',req:true},
     {k:'timeout',lbl:'Timeout (s)',type:'range',min:1,max:30,step:1,def:10},
-    {k:'modules',lbl:'Modules NPM',type:'text',ph:'lodash, axios',hint:'Séparés par virgules'},
+    {k:'modules',lbl:'Modules NPM',type:'text',ph:'lodash, axios',hint:'Separes par virgules'},
   ]},
-  {id:'content_check',emoji:'🧪',name:'content_check',desc:'Vérification contenu',cost:'~5 MB',disabled:false,fields:[
-    {k:'content',lbl:'Contenu',type:'ta',ph:'Texte ou URL à analyser…',req:true},
-    {k:'checks',lbl:'Vérifications',type:'select',opts:['all','spam','toxicity','nsfw','pii','malware_links']},
+  {id:'content_check',emoji:'🧪',name:'content_check',desc:'Verification contenu',cost:'~5 MB',fields:[
+    {k:'content',lbl:'Contenu',type:'ta',ph:'Texte ou URL a analyser…',req:true},
+    {k:'checks',lbl:'Verifications',type:'select',opts:['all','spam','toxicity','nsfw','pii','malware_links']},
     {k:'threshold',lbl:'Seuil (%)',type:'range',min:0,max:100,step:5,def:75},
   ]},
-  {id:'ocr_pdf',emoji:'📋',name:'ocr_pdf',desc:'OCR / Extraction PDF',cost:'~20 MB',disabled:false,fields:[
+  {id:'ocr_pdf',emoji:'📋',name:'ocr_pdf',desc:'OCR / Extraction PDF',cost:'~20 MB',fields:[
     {k:'file',lbl:'Fichier PDF',type:'file',accept:'.pdf',req:true},
     {k:'pages',lbl:'Pages',type:'text',ph:'all',hint:'Ex: 1-5, 8 — vide = tout'},
     {k:'output_format',lbl:'Format',type:'select',opts:['text','markdown','json','structured']},
     {k:'language',lbl:'Langue',type:'select',opts:['auto','fr','en','es','de']},
   ]},
-  {id:'csv_stats',emoji:'📈',name:'csv_stats',desc:'Statistiques CSV',cost:'~10 MB',disabled:false,fields:[
+  {id:'csv_stats',emoji:'📈',name:'csv_stats',desc:'Statistiques CSV',cost:'~10 MB',fields:[
     {k:'file',lbl:'Fichier CSV',type:'file',accept:'.csv',req:true},
-    {k:'separator',lbl:'Séparateur',type:'select',opts:[',',';','\\t','|']},
+    {k:'separator',lbl:'Separateur',type:'select',opts:[',',';','\\t','|']},
     {k:'columns',lbl:'Colonnes',type:'text',ph:'revenue, users',hint:'Vide = toutes'},
     {k:'stats',lbl:'Calculs',type:'select',opts:['all','basic','correlation','distribution','trends']},
   ]},
-  {id:'data_processing',emoji:'📊',name:'data_processing',desc:'Traitement données',cost:'~100 MB',disabled:false,fields:[
+  {id:'data_processing',emoji:'📊',name:'data_processing',desc:'Traitement donnees',cost:'~100 MB',fields:[
     {k:'input_format',lbl:'Format source',type:'select',req:true,opts:['json','csv','xml','yaml','ndjson']},
-    {k:'data',lbl:'Données',type:'ta',ph:'[{"id":1,"name":"Alice"}]',req:true},
-    {k:'operation',lbl:'Opération',type:'select',opts:['filter','transform','aggregate','join','deduplicate','validate']},
+    {k:'data',lbl:'Donnees',type:'ta',ph:'[{"id":1,"name":"Alice"}]',req:true},
+    {k:'operation',lbl:'Operation',type:'select',opts:['filter','transform','aggregate','join','deduplicate','validate']},
     {k:'output_format',lbl:'Format sortie',type:'select',opts:['json','csv','xml','yaml']},
   ]},
-  {id:'image_svg_generate',emoji:'🖼️',name:'image_svg_generate',desc:'Génération SVG',cost:'~2 MB',disabled:false,fields:[
+  {id:'image_svg_generate',emoji:'🖼️',name:'image_svg_generate',desc:'Generation SVG',cost:'~2 MB',fields:[
     {k:'prompt',lbl:'Description',type:'ta',ph:'Un logo hexagone bleu minimaliste…',req:true},
     {k:'width',lbl:'Largeur (px)',type:'text',ph:'400',def:'400'},
     {k:'height',lbl:'Hauteur (px)',type:'text',ph:'400',def:'400'},
     {k:'style',lbl:'Style',type:'select',opts:['minimal','flat','outline','filled','gradient','duotone']},
   ]},
-  {id:'audio_convert',emoji:'🎵',name:'audio_convert',desc:'Conversion audio',cost:'~50 MB/min',disabled:false,fields:[
+  {id:'audio_convert',emoji:'🎵',name:'audio_convert',desc:'Conversion audio',cost:'~50 MB/min',fields:[
     {k:'file',lbl:'Fichier audio',type:'file',accept:'.mp3,.wav,.ogg,.flac,.m4a',req:true},
     {k:'output_format',lbl:'Format sortie',type:'select',req:true,opts:['mp3','wav','ogg','flac','m4a','aac']},
     {k:'bitrate',lbl:'Bitrate (kbps)',type:'select',opts:['64','128','192','256','320']},
     {k:'sample_rate',lbl:'Sample rate',type:'select',opts:['22050','44100','48000','96000'],hint:'Hz'},
   ]},
-  {id:'video_transcode',emoji:'🎥',name:'video_transcode',desc:'Transcodage vidéo',cost:'~500 MB/min',disabled:false,paidOnly:true,fields:[
-    {k:'file',lbl:'Fichier vidéo',type:'file',accept:'.mp4,.mov,.avi,.mkv,.webm',req:true},
+  {id:'video_transcode',emoji:'🎥',name:'video_transcode',desc:'Transcodage video',cost:'~500 MB/min',paidOnly:true,fields:[
+    {k:'file',lbl:'Fichier video',type:'file',accept:'.mp4,.mov,.avi,.mkv,.webm',req:true},
     {k:'output_format',lbl:'Format sortie',type:'select',req:true,opts:['mp4','webm','avi','mkv','mov']},
   ]},
 ];
 
-// State
 let activeJob=JOBS[0], currentTab='json', lastResponse=null;
-let uploadedFiles={}, jobHistory=[], pollingTimers={}, activeHistItem=null;
+let uploadedFiles={}, jobHistory=[], pollingTimers={}, activeHistItem=null, quotaData=null;
 
-// Init
-(function(){
+(function init(){
   const list=document.getElementById('jobList');
-  JOBS.forEach(job=>{
+  JOBS.forEach(function(job){
     const btn=document.createElement('button');
-    btn.className='job-btn'+(job.id===activeJob.id?' active':'')+(job.disabled?' disabled':'');
+    btn.className='job-btn'+(job.id===activeJob.id?' active':'');
     btn.dataset.id=job.id;
-    btn.innerHTML=`<span class="job-emoji">${job.emoji}</span><div class="job-info"><div class="job-name">${job.name}</div><div class="job-cost">${job.cost}</div></div>`;
-    btn.onclick=()=>{ if(job.disabled){showToast('🎥 Job désactivé',true);return;} if(job.paidOnly&&quotaData&&!(quotaData.subscribed||(quotaData.usage&&quotaData.usage.remainingGB>0))){showToast('🎥 Crédits payants requis pour la vidéo',true);return;} selectJob(job); };
+    btn.innerHTML='<span class="job-emoji">'+job.emoji+'</span><div class="job-info"><div class="job-name">'+job.name+'</div><div class="job-cost">'+job.cost+'</div></div>';
+    btn.onclick=function(){
+      if(job.paidOnly&&quotaData&&!(quotaData.subscribed||(quotaData.usage&&quotaData.usage.remainingGB>0))){
+        showToast('Credits payants requis pour la video',true);return;
+      }
+      selectJob(job);
+    };
     list.appendChild(btn);
   });
   renderForm(activeJob);
-  renderCodeTab(currentTab);
 })();
 
 function selectJob(job){
   activeJob=job; uploadedFiles={};
-  document.querySelectorAll('.job-btn').forEach(b=>b.classList.toggle('active',b.dataset.id===job.id));
-  renderForm(job); clearOutput(); renderCodeTab(currentTab);
+  document.querySelectorAll('.job-btn').forEach(function(b){b.classList.toggle('active',b.dataset.id===job.id);});
+  renderForm(job); clearOutput();
 }
 
 function renderForm(job){
   document.getElementById('jobCostHint').textContent=job.cost;
   const form=document.getElementById('formScroll');
   form.innerHTML='';
-  job.fields.forEach(f=>{
+  (job.fields||[]).forEach(function(f){
     const div=document.createElement('div');
     div.className='field fade-in';
-    const lbl=`<div class="field-lbl">${f.lbl}${f.req?'<span class="req">*</span>':''}${f.opt?'<span class="opt">opt</span>':''}</div>`;
+    let lbl='<div class="field-lbl">'+f.lbl+(f.req?'<span class="req"> *</span>':'')+'</div>';
     let inp='';
-    if(f.type==='ta') inp=`<textarea class="f-ta" id="f_${f.k}" placeholder="${f.ph||''}">${f.def||''}</textarea>`;
-    else if(f.type==='select') inp=`<select class="f-select" id="f_${f.k}">${(f.opts||[]).map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`;
-    else if(f.type==='range') inp=`<div class="range-row"><input type="range" id="f_${f.k}" min="${f.min}" max="${f.max}" step="${f.step}" value="${f.def}" oninput="document.getElementById('rv_${f.k}').textContent=this.value"><span class="range-val" id="rv_${f.k}">${f.def}</span></div>`;
-    else if(f.type==='file') inp=`<div class="file-zone" id="fz_${f.k}" onclick="document.getElementById('fi_${f.k}').click()" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="dropFile(event,'${f.k}')"><div class="fz-icon">📁</div><div class="fz-txt">Glissez ou <em>cliquez</em></div><div class="fz-name" id="fn_${f.k}"></div><input type="file" id="fi_${f.k}" style="display:none" accept="${f.accept||'*'}" onchange="pickFile(this,'${f.k}')"></div>`;
-    else inp=`<input type="text" class="f-input" id="f_${f.k}" placeholder="${f.ph||''}" value="${f.def||''}">`;
-    div.innerHTML=lbl+inp+(f.hint?`<div class="f-hint">${f.hint}</div>`:'');
+    if(f.type==='ta'){
+      inp='<textarea class="f-ta" id="f_'+f.k+'" placeholder="'+(f.ph||'')+'">'+(f.def||'')+'</textarea>';
+    } else if(f.type==='select'){
+      inp='<select class="f-select" id="f_'+f.k+'">'+(f.opts||[]).map(function(o){return'<option value="'+o+'">'+o+'</option>';}).join('')+'</select>';
+    } else if(f.type==='range'){
+      inp='<div class="range-row"><input type="range" id="f_'+f.k+'" min="'+f.min+'" max="'+f.max+'" step="'+f.step+'" value="'+f.def+'" oninput="document.getElementById(\'rv_'+f.k+'\').textContent=this.value"><span class="range-val" id="rv_'+f.k+'">'+f.def+'</span></div>';
+    } else if(f.type==='file'){
+      inp='<div class="file-zone" id="fz_'+f.k+'" onclick="document.getElementById(\'fi_'+f.k+'\').click()" ondragover="event.preventDefault();this.classList.add(\'over\')" ondragleave="this.classList.remove(\'over\')" ondrop="dropFile(event,\''+f.k+'\')">'
+        +'<div class="fz-icon">📁</div><div class="fz-txt">Glissez ou <em>cliquez</em></div>'
+        +'<div class="fz-name" id="fn_'+f.k+'"></div>'
+        +'<input type="file" id="fi_'+f.k+'" style="display:none" accept="'+(f.accept||'*')+'" onchange="pickFile(this,\''+f.k+'\')"></div>';
+    } else {
+      inp='<input type="text" class="f-input" id="f_'+f.k+'" placeholder="'+(f.ph||'')+'" value="'+(f.def||'')+'">';
+    }
+    div.innerHTML=lbl+inp+(f.hint?'<div class="f-hint">'+f.hint+'</div>':'');
     form.appendChild(div);
   });
 }
@@ -399,269 +434,315 @@ function dropFile(e,k){ e.preventDefault(); document.getElementById('fz_'+k).cla
 
 function getParams(){
   const p={};
-  activeJob.fields.forEach(f=>{ if(f.type==='file')return; const el=document.getElementById('f_'+f.k); if(el&&el.value!=='')p[f.k]=f.type==='range'?Number(el.value):el.value; });
+  (activeJob.fields||[]).forEach(function(f){
+    if(f.type==='file') return;
+    const el=document.getElementById('f_'+f.k);
+    if(el&&el.value!=='') p[f.k]=f.type==='range'?Number(el.value):el.value;
+  });
   return p;
 }
 
-// Run
+// =====================================================
+//  FIX PRINCIPAL — extraction robuste de l'URL
+//  Gere: { result: { url, format } }  ← ton API
+//  Et aussi toutes les variantes courantes
+// =====================================================
+function guessExt(url){
+  if(!url) return 'file';
+  const m=String(url).match(/\.([a-zA-Z0-9]{2,5})(\?|#|$)/);
+  return m?m[1].toLowerCase():'file';
+}
+
+function extractDownloadInfo(resp){
+  if(!resp) return null;
+  // Cas principal : { status, result: { url, format }, error }
+  if(resp.result && resp.result.url){
+    return { url: resp.result.url, fmt: resp.result.format||guessExt(resp.result.url) };
+  }
+  // URL directe a la racine
+  if(resp.url){
+    return { url: resp.url, fmt: resp.format||guessExt(resp.url) };
+  }
+  // Variantes
+  var checks=[
+    resp.output_url,
+    resp.file_url,
+    resp.download_url,
+    resp.data&&resp.data.url?resp.data.url:null,
+    resp.result&&resp.result.output_url?resp.result.output_url:null,
+    resp.result&&resp.result.file_url?resp.result.file_url:null,
+  ];
+  for(var i=0;i<checks.length;i++){
+    if(checks[i]&&typeof checks[i]==='string'){
+      return { url: checks[i], fmt: guessExt(checks[i]) };
+    }
+  }
+  return null;
+}
+
+function updateDownloadBar(resp){
+  var bar=document.getElementById('dlBar');
+  var anchor=document.getElementById('dlAnchor');
+  var copyBtn=document.getElementById('dlCopyUrl');
+  var urlText=document.getElementById('dlUrlText');
+
+  var info=extractDownloadInfo(resp);
+  if(!info){ bar.classList.remove('visible'); return; }
+
+  var key=document.getElementById('keyInput').value.trim();
+  var fullUrl=info.url.startsWith('http')?info.url:BASE+info.url;
+  // Ajoute x-api-key pour que le telechargement fonctionne sans entete
+  var sep=fullUrl.includes('?')?'&':'?';
+  var dlUrl=key?fullUrl+sep+'x-api-key='+encodeURIComponent(key):fullUrl;
+  var fmt=info.fmt||'file';
+
+  var icons={mp3:'🎵',wav:'🎵',ogg:'🎵',flac:'🎵',m4a:'🎵',aac:'🎵',
+             mp4:'🎥',webm:'🎥',avi:'🎥',mkv:'🎥',mov:'🎥',
+             pdf:'📄',svg:'🖼️',png:'🖼️',jpg:'🖼️',jpeg:'🖼️',
+             csv:'📊',json:'📋',xml:'📋',txt:'📝'};
+  var icon=icons[fmt]||'⬇';
+
+  anchor.href=dlUrl;
+  anchor.setAttribute('download','result.'+fmt);
+  anchor.textContent=icon+' Download .'+fmt;
+  urlText.textContent=fullUrl;
+
+  // Copier l'URL propre (sans cle API)
+  copyBtn.onclick=function(){
+    navigator.clipboard.writeText(fullUrl).then(function(){ showToast('URL copiee!'); });
+  };
+
+  bar.classList.add('visible');
+}
+
 async function runJob(){
-  const key=document.getElementById('keyInput').value.trim();
-  if(!key){showToast('⚠ Clé API manquante',true);return;}
-  const btn=document.getElementById('runBtn');
+  var key=document.getElementById('keyInput').value.trim();
+  if(!key){showToast('Cle API manquante',true);return;}
+  var btn=document.getElementById('runBtn');
   btn.classList.add('loading'); btn.disabled=true;
-  const t0=Date.now();
-  const params=getParams();
-  const hasFile=activeJob.fields.some(f=>f.type==='file'&&uploadedFiles[f.k]);
-  let opts;
+  var t0=Date.now();
+  var params=getParams();
+  var hasFile=(activeJob.fields||[]).some(function(f){return f.type==='file'&&uploadedFiles[f.k];});
+  var opts;
   if(hasFile){
-    // Use FormData (multipart) — backend uses multer
-    const fd=new FormData();
+    var fd=new FormData();
     fd.append('type',activeJob.id);
     fd.append('params',JSON.stringify(params));
-    const fileField=activeJob.fields.find(f=>f.type==='file'&&uploadedFiles[f.k]);
-    if(fileField) fd.append('file',uploadedFiles[fileField.k]);
+    var ff=(activeJob.fields||[]).find(function(f){return f.type==='file'&&uploadedFiles[f.k];});
+    if(ff) fd.append('file',uploadedFiles[ff.k]);
     opts={method:'POST',headers:{'x-api-key':key},body:fd};
   } else {
-    opts={method:'POST',headers:{'Content-Type':'application/json','x-api-key':key},body:JSON.stringify({type:activeJob.id,params})};
+    opts={method:'POST',headers:{'Content-Type':'application/json','x-api-key':key},body:JSON.stringify({type:activeJob.id,params:params})};
   }
   try{
-    const res=await fetch(`${BASE}/api/enterprise/v1/jobs`,opts);
-    const elapsed=Date.now()-t0;
-    const data=await res.json();
-    lastResponse=data; renderOutput(); updateStatusBar(res.status,elapsed);
+    var res=await fetch(BASE+'/api/enterprise/v1/jobs',opts);
+    var elapsed=Date.now()-t0;
+    var data=await res.json();
+    lastResponse=data;
+    renderJson();
+    updateDownloadBar(data); // Affiche immediatement si deja un URL
+    updateStatusBar(res.status,elapsed);
     if(res.ok&&data.id){
       addHistory({id:data.id,type:activeJob.id,emoji:activeJob.emoji,status:data.status||'pending',createdAt:new Date()});
       startPolling(data.id,key);
       fetchQuota();
-      showToast('✓ Job créé — '+data.id);
+      showToast('Job cree — '+data.id);
     } else {
-      showToast('✗ '+(data.error||data.message||'Erreur'),true);
+      showToast((data.error||data.message||'Erreur'),true);
     }
-  }catch(e){
-    updateStatusBar(0,Date.now()-t0,true); lastResponse={error:e.message}; renderOutput(); showToast('✗ '+e.message,true);
+  } catch(e){
+    updateStatusBar(0,Date.now()-t0,true);
+    lastResponse={error:e.message};
+    renderJson();
+    showToast(e.message,true);
   }
   btn.classList.remove('loading'); btn.disabled=false;
 }
 
-// Polling
 function startPolling(jobId,key){
-  let attempts=0;
-  const timer=setInterval(async()=>{
+  var attempts=0;
+  var timer=setInterval(async function(){
     if(++attempts>60){clearInterval(timer);return;}
     try{
-      const res=await fetch(`${BASE}/api/enterprise/v1/jobs/${jobId}/result`,{headers:{'x-api-key':key}});
-      const data=await res.json();
-      const st=data.status||(res.ok?'completed':'failed');
+      var res=await fetch(BASE+'/api/enterprise/v1/jobs/'+jobId+'/result',{headers:{'x-api-key':key}});
+      var data=await res.json();
+      var st=data.status||(res.ok?'completed':'failed');
       updateHistItem(jobId,st,data);
       if(st==='completed'||st==='failed'||st==='done'){
         clearInterval(timer); delete pollingTimers[jobId];
-        if(activeHistItem===jobId){lastResponse=data;renderOutput();}
+        // Toujours mettre a jour si c'est le job actif ou le dernier cree
+        if(!activeHistItem||activeHistItem===jobId){
+          lastResponse=data;
+          renderJson();
+          updateDownloadBar(data); // <- le fix : mise a jour apres completion
+        }
       }
-    }catch{}
+    } catch(e){}
   },2500);
   pollingTimers[jobId]=timer;
 }
 
-// History
 function addHistory(e){ jobHistory.unshift(e); if(jobHistory.length>50)jobHistory.pop(); renderHistory(); }
-function updateHistItem(id,status,data){ const i=jobHistory.find(j=>j.id===id); if(i){i.status=status;i.data=data;} renderHistory(); }
+function updateHistItem(id,status,data){
+  var i=jobHistory.find(function(j){return j.id===id;});
+  if(i){i.status=status;i.data=data;}
+  renderHistory();
+}
 
 function renderHistory(){
-  const list=document.getElementById('histList');
+  var list=document.getElementById('histList');
   if(!jobHistory.length){list.innerHTML='<div class="empty-state" style="height:100px;font-size:10px;">No jobs yet</div>';return;}
   list.innerHTML='';
-  jobHistory.forEach(j=>{
-    const isRunning=j.status==='pending'||j.status==='running'||j.status==='processing';
-    const d=document.createElement('div');
+  jobHistory.forEach(function(j){
+    var isRunning=j.status==='pending'||j.status==='running'||j.status==='processing';
+    var d=document.createElement('div');
     d.className='hist-item'+(j.id===activeHistItem?' active-hist':'')+(isRunning?' running-anim':'');
-    d.innerHTML=`<div class="hist-row1"><span class="hist-type">${j.emoji} ${j.type}</span><span class="hbadge ${mapSt(j.status)}">${j.status}</span></div><div class="hist-id">${j.id}</div><div class="hist-time">${timeAgo(j.createdAt)}</div>`;
-    d.onclick=()=>{activeHistItem=j.id;if(j.data){lastResponse=j.data;renderOutput();}document.getElementById('stJobId').textContent=j.id;renderHistory();};
+    d.innerHTML='<div class="hist-row1"><span class="hist-type">'+j.emoji+' '+j.type+'</span><span class="hbadge '+mapSt(j.status)+'">'+j.status+'</span></div>'
+      +'<div class="hist-id">'+j.id+'</div>'
+      +'<div class="hist-time">'+timeAgo(j.createdAt)+'</div>';
+    d.onclick=function(){
+      activeHistItem=j.id;
+      if(j.data){ lastResponse=j.data; renderJson(); updateDownloadBar(j.data); }
+      document.getElementById('stJobId').textContent=j.id;
+      renderHistory();
+    };
     list.appendChild(d);
   });
 }
 function mapSt(s){ if(!s)return'pending'; if(s==='completed'||s==='done')return'completed'; if(s==='failed'||s==='error')return'failed'; if(s==='running'||s==='processing')return'running'; return'pending'; }
-function clearHistory(){ Object.values(pollingTimers).forEach(t=>clearInterval(t)); pollingTimers={}; jobHistory=[]; activeHistItem=null; renderHistory(); }
-
-// Quota
-let quotaData = null;
+function clearHistory(){ Object.values(pollingTimers).forEach(function(t){clearInterval(t);}); pollingTimers={}; jobHistory=[]; activeHistItem=null; renderHistory(); }
 
 async function fetchQuota(){
-  const key = document.getElementById('keyInput').value.trim();
-  if(!key || key.length < 8) return;
+  var key=document.getElementById('keyInput').value.trim();
+  if(!key||key.length<8) return;
   document.getElementById('quotaLoading').style.display='block';
   document.getElementById('quotaLoading').textContent='loading quota…';
   document.getElementById('quotaRows').style.display='none';
   document.getElementById('quotaRefreshBtn').style.display='none';
-  try {
-    const res = await fetch(`${BASE}/api/enterprise/v1/balance`, {
-      headers: {'x-api-key': key}
-    });
+  try{
+    var res=await fetch(BASE+'/api/enterprise/v1/balance',{headers:{'x-api-key':key}});
     if(!res.ok) throw new Error('HTTP '+res.status);
-    const data = await res.json();
-    quotaData = data;
-    renderQuota(data);
-  } catch(e) {
+    var data=await res.json();
+    quotaData=data; renderQuota(data);
+  } catch(e){
     document.getElementById('quotaLoading').textContent='quota unavailable';
     document.getElementById('quotaRefreshBtn').style.display='block';
   }
 }
 
-function fmtGB(mb){
-  if(mb === null || mb === undefined) return '?';
-  if(mb >= 1024) return (mb/1024).toFixed(2)+' GB';
-  return mb.toFixed(0)+' MB';
-}
-
 function renderQuota(data){
-  // Real shape from /v1/balance (mirrors /me response):
-  // data.freeTier.remainingGB, data.freeTier.weeklyLimitGB, data.freeTier.usedGB
-  // data.usage.remainingGB, data.usage.limitGB, data.usage.usedGB
-  // data.subscribed (bool)
-
   document.getElementById('quotaLoading').style.display='none';
   document.getElementById('quotaRows').style.display='block';
   document.getElementById('quotaRefreshBtn').style.display='block';
-
-  // Plan badge
-  const badge = document.querySelector('.plan-badge');
-  if(badge){
-    if(data.subscribed) badge.textContent='PREMIUM PLAN';
-    else badge.textContent='FREE PLAN';
+  var badge=document.getElementById('planBadge');
+  if(badge) badge.textContent=data.subscribed?'PREMIUM PLAN':'FREE PLAN';
+  var ft=data.freeTier||{};
+  var freeRemGB=ft.remainingGB!=null?ft.remainingGB:null;
+  var freeTotalGB=ft.weeklyLimitGB||3;
+  var freeUsedGB=ft.usedGB!=null?ft.usedGB:(freeTotalGB-(freeRemGB||freeTotalGB));
+  if(freeRemGB!==null){
+    var pct=Math.min(100,(freeUsedGB/freeTotalGB)*100);
+    var bar=document.getElementById('quotaBarFree');
+    bar.style.width=pct+'%';
+    bar.className='quota-bar-inner'+(pct>90?' crit':pct>70?' warn':'');
+    document.getElementById('quotaValFree').textContent=parseFloat(freeRemGB).toFixed(3)+' GB left / '+freeTotalGB+' GB';
   }
-
-  // Free bar — freeTier values are in GB
-  const ft = data.freeTier || {};
-  const freeRemGB = ft.remainingGB ?? null;
-  const freeTotalGB = ft.weeklyLimitGB ?? 3;
-  const freeUsedGB = ft.usedGB ?? (freeTotalGB - (freeRemGB ?? freeTotalGB));
-
-  if(freeRemGB !== null){
-    const pct = Math.min(100, (freeUsedGB / freeTotalGB) * 100);
-    const bar = document.getElementById('quotaBarFree');
-    bar.style.width = pct+'%';
-    bar.className = 'quota-bar-inner'+(pct>90?' crit':pct>70?' warn':'');
-    document.getElementById('quotaValFree').textContent = `${freeRemGB.toFixed(3)} GB left / ${freeTotalGB} GB`;
-  } else {
-    document.getElementById('quotaValFree').textContent = 'n/a';
-  }
-
-  // Paid bar — usage.remainingGB = solde payant disponible, limitGB=0 = pay-as-you-go (pas de plafond fixe)
-  const u = data.usage || {};
-  const paidRemGB = u.remainingGB ?? null;
-  const paidUsedGB = u.usedGB ?? 0;
-  const paidTotalGB = u.limitGB ?? 0;
-  const paidRow = document.getElementById('paidRow');
-
-  // Afficher la barre paid si on a un solde payant (remainingGB > 0) ou qu'on en a utilisé
-  if(paidRemGB !== null && (paidRemGB > 0 || paidUsedGB > 0)){
+  var u=data.usage||{};
+  var paidRemGB=u.remainingGB!=null?u.remainingGB:null;
+  var paidUsedGB=u.usedGB||0;
+  var paidTotalGB=u.limitGB||0;
+  var paidRow=document.getElementById('paidRow');
+  if(paidRemGB!==null&&(paidRemGB>0||paidUsedGB>0)){
     paidRow.style.display='flex';
-    // Si pas de limite fixe (pay-as-you-go), la barre montre l'usage vs total rechargé
-    const totalPaid = paidTotalGB > 0 ? paidTotalGB : (paidRemGB + paidUsedGB);
-    const pct = totalPaid > 0 ? Math.min(100, (paidUsedGB / totalPaid) * 100) : 0;
-    const bar = document.getElementById('quotaBarPaid');
-    bar.style.width = pct+'%';
-    bar.className = 'quota-bar-inner paid'+(pct>90?' crit':pct>70?' warn':'');
-    document.getElementById('quotaValPaid').textContent = `${parseFloat(paidRemGB).toFixed(2)} GB left`;
-  } else {
-    paidRow.style.display='none';
-  }
+    var totalPaid=paidTotalGB>0?paidTotalGB:(paidRemGB+paidUsedGB);
+    var pct2=totalPaid>0?Math.min(100,(paidUsedGB/totalPaid)*100):0;
+    var bar2=document.getElementById('quotaBarPaid');
+    bar2.style.width=pct2+'%';
+    bar2.className='quota-bar-inner paid'+(pct2>90?' crit':pct2>70?' warn':'');
+    document.getElementById('quotaValPaid').textContent=parseFloat(paidRemGB).toFixed(2)+' GB left';
+  } else { paidRow.style.display='none'; }
 }
 
-// Key
 function onKeyInput(){
-  const v=document.getElementById('keyInput').value.trim();
-  const el=document.getElementById('keyStatus');
+  var v=document.getElementById('keyInput').value.trim();
+  var el=document.getElementById('keyStatus');
   if(!v){el.className='key-status none';el.textContent='NO KEY';}
   else if(v.length<8){el.className='key-status err';el.textContent='INVALID';}
   else{el.className='key-status ok';el.textContent='SET';}
-  renderCodeTab(currentTab);
   if(v.length>=8) fetchQuota();
 }
-function toggleKey(){ const i=document.getElementById('keyInput'); i.type=i.type==='password'?'text':'password'; }
-
-// Output
-function renderOutput(){ if(currentTab==='json')renderJson(); else renderCodeTab(currentTab); }
+function toggleKey(){ var i=document.getElementById('keyInput'); i.type=i.type==='password'?'text':'password'; }
 
 function renderJson(){
-  if(!lastResponse)return;
-  let dlHtml='';
-  const r=lastResponse.result||lastResponse;
-  const fileUrl=r&&r.url?r.url:null;
-  if(fileUrl){
-    const fullUrl=fileUrl.startsWith('http')?fileUrl:`${BASE}${fileUrl}`;
-    const fmt=r.format||fileUrl.split('.').pop()||'file';
-    dlHtml=`<a class="dl-btn fade-in" href="${fullUrl}" download="result.${fmt}" target="_blank">⬇ Download .${fmt}</a>`;
-  }
-  document.getElementById('outBody').innerHTML=dlHtml+`<div class="json-pre fade-in">${hlJson(JSON.stringify(lastResponse,null,2))}</div>`;
+  if(!lastResponse) return;
+  document.getElementById('outBody').innerHTML='<div class="json-pre fade-in">'+hlJson(JSON.stringify(lastResponse,null,2))+'</div>';
 }
 
 function renderCodeTab(lang){
-  if(lang==='json'){if(lastResponse)renderJson();return;}
-  const key=document.getElementById('keyInput').value||'YOUR_API_KEY';
-  const params=getParams();
-  const payload={type:activeJob.id,params};
-  let code='';
+  if(lang==='json'){ renderJson(); return; }
+  var key=document.getElementById('keyInput').value||'YOUR_API_KEY';
+  var params=getParams();
+  var payload={type:activeJob.id,params:params};
+  var code='';
   if(lang==='curl'){
-    code=`# 1) Create job\ncurl -X POST ${BASE}/api/enterprise/v1/jobs \\\n  -H "Content-Type: application/json" \\\n  -H "x-api-key: ${key}" \\\n  -d '${JSON.stringify(payload)}'\n\n# 2) List jobs\ncurl -X GET ${BASE}/api/enterprise/v1/jobs \\\n  -H "x-api-key: ${key}"\n\n# 3) Get result\ncurl -X GET ${BASE}/api/enterprise/v1/jobs/{JOB_ID}/result \\\n  -H "x-api-key: ${key}"`;
+    code='# 1) Create job\ncurl -X POST '+BASE+'/api/enterprise/v1/jobs \\\n  -H "Content-Type: application/json" \\\n  -H "x-api-key: '+key+'" \\\n  -d \''+JSON.stringify(payload)+'\'\n\n# 2) Get result\ncurl '+BASE+'/api/enterprise/v1/jobs/{JOB_ID}/result \\\n  -H "x-api-key: '+key+'"';
   } else if(lang==='node'){
-    code=`const BASE = '${BASE}';\nconst API_KEY = '${key}';\n\n// 1) Create job\nconst res = await fetch(\`\${BASE}/api/enterprise/v1/jobs\`, {\n  method: 'POST',\n  headers: {\n    'Content-Type': 'application/json',\n    'x-api-key': API_KEY,\n  },\n  body: JSON.stringify(${JSON.stringify(payload,null,4)}),\n});\nconst { id } = await res.json();\n\n// 2) Poll until done\nasync function waitForResult(jobId) {\n  while (true) {\n    const r = await fetch(\`\${BASE}/api/enterprise/v1/jobs/\${jobId}/result\`, {\n      headers: { 'x-api-key': API_KEY },\n    });\n    const data = await r.json();\n    if (data.status === 'completed' || data.status === 'failed') return data;\n    await new Promise(ok => setTimeout(ok, 2500));\n  }\n}\n\nconst result = await waitForResult(id);\nconsole.log(result);`;
+    code='const res = await fetch("'+BASE+'/api/enterprise/v1/jobs", {\n  method: "POST",\n  headers: { "Content-Type": "application/json", "x-api-key": "'+key+'" },\n  body: JSON.stringify('+JSON.stringify(payload,null,2)+'),\n});\nconst { id } = await res.json();\n\n// Poll result\nconst poll = async () => {\n  while(true) {\n    const r = await fetch("'+BASE+'/api/enterprise/v1/jobs/"+id+"/result", { headers: {"x-api-key":"'+key+'"} });\n    const d = await r.json();\n    if(d.status === "completed" || d.status === "failed") return d;\n    await new Promise(ok => setTimeout(ok, 2500));\n  }\n};\nconst result = await poll();\nif(result.result?.url) {\n  // Telecharger : '+BASE+' + result.result.url\n}';
   } else if(lang==='python'){
-    const pyPayload=JSON.stringify(payload,null,4).replace(/null/g,'None').replace(/true/g,'True').replace(/false/g,'False');
-    code=`import requests, time\n\nBASE = '${BASE}'\nAPI_KEY = '${key}'\nHEADERS = {'x-api-key': API_KEY, 'Content-Type': 'application/json'}\n\n# 1) Create job\npayload = ${pyPayload}\nresp = requests.post(f'{BASE}/api/enterprise/v1/jobs', json=payload, headers=HEADERS)\njob_id = resp.json()['id']\n\n# 2) Poll until done\ndef wait_for_result(job_id):\n    while True:\n        r = requests.get(\n            f'{BASE}/api/enterprise/v1/jobs/{job_id}/result',\n            headers={'x-api-key': API_KEY}\n        )\n        data = r.json()\n        if data.get('status') in ('completed', 'failed', 'done'):\n            return data\n        time.sleep(2.5)\n\nresult = wait_for_result(job_id)\nprint(result)`;
+    code='import requests, time\nBASE = "'+BASE+'"\nHDR = {"x-api-key": "'+key+'"}\n\nresp = requests.post(BASE+"/api/enterprise/v1/jobs",\n  json='+JSON.stringify(payload,null,2).replace(/null/g,'None').replace(/true/g,'True').replace(/false/g,'False')+',\n  headers=HDR)\njob_id = resp.json()["id"]\n\nwhile True:\n    r = requests.get(BASE+"/api/enterprise/v1/jobs/"+job_id+"/result", headers=HDR)\n    d = r.json()\n    if d.get("status") in ("completed","failed","done"):\n        if d.get("result",{}).get("url"):\n            dl = requests.get(BASE+d["result"]["url"], headers=HDR)\n            open("result.'+activeJob.id+'", "wb").write(dl.content)\n        break\n    time.sleep(2.5)';
   }
-  const esc=code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const safe=code.replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
-  document.getElementById('outBody').innerHTML=`<button class="copy-btn" onclick="copyText(\`${safe}\`)">COPY</button><div class="code-pre fade-in">${esc}</div>`;
+  var esc=code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  document.getElementById('outBody').innerHTML='<button class="copy-btn" onclick="navigator.clipboard.writeText(document.querySelector(\'#outBody .code-pre\').textContent).then(function(){showToast(\'Copie!\')})">COPY</button><div class="code-pre fade-in">'+esc+'</div>';
 }
 
 function switchTab(tab,el){
   currentTab=tab;
-  document.querySelectorAll('.out-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.out-tab').forEach(function(t){t.classList.remove('active');});
   el.classList.add('active');
   renderCodeTab(tab);
 }
 
 function clearOutput(){
   lastResponse=null;
+  document.getElementById('dlBar').classList.remove('visible');
   document.getElementById('outBody').innerHTML='<div class="empty-state"><div class="empty-icon">⚡</div><div class="empty-txt">Create a job to see the response</div></div>';
   document.getElementById('stCode').textContent='—'; document.getElementById('stCode').className='st';
   document.getElementById('stTime').textContent='—'; document.getElementById('respMeta').textContent='';
 }
 
 function updateStatusBar(code,ms,isErr){
-  const el=document.getElementById('stCode');
-  if(isErr){el.className='st err';el.innerHTML='<span class="st-dot"></span> ERR';}
-  else if(code>=200&&code<300){el.className='st ok';el.innerHTML=`<span class="st-dot"></span> ${code}`;}
-  else{el.className='st err';el.innerHTML=`<span class="st-dot"></span> ${code}`;}
-  document.getElementById('stTime').textContent=`${ms}ms`;
-  document.getElementById('respMeta').textContent=`${ms}ms`;
+  var el=document.getElementById('stCode');
+  if(isErr||code===0){el.className='st err';el.innerHTML='<span class="st-dot"></span> ERR';}
+  else if(code>=200&&code<300){el.className='st ok';el.innerHTML='<span class="st-dot"></span> '+code;}
+  else{el.className='st err';el.innerHTML='<span class="st-dot"></span> '+code;}
+  document.getElementById('stTime').textContent=ms+'ms';
+  document.getElementById('respMeta').textContent=ms+'ms';
 }
 
-function copyPayload(){ copyText(JSON.stringify({type:activeJob.id,params:getParams()},null,2)); }
-function copyText(txt){ navigator.clipboard.writeText(txt).then(()=>showToast('✓ Copié')); }
+function copyPayload(){ navigator.clipboard.writeText(JSON.stringify({type:activeJob.id,params:getParams()},null,2)).then(function(){showToast('JSON copie!');}); }
 
 function showToast(msg,isErr){
-  const t=document.getElementById('toast');
+  var t=document.getElementById('toast');
   t.textContent=msg; t.className='toast show'+(isErr?' err':'');
-  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2600);
+  clearTimeout(t._t); t._t=setTimeout(function(){t.classList.remove('show');},2600);
 }
 
 function timeAgo(d){
-  const s=Math.floor((Date.now()-new Date(d))/1000);
+  var s=Math.floor((Date.now()-new Date(d))/1000);
   if(s<5)return'just now'; if(s<60)return s+'s ago'; if(s<3600)return Math.floor(s/60)+'m ago'; return Math.floor(s/3600)+'h ago';
 }
 
 function hlJson(json){
   return json.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,m=>{
-      if(/^"/.test(m))return/:$/.test(m)?`<span class="jk">${m}</span>`:`<span class="js">${m}</span>`;
-      if(/true|false/.test(m))return`<span class="jb">${m}</span>`;
-      if(/null/.test(m))return`<span class="jnull">${m}</span>`;
-      return`<span class="jn">${m}</span>`;
+    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,function(m){
+      if(/^"/.test(m)) return /:$/.test(m)?'<span class="jk">'+m+'</span>':'<span class="js">'+m+'</span>';
+      if(/true|false/.test(m)) return'<span class="jb">'+m+'</span>';
+      if(/null/.test(m)) return'<span class="jnull">'+m+'</span>';
+      return'<span class="jn">'+m+'</span>';
     });
 }
 
-setInterval(()=>{if(jobHistory.length)renderHistory();},30000);
+setInterval(function(){if(jobHistory.length)renderHistory();},30000);
 </script>
 </body>
 </html>
