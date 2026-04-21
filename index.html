@@ -80,6 +80,13 @@
                     </svg>
                     <span data-i18n="menu.enterprise_api">API</span>
                 </button>
+                <button id="menu-devs-tools" class="menu-item" onclick="window.open('Devs Tools.html','_blank')" style="display:none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                    <span>Devs Tools</span>
+                </button>
                 <button id="menu-docs" class="menu-item" onclick="setPage('docs')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -1917,6 +1924,10 @@
                     }
                     if (adminAirdropBtn) {
                         adminAirdropBtn.style.display = (role === 'admin' || isKornAdmin) ? 'flex' : 'none';
+                    }
+                    const devsToolsBtn = document.getElementById('menu-devs-tools');
+                    if (devsToolsBtn) {
+                        devsToolsBtn.style.display = (role === 'admin' || isKornAdmin) ? 'flex' : 'none';
                     }
                     const headerLoginBtn = document.getElementById('header-login-btn');
                     if (headerLoginBtn) headerLoginBtn.style.display = 'none';
