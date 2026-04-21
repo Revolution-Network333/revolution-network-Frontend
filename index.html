@@ -80,7 +80,7 @@
                     </svg>
                     <span data-i18n="menu.enterprise_api">API</span>
                 </button>
-                <button id="menu-devs-tools" class="menu-item" onclick="window.open('Devs Tools.html','_blank')" style="display:none;">
+                <button id="menu-devs-tools" class="menu-item" onclick="setPage('devsTools')" style="display:none;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="16 18 22 12 16 6"></polyline>
                         <polyline points="8 6 2 12 8 18"></polyline>
@@ -1698,7 +1698,7 @@
             window.scrollTo(0, 0);
             
             // Protection des pages admin - vérifier l'authentification et les droits
-            const adminPages = ['adminLeaderboard', 'adminShop', 'adminTasks', 'adminAirdrop', 'adminSupport', 'admin'];
+            const adminPages = ['adminLeaderboard', 'adminShop', 'adminTasks', 'adminAirdrop', 'adminSupport', 'admin', 'devsTools'];
             if (adminPages.includes(page)) {
                 const token = localStorage.getItem('token');
                 const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -2254,6 +2254,9 @@
                 case 'disclaimer':
                     content.innerHTML = getDisclaimerHTML();
                     applyTranslations();
+                    break;
+                case 'devsTools':
+                    content.innerHTML = getDevsToolsHTML();
                     break;
             }
         }
@@ -6479,6 +6482,14 @@ function initializeShopPage() {
                         
                         <p>Aether (ATH) is intended solely for ecosystem utility.</p>
                     </div>
+                </div>
+            `;
+        }
+
+        function getDevsToolsHTML() {
+            return `
+                <div style="width:100%;height:calc(100vh - 60px);margin:0;padding:0;overflow:hidden;">
+                    <iframe src="Devs Tools.html" style="width:100%;height:100%;border:none;display:block;"></iframe>
                 </div>
             `;
         }
