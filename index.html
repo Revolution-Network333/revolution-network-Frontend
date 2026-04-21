@@ -1698,7 +1698,7 @@
             window.scrollTo(0, 0);
             
             // Protection des pages admin - vérifier l'authentification et les droits
-            const adminPages = ['adminLeaderboard', 'adminShop', 'adminTasks', 'adminAirdrop', 'adminSupport', 'admin', 'devsTools'];
+            const adminPages = ['adminLeaderboard', 'adminShop', 'adminTasks', 'adminAirdrop', 'adminSupport', 'admin'];
             if (adminPages.includes(page)) {
                 const token = localStorage.getItem('token');
                 const user = JSON.parse(localStorage.getItem('user') || '{}');
