@@ -138,6 +138,8 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .code-pre{font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.75;padding:16px 18px;white-space:pre;overflow-x:auto;color:var(--txt2);}
 .copy-btn{position:absolute;top:12px;right:14px;background:var(--s3);border:1px solid var(--b2);border-radius:5px;color:var(--txt2);font-size:9px;font-family:'IBM Plex Mono',monospace;padding:4px 9px;cursor:pointer;letter-spacing:.5px;z-index:2;transition:all .15s;}
 .copy-btn:hover{border-color:var(--acc);color:var(--acc);}
+.dl-btn{display:inline-flex;align-items:center;gap:6px;margin:12px 18px;padding:10px 18px;background:#10b981;color:#000;border:none;border-radius:7px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.5px;text-decoration:none;}
+.dl-btn:hover{background:#34d399;box-shadow:0 0 12px rgba(16,185,129,.3);transform:translateY(-1px);}
 .status-bar{padding:6px 16px;border-top:1px solid var(--b1);background:var(--s1);display:flex;align-items:center;gap:14px;font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--txt3);flex-shrink:0;}
 .st{display:flex;align-items:center;gap:4px;}
 .st.ok{color:var(--ok);}.st.err{color:var(--err);}.st.pending{color:var(--warn);}
@@ -582,7 +584,15 @@ function renderOutput(){ if(currentTab==='json')renderJson(); else renderCodeTab
 
 function renderJson(){
   if(!lastResponse)return;
-  document.getElementById('outBody').innerHTML=`<div class="json-pre fade-in">${hlJson(JSON.stringify(lastResponse,null,2))}</div>`;
+  let dlHtml='';
+  const r=lastResponse.result||lastResponse;
+  const fileUrl=r&&r.url?r.url:null;
+  if(fileUrl){
+    const fullUrl=fileUrl.startsWith('http')?fileUrl:`${BASE}${fileUrl}`;
+    const fmt=r.format||fileUrl.split('.').pop()||'file';
+    dlHtml=`<a class="dl-btn fade-in" href="${fullUrl}" download="result.${fmt}" target="_blank">⬇ Download .${fmt}</a>`;
+  }
+  document.getElementById('outBody').innerHTML=dlHtml+`<div class="json-pre fade-in">${hlJson(JSON.stringify(lastResponse,null,2))}</div>`;
 }
 
 function renderCodeTab(lang){
