@@ -4926,11 +4926,12 @@ main();</code></pre>
                     <div class="page-header">
                         <h1 class="page-title">Admin Leaderboard</h1>
                         <div style="display:flex;gap:8px;align-items:center;">
-                            <input id="admin-search-input" type="text" placeholder="Recherche (username ou email)" 
+                            <input id="admin-search-input" type="text" placeholder="Recherche (username ou email)"
                                    style="padding:8px;border:1px solid #374151;border-radius:6px;background:#111827;color:#e5e7eb;min-width:260px;">
                             <button class="profile-btn" id="admin-search-btn">Rechercher</button>
                             <button class="profile-btn primary" onclick="currentPage='adminAirdrop'; renderPage();" title="Aller à la page des bonus globaux">🎁 Bonus Général</button>
                             <button class="profile-btn" onclick="openAdminNotificationModal()" title="Créer une notification">📣 Notification</button>
+                            <button class="profile-btn" onclick="clearJobsHistory()" title="Supprimer l'historique des jobs et les résultats" style="background:linear-gradient(135deg,#f59e0b,#d97706);">🗑️ Clear Jobs</button>
                             <button id="emergency-gb-repair-v2" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:white;border:none;padding:10px 18px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:bold;" onclick="repairGB()">🚨 RÉPARER GB</button>
                         </div>
                     </div>
@@ -8394,6 +8395,19 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
                 alert(d.success ? `✅ ${d.message} — ${d.fixed} users réparés` : '❌ ' + d.error);
             } catch(e) { alert('❌ ' + e.message); }
             if (btn) { btn.textContent = '🚨 RÉPARER GB'; btn.disabled = false; }
+        }
+
+        async function clearJobsHistory() {
+            if (!confirm('Supprimer tout l\'historique des jobs et les fichiers résultats ? Cette action est irréversible.')) return;
+            const token = localStorage.getItem('token');
+            try {
+                const r = await fetch(`${API_BASE}/api/admin/jobs/clear`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const d = await r.json();
+                alert(d.success ? `✅ ${d.message}` : '❌ ' + d.error);
+            } catch(e) { alert('❌ ' + e.message); }
         }
 
     </script>
