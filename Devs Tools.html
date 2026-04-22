@@ -363,13 +363,15 @@ const JOBS = [
     {k:'style',lbl:'Style',type:'select',opts:['minimal','flat','outline','filled','gradient','duotone']},
   ]},
   {id:'audio_convert',emoji:'🎵',name:'audio_convert',desc:'Conversion audio',cost:'~50 MB/min',fields:[
-    {k:'file',lbl:'Fichier audio',type:'file',accept:'.mp3,.wav,.ogg,.flac,.m4a',req:true},
+    {k:'inputUrl',lbl:'URL audio (optionnel)',type:'text',ph:'https://example.com/audio.mp3'},
+    {k:'file',lbl:'Fichier audio',type:'file',accept:'.mp3,.wav,.ogg,.flac,.m4a'},
     {k:'output_format',lbl:'Format sortie',type:'select',req:true,opts:['mp3','wav','ogg','flac','m4a','aac']},
     {k:'bitrate',lbl:'Bitrate (kbps)',type:'select',opts:['64','128','192','256','320']},
     {k:'sample_rate',lbl:'Sample rate',type:'select',opts:['22050','44100','48000','96000'],hint:'Hz'},
   ]},
   {id:'video_transcode',emoji:'🎥',name:'video_transcode',desc:'Transcodage video',cost:'~500 MB/min',paidOnly:true,fields:[
-    {k:'file',lbl:'Fichier video',type:'file',accept:'.mp4,.mov,.avi,.mkv,.webm',req:true},
+    {k:'inputUrl',lbl:'URL video (optionnel)',type:'text',ph:'https://example.com/video.mp4'},
+    {k:'file',lbl:'Fichier video',type:'file',accept:'.mp4,.mov,.avi,.mkv,.webm'},
     {k:'output_format',lbl:'Format sortie',type:'select',req:true,opts:['mp4','webm','avi','mkv','mov']},
   ]},
 ];
