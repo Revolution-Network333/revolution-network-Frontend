@@ -5801,14 +5801,14 @@ function initializeShopPage() {
                     const buttonHTML = `<button class="profile-btn ${isPro || isEnterprise ? 'primary' : ''}" data-link="${link}" ${priceIdAttr} style="font-size:0.85em;padding:8px 12px;width:auto;white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${btnLabel}</button>`;
 
                     let displayName = name;
-                    if (isStandard) displayName = 'Standard Plan – 500 GB';
-                    if (isPro) displayName = 'Pro Plan – 1,000 GB';
-                    if (isPremium) displayName = 'Premium Plan – 2,500 GB';
+                    if (isStandard) displayName = 'Standard Plan – 250 GB';
+                    if (isPro) displayName = 'Pro Plan – 500 GB';
+                    if (isPremium) displayName = 'Premium Plan – 1,500 GB';
 
                     const features = (() => {
-                        if (isStandard) return ['Monthly volume: 500 GB', 'Price per GB: €0.04', 'Ideal for small projects'];
-                        if (isPro) return ['Monthly volume: 1,000 GB', 'Price per GB: €0.04', 'Optional speed/priority bonus'];
-                        if (isPremium) return ['Monthly volume: 2,500 GB', 'Price per GB: €0.04', 'Speed and priority included'];
+                        if (isStandard) return ['Monthly volume: 250 GB', 'Price per GB: €0.08', 'Ideal for small projects'];
+                        if (isPro) return ['Monthly volume: 500 GB', 'Price per GB: €0.08', 'Optional speed/priority bonus'];
+                        if (isPremium) return ['Monthly volume: 1,500 GB', 'Price per GB: €0.08', 'Speed and priority included'];
                         return p.description ? p.description.split('. ') : [];
                     })();
 
