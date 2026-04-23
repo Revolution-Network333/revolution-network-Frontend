@@ -4434,7 +4434,7 @@ main();</code></pre>
 
             const planCards = (plans || []).map(p => {
                 const priceLabel = (p.price == null) ? t('shop.plan.quote_price') : formatPrice(p.price, p.currency || 'EUR');
-                const gbLabel = p.gbPerMonth ? `${Number(p.gbPerMonth).toLocaleString(currentLocale)} GB / ${t('common.month') || 'mois'}` : '';
+                const gbLabel = p.gbPerMonth ? `${Number(p.gbPerMonth).toLocaleString(currentLocale)} GB / ${t('shop.plan.period') || 'mois'}` : '';
                 const name = p.name || t('shop.plan.default_name');
                 const recommended = /pro/i.test(name) ? t('shop.plan.recommended_suffix') : '';
                 const btnLabel = (p.price == null) ? t('shop.plan.button.request_quote') : t('shop.plan.button.subscribe');
@@ -5783,7 +5783,7 @@ function initializeShopPage() {
                     if (isStandard) gbPerMonth = 250;
                     if (isPro) gbPerMonth = 500;
                     if (isPremium) gbPerMonth = 1500;
-                    const pointsLabel = gbPerMonth ? `🚀 ${gbPerMonth} GB / ${t('common.month') || 'mois'}` : '';
+                    const pointsLabel = gbPerMonth ? `🚀 ${gbPerMonth} GB / ${t('shop.plan.period') || 'mois'}` : '';
 
                     let recommendedTag = '';
                     if (isPro) recommendedTag = `<div class="plan-tag">${t('shop.plan.tag.recommended')}</div>`;
