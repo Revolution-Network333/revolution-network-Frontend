@@ -348,7 +348,7 @@ const JOBS = [
   ]},
   {id:'scrape_get',emoji:'🤖',name:'scrape_get',desc:'Scraping intelligent',cost:'~2 MB',fields:[
     {k:'url',lbl:'URL cible',type:'text',ph:'https://example.com',req:true},
-    {k:'mode',lbl:'Mode extraction',type:'select',opts:['css','ai','hybrid'],def:'hybrid'},
+    {k:'mode',lbl:'Mode extraction',type:'select',opts:['auto','html','browser','css','ai','hybrid'],def:'auto',hint:'auto: intelligent fallback, browser: Puppeteer, html: HTTP, css: selectors, ai: AI only'},
     {k:'selectors',lbl:'Selecteurs CSS',type:'ta',ph:'{\n  "title": "h1",\n  "price": ".price",\n  "description": ".description"\n}',hint:'JSON - pour mode css/hybrid'},
     {k:'ai_instruction',lbl:'Instruction AI',type:'text',ph:'Extract product title, price, description',hint:'Pour mode ai/hybrid'},
     {k:'schema',lbl:'Schema (optionnel)',type:'select',opts:['default','ecommerce','article'],def:'default',hint:'default: page_type,title,price,availability,description,raw_text'},
