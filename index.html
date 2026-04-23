@@ -4439,9 +4439,9 @@ main();</code></pre>
                 const recommended = /pro/i.test(name) ? t('shop.plan.recommended_suffix') : '';
                 const btnLabel = (p.price == null) ? t('shop.plan.button.request_quote') : t('shop.plan.button.subscribe');
                 const features = (() => {
-                    if (/standard/i.test(name)) return ['500 GB de volume', 'Support standard', 'Priorité normale'];
-                    if (/pro/i.test(name)) return ['1 000 GB de volume', 'Support rapide', 'Priorité haute'];
-                    if (/premium/i.test(name)) return ['2 500 GB de volume', 'Support VIP', 'Priorité Ultra'];
+                    if (/standard/i.test(name)) return ['250 GB de volume', 'Support standard', 'Priorité normale'];
+                    if (/pro/i.test(name)) return ['500 GB de volume', 'Support rapide', 'Priorité haute'];
+                    if (/premium/i.test(name)) return ['1 500 GB de volume', 'Support VIP', 'Priorité Ultra'];
                     return p.description ? [p.description] : [];
                 })();
                 const link = p.paymentLink || '';
@@ -4472,9 +4472,9 @@ main();</code></pre>
                             <div class="topup-section">
                                 <h4>Rechargement de volume</h4>
                                 <div class="topup-grid">
-                                    <div class="topup-item">10€ = 250 GB</div>
-                                    <div class="topup-item">40€ = 1 000 GB</div>
-                                    <div class="topup-item">100€ = 2 500 GB</div>
+                                    <div class="topup-item">20€ = 250 GB</div>
+                                    <div class="topup-item">40€ = 500 GB</div>
+                                    <div class="topup-item">100€ = 1 250 GB</div>
                                 </div>
                                 <h4>Coûts estimés par job</h4>
                                 <ul class="points-examples">
