@@ -5779,6 +5779,10 @@ function initializeShopPage() {
                             gbPerMonth = meta.gbPerMonth;
                         } catch(e) {}
                     }
+                    // Fallback to hardcoded values if backend not updated
+                    if (isStandard && !gbPerMonth) gbPerMonth = 250;
+                    if (isPro && !gbPerMonth) gbPerMonth = 500;
+                    if (isPremium && !gbPerMonth) gbPerMonth = 1500;
                     const pointsLabel = gbPerMonth ? `🚀 ${gbPerMonth} GB / ${t('common.month') || 'mois'}` : '';
 
                     let recommendedTag = '';
