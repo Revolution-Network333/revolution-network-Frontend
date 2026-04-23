@@ -2425,6 +2425,7 @@
                             <a class="profile-btn" href="#docs-project" style="text-decoration:none;">${t('docs.section.project')}</a>
                             <a class="profile-btn" href="#docs-platform" style="text-decoration:none;">${t('docs.section.platform')}</a>
                             <a class="profile-btn" href="#docs-api" style="text-decoration:none;">${t('docs.section.api')}</a>
+                            <a class="profile-btn" href="#docs-scraping" style="text-decoration:none;">Scraping Engine</a>
                             <a class="profile-btn" href="#docs-webhooks" style="text-decoration:none;">${t('docs.section.webhooks')}</a>
                             <a class="profile-btn" href="#docs-sdk" style="text-decoration:none;">${t('docs.section.sdk')}</a>
                             <a class="profile-btn" href="#docs-security" style="text-decoration:none;">${t('docs.section.security')}</a>
@@ -2466,6 +2467,29 @@
                             </div>
                             <div style="margin-top:14px;"><strong>${t('docs.api.free_tier_title')}</strong> :</div>
                             <div>${t('docs.api.free_tier_desc')}</div>
+                        </div>
+                    </div>
+
+                    <div id="docs-scraping" class="glass-card" style="padding: 18px; border-radius: 14px; border: 1px solid #1f2937; background: rgba(17, 24, 39, 0.35); margin-bottom: 14px;">
+                        <h2 style="margin:0 0 10px 0;">🤖 Scraping Engine</h2>
+                        <div style="color:#9ca3af; line-height:1.7;">
+                            <div style="margin-bottom:12px;"><strong>Modes d'extraction</strong> :</div>
+                            <div>• <strong>auto</strong> (par défaut): Fallback intelligent - tente HTML, puis Browser, puis AI</div>
+                            <div>• <strong>html</strong>: Extraction HTTP classique avec headers navigateur et décompression</div>
+                            <div>• <strong>browser</strong>: Extraction via Puppeteer (headless) pour contourner les protections anti-bot</div>
+                            <div>• <strong>css</strong>: Extraction basée sur sélecteurs CSS personnalisés</div>
+                            <div>• <strong>ai</strong>: Extraction purement basée sur l'IA</div>
+                            <div>• <strong>hybrid</strong>: Combine CSS et AI pour une extraction robuste</div>
+                            <div style="margin-top:12px;"><strong>Fonctionnalités E-commerce</strong> :</div>
+                            <div>• Détection automatique de plateformes: Amazon, Shopify, WooCommerce</div>
+                            <div>• Pagination intelligente avec détection automatique des liens "Suivant"</div>
+                            <div>• Standardisation de sortie pour les produits (name, price, availability, etc.)</div>
+                            <div>• Sélecteurs optimisés spécifiques par plateforme</div>
+                            <div style="margin-top:12px;"><strong>Robustesse</strong> :</div>
+                            <div>• Système de retry automatique en cas d'échec</div>
+                            <div>• Normalisation d'URL (ajout automatique de https://)</div>
+                            <div>• Headers navigateur réalistes pour éviter les blocages</div>
+                            <div>• Décompression automatique (gzip, brotli, deflate)</div>
                         </div>
                     </div>
 
@@ -4103,6 +4127,14 @@ main();</code></pre>
                                     <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs</div>
                                     <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs/:id</div>
                                     <div class="doc-item"><span>GET</span> /api/enterprise/v1/jobs/:id/result</div>
+                                </div>
+                                <div style="margin-top:14px; border-top:1px solid #1f2937; padding-top:12px;">
+                                    <strong>Scraping Engine (scrape_get)</strong>
+                                    <div style="margin-top:8px; color:#9ca3af; font-size:0.9rem;">
+                                        <div style="margin-bottom:6px;">Modes: <strong>auto</strong> (fallback intelligent), <strong>html</strong> (HTTP), <strong>browser</strong> (Puppeteer anti-bot), <strong>css</strong> (sélecteurs), <strong>ai</strong> (IA), <strong>hybrid</strong> (CSS+IA)</div>
+                                        <div style="margin-bottom:6px;">Plateformes: Amazon, Shopify, WooCommerce (détection automatique)</div>
+                                        <div>Robustesse: retry auto, normalisation URL, headers navigateur, décompression gzip/brotli</div>
+                                    </div>
                                 </div>
                                 <div class="doc-auth">Header: x-api-key</div>
                             </div>
