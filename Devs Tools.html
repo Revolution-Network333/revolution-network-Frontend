@@ -351,6 +351,7 @@ const JOBS = [
     {k:'mode',lbl:'Mode extraction',type:'select',opts:['css','ai','hybrid'],def:'hybrid'},
     {k:'selectors',lbl:'Selecteurs CSS',type:'ta',ph:'{\n  "title": "h1",\n  "price": ".price",\n  "description": ".description"\n}',hint:'JSON - pour mode css/hybrid'},
     {k:'ai_instruction',lbl:'Instruction AI',type:'text',ph:'Extract product title, price, description',hint:'Pour mode ai/hybrid'},
+    {k:'schema',lbl:'Schema (optionnel)',type:'select',opts:['default','ecommerce','article'],def:'default',hint:'default: title,price,availability,category,author,raw_text'},
   ]},
   {id:'text_transform',emoji:'📝',name:'text_transform',desc:'Transformation texte',cost:'~1 MB',fields:[
     {k:'input',lbl:'Texte source',type:'ta',ph:'Entrez votre texte…',req:true},
