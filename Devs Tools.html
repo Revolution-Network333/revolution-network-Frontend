@@ -197,6 +197,22 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .toast.err{border-color:var(--err);color:var(--err);}
 @keyframes fadeIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
 .fade-in{animation:fadeIn .3s ease forwards;}
+/* Console panel */
+.console-panel{display:flex;flex-direction:column;height:100%;background:var(--s1);border-radius:8px;overflow:hidden;}
+.console-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--b1);background:var(--s2);}
+.console-title{font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--txt);letter-spacing:1px;}
+.console-input{flex:1;min-height:150px;background:var(--s1);border:none;color:var(--txt);font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.6;padding:14px;resize:none;outline:none;}
+.console-input::placeholder{color:var(--txt3);}
+.console-actions{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--b1);background:var(--s2);}
+.console-output{flex:1;overflow:auto;padding:14px;background:var(--s1);font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.6;}
+.console-output::-webkit-scrollbar{width:4px;}
+.console-output::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
+.console-placeholder{color:var(--txt3);font-style:italic;text-align:center;padding:20px;}
+.console-result{display:flex;flex-direction:column;gap:6px;}
+.console-line{padding:6px 8px;border-radius:4px;background:var(--s2);border-left:3px solid var(--b2);word-break:break-all;}
+.console-line.result{border-left-color:var(--ok);color:var(--ok);}
+.console-line.error{border-left-color:var(--err);color:var(--err);}
+.console-line.info{border-left-color:var(--warn);color:var(--warn);}
 </style>
 </head>
 <body>
@@ -283,6 +299,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
         <div class="out-tab" onclick="switchTab('curl',this)">cURL</div>
         <div class="out-tab" onclick="switchTab('node',this)">Node.js</div>
         <div class="out-tab" onclick="switchTab('python',this)">Python</div>
+        <div class="out-tab" onclick="switchTab('console',this)">🖥 Console</div>
       </div>
 
       <!-- ====== DOWNLOAD BAR — toujours visible, hors scroll ====== -->
@@ -328,6 +345,12 @@ const JOBS = [
     {k:'url',lbl:'URL cible',type:'text',ph:'https://example.com',req:true},
     {k:'selector',lbl:'Selecteur CSS',type:'text',ph:'.content, h1',hint:'Optionnel'},
     {k:'output_format',lbl:'Format',type:'select',opts:['text','html','markdown','json']},
+  ]},
+  {id:'scrape_get',emoji:'🤖',name:'scrape_get',desc:'Scraping intelligent',cost:'~2 MB',fields:[
+    {k:'url',lbl:'URL cible',type:'text',ph:'https://example.com',req:true},
+    {k:'mode',lbl:'Mode extraction',type:'select',opts:['css','ai','hybrid'],def:'hybrid'},
+    {k:'selectors',lbl:'Selecteurs CSS',type:'ta',ph:'{\n  "title": "h1",\n  "price": ".price",\n  "description": ".description"\n}',hint:'JSON - pour mode css/hybrid'},
+    {k:'ai_instruction',lbl:'Instruction AI',type:'text',ph:'Extract product title, price, description',hint:'Pour mode ai/hybrid'},
   ]},
   {id:'text_transform',emoji:'📝',name:'text_transform',desc:'Transformation texte',cost:'~1 MB',fields:[
     {k:'input',lbl:'Texte source',type:'ta',ph:'Entrez votre texte…',req:true},
@@ -712,7 +735,119 @@ function switchTab(tab,el){
   currentTab=tab;
   document.querySelectorAll('.out-tab').forEach(function(t){t.classList.remove('active');});
   el.classList.add('active');
-  renderCodeTab(tab);
+  if(tab==='console'){
+    renderConsole();
+  } else {
+    renderCodeTab(tab);
+  }
+}
+
+function renderConsole(){
+  var key=document.getElementById('keyInput').value||'YOUR_API_KEY';
+  var html='<div class="console-panel fade-in">'+
+    '<div class="console-header">'+
+    '<div class="console-title">🖥 JavaScript Console</div>'+
+    '<button class="btn-sec" onclick="clearConsole()">Clear</button>'+
+    '</div>'+
+    '<textarea class="console-input" id="consoleInput" placeholder="// Enter JavaScript code to execute...&#10;// Example:&#10;const result = [1,2,3].map(x => x * 2);&#10;return result;"></textarea>'+
+    '<div class="console-actions">'+
+    '<button class="btn-run" onclick="runConsoleCode()">▶ Execute</button>'+
+    '<button class="btn-sec" onclick="runConsoleCodeRemote()">🌐 Execute via API</button>'+
+    '</div>'+
+    '<div class="console-output" id="consoleOutput">'+
+    '<div class="console-placeholder">Output will appear here...</div>'+
+    '</div>'+
+    '</div>';
+  document.getElementById('outBody').innerHTML=html;
+}
+
+function clearConsole(){
+  var out=document.getElementById('consoleOutput');
+  if(out) out.innerHTML='<div class="console-placeholder">Output will appear here...</div>';
+}
+
+function runConsoleCode(){
+  var code=document.getElementById('consoleInput').value;
+  if(!code.trim()){showToast('Enter code first',true);return;}
+  try{
+    var result=eval(code);
+    var out=document.getElementById('consoleOutput');
+    out.innerHTML='<div class="console-result fade-in">'+
+      '<div class="console-line">> '+code.replace(/\n/g,'<br>&nbsp; ')+'</div>'+
+      '<div class="console-line result">=> '+JSON.stringify(result,null,2)+'</div>'+
+      '</div>';
+    showToast('Code executed successfully');
+  } catch(e){
+    var out=document.getElementById('consoleOutput');
+    out.innerHTML='<div class="console-result fade-in">'+
+      '<div class="console-line">> '+code.replace(/\n/g,'<br>&nbsp; ')+'</div>'+
+      '<div class="console-line error">Error: '+e.message+'</div>'+
+      '</div>';
+    showToast(e.message,true);
+  }
+}
+
+async function runConsoleCodeRemote(){
+  var code=document.getElementById('consoleInput').value;
+  var key=document.getElementById('keyInput').value.trim();
+  if(!code.trim()){showToast('Enter code first',true);return;}
+  if(!key){showToast('API key required',true);return;}
+  
+  try{
+    var res=await fetch(BASE+'/api/enterprise/v1/jobs',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':key},
+      body:JSON.stringify({
+        type:'code_run_js',
+        params:{code:code,timeout:10}
+      })
+    });
+    var data=await res.json();
+    if(res.ok&&data.id){
+      var out=document.getElementById('consoleOutput');
+      out.innerHTML='<div class="console-result fade-in">'+
+        '<div class="console-line">> '+code.replace(/\n/g,'<br>&nbsp; ')+'</div>'+
+        '<div class="console-line info">Job created: '+data.id+'</div>'+
+        '<div class="console-line info">Polling for result...</div>'+
+        '</div>';
+      startConsolePolling(data.id,key,code);
+      showToast('Job created - polling...');
+    } else {
+      throw new Error(data.error||data.message||'Failed to create job');
+    }
+  } catch(e){
+    var out=document.getElementById('consoleOutput');
+    out.innerHTML='<div class="console-result fade-in">'+
+      '<div class="console-line">> '+code.replace(/\n/g,'<br>&nbsp; ')+'</div>'+
+      '<div class="console-line error">Error: '+e.message+'</div>'+
+      '</div>';
+    showToast(e.message,true);
+  }
+}
+
+function startConsolePolling(jobId,key,code){
+  var attempts=0;
+  var timer=setInterval(async function(){
+    if(++attempts>60){clearInterval(timer);return;}
+    try{
+      var res=await fetch(BASE+'/api/enterprise/v1/jobs/'+jobId+'/result',{headers:{'x-api-key':key}});
+      var data=await res.json();
+      var st=data.status||(res.ok?'completed':'failed');
+      if(st==='completed'||st==='failed'||st==='done'){
+        clearInterval(timer);
+        var out=document.getElementById('consoleOutput');
+        var resultHtml='<div class="console-line">> '+code.replace(/\n/g,'<br>&nbsp; ')+'</div>';
+        resultHtml+='<div class="console-line info">Status: '+st+'</div>';
+        if(st==='completed'&&data.result){
+          resultHtml+='<div class="console-line result">=> '+JSON.stringify(data.result,null,2)+'</div>';
+        } else if(st==='failed'){
+          resultHtml+='<div class="console-line error">Error: '+(data.error||'Unknown error')+'</div>';
+        }
+        out.innerHTML='<div class="console-result fade-in">'+resultHtml+'</div>';
+        showToast('Execution completed');
+      }
+    } catch(e){}
+  },2500);
 }
 
 function clearOutput(){
