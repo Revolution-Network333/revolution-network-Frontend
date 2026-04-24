@@ -362,6 +362,7 @@
                 'docs.section.webhooks': 'Webhooks (événements)',
                 'docs.section.sdk': 'SDK npm',
                 'docs.section.security': 'Sécurité & bonnes pratiques',
+                'docs.section.scraping': 'Scraping Engine',
                 'docs.section.faq': 'FAQ',
                 'docs.project.p1': 'Revolution Network est un projet DePIN (Decentralized Physical Infrastructure Network). L’objectif est de transformer des ressources distribuées (nœuds) en capacités utilisables via une plateforme. Le site sert d’interface (dashboard), tandis que le backend orchestre les jobs, les quotas, et l’exécution.',
                 'docs.platform.components': 'Composants',
@@ -395,6 +396,23 @@
                 'docs.faq.a2': 'Crédits insuffisants ou quota free tier dépassé.',
                 'docs.faq.q3': 'Comment éviter le polling ?',
                 'docs.faq.a3': 'Enregistrant un webhook pour job.completed / job.failed.',
+                'docs.scraping.modes_title': 'Modes d\'extraction',
+                'docs.scraping.modes.auto': 'auto (par défaut): Fallback intelligent - tente HTML, puis Browser, puis AI',
+                'docs.scraping.modes.html': 'html: Extraction HTTP classique avec headers navigateur et décompression',
+                'docs.scraping.modes.browser': 'browser: Extraction via Puppeteer (headless) pour contourner les protections anti-bot',
+                'docs.scraping.modes.css': 'css: Extraction basée sur sélecteurs CSS personnalisés',
+                'docs.scraping.modes.ai': 'ai: Extraction purement basée sur l\'IA',
+                'docs.scraping.modes.hybrid': 'hybrid: Combine CSS et AI pour une extraction robuste',
+                'docs.scraping.ecommerce_title': 'Fonctionnalités E-commerce',
+                'docs.scraping.ecommerce.platforms': 'Détection automatique de plateformes: Amazon, Shopify, WooCommerce',
+                'docs.scraping.ecommerce.pagination': 'Pagination intelligente avec détection automatique des liens "Suivant"',
+                'docs.scraping.ecommerce.standardization': 'Standardisation de sortie pour les produits (name, price, availability, etc.)',
+                'docs.scraping.ecommerce.selectors': 'Sélecteurs optimisés spécifiques par plateforme',
+                'docs.scraping.robustness_title': 'Robustesse',
+                'docs.scraping.robustness.retry': 'Système de retry automatique en cas d\'échec',
+                'docs.scraping.robustess.url': 'Normalisation d\'URL (ajout automatique de https://)',
+                'docs.scraping.robustness.headers': 'Headers navigateur réalistes pour éviter les blocages',
+                'docs.scraping.robustness.compression': 'Décompression automatique (gzip, brotli, deflate)',
                 'sidebar.follow': 'SUIVEZ-NOUS',
                 'social.twitter': 'X(Twitter)',
                 'social.discord': 'Discord',
@@ -714,6 +732,7 @@
                 'docs.section.webhooks': 'Webhooks (events)',
                 'docs.section.sdk': 'npm SDK',
                 'docs.section.security': 'Security & best practices',
+                'docs.section.scraping': 'Scraping Engine',
                 'docs.section.faq': 'FAQ',
                 'docs.project.p1': 'Revolution Network is a DePIN (Decentralized Physical Infrastructure Network) project. The goal is to turn distributed resources (nodes) into usable capacity through a platform. The website is the dashboard, while the backend orchestrates jobs, quotas, and execution.',
                 'docs.platform.components': 'Components',
@@ -747,6 +766,23 @@
                 'docs.faq.a2': 'Insufficient credits or free-tier quota exceeded.',
                 'docs.faq.q3': 'How to avoid polling?',
                 'docs.faq.a3': 'Register a webhook for job.completed / job.failed.',
+                'docs.scraping.modes_title': 'Extraction modes',
+                'docs.scraping.modes.auto': 'auto (default): Intelligent fallback - tries HTML, then Browser, then AI',
+                'docs.scraping.modes.html': 'html: Classic HTTP extraction with browser headers and decompression',
+                'docs.scraping.modes.browser': 'browser: Extraction via Puppeteer (headless) to bypass anti-bot protections',
+                'docs.scraping.modes.css': 'css: Extraction based on custom CSS selectors',
+                'docs.scraping.modes.ai': 'ai: Purely AI-based extraction',
+                'docs.scraping.modes.hybrid': 'hybrid: Combines CSS and AI for robust extraction',
+                'docs.scraping.ecommerce_title': 'E-commerce features',
+                'docs.scraping.ecommerce.platforms': 'Automatic platform detection: Amazon, Shopify, WooCommerce',
+                'docs.scraping.ecommerce.pagination': 'Smart pagination with automatic "Next" link detection',
+                'docs.scraping.ecommerce.standardization': 'Standardized output for products (name, price, availability, etc.)',
+                'docs.scraping.ecommerce.selectors': 'Platform-specific optimized selectors',
+                'docs.scraping.robustness_title': 'Robustness',
+                'docs.scraping.robustness.retry': 'Automatic retry system on failure',
+                'docs.scraping.robustess.url': 'URL normalization (automatic https:// addition)',
+                'docs.scraping.robustness.headers': 'Realistic browser headers to avoid blocking',
+                'docs.scraping.robustness.compression': 'Automatic decompression (gzip, brotli, deflate)',
                 'sidebar.follow': 'FOLLOW US',
                 'social.twitter': 'X(Twitter)',
                 'social.discord': 'Discord',
@@ -2425,7 +2461,7 @@
                             <a class="profile-btn" href="#docs-project" style="text-decoration:none;">${t('docs.section.project')}</a>
                             <a class="profile-btn" href="#docs-platform" style="text-decoration:none;">${t('docs.section.platform')}</a>
                             <a class="profile-btn" href="#docs-api" style="text-decoration:none;">${t('docs.section.api')}</a>
-                            <a class="profile-btn" href="#docs-scraping" style="text-decoration:none;">Scraping Engine</a>
+                            <a class="profile-btn" href="#docs-scraping" style="text-decoration:none;">${t('docs.section.scraping')}</a>
                             <a class="profile-btn" href="#docs-webhooks" style="text-decoration:none;">${t('docs.section.webhooks')}</a>
                             <a class="profile-btn" href="#docs-sdk" style="text-decoration:none;">${t('docs.section.sdk')}</a>
                             <a class="profile-btn" href="#docs-security" style="text-decoration:none;">${t('docs.section.security')}</a>
@@ -2471,25 +2507,25 @@
                     </div>
 
                     <div id="docs-scraping" class="glass-card" style="padding: 18px; border-radius: 14px; border: 1px solid #1f2937; background: rgba(17, 24, 39, 0.35); margin-bottom: 14px;">
-                        <h2 style="margin:0 0 10px 0;">🤖 Scraping Engine</h2>
+                        <h2 style="margin:0 0 10px 0;">🤖 ${t('docs.section.scraping')}</h2>
                         <div style="color:#9ca3af; line-height:1.7;">
-                            <div style="margin-bottom:12px;"><strong>Modes d'extraction</strong> :</div>
-                            <div>• <strong>auto</strong> (par défaut): Fallback intelligent - tente HTML, puis Browser, puis AI</div>
-                            <div>• <strong>html</strong>: Extraction HTTP classique avec headers navigateur et décompression</div>
-                            <div>• <strong>browser</strong>: Extraction via Puppeteer (headless) pour contourner les protections anti-bot</div>
-                            <div>• <strong>css</strong>: Extraction basée sur sélecteurs CSS personnalisés</div>
-                            <div>• <strong>ai</strong>: Extraction purement basée sur l'IA</div>
-                            <div>• <strong>hybrid</strong>: Combine CSS et AI pour une extraction robuste</div>
-                            <div style="margin-top:12px;"><strong>Fonctionnalités E-commerce</strong> :</div>
-                            <div>• Détection automatique de plateformes: Amazon, Shopify, WooCommerce</div>
-                            <div>• Pagination intelligente avec détection automatique des liens "Suivant"</div>
-                            <div>• Standardisation de sortie pour les produits (name, price, availability, etc.)</div>
-                            <div>• Sélecteurs optimisés spécifiques par plateforme</div>
-                            <div style="margin-top:12px;"><strong>Robustesse</strong> :</div>
-                            <div>• Système de retry automatique en cas d'échec</div>
-                            <div>• Normalisation d'URL (ajout automatique de https://)</div>
-                            <div>• Headers navigateur réalistes pour éviter les blocages</div>
-                            <div>• Décompression automatique (gzip, brotli, deflate)</div>
+                            <div style="margin-bottom:12px;"><strong>${t('docs.scraping.modes_title')}</strong> :</div>
+                            <div>• <strong>auto</strong> (${t('docs.scraping.modes.auto')})</div>
+                            <div>• <strong>html</strong> (${t('docs.scraping.modes.html')})</div>
+                            <div>• <strong>browser</strong> (${t('docs.scraping.modes.browser')})</div>
+                            <div>• <strong>css</strong> (${t('docs.scraping.modes.css')})</div>
+                            <div>• <strong>ai</strong> (${t('docs.scraping.modes.ai')})</div>
+                            <div>• <strong>hybrid</strong> (${t('docs.scraping.modes.hybrid')})</div>
+                            <div style="margin-top:12px;"><strong>${t('docs.scraping.ecommerce_title')}</strong> :</div>
+                            <div>• ${t('docs.scraping.ecommerce.platforms')}</div>
+                            <div>• ${t('docs.scraping.ecommerce.pagination')}</div>
+                            <div>• ${t('docs.scraping.ecommerce.standardization')}</div>
+                            <div>• ${t('docs.scraping.ecommerce.selectors')}</div>
+                            <div style="margin-top:12px;"><strong>${t('docs.scraping.robustness_title')}</strong> :</div>
+                            <div>• ${t('docs.scraping.robustness.retry')}</div>
+                            <div>• ${t('docs.scraping.robustess.url')}</div>
+                            <div>• ${t('docs.scraping.robustness.headers')}</div>
+                            <div>• ${t('docs.scraping.robustness.compression')}</div>
                         </div>
                     </div>
 
