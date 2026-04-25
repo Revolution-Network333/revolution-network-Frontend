@@ -356,6 +356,11 @@
                 'support.user_since': 'Membre depuis',
                 'docs.title': 'Documentation',
                 'docs.subtitle': 'DePIN • Plateforme • API • Intégrations',
+                'docs.pdf.subtitle': 'Documentation complète au format PDF.',
+                'docs.pdf.title': 'Revolution Network — Documentation',
+                'docs.pdf.description': 'Cliquez pour ouvrir ou télécharger le PDF complet',
+                'docs.pdf.open': 'Ouvrir le PDF',
+                'docs.pdf.download': 'Télécharger',
                 'docs.section.project': 'Le projet DePIN',
                 'docs.section.platform': 'Plateforme (site + node)',
                 'docs.section.api': 'API (Jobs)',
@@ -727,6 +732,11 @@
                 'support.user_since': 'Member since',
                 'docs.title': 'Documentation',
                 'docs.subtitle': 'DePIN • Platform • API • Integrations',
+                'docs.pdf.subtitle': 'Complete documentation in PDF format.',
+                'docs.pdf.title': 'Revolution Network — Documentation',
+                'docs.pdf.description': 'Click to open or download the complete PDF',
+                'docs.pdf.open': 'Open PDF',
+                'docs.pdf.download': 'Download',
                 'docs.section.project': 'DePIN project',
                 'docs.section.platform': 'Platform (site + node)',
                 'docs.section.api': 'API (Jobs)',
@@ -1350,6 +1360,11 @@
                 'support.user_since': 'Miembro desde',
                 'docs.title': 'Documentación',
                 'docs.subtitle': 'DePIN • Plataforma • API • Integraciones',
+                'docs.pdf.subtitle': 'Documentación completa en formato PDF.',
+                'docs.pdf.title': 'Revolution Network — Documentación',
+                'docs.pdf.description': 'Haz clic para abrir o descargar el PDF completo',
+                'docs.pdf.open': 'Abrir PDF',
+                'docs.pdf.download': 'Descargar',
                 'docs.section.project': 'Proyecto DePIN',
                 'docs.section.platform': 'Plataforma (sitio + nodo)',
                 'docs.section.api': 'API (Jobs)',
@@ -2494,7 +2509,7 @@
                     <div id="docs-pdf" class="glass-card" style="padding: 18px; border-radius: 14px; border: 1px solid #1f2937; background: rgba(17, 24, 39, 0.35); margin-bottom: 14px;">
                         <h2 style="margin:0 0 10px 0;">📄 PDF Documentation</h2>
                         <div style="color:#9ca3af; line-height:1.7; margin-bottom:16px;">
-                            Documentation complète au format PDF.
+                            ${t('docs.pdf.subtitle')}
                         </div>
                         <div style="background:#111827; border:1px solid #374151; border-radius:10px; padding:40px; text-align:center;">
                             <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.5" style="margin-bottom:16px;">
@@ -2503,8 +2518,8 @@
                                 <line x1="16" y1="13" x2="8" y2="13"></line>
                                 <line x1="16" y1="17" x2="8" y2="17"></line>
                             </svg>
-                            <div style="color:#e5e7eb; font-size:1.1rem; font-weight:600; margin-bottom:8px;">Revolution Network — Documentation</div>
-                            <div style="color:#9ca3af; font-size:0.9rem; margin-bottom:24px;">Cliquez pour ouvrir ou télécharger le PDF complet</div>
+                            <div style="color:#e5e7eb; font-size:1.1rem; font-weight:600; margin-bottom:8px;">${t('docs.pdf.title')}</div>
+                            <div style="color:#9ca3af; font-size:0.9rem; margin-bottom:24px;">${t('docs.pdf.description')}</div>
                             <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
                                 <button class="profile-btn primary" onclick="window.open('https://revolution-network.fr/Revolution-Network.pdf', '_blank')">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:6px;">
@@ -2512,7 +2527,7 @@
                                         <polyline points="15 3 21 3 21 9"></polyline>
                                         <line x1="10" y1="14" x2="21" y2="3"></line>
                                     </svg>
-                                    Ouvrir le PDF
+                                    ${t('docs.pdf.open')}
                                 </button>
                                 <a href="https://revolution-network.fr/Revolution-Network.pdf" download="Revolution-Network-Docs.pdf" class="profile-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2520,7 +2535,7 @@
                                         <path d="M7 10l5 5 5-5"></path>
                                         <path d="M4 20h16"></path>
                                     </svg>
-                                    Télécharger
+                                    ${t('docs.pdf.download')}
                                 </a>
                             </div>
                         </div>
