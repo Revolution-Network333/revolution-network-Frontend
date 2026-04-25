@@ -2493,25 +2493,58 @@
 
                     <div id="docs-pdf" class="glass-card" style="padding: 18px; border-radius: 14px; border: 1px solid #1f2937; background: rgba(17, 24, 39, 0.35); margin-bottom: 14px;">
                         <h2 style="margin:0 0 10px 0;">📄 PDF Documentation</h2>
-                        <div style="color:#9ca3af; line-height:1.7; margin-bottom:12px;">
-                            Scroll down to view the complete documentation in image format.
+                        <div style="color:#9ca3af; line-height:1.7; margin-bottom:16px;">
+                            Cliquez sur la prévisualisation pour ouvrir la documentation complète en PDF.
                         </div>
-                        <div style="max-height: 2000px; overflow-y: auto; padding-right: 10px;">
-                            <img src="/public/docs-images/page_1_img_1.jpeg" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
-                            <img src="/public/docs-images/page_1_img_2.png" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
-                            <img src="/public/docs-images/page_2_img_1.jpeg" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
-                            <img src="/public/docs-images/page_2_img_2.png" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
-                            <img src="/public/docs-images/page_3_img_1.jpeg" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
-                            <img src="/public/docs-images/page_3_img_2.png" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
-                            <img src="/public/docs-images/page_4_img_1.png" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
-                            <img src="/public/docs-images/page_5_img_1.png" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
-                            <img src="/public/docs-images/page_6_img_1.png" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
-                            <img src="/public/docs-images/page_7_img_1.png" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
-                            <img src="/public/docs-images/page_8_img_1.jpeg" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
-                            <img src="/public/docs-images/page_8_img_2.png" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
-                            <img src="/public/docs-images/page_9_img_1.png" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
-                            <img src="/public/docs-images/page_10_img_1.jpeg" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
-                            <img src="/public/docs-images/page_10_img_2.png" style="max-width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
+                        <div id="pdf-viewer-container" style="position:relative; width:100%; background:#111827; border-radius:10px; border:1px solid #374151; overflow:hidden; cursor:pointer;" onclick="openDocsPdf()">
+                            <iframe 
+                                id="docs-pdf-frame"
+                                src="/public/docs.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                                style="width:100%; height:480px; border:none; pointer-events:none; display:block;"
+                                onerror="document.getElementById('pdf-fallback').style.display='flex'; document.getElementById('docs-pdf-frame').style.display='none';">
+                            </iframe>
+                            <div id="pdf-fallback" style="display:none; flex-direction:column; align-items:center; justify-content:center; height:480px; gap:16px;">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.5">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                                <div style="color:#9ca3af; font-size:0.95rem;">PDF non disponible — vérifiez que le fichier existe sur le serveur</div>
+                            </div>
+                            <!-- Overlay cliquable -->
+                            <div style="position:absolute; inset:0; background:rgba(0,0,0,0.0); transition:background 0.2s;"
+                                 onmouseenter="this.style.background='rgba(0,0,0,0.15)'"
+                                 onmouseleave="this.style.background='rgba(0,0,0,0)'"
+                                 onclick="openDocsPdf()">
+                                <div style="position:absolute; bottom:16px; right:16px; background:rgba(17,24,39,0.9); border:1px solid #374151; border-radius:8px; padding:8px 16px; display:flex; align-items:center; gap:8px; color:#e5e7eb; font-size:0.85rem; pointer-events:none;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                        <polyline points="15 3 21 3 21 9"></polyline>
+                                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                                    </svg>
+                                    Ouvrir en plein écran
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top:12px; display:flex; gap:10px;">
+                            <button class="profile-btn primary" onclick="openDocsPdf()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:6px;">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                </svg>
+                                Ouvrir le PDF
+                            </button>
+                            <a href="/public/docs.pdf" download class="profile-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 3v10"></path>
+                                    <path d="M7 10l5 5 5-5"></path>
+                                    <path d="M4 20h16"></path>
+                                </svg>
+                                Télécharger
+                            </a>
                         </div>
                     </div>
 
@@ -8032,6 +8065,10 @@ function initializeShopPage() {
                 }
             })
             .catch(err => alert('Erreur fermeture ticket'));
+        }
+
+        function openDocsPdf() {
+            window.open('/public/docs.pdf', '_blank', 'noopener,noreferrer');
         }
 
         function initFaqChatWidget() {
