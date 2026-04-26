@@ -493,15 +493,33 @@ function guessExt(url){
 
 function extractDownloadInfo(resp){
   if(!resp) return null;
-  // Cas principal : { status, result: { url, format }, error }
-  if(resp.result && resp.result.url){
-    return { url: resp.result.url, fmt: resp.result.format||guessExt(resp.result.url) };
+  
+  // Cas R2 storage : { result: { url: "/api/enterprise/v1/jobs/X/download", storage: "r2" } }
+  if(resp.result && resp.result.storage === 'r2' && resp.result.url){
+    return { url: resp.result.url, fmt: 'json' };
   }
+  
+  // Cas extracted data : télécharger le JSON directement
+  if(resp.result && resp.result.extracted){
+    var blob = new Blob([JSON.stringify(resp.result, null, 2)], {type: 'application/json'});
+    var blobUrl = URL.createObjectURL(blob);
+    return { url: blobUrl, fmt: 'json', isBlob: true };
+  }
+  
+  // Cas URL de fichier généré (video, pdf, etc.)
+  if(resp.result && resp.result.url && !resp.result.extracted){
+    var u = resp.result.url;
+    if(!u.startsWith('http') || u.includes('/api/enterprise/v1/jobs/')){
+      return { url: u, fmt: resp.result.format || guessExt(u) || 'json' };
+    }
+  }
+  
   // URL directe a la racine
   if(resp.url){
     return { url: resp.url, fmt: resp.format||guessExt(resp.url) };
   }
-  // Variantes
+  
+  // Variantes existantes
   var checks=[
     resp.output_url,
     resp.file_url,
@@ -527,29 +545,27 @@ function updateDownloadBar(resp){
   var info=extractDownloadInfo(resp);
   if(!info){ bar.classList.remove('visible'); return; }
 
-  var key=document.getElementById('keyInput').value.trim();
-  var fullUrl=info.url.startsWith('http')?info.url:BASE+info.url;
-  // Ajoute x-api-key pour que le telechargement fonctionne sans entete
-  var sep=fullUrl.includes('?')?'&':'?';
-  var dlUrl=key?fullUrl+sep+'x-api-key='+encodeURIComponent(key):fullUrl;
-  var fmt=info.fmt||'file';
+  var fmt = info.fmt || 'json';
+  
+  if(info.isBlob){
+    // Blob local — pas besoin d'API key
+    anchor.href = info.url;
+    urlText.textContent = 'extracted-data.json (local)';
+  } else {
+    var key=document.getElementById('keyInput').value.trim();
+    var fullUrl=info.url.startsWith('http')?info.url:BASE+info.url;
+    var dlUrl=fullUrl+(fullUrl.includes('?')?'&':'?')+'x-api-key='+encodeURIComponent(key);
+    anchor.href=dlUrl;
+    urlText.textContent=fullUrl;
+    copyBtn.onclick=function(){
+      navigator.clipboard.writeText(fullUrl).then(function(){ showToast('URL copiee!'); });
+    };
+  }
 
-  var icons={mp3:'🎵',wav:'🎵',ogg:'🎵',flac:'🎵',m4a:'🎵',aac:'🎵',
-             mp4:'🎥',webm:'🎥',avi:'🎥',mkv:'🎥',mov:'🎥',
-             pdf:'📄',svg:'🖼️',png:'🖼️',jpg:'🖼️',jpeg:'🖼️',
-             csv:'📊',json:'📋',xml:'📋',txt:'📝'};
+  var icons={mp4:'�',mp3:'�',pdf:'📄',svg:'🖼️',png:'🖼️',jpg:'🖼️',jpeg:'🖼️',csv:'📊',json:'📋',xml:'📋',txt:'📝'};
   var icon=icons[fmt]||'⬇';
-
-  anchor.href=dlUrl;
   anchor.setAttribute('download','result.'+fmt);
   anchor.textContent=icon+' Download .'+fmt;
-  urlText.textContent=fullUrl;
-
-  // Copier l'URL propre (sans cle API)
-  copyBtn.onclick=function(){
-    navigator.clipboard.writeText(fullUrl).then(function(){ showToast('URL copiee!'); });
-  };
-
   bar.classList.add('visible');
 }
 
@@ -640,6 +656,7 @@ function renderHistory(){
       +'<div class="hist-time">'+timeAgo(j.createdAt)+'</div>';
     d.onclick=function(){
       activeHistItem=j.id;
+      document.getElementById('dlBar').classList.remove('visible'); // ✅ reset
       if(j.data){ lastResponse=j.data; renderJson(); updateDownloadBar(j.data); }
       document.getElementById('stJobId').textContent=j.id;
       renderHistory();
