@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
+    <meta name="google-adsense-account" content="ca-pub-6620583007706439">
     <title>Révolution Network - Dashboard</title>
     <link rel="icon" type="image/x-icon" href="nexon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="chrome-extension/assets/icon-32.png">
@@ -252,18 +253,28 @@
                 <!-- Content will be injected here -->
             </div>
 
-            <footer class="main-footer">
-                <div class="footer-content">
-                    <div class="footer-links">
-                        <a href="javascript:void(0)" onclick="setPage('privacy')" data-i18n="footer.privacy">Privacy Policy</a>
-                        <a href="javascript:void(0)" onclick="setPage('terms')" data-i18n="footer.terms">Terms of Service</a>
-                        <a href="javascript:void(0)" onclick="setPage('disclaimer')" data-i18n="footer.disclaimer">Token Disclaimer</a>
-                    </div>
-                    <div class="footer-copyright">
-                        &copy; 2026 Revolution Network. All rights reserved.
-                    </div>
-                </div>
-            </footer>
+           <footer class="main-footer">
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="javascript:void(0)" onclick="setPage('privacy')" data-i18n="footer.privacy">Privacy Policy</a>
+            <a href="javascript:void(0)" onclick="setPage('terms')" data-i18n="footer.terms">Terms of Service</a>
+            <a href="javascript:void(0)" onclick="setPage('disclaimer')" data-i18n="footer.disclaimer">Token Disclaimer</a>
+        </div>
+        <div class="footer-copyright">
+            &copy; 2026 Revolution Network. All rights reserved.
+        </div>
+    </div>
+    <!-- Bannière Google AdSense -->
+    <div style="width:100%;text-align:center;padding:8px 0;background:#0b0f14;border-top:1px solid #1f2937;">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-6620583007706439"
+             data-ad-slot="XXXXXXXXXX"
+             data-ad-format="horizontal"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+</footer>
 
             <div class="modal" id="notifications-modal" style="display:none;">
                 <div class="modal-content" style="max-width:560px;">
@@ -4196,15 +4207,15 @@ main();</code></pre>
                                 <h4 style="margin:0 0 8px 0;">Quick start</h4>
                                 <div style="color:#9ca3af; line-height:1.6;">
                                     <strong>1) Create a job</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X POST ${API_BASE}/api/enterprise/v1/jobs \
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X POST https://your-backend/api/enterprise/v1/jobs \
 -H "Content-Type: application/json" \
 -H "x-api-key: YOUR_KEY" \
 -d '{"type":"http_get","params":{"url":"https://example.com"}}'</code></pre>
                                     <strong>2) List jobs</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X GET ${API_BASE}/api/enterprise/v1/jobs \
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X GET https://your-backend/api/enterprise/v1/jobs \
 -H "x-api-key: YOUR_KEY"</code></pre>
                                     <strong>3) Get result</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X GET ${API_BASE}/api/enterprise/v1/jobs/ID/result \
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X GET https://your-backend/api/enterprise/v1/jobs/ID/result \
 -H "x-api-key: YOUR_KEY"</code></pre>
                                 </div>
                             </div>
