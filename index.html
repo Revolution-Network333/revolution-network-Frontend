@@ -4196,15 +4196,15 @@ main();</code></pre>
                                 <h4 style="margin:0 0 8px 0;">Quick start</h4>
                                 <div style="color:#9ca3af; line-height:1.6;">
                                     <strong>1) Create a job</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X POST https://your-backend/api/enterprise/v1/jobs \
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X POST ${API_BASE}/api/enterprise/v1/jobs \
 -H "Content-Type: application/json" \
 -H "x-api-key: YOUR_KEY" \
 -d '{"type":"http_get","params":{"url":"https://example.com"}}'</code></pre>
                                     <strong>2) List jobs</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X GET https://your-backend/api/enterprise/v1/jobs \
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X GET ${API_BASE}/api/enterprise/v1/jobs \
 -H "x-api-key: YOUR_KEY"</code></pre>
                                     <strong>3) Get result</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X GET https://your-backend/api/enterprise/v1/jobs/ID/result \
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X GET ${API_BASE}/api/enterprise/v1/jobs/ID/result \
 -H "x-api-key: YOUR_KEY"</code></pre>
                                 </div>
                             </div>
