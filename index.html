@@ -964,32 +964,46 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
           }
 
           async function fetchStats() {
-            // Use the same base URL as the rest of the app (handles localhost vs prod)
             const base = (typeof API_BASE !== 'undefined') ? API_BASE : BACKEND;
+            const token = localStorage.getItem('token');
             const endpoints = ['/api/stats', '/api/network/stats', '/api/health', '/api/public/stats'];
+
             for (const ep of endpoints) {
-              let r;
-              try {
-                const ctrl = new AbortController();
-                const tid = setTimeout(() => ctrl.abort(), 8000);
-                r = await fetch(`${base}${ep}`, { signal: ctrl.signal });
-                clearTimeout(tid);
-              } catch { continue; }
-              if (!r || !r.ok) continue;
-              let d;
-              try { d = await r.json(); } catch { continue; }
-              // Flatten one level of nesting (e.g. d.data.nodes)
-              const flat = { ...d, ...(d.data || {}), ...(d.stats || {}), ...(d.network || {}) };
-              const nodes  = flat.activeNodes  ?? flat.active_nodes  ?? flat.nodes          ?? flat.connected_nodes ?? flat.nodeCount;
-              const jobs   = flat.jobsProcessed ?? flat.jobs_processed ?? flat.total_jobs   ?? flat.jobs            ?? flat.jobsTotal   ?? flat.totalJobs;
-              const uptime = flat.uptime        ?? flat.networkUptime  ?? flat.network_uptime ?? flat.availability   ?? flat.uptimePct;
-              const users  = flat.users         ?? flat.totalUsers     ?? flat.total_users   ?? flat.registered_users ?? flat.userCount;
-              if (nodes  != null) setStatVal('ls-nodes',  fmtNum(nodes));
-              if (jobs   != null) setStatVal('ls-jobs',   fmtNum(jobs));
-              if (uptime != null) setStatVal('ls-uptime', fmtUptime(uptime));
-              if (users  != null) setStatVal('ls-users',  fmtNum(users));
-              if (nodes != null || jobs != null || users != null) return;
+              // Try twice: once with token (if available), once without
+              const attempts = token
+                ? [{ 'Authorization': `Bearer ${token}` }, {}]
+                : [{}];
+
+              for (const headers of attempts) {
+                let r;
+                try {
+                  const ctrl = new AbortController();
+                  const tid = setTimeout(() => ctrl.abort(), 8000);
+                  r = await fetch(`${base}${ep}`, { headers, signal: ctrl.signal });
+                  clearTimeout(tid);
+                } catch { continue; }
+                if (!r || !r.ok) continue;
+                let d;
+                try { d = await r.json(); } catch { continue; }
+                const flat = { ...d, ...(d.data || {}), ...(d.stats || {}), ...(d.network || {}) };
+                const nodes  = flat.activeNodes  ?? flat.active_nodes  ?? flat.nodes          ?? flat.connected_nodes ?? flat.nodeCount;
+                const jobs   = flat.jobsProcessed ?? flat.jobs_processed ?? flat.total_jobs   ?? flat.jobs            ?? flat.jobsTotal   ?? flat.totalJobs;
+                const uptime = flat.uptime        ?? flat.networkUptime  ?? flat.network_uptime ?? flat.availability   ?? flat.uptimePct;
+                const users  = flat.users         ?? flat.totalUsers     ?? flat.total_users   ?? flat.registered_users ?? flat.userCount;
+                if (nodes != null || jobs != null || users != null) {
+                  if (nodes  != null) setStatVal('ls-nodes',  fmtNum(nodes));
+                  if (jobs   != null) setStatVal('ls-jobs',   fmtNum(jobs));
+                  if (uptime != null) setStatVal('ls-uptime', fmtUptime(uptime));
+                  if (users  != null) setStatVal('ls-users',  fmtNum(users));
+                  return;
+                }
+              }
             }
+            // All endpoints failed — show static placeholder values
+            setStatVal('ls-nodes',  '—');
+            setStatVal('ls-jobs',   '—');
+            setStatVal('ls-uptime', '—');
+            setStatVal('ls-users',  '—');
           }
 
           let statsInited = false;
@@ -3109,19 +3123,19 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                             <div class="network-stat-value status-live" id="login-net-status">LIVE</div>
                         </div>
                         <div class="network-stat-item">
-                            <div class="network-stat-label">Active Nodes</div>
+                            <div class="network-stat-label">Nodes actifs</div>
                             <div class="network-stat-value neon-text-blue" id="login-net-nodes">—</div>
                         </div>
                         <div class="network-stat-item">
-                            <div class="network-stat-label">Total Uptime</div>
+                            <div class="network-stat-label">Uptime réseau</div>
                             <div class="network-stat-value neon-text-green" id="login-net-uptime">—</div>
                         </div>
                         <div class="network-stat-item">
-                            <div class="network-stat-label">Bandwidth Processed</div>
+                            <div class="network-stat-label">Jobs complétés</div>
                             <div class="network-stat-value neon-text-purple" id="login-net-bw">—</div>
                         </div>
                         <div class="network-stat-item">
-                            <div class="network-stat-label">API Requests</div>
+                            <div class="network-stat-label">Utilisateurs</div>
                             <div class="network-stat-value" id="login-net-api">—</div>
                         </div>
                     </div>
@@ -3441,6 +3455,19 @@ main();</code></pre>
             if (referralCodeFromUrl) {
                 try { localStorage.setItem('referralCode', referralCodeFromUrl); } catch {}
             }
+
+            // Populate login network stats bar from public endpoint
+            fetch(`${API_BASE}/api/public/stats`)
+                .then(r => r.ok ? r.json() : null)
+                .then(d => {
+                    if (!d) return;
+                    const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+                    if (d.nodes  != null) setEl('login-net-nodes',  d.nodes);
+                    if (d.uptime != null) setEl('login-net-uptime', d.uptime + '%');
+                    if (d.jobs   != null) setEl('login-net-bw',     d.jobs.toLocaleString());
+                    if (d.users  != null) setEl('login-net-api',    d.users);
+                })
+                .catch(() => {});
             
             loginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
