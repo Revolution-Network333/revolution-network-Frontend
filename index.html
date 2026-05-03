@@ -264,7 +264,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
   <!-- JOBS -->
   <section class="ln-section" id="jobs">
     <div class="ln-label" data-r data-ln="jobs.label">Types de jobs</div>
-    <h2 class="ln-h2" data-r data-ln="jobs.h2">12 types de compute,<br>un seul endpoint.</h2>
+    <h2 class="ln-h2" data-r data-ln="jobs.h2">10 types de compute,<br>un seul endpoint.</h2>
     <p class="ln-muted" data-r data-ln="jobs.sub">De l'extraction de données à la conversion vidéo, tout passe par la même API.</p>
     <div class="ln-jobs-grid" data-r>
       <div class="ln-job"><span class="ln-job-icon">🔍</span><div class="ln-job-name">http_get</div><div class="ln-job-desc">Analyse web simple</div><div class="ln-job-cost">~1 MB</div></div>
@@ -290,6 +290,114 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
       <div class="ln-step"><div class="ln-step-n">02</div><h3 data-ln="how.s2.title">Le réseau distribue</h3><p data-ln="how.s2.desc">L'API Gateway route le job vers les nodes disponibles. Redondance et validation automatiques.</p></div>
       <div class="ln-step"><div class="ln-step-n">03</div><h3 data-ln="how.s3.title">Tu récupères le résultat</h3><p data-ln="how.s3.desc">Le résultat validé est retourné via le même endpoint. Stocké sur couche R2/S3 décentralisée.</p></div>
       <div class="ln-step"><div class="ln-step-n">04</div><h3 data-ln="how.s4.title">Tu paies ce que tu consommes</h3><p data-ln="how.s4.desc">Facturation en MB. 3 GB gratuits par semaine. Pas d'abonnement forcé au départ.</p></div>
+    </div>
+  </section>
+
+  <!-- PERFORMANCE -->
+  <section class="ln-section" id="performance" style="text-align:center;">
+    <div class="ln-label" data-r>Performances</div>
+    <h2 class="ln-h2" data-r style="text-align:center;">Stress-testé &amp; prouvé<br>avant le scaling.</h2>
+    <p class="ln-muted" data-r style="margin:0 auto 3rem; text-align:center;">Des benchmarks réels sous charge concurrente — la fiabilité établie avant le déploiement à grande échelle.</p>
+    <div data-r style="display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:16px; overflow:hidden; max-width:860px; margin:0 auto 3rem;">
+      <div style="background:rgba(13,18,26,0.85); padding:2rem 1.5rem; text-align:center;">
+        <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:2.4rem; color:#4af0c4; margin-bottom:.4rem;">60+</div>
+        <div style="font-size:.8rem; color:#7a8799; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.06em;">Jobs simultanés</div>
+        <div style="font-size:.78rem; color:#4a5568; margin-top:.4rem;">Testés sans crash système</div>
+      </div>
+      <div style="background:rgba(13,18,26,0.85); padding:2rem 1.5rem; text-align:center;">
+        <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:2.4rem; color:#4af0c4; margin-bottom:.4rem;">88%</div>
+        <div style="font-size:.8rem; color:#7a8799; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.06em;">Taux de succès</div>
+        <div style="font-size:.78rem; color:#4a5568; margin-top:.4rem;">En amélioration rapide à chaque itération</div>
+      </div>
+      <div style="background:rgba(13,18,26,0.85); padding:2rem 1.5rem; text-align:center;">
+        <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:2.4rem; color:#4af0c4; margin-bottom:.4rem;">~3s</div>
+        <div style="font-size:.8rem; color:#7a8799; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.06em;">Latence moyenne</div>
+        <div style="font-size:.78rem; color:#4a5568; margin-top:.4rem;">Stable sous charge continue</div>
+      </div>
+      <div style="background:rgba(13,18,26,0.85); padding:2rem 1.5rem; text-align:center;">
+        <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:2.4rem; color:#4af0c4; margin-bottom:.4rem;">0</div>
+        <div style="font-size:.8rem; color:#7a8799; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.06em;">Crashes système</div>
+        <div style="font-size:.78rem; color:#4a5568; margin-top:.4rem;">Aucun timeout lors des stress tests</div>
+      </div>
+    </div>
+    <div data-r style="display:inline-flex; align-items:center; gap:10px; background:rgba(74,240,196,.06); border:1px solid rgba(74,240,196,.18); border-radius:10px; padding:.85rem 1.5rem; font-size:.88rem; color:#4af0c4;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      Capacité d'exécution distribuée prouvée — fiabilité établie avant le scaling.
+    </div>
+  </section>
+
+  <!-- MARKET OPPORTUNITY -->
+  <section class="ln-section" id="market" style="text-align:center;">
+    <div class="ln-label" data-r>Opportunité marché</div>
+    <h2 class="ln-h2" data-r style="text-align:center;">Trois marchés en explosion.<br>Un seul réseau au centre.</h2>
+    <p class="ln-muted" data-r style="margin:0 auto 3rem; text-align:center;">Revolution Network se positionne à l'intersection de trois tendances d'infrastructure parmi les plus rapides.</p>
+    <div data-r style="display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; max-width:860px; margin:0 auto 3rem;">
+      <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:2rem 1.5rem; text-align:center;">
+        <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:2.2rem; color:#e8edf5; margin-bottom:.5rem;">$791B</div>
+        <div style="font-size:.9rem; font-weight:600; color:#c8d3e0; margin-bottom:.4rem;">Cloud Market</div>
+        <div style="font-size:.8rem; color:#7a8799;">Infrastructure cloud mondiale d'ici 2028</div>
+      </div>
+      <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:2rem 1.5rem; text-align:center;">
+        <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:2.2rem; color:#e8edf5; margin-bottom:.5rem;">$1.8T</div>
+        <div style="font-size:.9rem; font-weight:600; color:#c8d3e0; margin-bottom:.4rem;">AI Compute</div>
+        <div style="font-size:.8rem; color:#7a8799;">Dépenses AI workloads projetées</div>
+      </div>
+      <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:2rem 1.5rem; text-align:center;">
+        <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:2.2rem; color:#4af0c4; margin-bottom:.5rem;">42%</div>
+        <div style="font-size:.9rem; font-weight:600; color:#c8d3e0; margin-bottom:.4rem;">DePIN Growth</div>
+        <div style="font-size:.8rem; color:#7a8799;">Croissance annuelle du secteur en Web3</div>
+      </div>
+    </div>
+    <div data-r style="display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; max-width:700px; margin:0 auto; text-align:left;">
+      <div style="display:flex; align-items:flex-start; gap:.75rem; padding:1rem 1.25rem; background:rgba(13,18,26,0.5); border:1px solid rgba(255,255,255,0.06); border-radius:10px;">
+        <span style="color:#4af0c4; margin-top:2px; flex-shrink:0;">→</span>
+        <div style="font-size:.85rem; color:#9ca3af;"><strong style="color:#c8d3e0;">Web scraping infra</strong> — marché multi-milliards sans alternative décentralisée</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:.75rem; padding:1rem 1.25rem; background:rgba(13,18,26,0.5); border:1px solid rgba(255,255,255,0.06); border-radius:10px;">
+        <span style="color:#4af0c4; margin-top:2px; flex-shrink:0;">→</span>
+        <div style="font-size:.85rem; color:#9ca3af;"><strong style="color:#c8d3e0;">Automation APIs</strong> — écosystèmes Zapier-like avides de backends fiables</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:.75rem; padding:1rem 1.25rem; background:rgba(13,18,26,0.5); border:1px solid rgba(255,255,255,0.06); border-radius:10px;">
+        <span style="color:#4af0c4; margin-top:2px; flex-shrink:0;">→</span>
+        <div style="font-size:.85rem; color:#9ca3af;"><strong style="color:#c8d3e0;">DePIN compute</strong> — catégorie émergente avec mécaniques token éprouvées</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:.75rem; padding:1rem 1.25rem; background:rgba(13,18,26,0.5); border:1px solid rgba(255,255,255,0.06); border-radius:10px;">
+        <span style="color:#4af0c4; margin-top:2px; flex-shrink:0;">→</span>
+        <div style="font-size:.85rem; color:#9ca3af;"><strong style="color:#c8d3e0;">AI data pipelines</strong> — demande infra la plus rapide en entreprise tech</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section class="ln-section" id="roadmap">
+    <div class="ln-label" data-r>Roadmap</div>
+    <h2 class="ln-h2" data-r>4 phases vers<br>la décentralisation totale.</h2>
+    <p class="ln-muted" data-r>De la fondation au protocole entièrement décentralisé — une progression claire et exécutable.</p>
+    <div class="ln-steps" data-r>
+      <div class="ln-step">
+        <div class="ln-step-n" style="color:#4af0c4;">Phase 1</div>
+        <h3>Foundation</h3>
+        <p style="color:#7a8799;">Lancement API, beta nodes, jobs compute de base (scrape, OCR, vidéo).</p>
+        <div style="margin-top:.75rem; display:inline-block; font-family:'DM Mono',monospace; font-size:.7rem; padding:.2rem .6rem; border-radius:999px; background:rgba(74,240,196,.1); color:#4af0c4; border:1px solid rgba(74,240,196,.2);">✓ En cours</div>
+      </div>
+      <div class="ln-step">
+        <div class="ln-step-n">Phase 2</div>
+        <h3>Token Launch</h3>
+        <p style="color:#7a8799;">ATH TGE, listing RapidAPI, activation Marketplace, staking en ligne.</p>
+        <div style="margin-top:.75rem; display:inline-block; font-family:'DM Mono',monospace; font-size:.7rem; padding:.2rem .6rem; border-radius:999px; background:rgba(255,255,255,.04); color:#7a8799; border:1px solid rgba(255,255,255,.1);">À venir</div>
+      </div>
+      <div class="ln-step">
+        <div class="ln-step-n">Phase 3</div>
+        <h3>Enterprise</h3>
+        <p style="color:#7a8799;">Abonnements enterprise, scaling DePIN, déploiement du système de gouvernance.</p>
+        <div style="margin-top:.75rem; display:inline-block; font-family:'DM Mono',monospace; font-size:.7rem; padding:.2rem .6rem; border-radius:999px; background:rgba(255,255,255,.04); color:#7a8799; border:1px solid rgba(255,255,255,.1);">À venir</div>
+      </div>
+      <div class="ln-step">
+        <div class="ln-step-n">Phase 4</div>
+        <h3>Décentralisation</h3>
+        <p style="color:#7a8799;">Protocole entièrement décentralisé, marketplace compute mondial, gouvernance DAO.</p>
+        <div style="margin-top:.75rem; display:inline-block; font-family:'DM Mono',monospace; font-size:.7rem; padding:.2rem .6rem; border-radius:999px; background:rgba(255,255,255,.04); color:#7a8799; border:1px solid rgba(255,255,255,.1);">À venir</div>
+      </div>
     </div>
   </section>
 
@@ -369,6 +477,127 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
           </div>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- TOKENOMICS -->
+  <section class="ln-section" id="tokenomics">
+    <div class="ln-label" data-r>Tokenomics</div>
+    <h2 class="ln-h2" data-r>ATH — Aether Token.<br>500 000 000 en supply totale.</h2>
+    <p class="ln-muted" data-r>Conçu pour aligner chaque partie prenante — les fournisseurs de compute reçoivent la majorité.</p>
+    <div data-r style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:center;">
+      <!-- Left: distribution bars -->
+      <div style="display:flex; flex-direction:column; gap:1rem;">
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:.4rem;">
+            <span style="font-size:.88rem; color:#c8d3e0; font-weight:600;">Nodes (récompenses compute)</span>
+            <span style="font-family:'DM Mono',monospace; font-size:.88rem; color:#4af0c4; font-weight:700;">60%</span>
+          </div>
+          <div style="height:8px; background:rgba(255,255,255,0.06); border-radius:999px; overflow:hidden;">
+            <div style="width:60%; height:100%; background:linear-gradient(90deg,#4af0c4,#2ad4a8); border-radius:999px;"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:.4rem;">
+            <span style="font-size:.88rem; color:#c8d3e0; font-weight:600;">Investisseurs (Seed / Private / Public)</span>
+            <span style="font-family:'DM Mono',monospace; font-size:.88rem; color:#7a8799; font-weight:700;">15%</span>
+          </div>
+          <div style="height:8px; background:rgba(255,255,255,0.06); border-radius:999px; overflow:hidden;">
+            <div style="width:15%; height:100%; background:rgba(122,135,153,0.7); border-radius:999px;"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:.4rem;">
+            <span style="font-size:.88rem; color:#c8d3e0; font-weight:600;">Équipe (vesting)</span>
+            <span style="font-family:'DM Mono',monospace; font-size:.88rem; color:#7a8799; font-weight:700;">15%</span>
+          </div>
+          <div style="height:8px; background:rgba(255,255,255,0.06); border-radius:999px; overflow:hidden;">
+            <div style="width:15%; height:100%; background:rgba(122,135,153,0.7); border-radius:999px;"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:.4rem;">
+            <span style="font-size:.88rem; color:#c8d3e0; font-weight:600;">Écosystème (grants, liquidité)</span>
+            <span style="font-family:'DM Mono',monospace; font-size:.88rem; color:#7a8799; font-weight:700;">10%</span>
+          </div>
+          <div style="height:8px; background:rgba(255,255,255,0.06); border-radius:999px; overflow:hidden;">
+            <div style="width:10%; height:100%; background:rgba(122,135,153,0.7); border-radius:999px;"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Right: utility pillars -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:.75rem;">
+        <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:1rem;">
+          <div style="font-size:1.1rem; margin-bottom:.4rem;">💳</div>
+          <div style="font-size:.82rem; font-weight:600; color:#c8d3e0; margin-bottom:.2rem;">API Payments</div>
+          <div style="font-size:.78rem; color:#7a8799;">Payer les jobs en ATH</div>
+        </div>
+        <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:1rem;">
+          <div style="font-size:1.1rem; margin-bottom:.4rem;">🏆</div>
+          <div style="font-size:.82rem; font-weight:600; color:#c8d3e0; margin-bottom:.2rem;">Node Rewards</div>
+          <div style="font-size:.78rem; color:#7a8799;">Gagner ATH en traitant des jobs</div>
+        </div>
+        <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:1rem;">
+          <div style="font-size:1.1rem; margin-bottom:.4rem;">🗳️</div>
+          <div style="font-size:.82rem; font-weight:600; color:#c8d3e0; margin-bottom:.2rem;">Governance</div>
+          <div style="font-size:.78rem; color:#7a8799;">Voter sur les mises à jour du protocole</div>
+        </div>
+        <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:1rem;">
+          <div style="font-size:1.1rem; margin-bottom:.4rem;">🔒</div>
+          <div style="font-size:.82rem; font-weight:600; color:#c8d3e0; margin-bottom:.2rem;">Staking</div>
+          <div style="font-size:.78rem; color:#7a8799;">Booster la priorité des nodes</div>
+        </div>
+        <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:1rem;">
+          <div style="font-size:1.1rem; margin-bottom:.4rem;">🔥</div>
+          <div style="font-size:.82rem; font-weight:600; color:#c8d3e0; margin-bottom:.2rem;">Burn Mechanism</div>
+          <div style="font-size:.78rem; color:#7a8799;">% des frais API brûlés définitivement</div>
+        </div>
+        <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:1rem;">
+          <div style="font-size:1.1rem; margin-bottom:.4rem;">🛒</div>
+          <div style="font-size:.82rem; font-weight:600; color:#c8d3e0; margin-bottom:.2rem;">Marketplace</div>
+          <div style="font-size:.78rem; color:#7a8799;">Trader du compute peer-to-peer</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPETITIVE ADVANTAGE -->
+  <section class="ln-section" id="competitive">
+    <div class="ln-label" data-r>Positionnement</div>
+    <h2 class="ln-h2" data-r>Les autres sont étroits.<br>Nous sommes general-purpose.</h2>
+    <p class="ln-muted" data-r>Aucun concurrent n'adresse simultanément les quatre verticaux où Revolution Network opère.</p>
+    <div data-r style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:stretch;">
+      <!-- Competitors -->
+      <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:2rem;">
+        <div style="font-size:.78rem; font-family:'DM Mono',monospace; color:#7a8799; text-transform:uppercase; letter-spacing:.08em; margin-bottom:1.25rem;">❌ Les autres</div>
+        <div style="display:flex; flex-direction:column; gap:1rem;">
+          <div style="display:flex; align-items:flex-start; gap:.75rem; padding:.85rem 1rem; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid rgba(255,255,255,0.05);">
+            <span style="color:#ef4444; font-size:.9rem; flex-shrink:0; margin-top:1px;">✕</span>
+            <div style="font-size:.85rem; color:#9ca3af;"><strong style="color:#c8d3e0;">Réseaux VPN DePIN</strong> — bande passante sans exécution</div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:.75rem; padding:.85rem 1rem; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid rgba(255,255,255,0.05);">
+            <span style="color:#ef4444; font-size:.9rem; flex-shrink:0; margin-top:1px;">✕</span>
+            <div style="font-size:.85rem; color:#9ca3af;"><strong style="color:#c8d3e0;">Réseaux GPU-only</strong> — compute lourd, aucun workload web</div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:.75rem; padding:.85rem 1rem; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid rgba(255,255,255,0.05);">
+            <span style="color:#ef4444; font-size:.9rem; flex-shrink:0; margin-top:1px;">✕</span>
+            <div style="font-size:.85rem; color:#9ca3af;"><strong style="color:#c8d3e0;">API providers statiques</strong> — centralisés, fragiles, chers à l'échelle</div>
+          </div>
+        </div>
+      </div>
+      <!-- Revolution -->
+      <div style="background:rgba(74,240,196,0.04); border:1px solid rgba(74,240,196,0.2); border-radius:16px; padding:2rem; position:relative; overflow:hidden;">
+        <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(74,240,196,0.08) 0%,transparent 70%);pointer-events:none;"></div>
+        <div style="font-size:.78rem; font-family:'DM Mono',monospace; color:#4af0c4; text-transform:uppercase; letter-spacing:.08em; margin-bottom:1.25rem;">✓ Revolution Network</div>
+        <p style="font-size:.92rem; color:#c8d3e0; line-height:1.7; margin-bottom:1.25rem;">Le seul réseau d'exécution <strong style="color:#4af0c4;">general-purpose</strong> conçu pour les workloads web, data et AI — élastique, décentralisé, et modulaire.</p>
+        <div style="display:flex; flex-direction:column; gap:.6rem;">
+          <div style="display:flex; align-items:center; gap:.6rem; font-size:.83rem; color:#9ca3af;"><span style="color:#4af0c4;">✓</span> Web scraping distribué</div>
+          <div style="display:flex; align-items:center; gap:.6rem; font-size:.83rem; color:#9ca3af;"><span style="color:#4af0c4;">✓</span> Orchestration API multi-étapes</div>
+          <div style="display:flex; align-items:center; gap:.6rem; font-size:.83rem; color:#9ca3af;"><span style="color:#4af0c4;">✓</span> Traitement AI et data pipelines</div>
+          <div style="display:flex; align-items:center; gap:.6rem; font-size:.83rem; color:#9ca3af;"><span style="color:#4af0c4;">✓</span> Incentives token natifs (ATH)</div>
+        </div>
+        <div style="margin-top:1.25rem; font-size:.8rem; font-style:italic; color:#7a8799; padding-top:1rem; border-top:1px solid rgba(74,240,196,0.12);">Pour les acteurs enterprise comme Bright Data ou AWS, ce n'est pas une concurrence — c'est une couche d'expansion.</div>
       </div>
     </div>
   </section>
@@ -726,7 +955,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'qs.card1.title': 'bash · 1) Créer un job',
               'qs.card2.title': 'bash · 2) Lister & 3) Récupérer',
               'jobs.label': 'Types de jobs',
-              'jobs.h2': '12 types de compute,<br>un seul endpoint.',
+              'jobs.h2': '10 types de compute,<br>un seul endpoint.',
               'jobs.sub': "De l'extraction de données à la conversion vidéo, tout passe par la même API.",
               'how.label': 'Comment ça marche',
               'how.h2': 'Infrastructure décentralisée,<br>expérience centralisée.',
@@ -789,7 +1018,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'qs.card1.title': 'bash · 1) Create a job',
               'qs.card2.title': 'bash · 2) List & 3) Fetch result',
               'jobs.label': 'Job types',
-              'jobs.h2': '12 compute types,<br>one single endpoint.',
+              'jobs.h2': '10 compute types,<br>one single endpoint.',
               'jobs.sub': 'From data extraction to video transcoding, everything goes through the same API.',
               'how.label': 'How it works',
               'how.h2': 'Decentralized infrastructure,<br>centralized experience.',
@@ -852,7 +1081,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'qs.card1.title': 'bash · 1) Crear un job',
               'qs.card2.title': 'bash · 2) Listar & 3) Obtener resultado',
               'jobs.label': 'Tipos de jobs',
-              'jobs.h2': '12 tipos de compute,<br>un solo endpoint.',
+              'jobs.h2': '10 tipos de compute,<br>un solo endpoint.',
               'jobs.sub': 'Desde extracción de datos hasta transcodificación de vídeo, todo pasa por la misma API.',
               'how.label': 'Cómo funciona',
               'how.h2': 'Infraestructura descentralizada,<br>experiencia centralizada.',
@@ -3280,70 +3509,32 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                         <div style="color:#9ca3af; line-height:1.7; margin-bottom:16px;">
                             ${t('docs.pdf.subtitle')}
                         </div>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-                            <!-- Partie 1 -->
-                            <div style="background:#111827; border:1px solid #374151; border-radius:10px; padding:32px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:space-between;">
-                                <div>
-                                    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.5" style="margin-bottom:12px;">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                        <polyline points="14 2 14 8 20 8"></polyline>
-                                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <div style="background:#111827; border:1px solid #374151; border-radius:10px; padding:40px; text-align:center;">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.5" style="margin-bottom:16px;">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                            <div style="color:#e5e7eb; font-size:1.1rem; font-weight:600; margin-bottom:8px;">${t('docs.pdf.title')}</div>
+                            <div style="color:#9ca3af; font-size:0.9rem; margin-bottom:24px;">${t('docs.pdf.description')}</div>
+                            <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                                <button class="profile-btn primary" onclick="window.open('https://revolution-network.fr/Revolution-Network.pdf', '_blank')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:6px;">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                        <polyline points="15 3 21 3 21 9"></polyline>
+                                        <line x1="10" y1="14" x2="21" y2="3"></line>
                                     </svg>
-                                    <div style="color:#e5e7eb; font-size:1rem; font-weight:600; margin-bottom:4px;">${t('docs.pdf.title')}</div>
-                                    <div style="color:#6b7280; font-size:0.75rem; font-weight:500; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em;">Partie 1</div>
-                                    <div style="color:#9ca3af; font-size:0.85rem; margin-bottom:20px;">${t('docs.pdf.description')}</div>
-                                </div>
-                                <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-                                    <button class="profile-btn primary" onclick="window.open('https://revolution-network.fr/Revolution-Network.pdf', '_blank')">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:5px;">
-                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                            <polyline points="15 3 21 3 21 9"></polyline>
-                                            <line x1="10" y1="14" x2="21" y2="3"></line>
-                                        </svg>
-                                        ${t('docs.pdf.open')}
-                                    </button>
-                                    <a href="https://revolution-network.fr/Revolution-Network.pdf" download="Revolution-Network-Docs.pdf" class="profile-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M12 3v10"></path>
-                                            <path d="M7 10l5 5 5-5"></path>
-                                            <path d="M4 20h16"></path>
-                                        </svg>
-                                        ${t('docs.pdf.download')}
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- Partie 2 -->
-                            <div style="background:#111827; border:1px solid #374151; border-radius:10px; padding:32px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:space-between;">
-                                <div>
-                                    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.5" style="margin-bottom:12px;">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                        <polyline points="14 2 14 8 20 8"></polyline>
-                                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    ${t('docs.pdf.open')}
+                                </button>
+                                <a href="https://revolution-network.fr/Revolution-Network.pdf" download="Revolution-Network-Docs.pdf" class="profile-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 3v10"></path>
+                                        <path d="M7 10l5 5 5-5"></path>
+                                        <path d="M4 20h16"></path>
                                     </svg>
-                                    <div style="color:#e5e7eb; font-size:1rem; font-weight:600; margin-bottom:4px;">Revolution Network — Pitch Deck</div>
-                                    <div style="color:#6b7280; font-size:0.75rem; font-weight:500; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em;">Partie 2</div>
-                                    <div style="color:#9ca3af; font-size:0.85rem; margin-bottom:20px;">${t('docs.pdf.description')}</div>
-                                </div>
-                                <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-                                    <button class="profile-btn primary" onclick="window.open('https://revolution-network.fr/Revolution-Network_P2.pdf', '_blank')">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:5px;">
-                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                            <polyline points="15 3 21 3 21 9"></polyline>
-                                            <line x1="10" y1="14" x2="21" y2="3"></line>
-                                        </svg>
-                                        ${t('docs.pdf.open')}
-                                    </button>
-                                    <a href="https://revolution-network.fr/Revolution-Network_P2.pdf" download="Revolution-Network-P2.pdf" class="profile-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M12 3v10"></path>
-                                            <path d="M7 10l5 5 5-5"></path>
-                                            <path d="M4 20h16"></path>
-                                        </svg>
-                                        ${t('docs.pdf.download')}
-                                    </a>
-                                </div>
+                                    ${t('docs.pdf.download')}
+                                </a>
                             </div>
                         </div>
                     </div>
