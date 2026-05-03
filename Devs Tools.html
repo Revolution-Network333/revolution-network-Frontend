@@ -275,7 +275,6 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
     <div class="limits-note">
       <div>⚡ <span>0.2 GB</span> max / job</div>
       <div>⏱ <span>30 req</span> / minute</div>
-      <div>🎥 Video <span>requires paid credits</span></div>
       <div>₿ Crypto <span>~3 MB / appel</span></div>
     </div>
     <div class="limits-note" style="margin-top:16px;padding-top:12px;border-top:1px solid var(--b2);">
@@ -420,18 +419,6 @@ const JOBS = [
     {k:'width',lbl:'Largeur (px)',type:'text',ph:'400',def:'400'},
     {k:'height',lbl:'Hauteur (px)',type:'text',ph:'400',def:'400'},
     {k:'style',lbl:'Style',type:'select',opts:['minimal','flat','outline','filled','gradient','duotone']},
-  ]},
-  {id:'audio_convert',emoji:'🎵',name:'audio_convert',desc:'Conversion audio',cost:'~50 MB/min',fields:[
-    {k:'inputUrl',lbl:'URL audio (optionnel)',type:'text',ph:'https://example.com/audio.mp3'},
-    {k:'file',lbl:'Fichier audio',type:'file',accept:'.mp3,.wav,.ogg,.flac,.m4a'},
-    {k:'output_format',lbl:'Format sortie',type:'select',req:true,opts:['mp3','wav','ogg','flac','m4a','aac']},
-    {k:'bitrate',lbl:'Bitrate (kbps)',type:'select',opts:['64','128','192','256','320']},
-    {k:'sample_rate',lbl:'Sample rate',type:'select',opts:['22050','44100','48000','96000'],hint:'Hz'},
-  ]},
-  {id:'video_transcode',emoji:'🎥',name:'video_transcode',desc:'Transcodage video',cost:'~500 MB/min',paidOnly:true,fields:[
-    {k:'inputUrl',lbl:'URL video (optionnel)',type:'text',ph:'https://example.com/video.mp4'},
-    {k:'file',lbl:'Fichier video',type:'file',accept:'.mp4,.mov,.avi,.mkv,.webm'},
-    {k:'output_format',lbl:'Format sortie',type:'select',req:true,opts:['mp4','webm','avi','mkv','mov']},
   ]},
   {id:'crypto_scrape',emoji:'₿',name:'crypto_scrape',desc:'Données crypto temps réel',cost:'~3 MB',fields:[
     {k:'action',lbl:'Action',type:'select',req:true,
