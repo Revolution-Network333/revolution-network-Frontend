@@ -1,1 +1,4 @@
 bash test_jobs.sh API_KEY
+
+
+bash test_jobs_hard.sh 6892a5-ea8b0c-d75d07-c9d7a6 chaos
