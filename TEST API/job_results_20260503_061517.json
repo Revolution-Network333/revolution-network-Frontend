@@ -1,0 +1,20 @@
+[
+{"type":"http_get","status":"error","error":"no id returned"}
+,
+{"type":"text_transform","status":"error","error":"no id returned"}
+,
+{"type":"text_generate_template","status":"error","error":"no id returned"}
+,
+{"type":"code_run_js","status":"error","error":"no id returned"}
+,
+{"type":"scrape_get","status":"error","error":"no id returned"}
+,
+{"type":"image_svg_generate","status":"error","error":"no id returned"}
+,
+{"type":"content_check","status":"error","error":"no id returned"}
+,
+{"type":"csv_stats","status":"error","error":"no id returned"}
+,
+{"type":"ocr_pdf","status":"error","error":"no id returned"}
+,
+{"type":"audio_convert","status":"error","error":"no id returned"}
