@@ -8791,9 +8791,9 @@ function initializeShopPage() {
                         </div>
                     </div>
                     <div class="shop-warning">
-                        ⚠️ <strong>Attention :</strong> Le calcul de l'allocation mettra à jour le score et l'allocation de TOUS les utilisateurs éligibles. 
+                        ⚠️ <strong>Attention :</strong> Le calcul de l'allocation mettra à jour le score et l'allocation de TOUS les utilisateurs éligibles.
                         Cette action est irréversible et sera enregistrée dans les logs.
-                        <br>Formule : <code>Score = (0.5 * √Dépenses) + (0.25 * Points^0.7) + (0.15 * JoursActifs) + (0.10 * Achats)</code>
+                        <br>Formule v2 : <code id="airdrop-formula-text">Score = Bonus × (40% VALUE + 35% USAGE + 25% GROWTH) — Scores normalisés par percentile</code>
                     </div>
 
                     <div class="section-info-bubble" style="margin-bottom: 16px;">
@@ -8819,6 +8819,10 @@ function initializeShopPage() {
                                 <th data-sort="id" style="cursor:pointer">ID ↕</th>
                                 <th data-sort="email" style="cursor:pointer">Utilisateur ↕</th>
                                 <th data-sort="score" style="cursor:pointer">Score Airdrop ↕</th>
+                                <th data-sort="value" style="cursor:pointer" title="VALUE : revenus (dépenses + abonnements API avec loyalty factor)">VALUE ↕</th>
+                                <th data-sort="usage" style="cursor:pointer" title="USAGE : activité réseau (jobs, jours actifs, fiabilité nœud)">USAGE ↕</th>
+                                <th data-sort="growth" style="cursor:pointer" title="GROWTH : parrainages pondérés par qualité">GROWTH ↕</th>
+                                <th data-sort="bonus" style="cursor:pointer" title="Bonus : multiplicateur de score">Bonus ↕</th>
                                 <th data-sort="allocation" style="cursor:pointer">Allocation (Tokens) ↕</th>
                                 <th data-sort="spent" style="cursor:pointer">Dépensé (€) ↕</th>
                                 <th data-sort="points" style="cursor:pointer">Points ↕</th>
@@ -8827,7 +8831,7 @@ function initializeShopPage() {
                                 <th>Dernier Calcul</th>
                             </tr>
                         </thead>
-                        <tbody><tr><td colspan="9" style="text-align:center">Chargement...</td></tr></tbody>
+                        <tbody><tr><td colspan="13" style="text-align:center">Chargement...</td></tr></tbody>
                     </table>
 
                     <!-- Bonus Panel Modal -->
@@ -9067,13 +9071,13 @@ function initializeShopPage() {
                     })
                     .catch(err => {
                         console.error(err);
-                        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#ef4444">Erreur de chargement</td></tr>`;
+                        tbody.innerHTML = `<tr><td colspan="13" style="text-align:center;color:#ef4444">Erreur de chargement</td></tr>`;
                     });
             }
 
             function renderTable(data) {
                 if (data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#9ca3af">Aucun participant trouvé</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="13" style="text-align:center;color:#9ca3af">Aucun participant trouvé</td></tr>`;
                     statsDiv.textContent = '0 participants';
                     return;
                 }
@@ -9082,6 +9086,16 @@ function initializeShopPage() {
                 const rows = data.map(u => {
                     totalAlloc += parseFloat(u.airdrop_allocation || 0);
                     const lastCalc = u.last_airdrop_calculation ? new Date(u.last_airdrop_calculation).toLocaleString() : '-';
+                    
+                    // Format bonus with color
+                    const bonus = parseFloat(u.airdrop_bonus_mult || 1.0);
+                    let bonusColor = '#9ca3af'; // gray for ×1.0
+                    if (bonus >= 1.1 && bonus < 1.5) {
+                        bonusColor = '#f97316'; // orange
+                    } else if (bonus >= 1.5) {
+                        bonusColor = '#22c55e'; // green/golden for early adopter
+                    }
+                    
                     return `
                         <tr>
                             <td>${u.id}</td>
@@ -9090,6 +9104,10 @@ function initializeShopPage() {
                                 <div style="font-size:0.8em;color:#94a3b8">${maskEmail(u.email)}</div>
                             </td>
                             <td style="font-weight:bold;color:#fbbf24">${parseFloat(u.airdrop_score || 0).toFixed(2)}</td>
+                            <td style="color:#60a5fa">${parseFloat(u.airdrop_value_score || 0).toFixed(2)}%</td>
+                            <td style="color:#a78bfa">${parseFloat(u.airdrop_usage_score || 0).toFixed(2)}%</td>
+                            <td style="color:#f472b6">${parseFloat(u.airdrop_growth_score || 0).toFixed(2)}%</td>
+                            <td style="font-weight:bold;color:${bonusColor}">×${bonus.toFixed(2)}</td>
                             <td style="font-weight:bold;color:#22c55e">${parseFloat(u.airdrop_allocation || 0).toLocaleString()}</td>
                             <td>${parseFloat(u.total_spent || 0).toFixed(2)} €</td>
                             <td>${parseInt(u.total_points || 0).toLocaleString()}</td>
@@ -9167,6 +9185,11 @@ function initializeShopPage() {
                         const msg = (j && j.message) ? j.message : 'Calcul terminé';
                         const total = (j && typeof j.total_global_score === 'number') ? j.total_global_score : null;
                         if (j && j.circulating_supply) currentCirculatingSupply = Number(j.circulating_supply) || currentCirculatingSupply;
+                        // Update formula text if provided by API
+                        if (j && j.formula) {
+                            const formulaText = document.getElementById('airdrop-formula-text');
+                            if (formulaText) formulaText.textContent = j.formula;
+                        }
                         alert(total !== null ? `Succès ! ${msg}\nScore Global: ${total.toFixed(2)}\nSupply: ${formatInt(currentCirculatingSupply)} tokens` : `Succès ! ${msg}\nSupply: ${formatInt(currentCirculatingSupply)} tokens`);
                         loadParticipants();
                     } else {
