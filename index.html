@@ -267,16 +267,16 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
     <h2 class="ln-h2" data-r data-ln="jobs.h2">10 types de compute,<br>un seul endpoint.</h2>
     <p class="ln-muted" data-r data-ln="jobs.sub">De l'extraction de données à la conversion vidéo, tout passe par la même API.</p>
     <div class="ln-jobs-grid" data-r>
-      <div class="ln-job"><span class="ln-job-icon">🔍</span><div class="ln-job-name">http_get</div><div class="ln-job-desc">Analyse web simple</div><div class="ln-job-cost">~1 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">🤖</span><div class="ln-job-name">scrape_get</div><div class="ln-job-desc">Scraping intelligent (auto/browser/css/ai)</div><div class="ln-job-cost">~2 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">📄</span><div class="ln-job-name">ocr_pdf</div><div class="ln-job-desc">OCR / Extraction PDF</div><div class="ln-job-cost">~20 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">🖼️</span><div class="ln-job-name">image_svg_generate</div><div class="ln-job-desc">Génération SVG avec texte</div><div class="ln-job-cost">~2 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">⚙️</span><div class="ln-job-name">code_run_js</div><div class="ln-job-desc">Exécution JS (sandbox VM)</div><div class="ln-job-cost">~5 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">📝</span><div class="ln-job-name">text_transform</div><div class="ln-job-desc">Transformation de texte</div><div class="ln-job-cost">~1 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">📄</span><div class="ln-job-name">text_generate_template</div><div class="ln-job-desc">Génération de template</div><div class="ln-job-cost">~1 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">🧪</span><div class="ln-job-name">content_check</div><div class="ln-job-desc">Vérification de contenu</div><div class="ln-job-cost">~5 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">📊</span><div class="ln-job-name">data_processing</div><div class="ln-job-desc">Traitement de données</div><div class="ln-job-cost">~100 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">📈</span><div class="ln-job-name">csv_stats</div><div class="ln-job-desc">Statistiques CSV</div><div class="ln-job-cost">~10 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">🔍</span><div class="ln-job-name">http_get</div><div class="ln-job-desc" data-ln="job.http_get.desc">Analyse web simple</div><div class="ln-job-cost">~1 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">🤖</span><div class="ln-job-name">scrape_get</div><div class="ln-job-desc" data-ln="job.scrape_get.desc">Scraping intelligent (auto/browser/css/ai)</div><div class="ln-job-cost">~2 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">📄</span><div class="ln-job-name">ocr_pdf</div><div class="ln-job-desc" data-ln="job.ocr_pdf.desc">OCR / Extraction PDF</div><div class="ln-job-cost">~20 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">🖼️</span><div class="ln-job-name">image_svg_generate</div><div class="ln-job-desc" data-ln="job.image_svg.desc">Génération SVG avec texte</div><div class="ln-job-cost">~2 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">⚙️</span><div class="ln-job-name">code_run_js</div><div class="ln-job-desc" data-ln="job.code_run_js.desc">Exécution JS (sandbox VM)</div><div class="ln-job-cost">~5 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">📝</span><div class="ln-job-name">text_transform</div><div class="ln-job-desc" data-ln="job.text_transform.desc">Transformation de texte</div><div class="ln-job-cost">~1 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">📄</span><div class="ln-job-name">text_generate_template</div><div class="ln-job-desc" data-ln="job.text_template.desc">Génération de template</div><div class="ln-job-cost">~1 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">🧪</span><div class="ln-job-name">content_check</div><div class="ln-job-desc" data-ln="job.content_check.desc">Vérification de contenu</div><div class="ln-job-cost">~5 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">📊</span><div class="ln-job-name">data_processing</div><div class="ln-job-desc" data-ln="job.data_processing.desc">Traitement de données</div><div class="ln-job-cost">~100 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">📈</span><div class="ln-job-name">csv_stats</div><div class="ln-job-desc" data-ln="job.csv_stats.desc">Statistiques CSV</div><div class="ln-job-cost">~10 MB</div></div>
     </div>
   </section>
 
@@ -1210,6 +1210,16 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'pricing.custom.f2': 'Priorité dédiée',
               'pricing.custom.f3': 'Infrastructure sur mesure',
               'pricing.custom.f4': 'Support 24/7 dédié',
+              'job.http_get.desc': 'Analyse web simple',
+              'job.scrape_get.desc': 'Scraping intelligent (auto/browser/css/ai)',
+              'job.ocr_pdf.desc': 'OCR / Extraction PDF',
+              'job.image_svg.desc': 'Génération SVG avec texte',
+              'job.code_run_js.desc': 'Exécution JS (sandbox VM)',
+              'job.text_transform.desc': 'Transformation de texte',
+              'job.text_template.desc': 'Génération de template',
+              'job.content_check.desc': 'Vérification de contenu',
+              'job.data_processing.desc': 'Traitement de données',
+              'job.csv_stats.desc': 'Statistiques CSV',
             },
             en: {
               'nav.jobs': 'Jobs',
@@ -1327,6 +1337,16 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'pricing.custom.f2': 'Dedicated priority',
               'pricing.custom.f3': 'Custom infrastructure',
               'pricing.custom.f4': 'Dedicated 24/7 support',
+              'job.http_get.desc': 'Simple web fetch',
+              'job.scrape_get.desc': 'Smart scraping (auto/browser/css/ai)',
+              'job.ocr_pdf.desc': 'OCR / PDF extraction',
+              'job.image_svg.desc': 'SVG generation with text',
+              'job.code_run_js.desc': 'JS execution (VM sandbox)',
+              'job.text_transform.desc': 'Text transformation',
+              'job.text_template.desc': 'Template generation',
+              'job.content_check.desc': 'Content verification',
+              'job.data_processing.desc': 'Data processing',
+              'job.csv_stats.desc': 'CSV statistics',
             },
             es: {
               'nav.jobs': 'Jobs',
@@ -1444,6 +1464,16 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'pricing.custom.f2': 'Prioridad dedicada',
               'pricing.custom.f3': 'Infraestructura a medida',
               'pricing.custom.f4': 'Soporte dedicado 24/7',
+              'job.http_get.desc': 'Análisis web simple',
+              'job.scrape_get.desc': 'Scraping inteligente (auto/browser/css/ai)',
+              'job.ocr_pdf.desc': 'OCR / Extracción PDF',
+              'job.image_svg.desc': 'Generación SVG con texto',
+              'job.code_run_js.desc': 'Ejecución JS (sandbox VM)',
+              'job.text_transform.desc': 'Transformación de texto',
+              'job.text_template.desc': 'Generación de plantilla',
+              'job.content_check.desc': 'Verificación de contenido',
+              'job.data_processing.desc': 'Procesamiento de datos',
+              'job.csv_stats.desc': 'Estadísticas CSV',
             }
           };
 
