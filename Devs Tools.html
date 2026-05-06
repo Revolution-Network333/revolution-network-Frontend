@@ -733,7 +733,8 @@ async function fetchQuota(){
     var data=await res.json();
     quotaData=data; renderQuota(data);
   } catch(e){
-    document.getElementById('quotaLoading').textContent='quota unavailable';
+    console.error('Quota fetch error:', e);
+    document.getElementById('quotaLoading').textContent='Error: '+e.message;
     document.getElementById('quotaRefreshBtn').style.display='block';
   }
 }
