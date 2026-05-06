@@ -602,6 +602,166 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
     </div>
   </section>
 
+  <!-- PRICING -->
+  <section class="ln-pricing" id="pricing">
+    <style>
+      .ln-pricing { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+      .ln-pricing-grid-top { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 1.25rem; }
+      .ln-pricing-grid-bot { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+      @media(max-width:900px){ .ln-pricing-grid-top,.ln-pricing-grid-bot{ grid-template-columns:1fr 1fr; } }
+      @media(max-width:580px){ .ln-pricing-grid-top,.ln-pricing-grid-bot{ grid-template-columns:1fr; } }
+      .ln-pc { background: rgba(13,18,25,0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 1.75rem; position: relative; overflow: hidden; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; }
+      .ln-pc:hover { border-color: rgba(255,255,255,.15); transform: translateY(-2px); }
+      .ln-pc.ln-pc--rec  { border-color: rgba(74,240,196,.35); box-shadow: 0 0 0 1px rgba(74,240,196,.08) inset, 0 0 32px rgba(74,240,196,.04); }
+      .ln-pc.ln-pc--rec:hover { border-color: rgba(74,240,196,.6); }
+      .ln-pc.ln-pc--best { border-color: rgba(245,158,11,.3); box-shadow: 0 0 0 1px rgba(245,158,11,.06) inset; }
+      .ln-pc.ln-pc--ent  { border-color: rgba(210,25,25,.3); background: rgba(210,25,25,.04); }
+      .ln-pc.ln-pc--free { border-color: rgba(34,197,94,.3); }
+      .ln-ribbon { position: absolute; top: 14px; right: -30px; font-family: 'DM Mono', monospace; font-size: .63rem; font-weight: 500; letter-spacing: .08em; padding: .3rem 2.8rem; transform: rotate(35deg); text-transform: uppercase; z-index: 2; line-height: 1; }
+      .ln-ribbon--green { background: #4af0c4; color: #080808; }
+      .ln-ribbon--amber { background: #d97706; color: #fff; }
+      .ln-ribbon--red   { background: #d21919; color: #fff; }
+      .ln-pc-tag { display: inline-flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .06em; margin-bottom: 1rem; text-transform: uppercase; color: #7a8799; }
+      .ln-pc-tag::before { content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+      .ln-pc-tag--cyan   { color: #4af0c4; }
+      .ln-pc-tag--amber  { color: #f59e0b; }
+      .ln-pc-tag--red    { color: #ff6b6b; }
+      .ln-pc-tag--green  { color: #4ade80; }
+      .ln-pc-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: .4rem; line-height: 1.2; }
+      .ln-pc-price { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2.4rem; line-height: 1; margin-bottom: .15rem; letter-spacing: -.02em; }
+      .ln-pc-price-custom { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.7rem; line-height: 1; margin-bottom: .15rem; }
+      .ln-pc-period { font-size: .8rem; font-weight: 400; color: #7a8799; font-family: 'DM Sans', sans-serif; margin-left: 4px; }
+      .ln-pc-gb { font-family: 'DM Mono', monospace; font-size: .8rem; color: #4af0c4; margin-bottom: 1.25rem; }
+      .ln-pc--ent .ln-pc-gb { color: #ff6b6b; }
+      .ln-pc-div { height: 1px; background: rgba(255,255,255,.06); margin: 1.25rem 0; }
+      .ln-pc-feats { list-style: none; display: flex; flex-direction: column; gap: .6rem; margin-bottom: 1.75rem; flex: 1; }
+      .ln-pc-feats li { font-size: .875rem; color: #a0aec0; display: flex; align-items: flex-start; gap: .5rem; line-height: 1.5; }
+      .ln-pc-feats li::before { content: ''; display: inline-block; min-width: 14px; height: 14px; margin-top: 1px; border-radius: 50%; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%234af0c4' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: center; background-color: rgba(74,240,196,.08); border: 1px solid rgba(74,240,196,.25); }
+      .ln-pc--ent .ln-pc-feats li::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%23ff6b6b' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-color: rgba(210,25,25,.08); border-color: rgba(210,25,25,.3); }
+      .ln-pc--free .ln-pc-feats li::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%234ade80' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-color: rgba(34,197,94,.08); border-color: rgba(34,197,94,.25); }
+      .ln-pc-btn { width: 100%; padding: .75rem 1.5rem; border-radius: 9px; font-weight: 600; font-size: .9rem; font-family: 'DM Sans', sans-serif; cursor: pointer; border: none; transition: all .2s; }
+      .ln-pc-btn--outline  { background: transparent; border: 1px solid rgba(255,255,255,.15); color: #e8edf5; }
+      .ln-pc-btn--outline:hover { border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.04); }
+      .ln-pc-btn--primary  { background: #4af0c4; color: #080808; border: none; }
+      .ln-pc-btn--primary:hover { opacity: .9; box-shadow: 0 6px 20px rgba(74,240,196,.25); transform: translateY(-1px); }
+      .ln-pc-btn--free     { background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.25); color: #4ade80; cursor: default; }
+      .ln-pc-btn--ent      { background: rgba(210,25,25,.15); border: 1px solid rgba(210,25,25,.3); color: #ff6b6b; }
+      .ln-pc-btn--ent:hover { background: rgba(210,25,25,.25); }
+      .ln-pricing-note { font-size: .75rem; color: #4a5568; text-align: center; margin-top: 2.5rem; font-family: 'DM Mono', monospace; }
+      .ln-pricing-note span { color: #7a8799; }
+    </style>
+
+    <div class="ln-label" data-ln="pricing.label">// tarification</div>
+    <h2 class="ln-h2" data-ln="pricing.title">Un forfait pour chaque usage</h2>
+    <p class="ln-sub" style="margin-bottom:2.5rem" data-ln="pricing.subtitle">Consommation déduite de ton volume mensuel. Pas de frais cachés, pas d'engagement — résilie quand tu veux.</p>
+
+    <div class="ln-pricing-grid-top">
+      <!-- FREE -->
+      <div class="ln-pc ln-pc--free">
+        <span class="ln-pc-tag ln-pc-tag--green" data-ln="pricing.tag.free">Gratuit</span>
+        <div class="ln-pc-name" data-ln="pricing.free.name">Forfait Free</div>
+        <div class="ln-pc-price">0,00<span class="ln-pc-period" data-ln="pricing.period">/ mois</span></div>
+        <div class="ln-pc-gb">🚀 3 GB / semaine</div>
+        <div class="ln-pc-div"></div>
+        <ul class="ln-pc-feats">
+          <li data-ln="pricing.free.f1">3 GB compute / semaine (réinit. hebdo)</li>
+          <li data-ln="pricing.free.f2">Max 0,2 GB par job</li>
+          <li data-ln="pricing.free.f3">Limite 30 requêtes / minute</li>
+          <li data-ln="pricing.free.f4">Jobs vidéo désactivés</li>
+        </ul>
+        <button class="ln-pc-btn ln-pc-btn--free" disabled data-ln="pricing.btn.included">Inclus</button>
+      </div>
+
+      <!-- NOVICE -->
+      <div class="ln-pc">
+        <span class="ln-pc-tag" data-ln="pricing.tag.novice">Novice</span>
+        <div class="ln-pc-name" data-ln="pricing.novice.name">Novice API Plan – 60 GB</div>
+        <div class="ln-pc-price">5,00 €<span class="ln-pc-period" data-ln="pricing.period">/ mois</span></div>
+        <div class="ln-pc-gb">🚀 <span data-ln="pricing.novice.gb">60 GB / par mois</span></div>
+        <div class="ln-pc-div"></div>
+        <ul class="ln-pc-feats">
+          <li data-ln="pricing.novice.f1">Forfait bande passante Novice</li>
+          <li data-ln="pricing.novice.f2">Volume mensuel : 60 GB</li>
+          <li data-ln="pricing.novice.f3">Prix par GB : 0,08 €</li>
+          <li data-ln="pricing.novice.f4">Suivi conso automatique inclus</li>
+          <li data-ln="pricing.novice.f5">Idéal pour petits projets</li>
+        </ul>
+        <button class="ln-pc-btn ln-pc-btn--outline" onclick="showLoginFromLanding()" data-ln="pricing.btn.subscribe">S'abonner</button>
+      </div>
+
+      <!-- STANDARD — RECOMMANDÉ -->
+      <div class="ln-pc ln-pc--rec">
+        <div class="ln-ribbon ln-ribbon--green" data-ln="pricing.badge.recommended">Recommandé</div>
+        <span class="ln-pc-tag ln-pc-tag--cyan" data-ln="pricing.tag.popular">Populaire</span>
+        <div class="ln-pc-name" data-ln="pricing.standard.name">Standard Plan – 250 GB</div>
+        <div class="ln-pc-price">20,00 €<span class="ln-pc-period" data-ln="pricing.period">/ mois</span></div>
+        <div class="ln-pc-gb">🚀 <span data-ln="pricing.standard.gb">250 GB / par mois</span></div>
+        <div class="ln-pc-div"></div>
+        <ul class="ln-pc-feats">
+          <li data-ln="pricing.standard.f1">Volume mensuel : 250 GB</li>
+          <li data-ln="pricing.standard.f2">Prix par GB : 0,08 €</li>
+          <li data-ln="pricing.standard.f3">Idéal pour petits projets réguliers</li>
+          <li data-ln="pricing.standard.f4">Priorité standard</li>
+        </ul>
+        <button class="ln-pc-btn ln-pc-btn--primary" onclick="showLoginFromLanding()" data-ln="pricing.btn.subscribe">S'abonner</button>
+      </div>
+    </div>
+
+    <div class="ln-pricing-grid-bot">
+      <!-- PRO -->
+      <div class="ln-pc">
+        <span class="ln-pc-tag" data-ln="pricing.tag.pro">Pro</span>
+        <div class="ln-pc-name" data-ln="pricing.pro.name">Pro Plan – 500 GB</div>
+        <div class="ln-pc-price">40,00 €<span class="ln-pc-period" data-ln="pricing.period">/ mois</span></div>
+        <div class="ln-pc-gb">🚀 <span data-ln="pricing.pro.gb">500 GB / par mois</span></div>
+        <div class="ln-pc-div"></div>
+        <ul class="ln-pc-feats">
+          <li data-ln="pricing.pro.f1">Volume mensuel : 500 GB</li>
+          <li data-ln="pricing.pro.f2">Prix par GB : 0,08 €</li>
+          <li data-ln="pricing.pro.f3">Bonus vitesse / priorité optionnel</li>
+          <li data-ln="pricing.pro.f4">Support prioritaire</li>
+        </ul>
+        <button class="ln-pc-btn ln-pc-btn--outline" onclick="showLoginFromLanding()" data-ln="pricing.btn.subscribe">S'abonner</button>
+      </div>
+
+      <!-- PREMIUM — BEST VALUE -->
+      <div class="ln-pc ln-pc--best">
+        <div class="ln-ribbon ln-ribbon--amber" data-ln="pricing.badge.best_value">Best Value</div>
+        <span class="ln-pc-tag ln-pc-tag--amber" data-ln="pricing.tag.best">Meilleur ratio</span>
+        <div class="ln-pc-name" data-ln="pricing.premium.name">Premium Plan – 1 500 GB</div>
+        <div class="ln-pc-price">100,00 €<span class="ln-pc-period" data-ln="pricing.period">/ mois</span></div>
+        <div class="ln-pc-gb">🚀 <span data-ln="pricing.premium.gb">1 500 GB / par mois</span></div>
+        <div class="ln-pc-div"></div>
+        <ul class="ln-pc-feats">
+          <li data-ln="pricing.premium.f1">Volume mensuel : 1 500 GB</li>
+          <li data-ln="pricing.premium.f2">Prix par GB : 0,08 €</li>
+          <li data-ln="pricing.premium.f3">Vitesse et priorité incluses</li>
+          <li data-ln="pricing.premium.f4">Support VIP</li>
+        </ul>
+        <button class="ln-pc-btn ln-pc-btn--outline" onclick="showLoginFromLanding()" data-ln="pricing.btn.subscribe">S'abonner</button>
+      </div>
+
+      <!-- SUR MESURE -->
+      <div class="ln-pc ln-pc--ent">
+        <div class="ln-ribbon ln-ribbon--red" data-ln="pricing.badge.custom">Custom</div>
+        <span class="ln-pc-tag ln-pc-tag--red" data-ln="pricing.tag.custom">Sur Mesure</span>
+        <div class="ln-pc-name" data-ln="pricing.custom.name">Sur Mesure</div>
+        <div class="ln-pc-price-custom" data-ln="pricing.custom.price">Sur devis<span class="ln-pc-period" data-ln="pricing.period">/ mois</span></div>
+        <div class="ln-pc-gb">⚡ <span data-ln="pricing.custom.gb">Volume illimité ou spécifique</span></div>
+        <div class="ln-pc-div"></div>
+        <ul class="ln-pc-feats">
+          <li data-ln="pricing.custom.f1">SLA personnalisé</li>
+          <li data-ln="pricing.custom.f2">Priorité dédiée</li>
+          <li data-ln="pricing.custom.f3">Infrastructure sur mesure</li>
+          <li data-ln="pricing.custom.f4">Support 24/7 dédié</li>
+        </ul>
+        <button class="ln-pc-btn ln-pc-btn--ent" onclick="showLoginFromLanding()" data-ln="pricing.btn.quote">Demander un devis</button>
+      </div>
+    </div>
+
+    <p class="ln-pricing-note"><span data-ln="pricing.note">Prix en EUR TTC · 0,08 € / GB supplémentaire · Annulation à tout moment</span></p>
+  </section>
+
   <!-- CTA -->
   <section class="ln-cta">
     <div class="ln-label" data-r data-ln="cta.label">Prêt ?</div>
@@ -996,6 +1156,60 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'node.card4.label': 'Uptime bonus',
               'node.card4.val': '×Multiplicateur',
               'node.card4.sub': '99 %+ uptime booste ton score pour l\'airdrop suivant',
+              'pricing.label': '// tarification',
+              'pricing.title': 'Un forfait pour chaque usage',
+              'pricing.subtitle': 'Consommation déduite de ton volume mensuel. Pas de frais cachés, pas d\'engagement — résilie quand tu veux.',
+              'pricing.note': 'Prix en EUR TTC · 0,08 € / GB supplémentaire · Annulation à tout moment',
+              'pricing.tag.free': 'Gratuit',
+              'pricing.tag.novice': 'Novice',
+              'pricing.tag.popular': 'Populaire',
+              'pricing.tag.pro': 'Pro',
+              'pricing.tag.best': 'Meilleur ratio',
+              'pricing.tag.custom': 'Sur Mesure',
+              'pricing.badge.recommended': 'Recommandé',
+              'pricing.badge.best_value': 'Best Value',
+              'pricing.badge.custom': 'Custom',
+              'pricing.period': '/ mois',
+              'pricing.btn.included': 'Inclus',
+              'pricing.btn.subscribe': 'S\'abonner',
+              'pricing.btn.quote': 'Demander un devis',
+              'pricing.free.name': 'Forfait Free',
+              'pricing.free.f1': '3 GB compute / semaine (réinit. hebdo)',
+              'pricing.free.f2': 'Max 0,2 GB par job',
+              'pricing.free.f3': 'Limite 30 requêtes / minute',
+              'pricing.free.f4': 'Jobs vidéo désactivés',
+              'pricing.novice.name': 'Novice API Plan – 60 GB',
+              'pricing.novice.gb': '60 GB / par mois',
+              'pricing.novice.f1': 'Forfait bande passante Novice',
+              'pricing.novice.f2': 'Volume mensuel : 60 GB',
+              'pricing.novice.f3': 'Prix par GB : 0,08 €',
+              'pricing.novice.f4': 'Suivi conso automatique inclus',
+              'pricing.novice.f5': 'Idéal pour petits projets',
+              'pricing.standard.name': 'Standard Plan – 250 GB',
+              'pricing.standard.gb': '250 GB / par mois',
+              'pricing.standard.f1': 'Volume mensuel : 250 GB',
+              'pricing.standard.f2': 'Prix par GB : 0,08 €',
+              'pricing.standard.f3': 'Idéal pour petits projets réguliers',
+              'pricing.standard.f4': 'Priorité standard',
+              'pricing.pro.name': 'Pro Plan – 500 GB',
+              'pricing.pro.gb': '500 GB / par mois',
+              'pricing.pro.f1': 'Volume mensuel : 500 GB',
+              'pricing.pro.f2': 'Prix par GB : 0,08 €',
+              'pricing.pro.f3': 'Bonus vitesse / priorité optionnel',
+              'pricing.pro.f4': 'Support prioritaire',
+              'pricing.premium.name': 'Premium Plan – 1 500 GB',
+              'pricing.premium.gb': '1 500 GB / par mois',
+              'pricing.premium.f1': 'Volume mensuel : 1 500 GB',
+              'pricing.premium.f2': 'Prix par GB : 0,08 €',
+              'pricing.premium.f3': 'Vitesse et priorité incluses',
+              'pricing.premium.f4': 'Support VIP',
+              'pricing.custom.name': 'Sur Mesure',
+              'pricing.custom.price': 'Sur devis',
+              'pricing.custom.gb': 'Volume illimité ou spécifique',
+              'pricing.custom.f1': 'SLA personnalisé',
+              'pricing.custom.f2': 'Priorité dédiée',
+              'pricing.custom.f3': 'Infrastructure sur mesure',
+              'pricing.custom.f4': 'Support 24/7 dédié',
             },
             en: {
               'nav.jobs': 'Jobs',
@@ -1059,6 +1273,60 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'node.card4.label': 'Uptime bonus',
               'node.card4.val': '×Multiplier',
               'node.card4.sub': '99%+ uptime boosts your score for the next airdrop',
+              'pricing.label': '// pricing',
+              'pricing.title': 'A plan for every use case',
+              'pricing.subtitle': 'Consumption deducted from your monthly volume. No hidden fees, no commitment — cancel anytime.',
+              'pricing.note': 'Prices in EUR incl. tax · €0.08 / extra GB · Cancel anytime',
+              'pricing.tag.free': 'Free',
+              'pricing.tag.novice': 'Novice',
+              'pricing.tag.popular': 'Popular',
+              'pricing.tag.pro': 'Pro',
+              'pricing.tag.best': 'Best Ratio',
+              'pricing.tag.custom': 'Custom',
+              'pricing.badge.recommended': 'Recommended',
+              'pricing.badge.best_value': 'Best Value',
+              'pricing.badge.custom': 'Custom',
+              'pricing.period': '/ month',
+              'pricing.btn.included': 'Included',
+              'pricing.btn.subscribe': 'Subscribe',
+              'pricing.btn.quote': 'Request a quote',
+              'pricing.free.name': 'Free Plan',
+              'pricing.free.f1': '3 GB compute / week (weekly reset)',
+              'pricing.free.f2': 'Max 0.2 GB per job',
+              'pricing.free.f3': 'Limit 30 requests / minute',
+              'pricing.free.f4': 'Video jobs disabled',
+              'pricing.novice.name': 'Novice API Plan – 60 GB',
+              'pricing.novice.gb': '60 GB / per month',
+              'pricing.novice.f1': 'Novice bandwidth plan',
+              'pricing.novice.f2': 'Monthly volume: 60 GB',
+              'pricing.novice.f3': 'Price per GB: €0.08',
+              'pricing.novice.f4': 'Automatic consumption tracking',
+              'pricing.novice.f5': 'Ideal for small projects',
+              'pricing.standard.name': 'Standard Plan – 250 GB',
+              'pricing.standard.gb': '250 GB / per month',
+              'pricing.standard.f1': 'Monthly volume: 250 GB',
+              'pricing.standard.f2': 'Price per GB: €0.08',
+              'pricing.standard.f3': 'Ideal for regular small projects',
+              'pricing.standard.f4': 'Standard priority',
+              'pricing.pro.name': 'Pro Plan – 500 GB',
+              'pricing.pro.gb': '500 GB / per month',
+              'pricing.pro.f1': 'Monthly volume: 500 GB',
+              'pricing.pro.f2': 'Price per GB: €0.08',
+              'pricing.pro.f3': 'Optional speed / priority bonus',
+              'pricing.pro.f4': 'Priority support',
+              'pricing.premium.name': 'Premium Plan – 1,500 GB',
+              'pricing.premium.gb': '1,500 GB / per month',
+              'pricing.premium.f1': 'Monthly volume: 1,500 GB',
+              'pricing.premium.f2': 'Price per GB: €0.08',
+              'pricing.premium.f3': 'Speed and priority included',
+              'pricing.premium.f4': 'VIP support',
+              'pricing.custom.name': 'Custom',
+              'pricing.custom.price': 'On quote',
+              'pricing.custom.gb': 'Unlimited or specific volume',
+              'pricing.custom.f1': 'Custom SLA',
+              'pricing.custom.f2': 'Dedicated priority',
+              'pricing.custom.f3': 'Custom infrastructure',
+              'pricing.custom.f4': 'Dedicated 24/7 support',
             },
             es: {
               'nav.jobs': 'Jobs',
@@ -1122,6 +1390,60 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'node.card4.label': 'Bonus de uptime',
               'node.card4.val': '×Multiplicador',
               'node.card4.sub': '99 %+ uptime potencia tu puntuación para el próximo airdrop',
+              'pricing.label': '// precios',
+              'pricing.title': 'Un plan para cada uso',
+              'pricing.subtitle': 'El consumo se deduce de tu volumen mensual. Sin costes ocultos, sin compromiso — cancela cuando quieras.',
+              'pricing.note': 'Precios en EUR con IVA · 0,08 € / GB adicional · Cancelación en cualquier momento',
+              'pricing.tag.free': 'Gratuito',
+              'pricing.tag.novice': 'Novato',
+              'pricing.tag.popular': 'Popular',
+              'pricing.tag.pro': 'Pro',
+              'pricing.tag.best': 'Mejor Ratio',
+              'pricing.tag.custom': 'A Medida',
+              'pricing.badge.recommended': 'Recomendado',
+              'pricing.badge.best_value': 'Mejor Valor',
+              'pricing.badge.custom': 'Custom',
+              'pricing.period': '/ mes',
+              'pricing.btn.included': 'Incluido',
+              'pricing.btn.subscribe': 'Suscribirse',
+              'pricing.btn.quote': 'Pedir presupuesto',
+              'pricing.free.name': 'Plan Gratuito',
+              'pricing.free.f1': '3 GB cómputo / semana (reinicio semanal)',
+              'pricing.free.f2': 'Máx 0,2 GB por tarea',
+              'pricing.free.f3': 'Límite 30 solicitudes / minuto',
+              'pricing.free.f4': 'Tareas de vídeo desactivadas',
+              'pricing.novice.name': 'Plan Novato API – 60 GB',
+              'pricing.novice.gb': '60 GB / por mes',
+              'pricing.novice.f1': 'Plan de ancho de banda Novato',
+              'pricing.novice.f2': 'Volumen mensual: 60 GB',
+              'pricing.novice.f3': 'Precio por GB: 0,08 €',
+              'pricing.novice.f4': 'Seguimiento de consumo automático',
+              'pricing.novice.f5': 'Ideal para pequeños proyectos',
+              'pricing.standard.name': 'Plan Estándar – 250 GB',
+              'pricing.standard.gb': '250 GB / por mes',
+              'pricing.standard.f1': 'Volumen mensual: 250 GB',
+              'pricing.standard.f2': 'Precio por GB: 0,08 €',
+              'pricing.standard.f3': 'Ideal para proyectos pequeños regulares',
+              'pricing.standard.f4': 'Prioridad estándar',
+              'pricing.pro.name': 'Plan Pro – 500 GB',
+              'pricing.pro.gb': '500 GB / por mes',
+              'pricing.pro.f1': 'Volumen mensual: 500 GB',
+              'pricing.pro.f2': 'Precio por GB: 0,08 €',
+              'pricing.pro.f3': 'Bono velocidad / prioridad opcional',
+              'pricing.pro.f4': 'Soporte prioritario',
+              'pricing.premium.name': 'Plan Premium – 1.500 GB',
+              'pricing.premium.gb': '1.500 GB / por mes',
+              'pricing.premium.f1': 'Volumen mensual: 1.500 GB',
+              'pricing.premium.f2': 'Precio por GB: 0,08 €',
+              'pricing.premium.f3': 'Velocidad y prioridad incluidas',
+              'pricing.premium.f4': 'Soporte VIP',
+              'pricing.custom.name': 'A Medida',
+              'pricing.custom.price': 'Bajo presupuesto',
+              'pricing.custom.gb': 'Volumen ilimitado o específico',
+              'pricing.custom.f1': 'SLA personalizado',
+              'pricing.custom.f2': 'Prioridad dedicada',
+              'pricing.custom.f3': 'Infraestructura a medida',
+              'pricing.custom.f4': 'Soporte dedicado 24/7',
             }
           };
 
@@ -1702,7 +2024,61 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'register.email': 'Email',
                 'register.password': 'Mot de passe (min 8)',
                 'register.submit': 'Créer mon compte',
-                'register.back': 'Retour à la connexion'
+                'register.back': 'Retour à la connexion',
+                'landing.pricing.label': '// tarification',
+                'landing.pricing.title': 'Un forfait pour chaque usage',
+                'landing.pricing.subtitle': 'Consommation déduite de ton volume mensuel. Pas de frais cachés, pas d\'engagement — résilie quand tu veux.',
+                'landing.pricing.note': 'Prix en EUR TTC · 0,08 € / GB supplémentaire · Annulation à tout moment',
+                'landing.pricing.tag.free': 'Gratuit',
+                'landing.pricing.tag.novice': 'Novice',
+                'landing.pricing.tag.popular': 'Populaire',
+                'landing.pricing.tag.pro': 'Pro',
+                'landing.pricing.tag.best': 'Meilleur ratio',
+                'landing.pricing.tag.custom': 'Sur Mesure',
+                'landing.pricing.badge.recommended': 'Recommandé',
+                'landing.pricing.badge.best_value': 'Best Value',
+                'landing.pricing.badge.custom': 'Custom',
+                'landing.pricing.period': '/ mois',
+                'landing.pricing.btn.included': 'Inclus',
+                'landing.pricing.btn.subscribe': 'S\'abonner',
+                'landing.pricing.btn.quote': 'Demander un devis',
+                'landing.pricing.plan.free.name': 'Forfait Free',
+                'landing.pricing.plan.free.f1': '3 GB compute / semaine (réinit. hebdo)',
+                'landing.pricing.plan.free.f2': 'Max 0,2 GB par job',
+                'landing.pricing.plan.free.f3': 'Limite 30 requêtes / minute',
+                'landing.pricing.plan.free.f4': 'Jobs vidéo désactivés',
+                'landing.pricing.plan.novice.name': 'Novice API Plan – 60 GB',
+                'landing.pricing.plan.novice.gb': '60 GB / par mois',
+                'landing.pricing.plan.novice.f1': 'Forfait bande passante Novice',
+                'landing.pricing.plan.novice.f2': 'Volume mensuel : 60 GB',
+                'landing.pricing.plan.novice.f3': 'Prix par GB : 0,08 €',
+                'landing.pricing.plan.novice.f4': 'Suivi conso automatique inclus',
+                'landing.pricing.plan.novice.f5': 'Idéal pour petits projets',
+                'landing.pricing.plan.standard.name': 'Standard Plan – 250 GB',
+                'landing.pricing.plan.standard.gb': '250 GB / par mois',
+                'landing.pricing.plan.standard.f1': 'Volume mensuel : 250 GB',
+                'landing.pricing.plan.standard.f2': 'Prix par GB : 0,08 €',
+                'landing.pricing.plan.standard.f3': 'Idéal pour petits projets réguliers',
+                'landing.pricing.plan.standard.f4': 'Priorité standard',
+                'landing.pricing.plan.pro.name': 'Pro Plan – 500 GB',
+                'landing.pricing.plan.pro.gb': '500 GB / par mois',
+                'landing.pricing.plan.pro.f1': 'Volume mensuel : 500 GB',
+                'landing.pricing.plan.pro.f2': 'Prix par GB : 0,08 €',
+                'landing.pricing.plan.pro.f3': 'Bonus vitesse / priorité optionnel',
+                'landing.pricing.plan.pro.f4': 'Support prioritaire',
+                'landing.pricing.plan.premium.name': 'Premium Plan – 1 500 GB',
+                'landing.pricing.plan.premium.gb': '1 500 GB / par mois',
+                'landing.pricing.plan.premium.f1': 'Volume mensuel : 1 500 GB',
+                'landing.pricing.plan.premium.f2': 'Prix par GB : 0,08 €',
+                'landing.pricing.plan.premium.f3': 'Vitesse et priorité incluses',
+                'landing.pricing.plan.premium.f4': 'Support VIP',
+                'landing.pricing.plan.custom.name': 'Sur Mesure',
+                'landing.pricing.plan.custom.price': 'Sur devis',
+                'landing.pricing.plan.custom.gb': 'Volume illimité ou spécifique',
+                'landing.pricing.plan.custom.f1': 'SLA personnalisé',
+                'landing.pricing.plan.custom.f2': 'Priorité dédiée',
+                'landing.pricing.plan.custom.f3': 'Infrastructure sur mesure',
+                'landing.pricing.plan.custom.f4': 'Support 24/7 dédié'
             },
             en: {
                 'menu.label': 'MENU',
@@ -2326,7 +2702,61 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'register.email': 'Email',
                 'register.password': 'Password (min 8)',
                 'register.submit': 'Create my account',
-                'register.back': 'Back to sign in'
+                'register.back': 'Back to sign in',
+                'landing.pricing.label': '// pricing',
+                'landing.pricing.title': 'A plan for every use case',
+                'landing.pricing.subtitle': 'Consumption deducted from your monthly volume. No hidden fees, no commitment — cancel anytime.',
+                'landing.pricing.note': 'Prices in EUR incl. tax · €0.08 / extra GB · Cancel anytime',
+                'landing.pricing.tag.free': 'Free',
+                'landing.pricing.tag.novice': 'Novice',
+                'landing.pricing.tag.popular': 'Popular',
+                'landing.pricing.tag.pro': 'Pro',
+                'landing.pricing.tag.best': 'Best Ratio',
+                'landing.pricing.tag.custom': 'Custom',
+                'landing.pricing.badge.recommended': 'Recommended',
+                'landing.pricing.badge.best_value': 'Best Value',
+                'landing.pricing.badge.custom': 'Custom',
+                'landing.pricing.period': '/ month',
+                'landing.pricing.btn.included': 'Included',
+                'landing.pricing.btn.subscribe': 'Subscribe',
+                'landing.pricing.btn.quote': 'Request a quote',
+                'landing.pricing.plan.free.name': 'Free Plan',
+                'landing.pricing.plan.free.f1': '3 GB compute / week (weekly reset)',
+                'landing.pricing.plan.free.f2': 'Max 0.2 GB per job',
+                'landing.pricing.plan.free.f3': 'Limit 30 requests / minute',
+                'landing.pricing.plan.free.f4': 'Video jobs disabled',
+                'landing.pricing.plan.novice.name': 'Novice API Plan – 60 GB',
+                'landing.pricing.plan.novice.gb': '60 GB / per month',
+                'landing.pricing.plan.novice.f1': 'Novice bandwidth plan',
+                'landing.pricing.plan.novice.f2': 'Monthly volume: 60 GB',
+                'landing.pricing.plan.novice.f3': 'Price per GB: €0.08',
+                'landing.pricing.plan.novice.f4': 'Automatic consumption tracking',
+                'landing.pricing.plan.novice.f5': 'Ideal for small projects',
+                'landing.pricing.plan.standard.name': 'Standard Plan – 250 GB',
+                'landing.pricing.plan.standard.gb': '250 GB / per month',
+                'landing.pricing.plan.standard.f1': 'Monthly volume: 250 GB',
+                'landing.pricing.plan.standard.f2': 'Price per GB: €0.08',
+                'landing.pricing.plan.standard.f3': 'Ideal for regular small projects',
+                'landing.pricing.plan.standard.f4': 'Standard priority',
+                'landing.pricing.plan.pro.name': 'Pro Plan – 500 GB',
+                'landing.pricing.plan.pro.gb': '500 GB / per month',
+                'landing.pricing.plan.pro.f1': 'Monthly volume: 500 GB',
+                'landing.pricing.plan.pro.f2': 'Price per GB: €0.08',
+                'landing.pricing.plan.pro.f3': 'Optional speed / priority bonus',
+                'landing.pricing.plan.pro.f4': 'Priority support',
+                'landing.pricing.plan.premium.name': 'Premium Plan – 1,500 GB',
+                'landing.pricing.plan.premium.gb': '1,500 GB / per month',
+                'landing.pricing.plan.premium.f1': 'Monthly volume: 1,500 GB',
+                'landing.pricing.plan.premium.f2': 'Price per GB: €0.08',
+                'landing.pricing.plan.premium.f3': 'Speed and priority included',
+                'landing.pricing.plan.premium.f4': 'VIP support',
+                'landing.pricing.plan.custom.name': 'Custom',
+                'landing.pricing.plan.custom.price': 'On quote',
+                'landing.pricing.plan.custom.gb': 'Unlimited or specific volume',
+                'landing.pricing.plan.custom.f1': 'Custom SLA',
+                'landing.pricing.plan.custom.f2': 'Dedicated priority',
+                'landing.pricing.plan.custom.f3': 'Custom infrastructure',
+                'landing.pricing.plan.custom.f4': 'Dedicated 24/7 support'
             },
             es: {
                 'menu.label': 'MENÚ',
@@ -2665,7 +3095,61 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'register.email': 'Correo electrónico',
                 'register.password': 'Contraseña (mín 8)',
                 'register.submit': 'Crear mi cuenta',
-                'register.back': 'Volver a inicio de sesión'
+                'register.back': 'Volver a inicio de sesión',
+                'landing.pricing.label': '// precios',
+                'landing.pricing.title': 'Un plan para cada uso',
+                'landing.pricing.subtitle': 'El consumo se deduce de tu volumen mensual. Sin costes ocultos, sin compromiso — cancela cuando quieras.',
+                'landing.pricing.note': 'Precios en EUR con IVA · 0,08 € / GB adicional · Cancelación en cualquier momento',
+                'landing.pricing.tag.free': 'Gratuito',
+                'landing.pricing.tag.novice': 'Novato',
+                'landing.pricing.tag.popular': 'Popular',
+                'landing.pricing.tag.pro': 'Pro',
+                'landing.pricing.tag.best': 'Mejor Ratio',
+                'landing.pricing.tag.custom': 'A Medida',
+                'landing.pricing.badge.recommended': 'Recomendado',
+                'landing.pricing.badge.best_value': 'Mejor Valor',
+                'landing.pricing.badge.custom': 'Custom',
+                'landing.pricing.period': '/ mes',
+                'landing.pricing.btn.included': 'Incluido',
+                'landing.pricing.btn.subscribe': 'Suscribirse',
+                'landing.pricing.btn.quote': 'Pedir presupuesto',
+                'landing.pricing.plan.free.name': 'Plan Gratuito',
+                'landing.pricing.plan.free.f1': '3 GB cómputo / semana (reinicio semanal)',
+                'landing.pricing.plan.free.f2': 'Máx 0,2 GB por tarea',
+                'landing.pricing.plan.free.f3': 'Límite 30 solicitudes / minuto',
+                'landing.pricing.plan.free.f4': 'Tareas de vídeo desactivadas',
+                'landing.pricing.plan.novice.name': 'Plan Novato API – 60 GB',
+                'landing.pricing.plan.novice.gb': '60 GB / por mes',
+                'landing.pricing.plan.novice.f1': 'Plan de ancho de banda Novato',
+                'landing.pricing.plan.novice.f2': 'Volumen mensual: 60 GB',
+                'landing.pricing.plan.novice.f3': 'Precio por GB: 0,08 €',
+                'landing.pricing.plan.novice.f4': 'Seguimiento de consumo automático',
+                'landing.pricing.plan.novice.f5': 'Ideal para pequeños proyectos',
+                'landing.pricing.plan.standard.name': 'Plan Estándar – 250 GB',
+                'landing.pricing.plan.standard.gb': '250 GB / por mes',
+                'landing.pricing.plan.standard.f1': 'Volumen mensual: 250 GB',
+                'landing.pricing.plan.standard.f2': 'Precio por GB: 0,08 €',
+                'landing.pricing.plan.standard.f3': 'Ideal para proyectos pequeños regulares',
+                'landing.pricing.plan.standard.f4': 'Prioridad estándar',
+                'landing.pricing.plan.pro.name': 'Plan Pro – 500 GB',
+                'landing.pricing.plan.pro.gb': '500 GB / por mes',
+                'landing.pricing.plan.pro.f1': 'Volumen mensual: 500 GB',
+                'landing.pricing.plan.pro.f2': 'Precio por GB: 0,08 €',
+                'landing.pricing.plan.pro.f3': 'Bono velocidad / prioridad opcional',
+                'landing.pricing.plan.pro.f4': 'Soporte prioritario',
+                'landing.pricing.plan.premium.name': 'Plan Premium – 1.500 GB',
+                'landing.pricing.plan.premium.gb': '1.500 GB / por mes',
+                'landing.pricing.plan.premium.f1': 'Volumen mensual: 1.500 GB',
+                'landing.pricing.plan.premium.f2': 'Precio por GB: 0,08 €',
+                'landing.pricing.plan.premium.f3': 'Velocidad y prioridad incluidas',
+                'landing.pricing.plan.premium.f4': 'Soporte VIP',
+                'landing.pricing.plan.custom.name': 'A Medida',
+                'landing.pricing.plan.custom.price': 'Bajo presupuesto',
+                'landing.pricing.plan.custom.gb': 'Volumen ilimitado o específico',
+                'landing.pricing.plan.custom.f1': 'SLA personalizado',
+                'landing.pricing.plan.custom.f2': 'Prioridad dedicada',
+                'landing.pricing.plan.custom.f3': 'Infraestructura a medida',
+                'landing.pricing.plan.custom.f4': 'Soporte dedicado 24/7'
             }
         };
         function t(key) {

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#080808;color:#e8edf5;font-family:'DM Sans',sans-serif}
+.pricing-section{padding:5rem 2rem;max-width:1200px;margin:0 auto;position:relative}
+.ln-label{font-family:'DM Mono',monospace;font-size:.75rem;color:#4af0c4;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;display:block}
+.ln-h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.75rem,3vw,2.75rem);letter-spacing:-0.02em;margin-bottom:.75rem}
+.ln-muted{color:#7a8799;max-width:540px;margin-bottom:3.5rem;font-weight:300;font-size:1rem;line-height:1.7}
+.toggle-row{display:flex;align-items:center;gap:1rem;margin-bottom:3rem}
+.toggle-label{font-size:.85rem;color:#7a8799;font-family:'DM Mono',monospace}
+.toggle-label.active{color:#4af0c4}
+.toggle{width:44px;height:24px;background:rgba(74,240,196,.15);border:1px solid rgba(74,240,196,.3);border-radius:12px;cursor:pointer;position:relative;transition:background .2s}
+.toggle.on{background:rgba(74,240,196,.25);border-color:#4af0c4}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#4af0c4;transition:transform .2s;transform:translateX(0)}
+.toggle.on::after{transform:translateX(20px)}
+.save-badge{background:rgba(74,240,196,.12);border:1px solid rgba(74,240,196,.25);color:#4af0c4;font-family:'DM Mono',monospace;font-size:.7rem;padding:.2rem .6rem;border-radius:999px;letter-spacing:.05em}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:1.25rem}
+.plans-grid-bottom{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+@media(max-width:900px){.plans-grid,.plans-grid-bottom{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.plans-grid,.plans-grid-bottom{grid-template-columns:1fr}}
+.plan-card{background:rgba(13,18,25,0.75);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:1.75rem;position:relative;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+.plan-card:hover{border-color:rgba(255,255,255,.14);transform:translateY(-2px)}
+.plan-card.recommended{border-color:rgba(74,240,196,.35);box-shadow:0 0 0 1px rgba(74,240,196,.1) inset,0 0 32px rgba(74,240,196,.05)}
+.plan-card.recommended:hover{border-color:rgba(74,240,196,.6)}
+.plan-card.best-value{border-color:rgba(245,158,11,.3);box-shadow:0 0 0 1px rgba(245,158,11,.08) inset}
+.plan-card.enterprise{border-color:rgba(210,25,25,.3);background:rgba(210,25,25,.05)}
+.plan-card.free{border-color:rgba(34,197,94,.3)}
+.ribbon{position:absolute;top:14px;right:-28px;background:#d97706;color:#fff;font-family:'DM Mono',monospace;font-size:.65rem;font-weight:500;letter-spacing:.08em;padding:.3rem 2.5rem;transform:rotate(35deg);transform-origin:center;line-height:1;text-transform:uppercase;z-index:2}
+.ribbon.green{background:#4af0c4;color:#080808}
+.ribbon.red{background:#d21919;color:#fff}
+.plan-tag{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:.7rem;color:#7a8799;letter-spacing:.06em;margin-bottom:1rem;text-transform:uppercase}
+.plan-tag-dot{width:5px;height:5px;border-radius:50%;background:#7a8799}
+.plan-tag.pro .plan-tag-dot{background:#4af0c4}
+.plan-tag.pro{color:#4af0c4}
+.plan-tag.best .plan-tag-dot{background:#f59e0b}
+.plan-tag.best{color:#f59e0b}
+.plan-tag.enterprise .plan-tag-dot{background:#ff6b6b}
+.plan-tag.enterprise{color:#ff6b6b}
+.plan-tag.free .plan-tag-dot{background:#4ade80}
+.plan-tag.free{color:#4ade80}
+.plan-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:.4rem;line-height:1.2}
+.plan-price{font-family:'Syne',sans-serif;font-weight:800;font-size:2.4rem;line-height:1;margin-bottom:.15rem;letter-spacing:-0.02em}
+.plan-price .currency{font-size:1.3rem;font-weight:600;vertical-align:super;margin-right:2px}
+.plan-price .period{font-size:.82rem;font-weight:400;color:#7a8799;margin-left:4px;font-family:'DM Sans',sans-serif;letter-spacing:0}
+.plan-gb{font-family:'DM Mono',monospace;font-size:.8rem;color:#4af0c4;margin-bottom:1.25rem;display:flex;align-items:center;gap:6px}
+.plan-gb .rocket{font-size:.85rem}
+.plan-divider{height:1px;background:rgba(255,255,255,0.06);margin:1.25rem 0}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.75rem;flex:1}
+.plan-features li{font-size:.875rem;color:#a0aec0;display:flex;align-items:flex-start;gap:.5rem;line-height:1.5}
+.plan-features li::before{content:'';display:inline-block;width:14px;height:14px;min-width:14px;margin-top:1px;background:rgba(74,240,196,.15);border:1px solid rgba(74,240,196,.3);border-radius:50%;position:relative}
+.plan-features li::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%234af0c4' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-color:rgba(74,240,196,.08);border:1px solid rgba(74,240,196,.25);border-radius:50%}
+.plan-card.enterprise .plan-features li::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%23ff6b6b' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-color:rgba(210,25,25,.08);border-color:rgba(210,25,25,.3)}
+.plan-card.free .plan-features li::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%234ade80' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-color:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25)}
+.plan-btn{width:100%;padding:.75rem 1.5rem;border-radius:9px;font-weight:600;font-size:.9rem;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;transition:all .2s;letter-spacing:.01em}
+.plan-btn.outline{background:transparent;border:1px solid rgba(255,255,255,.15);color:#e8edf5}
+.plan-btn.outline:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.04)}
+.plan-btn.primary{background:#4af0c4;color:#080808;border:none}
+.plan-btn.primary:hover{opacity:.9;box-shadow:0 6px 20px rgba(74,240,196,.25);transform:translateY(-1px)}
+.plan-btn.included{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);color:#4ade80}
+.plan-btn.included:hover{background:rgba(34,197,94,.18)}
+.plan-btn.enterprise-btn{background:rgba(210,25,25,.15);border:1px solid rgba(210,25,25,.3);color:#ff6b6b}
+.plan-btn.enterprise-btn:hover{background:rgba(210,25,25,.25)}
+.price-note{font-size:.75rem;color:#4a5568;text-align:center;margin-top:2.5rem;font-family:'DM Mono',monospace}
+.price-note span{color:#7a8799}
+</style>
+</head>
+<body>
+<section class="pricing-section">
+  <span class="ln-label">// tarification</span>
+  <h2 class="ln-h2">Un forfait pour chaque usage</h2>
+  <p class="ln-muted">Consommation déduite de ton volume mensuel. Pas de frais cachés, pas d'engagement — résilie quand tu veux.</p>
+
+  <div class="toggle-row">
+    <span class="toggle-label active" id="lbl-monthly">Mensuel</span>
+    <div class="toggle" id="billing-toggle"></div>
+    <span class="toggle-label" id="lbl-annual">Annuel</span>
+    <span class="save-badge" id="save-badge" style="display:none">-20%</span>
+  </div>
+
+  <div class="plans-grid">
+    <!-- FREE -->
+    <div class="plan-card free">
+      <div class="plan-tag free"><span class="plan-tag-dot"></span>Gratuit</div>
+      <div class="plan-name">Forfait Free</div>
+      <div class="plan-price"><span class="currency"></span>0,00<span class="period">€ / mois</span></div>
+      <div class="plan-gb"><span class="rocket">🚀</span> 3 GB compute / semaine</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>3 GB compute / semaine (réinit. hebdo)</li>
+        <li>Max 0,2 GB par job</li>
+        <li>Limite 30 requêtes / minute</li>
+        <li>Jobs vidéo désactivés</li>
+      </ul>
+      <button class="plan-btn included" disabled>Inclus</button>
+    </div>
+
+    <!-- NOVICE -->
+    <div class="plan-card">
+      <div class="plan-tag"><span class="plan-tag-dot"></span>Novice</div>
+      <div class="plan-name">Novice API Plan – 60 GB</div>
+      <div class="plan-price"><span class="currency"></span><span class="price-val" data-monthly="5" data-annual="4">5,00</span><span class="period">€ / mois</span></div>
+      <div class="plan-gb"><span class="rocket">🚀</span> 60 GB / par mois</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>Forfait bande passante Novice</li>
+        <li>Volume mensuel : 60 GB</li>
+        <li>Prix par GB : 0,08 €</li>
+        <li>Suivi conso automatique inclus</li>
+        <li>Idéal pour petits projets</li>
+      </ul>
+      <button class="plan-btn outline">S'abonner</button>
+    </div>
+
+    <!-- STANDARD — RECOMMANDÉ -->
+    <div class="plan-card recommended">
+      <div class="ribbon green">Recommandé</div>
+      <div class="plan-tag pro"><span class="plan-tag-dot"></span>Populaire</div>
+      <div class="plan-name">Standard Plan – 250 GB</div>
+      <div class="plan-price"><span class="currency"></span><span class="price-val" data-monthly="20" data-annual="16">20,00</span><span class="period">€ / mois</span></div>
+      <div class="plan-gb"><span class="rocket">🚀</span> 250 GB / par mois</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>Volume mensuel : 250 GB</li>
+        <li>Prix par GB : 0,08 €</li>
+        <li>Idéal pour petits projets réguliers</li>
+        <li>Priorité standard</li>
+      </ul>
+      <button class="plan-btn primary">S'abonner</button>
+    </div>
+  </div>
+
+  <div class="plans-grid-bottom">
+    <!-- PRO -->
+    <div class="plan-card">
+      <div class="plan-tag"><span class="plan-tag-dot"></span>Pro</div>
+      <div class="plan-name">Pro Plan – 500 GB</div>
+      <div class="plan-price"><span class="currency"></span><span class="price-val" data-monthly="40" data-annual="32">40,00</span><span class="period">€ / mois</span></div>
+      <div class="plan-gb"><span class="rocket">🚀</span> 500 GB / par mois</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>Volume mensuel : 500 GB</li>
+        <li>Prix par GB : 0,08 €</li>
+        <li>Bonus vitesse / priorité optionnel</li>
+        <li>Support prioritaire</li>
+      </ul>
+      <button class="plan-btn outline">S'abonner</button>
+    </div>
+
+    <!-- PREMIUM — BEST VALUE -->
+    <div class="plan-card best-value">
+      <div class="ribbon">Best Value</div>
+      <div class="plan-tag best"><span class="plan-tag-dot"></span>Meilleur ratio</div>
+      <div class="plan-name">Premium Plan – 1 500 GB</div>
+      <div class="plan-price"><span class="currency"></span><span class="price-val" data-monthly="100" data-annual="80">100,00</span><span class="period">€ / mois</span></div>
+      <div class="plan-gb"><span class="rocket">🚀</span> 1 500 GB / par mois</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>Volume mensuel : 1 500 GB</li>
+        <li>Prix par GB : 0,08 €</li>
+        <li>Vitesse et priorité incluses</li>
+        <li>Support VIP</li>
+      </ul>
+      <button class="plan-btn outline">S'abonner</button>
+    </div>
+
+    <!-- SUR MESURE -->
+    <div class="plan-card enterprise">
+      <div class="ribbon red">Custom</div>
+      <div class="plan-tag enterprise"><span class="plan-tag-dot"></span>Sur Mesure</div>
+      <div class="plan-name">Sur Mesure</div>
+      <div class="plan-price" style="font-size:1.8rem">Sur devis<span class="period" style="font-size:.8rem"> / mois</span></div>
+      <div class="plan-gb" style="color:#ff6b6b"><span class="rocket">⚡</span> Volume illimité ou spécifique</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>SLA personnalisé</li>
+        <li>Priorité dédiée</li>
+        <li>Infrastructure sur mesure</li>
+        <li>Support 24/7 dédié</li>
+      </ul>
+      <button class="plan-btn enterprise-btn">Demander un devis</button>
+    </div>
+  </div>
+
+  <p class="price-note">Prix en EUR TTC · <span>0,08 € / GB supplémentaire</span> · Annulation à tout moment</p>
+</section>
+<script>
+const toggle = document.getElementById('billing-toggle');
+const lblA = document.getElementById('lbl-annual');
+const lblM = document.getElementById('lbl-monthly');
+const saveBadge = document.getElementById('save-badge');
+let annual = false;
+toggle.addEventListener('click', () => {
+  annual = !annual;
+  toggle.classList.toggle('on', annual);
+  lblA.classList.toggle('active', annual);
+  lblM.classList.toggle('active', !annual);
+  saveBadge.style.display = annual ? 'inline-flex' : 'none';
+  document.querySelectorAll('.price-val').forEach(el => {
+    const v = annual ? el.dataset.annual : el.dataset.monthly;
+    el.textContent = parseFloat(v).toFixed(2).replace('.', ',');
+  });
+});
+</script>
+</body>
+</html>
