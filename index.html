@@ -6256,23 +6256,33 @@ main();</code></pre>
                         });
                         return;
                     }
+                    if (!r.ok) {
+                        throw new Error('HTTP '+r.status);
+                    }
                     const data = await r.json();
                     if (data.fullKey) {
-                        await navigator.clipboard.writeText(data.fullKey);
-                        const k = document.getElementById('api-key-value');
-                        if (k && data.apiKeyMasked) k.textContent = data.apiKeyMasked;
-                        copyBtn.textContent = t('common.copied');
-                        const prevBg = copyBtn.style.backgroundColor;
-                        copyBtn.style.backgroundColor = '#22c55e';
-                        setTimeout(() => { copyBtn.textContent = originalText; copyBtn.style.backgroundColor = prevBg; }, 1200);
+                        try {
+                            await navigator.clipboard.writeText(data.fullKey);
+                            const k = document.getElementById('api-key-value');
+                            if (k && data.apiKeyMasked) k.textContent = data.apiKeyMasked;
+                            copyBtn.textContent = t('common.copied');
+                            const prevBg = copyBtn.style.backgroundColor;
+                            copyBtn.style.backgroundColor = '#22c55e';
+                            setTimeout(() => { copyBtn.textContent = originalText; copyBtn.style.backgroundColor = prevBg; }, 1200);
+                        } catch (clipboardErr) {
+                            console.error('Clipboard error:', clipboardErr);
+                            copyBtn.textContent = 'Clipboard error';
+                            copyBtn.style.backgroundColor = '#ef4444';
+                            setTimeout(() => { copyBtn.textContent = originalText; copyBtn.style.backgroundColor = ''; }, 2000);
+                        }
                     } else {
-                        throw new Error('No key returned');
+                        throw new Error('No key returned from API');
                     }
-                }).catch(() => {
-                    const prevBg = copyBtn.style.backgroundColor;
-                    copyBtn.textContent = t('common.error');
+                }).catch(err => {
+                    console.error('Copy API key error:', err);
+                    copyBtn.textContent = 'Error: '+err.message;
                     copyBtn.style.backgroundColor = '#ef4444';
-                    setTimeout(() => { copyBtn.textContent = originalText; copyBtn.style.backgroundColor = prevBg; }, 1200);
+                    setTimeout(() => { copyBtn.textContent = originalText; copyBtn.style.backgroundColor = ''; }, 2000);
                 });
             });
             if (regenBtn) regenBtn.addEventListener('click', () => {
