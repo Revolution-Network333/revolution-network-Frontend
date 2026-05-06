@@ -193,7 +193,7 @@
           <span class="ln-code-lang" data-ln="qs.card1.title">bash · 1) Créer un job</span>
         </div>
         <div class="ln-code-body"><span class="lc"># POST /api/enterprise/v1/jobs</span>
-<span class="lf">curl</span> <span class="ls">-X POST</span> https://revolution-backend-sal2.onrender.com/api/enterprise/v1/jobs \
+<span class="lf">curl</span> <span class="ls">-X POST</span> https://api.revolution-network.fr/api/enterprise/v1/jobs \
   <span class="ls">-H</span> <span class="ls">"Content-Type: application/json"</span> \
   <span class="ls">-H</span> <span class="ls">"x-api-key: YOUR_KEY"</span> \
   <span class="ls">-d</span> <span class="ls">'{"type":"http_get","params":{"url":"https://example.com"}}'</span>
@@ -209,11 +209,11 @@
           <span class="ln-code-lang" data-ln="qs.card2.title">bash · 2) Lister & 3) Récupérer</span>
         </div>
         <div class="ln-code-body"><span class="lc"># 2) GET /api/enterprise/v1/jobs</span>
-<span class="lf">curl</span> https://revolution-backend-sal2.onrender.com/api/enterprise/v1/jobs \
+<span class="lf">curl</span> https://api.revolution-network.fr/api/enterprise/v1/jobs \
   <span class="ls">-H</span> <span class="ls">"x-api-key: YOUR_KEY"</span>
 
 <span class="lc"># 3) GET result quand status === "done"</span>
-<span class="lf">curl</span> https://revolution-backend-sal2.onrender.com/api/enterprise/v1/jobs/<span class="ln2">job_abc123</span>/result \
+<span class="lf">curl</span> https://api.revolution-network.fr/api/enterprise/v1/jobs/<span class="ln2">job_abc123</span>/result \
   <span class="ls">-H</span> <span class="ls">"x-api-key: YOUR_KEY"</span>
 
 <span class="lc"># Réponse</span>
@@ -227,7 +227,7 @@
           <span class="ln-code-lang">bash · Scraping intelligent</span>
         </div>
         <div class="ln-code-body"><span class="lc"># Mode auto — fallback intelligent browser/css/ai</span>
-<span class="lf">curl</span> <span class="ls">-X POST</span> https://revolution-backend-sal2.onrender.com/api/enterprise/v1/jobs \
+<span class="lf">curl</span> <span class="ls">-X POST</span> https://api.revolution-network.fr/api/enterprise/v1/jobs \
   <span class="ls">-H</span> <span class="ls">"x-api-key: YOUR_KEY"</span> \
   <span class="ls">-H</span> <span class="ls">"Content-Type: application/json"</span> \
   <span class="ls">-d</span> <span class="ls">'{"type":"scrape_get","params":{
@@ -1088,7 +1088,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
            LANDING PAGE — Auth routing + Live stats + i18n (FR/EN/ES)
            ============================================================ */
         (function() {
-          const BACKEND = 'https://revolution-backend-sal2.onrender.com';
+          const BACKEND = 'https://api.revolution-network.fr';
           const lp = document.getElementById('landing-page');
           const app = document.querySelector('.app');
 
@@ -1883,7 +1883,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
         );
         const API_BASE = isLocalHost
             ? 'http://localhost:3000'
-            : 'https://revolution-backend-sal2.onrender.com';
+            : 'https://api.revolution-network.fr';
         
         const LANGS = { fr: { locale: 'fr-FR' }, en: { locale: 'en-US' }, es: { locale: 'es-ES' } };
         let currentLang = localStorage.getItem('lang') || 'fr';
@@ -5930,15 +5930,15 @@ main();</code></pre>
                                 <h4 style="margin:0 0 8px 0;">Quick start</h4>
                                 <div style="color:#9ca3af; line-height:1.6;">
                                     <strong>1) Create a job</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X POST https://revolution-backend-sal2.onrender.com/api/enterprise/v1/jobs \
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X POST https://api.revolution-network.fr/api/enterprise/v1/jobs \
 -H "Content-Type: application/json" \
 -H "x-api-key: YOUR_KEY" \
 -d '{"type":"http_get","params":{"url":"https://example.com"}}'</code></pre>
                                     <strong>2) List jobs</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X GET https://revolution-backend-sal2.onrender.com/api/enterprise/v1/jobs \
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X GET https://api.revolution-network.fr/api/enterprise/v1/jobs \
 -H "x-api-key: YOUR_KEY"</code></pre>
                                     <strong>3) Get result</strong><br>
-                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X GET https://revolution-backend-sal2.onrender.com/api/enterprise/v1/jobs/ID/result \
+                                    <pre style="background:#0b0f14; padding:12px; border-radius:10px; overflow:auto; border:1px solid #111827;"><code>curl -X GET https://api.revolution-network.fr/api/enterprise/v1/jobs/ID/result \
 -H "x-api-key: YOUR_KEY"</code></pre>
                                 </div>
                             </div>
