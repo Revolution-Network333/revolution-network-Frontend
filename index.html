@@ -1,9 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
+    <meta name="description" content="API compute d�centralis�e pour scraping, OCR, code execution et data processing. 3 GB gratuits par semaine. R�seau mondial de nodes DePIN.">
+    <link rel="canonical" href="https://revolution-network.fr/">
+    <meta property="og:title" content="Revolution Network - API Compute Decentralisee">
+    <meta property="og:description" content="Scraping, OCR, code execution et data processing via une seule API. 3 GB gratuits/semaine.">
+    <meta property="og:url" content="https://revolution-network.fr/">
+    <meta property="og:type" content="website">
     <meta name="google-adsense-account" content="ca-pub-6620583007706439">
     <title>Révolution Network - Dashboard</title>
     <link rel="icon" type="image/x-icon" href="nexon.ico">
@@ -16,7 +22,7 @@
     <link rel="stylesheet" href="styles.css">
     <script async src="https://js.stripe.com/v3/buy-button.js"></script>
 <style>
-#landing-page{display:block;position:fixed;inset:0;z-index:9999;background:transparent;color:#e8edf5;font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;overflow-y:auto;}
+#landing-page{display:none;position:fixed;inset:0;z-index:9999;background:transparent;color:#e8edf5;font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;overflow-y:auto;}
 #landing-page *,#landing-page *::before,#landing-page *::after{box-sizing:border-box;margin:0;padding:0}
 #landing-page nav{position:sticky;top:0;z-index:100;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,12,18,0.55);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);}
 #landing-page .ln-logo{display:flex;align-items:center;gap:10px;font-family:'DM Sans',sans-serif;font-weight:400;font-size:1rem;color:#e8edf5;text-decoration:none;letter-spacing:0.01em;}
@@ -122,7 +128,7 @@
 <!-- ============================================================ -->
 <!-- LANDING PAGE — shown when NOT authenticated                  -->
 <!-- ============================================================ -->
-<div id="landing-page">
+<script>if(!localStorage.getItem("token")){document.addEventListener("DOMContentLoaded",function(){var lp=document.getElementById("landing-page");if(lp)lp.style.display="block";});}</script><div id="landing-page">
 
   <!-- NAV -->
   <nav>
