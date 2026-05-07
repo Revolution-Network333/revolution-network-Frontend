@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Devs Tools ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Revolution Network</title>
+<title>Devs Tools ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Revolution Network</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -107,13 +107,13 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .btn-sec{background:none;border:1px solid var(--b2);border-radius:7px;color:var(--txt2);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:9px 13px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;}
 .btn-sec:hover{border-color:var(--txt2);color:#ffffff;}
 .ep-label{font-size:10px;color:var(--txt3);font-family:'IBM Plex Mono',monospace;margin-left:auto;}
-/* OUTPUT PANEL ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â flex column so dl-bar stays outside scroll */
+/* OUTPUT PANEL ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â flex column so dl-bar stays outside scroll */
 .out-panel{display:flex;flex-direction:column;flex:1;overflow:hidden;}
 .out-tabs{display:flex;background:var(--s1);border-bottom:1px solid var(--b1);padding:0 14px;gap:2px;flex-shrink:0;}
 .out-tab{font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:.5px;text-transform:uppercase;padding:9px 12px;cursor:pointer;color:var(--txt3);border-bottom:2px solid transparent;transition:all .15s;}
 .out-tab.active{color:#ffffff;border-bottom-color:#ffffff;}
 .out-tab:hover:not(.active){color:var(--txt2);}
-/* === DOWNLOAD BAR ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â principal fix === */
+/* === DOWNLOAD BAR ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â principal fix === */
 .dl-bar{
   display:none;
   padding:10px 16px;
@@ -243,27 +243,27 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   <div class="plan-badge" id="planBadge">FREE PLAN</div>
   <div class="quota-wrap">
     <div class="quota-block">
-      <div class="quota-loading" id="quotaLoading">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â enter API key to load quota ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â</div>
+      <div class="quota-loading" id="quotaLoading">ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â enter API key to load quota ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â</div>
       <div id="quotaRows" style="display:none;">
         <div class="quota-row">
           <span class="quota-label free-lbl">FREE</span>
           <div class="quota-bar-outer"><div class="quota-bar-inner" id="quotaBarFree" style="width:0%"></div></div>
-          <span class="quota-val" id="quotaValFree">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â / 3 GB</span>
+          <span class="quota-val" id="quotaValFree">ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â / 3 GB</span>
         </div>
         <div class="quota-row" id="paidRow" style="display:none;">
           <span class="quota-label paid-lbl">PAID</span>
           <div class="quota-bar-outer"><div class="quota-bar-inner paid" id="quotaBarPaid" style="width:0%"></div></div>
-          <span class="quota-val" id="quotaValPaid">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â / ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â</span>
+          <span class="quota-val" id="quotaValPaid">ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â / ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â</span>
         </div>
       </div>
     </div>
-    <button class="quota-refresh" id="quotaRefreshBtn" onclick="fetchQuota()" title="Refresh" style="display:none;">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Ãƒâ€šÃ‚Â»</button>
+    <button class="quota-refresh" id="quotaRefreshBtn" onclick="fetchQuota()" title="Refresh" style="display:none;">ÃƒÂ¢Ã¢â‚¬Â Ã‚Â»</button>
   </div>
   <div class="sep"></div>
   <div class="key-wrap">
     <span class="key-label">x-api-key</span>
     <input type="password" class="key-input" id="keyInput" placeholder="your-api-key-here" oninput="onKeyInput()">
-    <button class="key-eye" onclick="toggleKey()">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã‹Å“Ãƒâ€šÃ‚Â</button>
+    <button class="key-eye" onclick="toggleKey()">ÃƒÂ°Ã…Â¸Ã¢â‚¬ËœÃ‚Â</button>
     <span class="key-status none" id="keyStatus">NO KEY</span>
   </div>
 </div>
@@ -273,20 +273,20 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
     <div class="sidebar-head">Job Types</div>
     <div class="job-list" id="jobList"></div>
     <div class="limits-note">
-      <div>ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã‚Â¡Ãƒâ€šÃ‚Â¡ <span>0.2 GB</span> max / job</div>
-      <div>ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â± <span>30 req</span> / minute</div>
-      <div>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¿ Crypto <span>~3 MB / appel</span></div>
+      <div>ÃƒÂ¢Ã…Â¡Ã‚Â¡ <span>0.2 GB</span> max / job</div>
+      <div>ÃƒÂ¢Ã‚ÂÃ‚Â± <span>30 req</span> / minute</div>
+      <div>ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¿ Crypto <span>~3 MB / appel</span></div>
     </div>
     <div class="limits-note" style="margin-top:16px;padding-top:12px;border-top:1px solid var(--b2);">
       <div style="font-size:10px;color:var(--txt3);margin-bottom:8px;">Avec Devs Tools, vous pouvez :</div>
       <div style="font-size:9px;color:var(--txt2);line-height:1.5;">
-        <div>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Se connecter au rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©seau sÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©curisÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©</div>
-        <div>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Envoyer des jobs / tÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ches compute</div>
-        <div>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Tester l'API facilement</div>
-        <div>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Monitorer l'exÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©cution en temps rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©el</div>
-        <div>ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¢ Utiliser la puissance distribuÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©e sans configuration complexe</div>
+        <div>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Se connecter au rÃƒÆ’Ã‚Â©seau sÃƒÆ’Ã‚Â©curisÃƒÆ’Ã‚Â©</div>
+        <div>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Envoyer des jobs / tÃƒÆ’Ã‚Â¢ches compute</div>
+        <div>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Tester l'API facilement</div>
+        <div>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Monitorer l'exÃƒÆ’Ã‚Â©cution en temps rÃƒÆ’Ã‚Â©el</div>
+        <div>ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Utiliser la puissance distribuÃƒÆ’Ã‚Â©e sans configuration complexe</div>
       </div>
-      <div style="font-size:9px;color:var(--txt3);margin-top:8px;font-style:italic;">Devs Tools est l'outil officiel pour interagir avec le rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©seau, dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©velopper, tester et automatiser vos workloads.</div>
+      <div style="font-size:9px;color:var(--txt3);margin-top:8px;font-style:italic;">Devs Tools est l'outil officiel pour interagir avec le rÃƒÆ’Ã‚Â©seau, dÃƒÆ’Ã‚Â©velopper, tester et automatiser vos workloads.</div>
     </div>
   </div>
 
@@ -294,13 +294,13 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
     <div class="panel" style="max-width:400px;min-width:300px;">
       <div class="panel-bar">
         <div class="panel-label"><span class="dot"></span> PARAMS</div>
-        <div class="panel-hint" id="jobCostHint">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â</div>
+        <div class="panel-hint" id="jobCostHint">ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â</div>
       </div>
       <div class="form-scroll" id="formScroll"></div>
       <div class="form-foot">
         <button class="btn-run" id="runBtn" onclick="runJob()">
           <span class="spinner"></span>
-          <span class="run-txt">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â¶ Create Job</span>
+          <span class="run-txt">ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¶ Create Job</span>
         </button>
         <button class="btn-sec" onclick="copyPayload()">{ } JSON</button>
         <span class="ep-label">POST /api/enterprise/v1/jobs</span>
@@ -320,27 +320,27 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
         <div class="out-tab" onclick="switchTab('curl',this)">cURL</div>
         <div class="out-tab" onclick="switchTab('node',this)">Node.js</div>
         <div class="out-tab" onclick="switchTab('python',this)">Python</div>
-        <div class="out-tab" onclick="switchTab('console',this)">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â¥ Console</div>
-        <div class="out-tab" id="visualTab" style="display:none;color:#f59e0b;" onclick="switchTab('visual',this)">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¿ Visual</div>
+        <div class="out-tab" onclick="switchTab('console',this)">ÃƒÂ°Ã…Â¸Ã¢â‚¬â€œÃ‚Â¥ Console</div>
+        <div class="out-tab" id="visualTab" style="display:none;color:#f59e0b;" onclick="switchTab('visual',this)">ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¿ Visual</div>
       </div>
 
-      <!-- ====== DOWNLOAD BAR ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â toujours visible, hors scroll ====== -->
+      <!-- ====== DOWNLOAD BAR ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â toujours visible, hors scroll ====== -->
       <div class="dl-bar" id="dlBar">
-        <a class="dl-btn" id="dlAnchor" href="#" download="result" target="_blank">ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¡ Download</a>
-        <button class="btn-sec" id="dlCopyUrl" style="padding:6px 10px;font-size:10px;">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¹ Copy URL</button>
+        <a class="dl-btn" id="dlAnchor" href="#" download="result" target="_blank">ÃƒÂ¢Ã‚Â¬Ã¢â‚¬Â¡ Download</a>
+        <button class="btn-sec" id="dlCopyUrl" style="padding:6px 10px;font-size:10px;">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã¢â‚¬Â¹ Copy URL</button>
         <span class="dl-url-text" id="dlUrlText"></span>
       </div>
 
       <div class="out-body" id="outBody">
         <div class="empty-state">
-          <div class="empty-icon">ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã‚Â¡Ãƒâ€šÃ‚Â¡</div>
+          <div class="empty-icon">ÃƒÂ¢Ã…Â¡Ã‚Â¡</div>
           <div class="empty-txt">Create a job to see the response</div>
         </div>
       </div>
       <div class="status-bar">
         <span class="st">POST /api/enterprise/v1/jobs</span>
-        <span class="st" id="stCode">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â</span>
-        <span class="st" id="stTime">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â</span>
+        <span class="st" id="stCode">ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â</span>
+        <span class="st" id="stTime">ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â</span>
         <span class="st" id="stJobId" style="margin-left:auto;font-size:9px;color:var(--txt3)"></span>
       </div>
     </div>
@@ -363,75 +363,75 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 const BASE = 'https://api.revolution-network.fr';
 
 const JOBS = [
-  {id:'http_get',emoji:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒâ€šÃ‚Â',name:'http_get',desc:'Analyse Web',cost:'~1 MB',fields:[
+  {id:'http_get',emoji:'ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ‚Â',name:'http_get',desc:'Analyse Web',cost:'~1 MB',fields:[
     {k:'url',lbl:'URL cible',type:'text',ph:'https://example.com',req:true},
     {k:'selector',lbl:'Selecteur CSS',type:'text',ph:'.content, h1',hint:'Optionnel'},
     {k:'output_format',lbl:'Format',type:'select',opts:['text','html','markdown','json']},
   ]},
-  {id:'scrape_get',emoji:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€šÃ‚Â¤ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“',name:'scrape_get',desc:'Scraping intelligent',cost:'~2 MB',fields:[
+  {id:'scrape_get',emoji:'ÃƒÂ°Ã…Â¸Ã‚Â¤Ã¢â‚¬â€œ',name:'scrape_get',desc:'Scraping intelligent',cost:'~2 MB',fields:[
     {k:'url',lbl:'URL cible',type:'text',ph:'https://example.com',req:true},
     {k:'mode',lbl:'Mode extraction',type:'select',opts:['auto','html','browser','css','ai','hybrid'],def:'auto',hint:'auto: intelligent fallback, browser: Puppeteer, html: HTTP, css: selectors, ai: AI only'},
     {k:'selectors',lbl:'Selecteurs CSS',type:'ta',ph:'{\n  "title": "h1",\n  "price": ".price",\n  "description": ".description"\n}',hint:'JSON - pour mode css/hybrid'},
     {k:'ai_instruction',lbl:'Instruction AI',type:'text',ph:'Extract product title, price, description',hint:'Pour mode ai/hybrid'},
     {k:'schema',lbl:'Schema (optionnel)',type:'select',opts:['default','ecommerce','article'],def:'default',hint:'default: page_type,title,price,availability,description,raw_text'},
-    {k:'max_pages',lbl:'Max pages',type:'text',ph:'1',def:'1',hint:'Pagination: nombre de pages ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â  scraper (1 = sans pagination)'},
+    {k:'max_pages',lbl:'Max pages',type:'text',ph:'1',def:'1',hint:'Pagination: nombre de pages ÃƒÆ’Ã‚Â  scraper (1 = sans pagination)'},
   ]},
-  {id:'text_transform',emoji:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒâ€šÃ‚Â',name:'text_transform',desc:'Transformation texte',cost:'~1 MB',fields:[
-    {k:'input',lbl:'Texte source',type:'ta',ph:'Entrez votre texteÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦',req:true},
+  {id:'text_transform',emoji:'ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â',name:'text_transform',desc:'Transformation texte',cost:'~1 MB',fields:[
+    {k:'input',lbl:'Texte source',type:'ta',ph:'Entrez votre texteÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦',req:true},
     {k:'operation',lbl:'Operation',type:'select',req:true,opts:['translate','summarize','fix_grammar','to_markdown','to_html','extract_keywords','sentiment']},
     {k:'target_lang',lbl:'Langue cible',type:'select',opts:['fr','en','es','de','it','ja','zh'],hint:'Pour "translate" uniquement'},
   ]},
-  {id:'text_generate_template',emoji:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾',name:'text_generate_template',desc:'Generation template',cost:'~1 MB',fields:[
+  {id:'text_generate_template',emoji:'ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã¢â‚¬Å¾',name:'text_generate_template',desc:'Generation template',cost:'~1 MB',fields:[
     {k:'template_type',lbl:'Type',type:'select',req:true,opts:['email','invoice','report','readme','changelog','api_doc','cover_letter']},
     {k:'variables',lbl:'Variables JSON',type:'ta',ph:'{"name":"Acme","date":"2025-01-01"}',hint:'Valeurs a injecter'},
     {k:'output_format',lbl:'Format',type:'select',opts:['markdown','html','plain']},
   ]},
-  {id:'code_run_js',emoji:'ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã‚Â¡ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¸Ãƒâ€šÃ‚Â',name:'code_run_js',desc:'Execution JS sandbox',cost:'~5 MB',fields:[
+  {id:'code_run_js',emoji:'ÃƒÂ¢Ã…Â¡Ã¢â€žÂ¢ÃƒÂ¯Ã‚Â¸Ã‚Â',name:'code_run_js',desc:'Execution JS sandbox',cost:'~5 MB',fields:[
     {k:'code',lbl:'Code JavaScript',type:'ta',ph:'const result = [1,2,3].map(x=>x*2);\nreturn result;',req:true},
     {k:'timeout',lbl:'Timeout (s)',type:'range',min:1,max:30,step:1,def:10},
     {k:'modules',lbl:'Modules NPM',type:'text',ph:'lodash, axios',hint:'Separes par virgules'},
   ]},
-  {id:'content_check',emoji:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€šÃ‚Â§Ãƒâ€šÃ‚Âª',name:'content_check',desc:'Verification contenu',cost:'~5 MB',fields:[
-    {k:'content',lbl:'Contenu',type:'ta',ph:'Texte ou URL a analyserÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦',req:true},
+  {id:'content_check',emoji:'ÃƒÂ°Ã…Â¸Ã‚Â§Ã‚Âª',name:'content_check',desc:'Verification contenu',cost:'~5 MB',fields:[
+    {k:'content',lbl:'Contenu',type:'ta',ph:'Texte ou URL a analyserÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦',req:true},
     {k:'checks',lbl:'Verifications',type:'select',opts:['all','spam','toxicity','nsfw','pii','malware_links']},
     {k:'threshold',lbl:'Seuil (%)',type:'range',min:0,max:100,step:5,def:75},
   ]},
-  {id:'ocr_pdf',emoji:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¹',name:'ocr_pdf',desc:'OCR / Extraction PDF',cost:'~20 MB',fields:[
+  {id:'ocr_pdf',emoji:'ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã¢â‚¬Â¹',name:'ocr_pdf',desc:'OCR / Extraction PDF',cost:'~20 MB',fields:[
     {k:'file',lbl:'Fichier PDF',type:'file',accept:'.pdf',req:true},
-    {k:'pages',lbl:'Pages',type:'text',ph:'all',hint:'Ex: 1-5, 8 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â vide = tout'},
+    {k:'pages',lbl:'Pages',type:'text',ph:'all',hint:'Ex: 1-5, 8 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â vide = tout'},
     {k:'output_format',lbl:'Format',type:'select',opts:['text','markdown','json','structured']},
     {k:'language',lbl:'Langue',type:'select',opts:['auto','fr','en','es','de']},
   ]},
-  {id:'csv_stats',emoji:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒâ€¹Ã¢â‚¬Â ',name:'csv_stats',desc:'Statistiques CSV',cost:'~10 MB',fields:[
+  {id:'csv_stats',emoji:'ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‹â€ ',name:'csv_stats',desc:'Statistiques CSV',cost:'~10 MB',fields:[
     {k:'file',lbl:'Fichier CSV',type:'file',accept:'.csv',req:true},
     {k:'separator',lbl:'Separateur',type:'select',opts:[',',';','\\t','|']},
     {k:'columns',lbl:'Colonnes',type:'text',ph:'revenue, users',hint:'Vide = toutes'},
     {k:'stats',lbl:'Calculs',type:'select',opts:['all','basic','correlation','distribution','trends']},
   ]},
-  {id:'data_processing',emoji:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒâ€¦Ã‚Â ',name:'data_processing',desc:'Traitement donnees',cost:'~100 MB',fields:[
+  {id:'data_processing',emoji:'ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã…Â ',name:'data_processing',desc:'Traitement donnees',cost:'~100 MB',fields:[
     {k:'input_format',lbl:'Format source',type:'select',req:true,opts:['json','csv','xml','yaml','ndjson']},
     {k:'data',lbl:'Donnees',type:'ta',ph:'[{"id":1,"name":"Alice"}]',req:true},
     {k:'operation',lbl:'Operation',type:'select',opts:['filter','transform','aggregate','join','deduplicate','validate']},
     {k:'output_format',lbl:'Format sortie',type:'select',opts:['json','csv','xml','yaml']},
   ]},
-  {id:'image_svg_generate',emoji:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â¼ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¸Ãƒâ€šÃ‚Â',name:'image_svg_generate',desc:'Generation SVG',cost:'~2 MB',fields:[
-    {k:'prompt',lbl:'Description',type:'ta',ph:'Un logo hexagone bleu minimalisteÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦',req:true},
+  {id:'image_svg_generate',emoji:'ÃƒÂ°Ã…Â¸Ã¢â‚¬â€œÃ‚Â¼ÃƒÂ¯Ã‚Â¸Ã‚Â',name:'image_svg_generate',desc:'Generation SVG',cost:'~2 MB',fields:[
+    {k:'prompt',lbl:'Description',type:'ta',ph:'Un logo hexagone bleu minimalisteÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦',req:true},
     {k:'width',lbl:'Largeur (px)',type:'text',ph:'400',def:'400'},
     {k:'height',lbl:'Hauteur (px)',type:'text',ph:'400',def:'400'},
     {k:'style',lbl:'Style',type:'select',opts:['minimal','flat','outline','filled','gradient','duotone']},
   ]},
-  {id:'crypto_scrape',emoji:'ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¿',name:'crypto_scrape',desc:'DonnÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©es crypto temps rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©el',cost:'~3 MB',fields:[
+  {id:'crypto_scrape',emoji:'ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¿',name:'crypto_scrape',desc:'DonnÃƒÆ’Ã‚Â©es crypto temps rÃƒÆ’Ã‚Â©el',cost:'~3 MB',fields:[
     {k:'action',lbl:'Action',type:'select',req:true,
       opts:['prices','top','global','trending','detail','history','search','exchanges'],
       def:'prices',
-      hint:'prices: multi-coins en temps rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©el ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· top: top N par market cap ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· global: marchÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© global ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· trending: tendances ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· detail: fiche complÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¨te ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· history: historique ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· search: recherche ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· exchanges: liste exchanges'},
+      hint:'prices: multi-coins en temps rÃƒÆ’Ã‚Â©el Ãƒâ€šÃ‚Â· top: top N par market cap Ãƒâ€šÃ‚Â· global: marchÃƒÆ’Ã‚Â© global Ãƒâ€šÃ‚Â· trending: tendances Ãƒâ€šÃ‚Â· detail: fiche complÃƒÆ’Ã‚Â¨te Ãƒâ€šÃ‚Â· history: historique Ãƒâ€šÃ‚Â· search: recherche Ãƒâ€šÃ‚Â· exchanges: liste exchanges'},
     {k:'coin',lbl:'Coin ID (Paprika)',type:'text',ph:'bitcoin',def:'bitcoin',
-      hint:'Pour actions detail/history. Noms courants acceptÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©s (bitcoin, ethereum, solanaÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦) ou format Paprika direct (btc-bitcoin, eth-ethereum)'},
-    {k:'limit',lbl:'Limite rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©sultats',type:'text',ph:'10',def:'10',
+      hint:'Pour actions detail/history. Noms courants acceptÃƒÆ’Ã‚Â©s (bitcoin, ethereum, solanaÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦) ou format Paprika direct (btc-bitcoin, eth-ethereum)'},
+    {k:'limit',lbl:'Limite rÃƒÆ’Ã‚Â©sultats',type:'text',ph:'10',def:'10',
       hint:'Pour top/exchanges. Max 250'},
     {k:'days',lbl:'Historique (jours)',type:'text',ph:'7',def:'7',
       hint:'Pour history. 1=hourly, >1=daily. Max 365'},
-    {k:'vs_currency',lbl:'Devise de rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©rence',type:'select',
+    {k:'vs_currency',lbl:'Devise de rÃƒÆ’Ã‚Â©fÃƒÆ’Ã‚Â©rence',type:'select',
       opts:['usd','eur','gbp','jpy','btc','eth'],def:'usd'},
     {k:'query',lbl:'Recherche',type:'text',ph:'sol',
       hint:'Pour action search uniquement'},
@@ -482,7 +482,7 @@ function renderForm(job){
       inp='<div class="range-row"><input type="range" id="f_'+f.k+'" min="'+f.min+'" max="'+f.max+'" step="'+f.step+'" value="'+f.def+'" oninput="document.getElementById(\'rv_'+f.k+'\').textContent=this.value"><span class="range-val" id="rv_'+f.k+'">'+f.def+'</span></div>';
     } else if(f.type==='file'){
       inp='<div class="file-zone" id="fz_'+f.k+'" onclick="document.getElementById(\'fi_'+f.k+'\').click()" ondragover="event.preventDefault();this.classList.add(\'over\')" ondragleave="this.classList.remove(\'over\')" ondrop="dropFile(event,\''+f.k+'\')">'
-        +'<div class="fz-icon">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒâ€šÃ‚Â</div><div class="fz-txt">Glissez ou <em>cliquez</em></div>'
+        +'<div class="fz-icon">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â</div><div class="fz-txt">Glissez ou <em>cliquez</em></div>'
         +'<div class="fz-name" id="fn_'+f.k+'"></div>'
         +'<input type="file" id="fi_'+f.k+'" style="display:none" accept="'+(f.accept||'*')+'" onchange="pickFile(this,\''+f.k+'\')"></div>';
     } else {
@@ -507,8 +507,8 @@ function getParams(){
 }
 
 // =====================================================
-//  FIX PRINCIPAL ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â extraction robuste de l'URL
-//  Gere: { result: { url, format } }  ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Ãƒâ€šÃ‚Â ton API
+//  FIX PRINCIPAL ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â extraction robuste de l'URL
+//  Gere: { result: { url, format } }  ÃƒÂ¢Ã¢â‚¬Â Ã‚Â ton API
 //  Et aussi toutes les variantes courantes
 // =====================================================
 function guessExt(url){
@@ -525,14 +525,14 @@ function extractDownloadInfo(resp){
     return { url: resp.result.url, fmt: 'json' };
   }
   
-  // Cas extracted data : tÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©lÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©charger le JSON directement
+  // Cas extracted data : tÃƒÆ’Ã‚Â©lÃƒÆ’Ã‚Â©charger le JSON directement
   if(resp.result && resp.result.extracted){
     var blob = new Blob([JSON.stringify(resp.result, null, 2)], {type: 'application/json'});
     var blobUrl = URL.createObjectURL(blob);
     return { url: blobUrl, fmt: 'json', isBlob: true };
   }
   
-  // Cas URL de fichier gÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© (video, pdf, etc.)
+  // Cas URL de fichier gÃƒÆ’Ã‚Â©nÃƒÆ’Ã‚Â©rÃƒÆ’Ã‚Â© (video, pdf, etc.)
   if(resp.result && resp.result.url && !resp.result.extracted){
     var u = resp.result.url;
     if(!u.startsWith('http') || u.includes('/api/enterprise/v1/jobs/')){
@@ -573,16 +573,12 @@ function updateDownloadBar(resp){
   var urlText=document.getElementById('dlUrlText');
 
   var info=extractDownloadInfo(resp);
-  if(!info&&(resp.status==='completed'||resp.status==='done')&&resp.result){
-    var blob=new Blob([JSON.stringify(resp.result,null,2)],{type:'application/json'});
-    info={ url: URL.createObjectURL(blob), fmt: 'json', isBlob: true };
-  }
   if(!info){ bar.classList.remove('visible'); return; }
 
   var fmt = info.fmt || 'json';
   
   if(info.isBlob){
-    // Blob local ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â pas besoin d'API key
+    // Blob local ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â pas besoin d'API key
     anchor.href = info.url;
     urlText.textContent = 'extracted-data.json (local)';
   } else {
@@ -596,8 +592,8 @@ function updateDownloadBar(resp){
     };
   }
 
-  var icons={mp4:'ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½',mp3:'ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½',pdf:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾',svg:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â¼ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¸Ãƒâ€šÃ‚Â',png:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â¼ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¸Ãƒâ€šÃ‚Â',jpg:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â¼ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¸Ãƒâ€šÃ‚Â',jpeg:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â¼ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¸Ãƒâ€šÃ‚Â',csv:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒâ€¦Ã‚Â ',json:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¹',xml:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¹',txt:'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒâ€šÃ‚Â'};
-  var icon=icons[fmt]||'ÃƒÆ’Ã‚Â¢Ãƒâ€šÃ‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¡';
+  var icons={mp4:'ÃƒÂ¯Ã‚Â¿Ã‚Â½',mp3:'ÃƒÂ¯Ã‚Â¿Ã‚Â½',pdf:'ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã¢â‚¬Å¾',svg:'ÃƒÂ°Ã…Â¸Ã¢â‚¬â€œÃ‚Â¼ÃƒÂ¯Ã‚Â¸Ã‚Â',png:'ÃƒÂ°Ã…Â¸Ã¢â‚¬â€œÃ‚Â¼ÃƒÂ¯Ã‚Â¸Ã‚Â',jpg:'ÃƒÂ°Ã…Â¸Ã¢â‚¬â€œÃ‚Â¼ÃƒÂ¯Ã‚Â¸Ã‚Â',jpeg:'ÃƒÂ°Ã…Â¸Ã¢â‚¬â€œÃ‚Â¼ÃƒÂ¯Ã‚Â¸Ã‚Â',csv:'ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã…Â ',json:'ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã¢â‚¬Â¹',xml:'ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã¢â‚¬Â¹',txt:'ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â'};
+  var icon=icons[fmt]||'ÃƒÂ¢Ã‚Â¬Ã¢â‚¬Â¡';
   anchor.setAttribute('download','result.'+fmt);
   anchor.textContent=icon+' Download .'+fmt;
   bar.classList.add('visible');
@@ -634,7 +630,7 @@ async function runJob(){
       addHistory({id:data.id,type:activeJob.id,emoji:activeJob.emoji,status:data.status||'pending',createdAt:new Date()});
       startPolling(data.id,key,activeJob.id);
       fetchQuota();
-      showToast('Job cree ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â '+data.id);
+      showToast('Job cree ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â '+data.id);
     } else {
       showToast((data.error||data.message||'Erreur'),true);
     }
@@ -664,7 +660,7 @@ function startPolling(jobId,key,jobType){
             try{
               var dlRes=await fetch(BASE+data.result.url,{headers:{'x-api-key':key}});
               var cryptoData=await dlRes.json();
-              // Injecter les mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©tadonnÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©es si absentes
+              // Injecter les mÃƒÆ’Ã‚Â©tadonnÃƒÆ’Ã‚Â©es si absentes
               if(!cryptoData.crypto) cryptoData.crypto=true;
               if(!cryptoData.action){
                 var params=getParams();
@@ -672,14 +668,14 @@ function startPolling(jobId,key,jobType){
               }
               lastResponse=cryptoData;
             } catch(e){
-              lastResponse=data; // fallback au statut si fetch ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©choue
+              lastResponse=data; // fallback au statut si fetch ÃƒÆ’Ã‚Â©choue
             }
           } else {
             lastResponse=data;
           }
           renderJson();
           updateDownloadBar(data);
-          // Si c'est un rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©sultat visual crypto, basculer automatiquement sur l'onglet Visual
+          // Si c'est un rÃƒÆ’Ã‚Â©sultat visual crypto, basculer automatiquement sur l'onglet Visual
           if(jobType==='crypto_scrape' && lastResponse.crypto && lastResponse.action==='prices'){
             var vTab=document.getElementById('visualTab');
             if(vTab){
@@ -717,7 +713,7 @@ function renderHistory(){
       +'<div class="hist-time">'+timeAgo(j.createdAt)+'</div>';
     d.onclick=function(){
       activeHistItem=j.id;
-      document.getElementById('dlBar').classList.remove('visible'); // ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ reset
+      document.getElementById('dlBar').classList.remove('visible'); // ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦ reset
       if(j.data){ lastResponse=j.data; renderJson(); updateDownloadBar(j.data); }
       document.getElementById('stJobId').textContent=j.id;
       renderHistory();
@@ -732,7 +728,7 @@ async function fetchQuota(){
   var key=document.getElementById('keyInput').value.trim();
   if(!key||key.length<8) return;
   document.getElementById('quotaLoading').style.display='block';
-  document.getElementById('quotaLoading').textContent='loading quotaÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦';
+  document.getElementById('quotaLoading').textContent='loading quotaÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦';
   document.getElementById('quotaRows').style.display='none';
   document.getElementById('quotaRefreshBtn').style.display='none';
   try{
@@ -792,7 +788,7 @@ function toggleKey(){ var i=document.getElementById('keyInput'); i.type=i.type==
 
 function renderJson(){
   if(!lastResponse) return;
-  // Affiche/masque l'onglet Visual selon le type de rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©ponse
+  // Affiche/masque l'onglet Visual selon le type de rÃƒÆ’Ã‚Â©ponse
   var isCryptoPrices = lastResponse.crypto===true && lastResponse.action==='prices'
     && lastResponse.data && Array.isArray(lastResponse.data) && lastResponse.data.length>0;
   var vTab=document.getElementById('visualTab');
@@ -836,7 +832,7 @@ function renderVisual(){
   if(lastResponse.data && Array.isArray(lastResponse.data)) coins=lastResponse.data;
   else if(Array.isArray(lastResponse)) coins=lastResponse;
   if(!coins||!coins.length){
-    document.getElementById('outBody').innerHTML='<div class="empty-state"><div class="empty-icon">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¿</div><div class="empty-txt">Aucune donnÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©e crypto ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â  afficher</div></div>';
+    document.getElementById('outBody').innerHTML='<div class="empty-state"><div class="empty-icon">ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¿</div><div class="empty-txt">Aucune donnÃƒÆ’Ã‚Â©e crypto ÃƒÆ’Ã‚Â  afficher</div></div>';
     return;
   }
   var RANK=['BTCUSDT','ETHUSDT','BNBUSDT','SOLUSDT','XRPUSDT','DOGEUSDT','ADAUSDT','LINKUSDT','AVAXUSDT','LTCUSDT','DOTUSDT','SHIBUSDT'];
@@ -878,13 +874,13 @@ function renderVisual(){
     +'<div class="cp-toolbar-vis">'
     +'<label>Trier par</label>'
     +'<select id="cpSortSel">'
-    +'<option value="rank">Rank marchÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©</option>'
-    +'<option value="price_desc">Prix dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©croissant</option>'
+    +'<option value="rank">Rank marchÃƒÆ’Ã‚Â©</option>'
+    +'<option value="price_desc">Prix dÃƒÆ’Ã‚Â©croissant</option>'
     +'<option value="change_desc">Hausse 24h</option>'
     +'<option value="change_asc">Baisse 24h</option>'
-    +'<option value="vol_desc">Volume dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©croissant</option>'
+    +'<option value="vol_desc">Volume dÃƒÆ’Ã‚Â©croissant</option>'
     +'</select>'
-    +'<span style="font-size:9px;color:var(--txt3);font-family:\'IBM Plex Mono\',monospace;margin-left:auto;">'+coins.length+' coins ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· Binance ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· '+ts+'</span>'
+    +'<span style="font-size:9px;color:var(--txt3);font-family:\'IBM Plex Mono\',monospace;margin-left:auto;">'+coins.length+' coins Ãƒâ€šÃ‚Â· Binance Ãƒâ€šÃ‚Â· '+ts+'</span>'
     +'</div>'
     +'<div class="cp-grid" id="cpGridInner">'+buildGrid()+'</div>'
     +'</div>';
@@ -900,13 +896,13 @@ function renderConsole(){
   var key=document.getElementById('keyInput').value||'YOUR_API_KEY';
   var html='<div class="console-panel fade-in">'+
     '<div class="console-header">'+
-    '<div class="console-title">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â¥ JavaScript Console</div>'+
+    '<div class="console-title">ÃƒÂ°Ã…Â¸Ã¢â‚¬â€œÃ‚Â¥ JavaScript Console</div>'+
     '<button class="btn-sec" onclick="clearConsole()">Clear</button>'+
     '</div>'+
     '<textarea class="console-input" id="consoleInput" placeholder="// Enter JavaScript code to execute...&#10;// Example:&#10;const result = [1,2,3].map(x => x * 2);&#10;return result;"></textarea>'+
     '<div class="console-actions">'+
-    '<button class="btn-run" onclick="runConsoleCode()">ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“Ãƒâ€šÃ‚Â¶ Execute</button>'+
-    '<button class="btn-sec" onclick="runConsoleCodeRemote()">ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã¢â‚¬â„¢Ãƒâ€šÃ‚Â Execute via API</button>'+
+    '<button class="btn-run" onclick="runConsoleCode()">ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¶ Execute</button>'+
+    '<button class="btn-sec" onclick="runConsoleCodeRemote()">ÃƒÂ°Ã…Â¸Ã…â€™Ã‚Â Execute via API</button>'+
     '</div>'+
     '<div class="console-output" id="consoleOutput">'+
     '<div class="console-placeholder">Output will appear here...</div>'+
@@ -1007,9 +1003,9 @@ function startConsolePolling(jobId,key,code){
 function clearOutput(){
   lastResponse=null;
   document.getElementById('dlBar').classList.remove('visible');
-  document.getElementById('outBody').innerHTML='<div class="empty-state"><div class="empty-icon">ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã‚Â¡Ãƒâ€šÃ‚Â¡</div><div class="empty-txt">Create a job to see the response</div></div>';
-  document.getElementById('stCode').textContent='ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â'; document.getElementById('stCode').className='st';
-  document.getElementById('stTime').textContent='ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â'; document.getElementById('respMeta').textContent='';
+  document.getElementById('outBody').innerHTML='<div class="empty-state"><div class="empty-icon">ÃƒÂ¢Ã…Â¡Ã‚Â¡</div><div class="empty-txt">Create a job to see the response</div></div>';
+  document.getElementById('stCode').textContent='ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â'; document.getElementById('stCode').className='st';
+  document.getElementById('stTime').textContent='ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â'; document.getElementById('respMeta').textContent='';
 }
 
 function updateStatusBar(code,ms,isErr){
@@ -1024,17 +1020,17 @@ function updateStatusBar(code,ms,isErr){
 function copyPayload(){ navigator.clipboard.writeText(JSON.stringify({type:activeJob.id,params:getParams()},null,2)).then(function(){showToast('JSON copie!');}); }
 
 // =====================================================
-//  CRYPTO SCRAPE ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â hints dynamiques selon l'action
+//  CRYPTO SCRAPE ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â hints dynamiques selon l'action
 // =====================================================
 var CRYPTO_ACTION_HINTS = {
-  prices:    'ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¿ Prix en temps rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©el de toutes les paires USDT sur Binance (BTC, ETH, BNB, SOLÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦). Source : Binance Public API ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â sans clÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©.',
-  top:       'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒâ€¦Ã‚Â  Tous les coins classÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©s par market cap via CoinPaprika. RÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©sultats triÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©s par rank (BTC #1, ETH #2ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦). Source : CoinPaprika ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â sans clÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©.',
-  global:    'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã¢â‚¬â„¢Ãƒâ€šÃ‚Â Capitalisation totale du marchÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© crypto, dominance BTC/ETH, volume 24h global. Source : CoinPaprika ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â sans clÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©.',
-  trending:  'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒâ€šÃ‚Â¥ Coins triÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©s par volume 24h (meilleure approximation du trending disponible sans clÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©). Source : CoinPaprika ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â sans clÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©.',
-  detail:    'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¹ Fiche complÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¨te d\'un coin : prix USD/EUR/BTC, ATH, supply, liens officiels. Utilisez le champ "Coin ID". Source : CoinPaprika ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â sans clÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©.',
-  history:   'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒâ€¹Ã¢â‚¬Â  Historique OHLCV d\'un coin. Indiquez le coin et le nombre de jours. ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â°Ãƒâ€šÃ‚Â¤1 jour = donnÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©es horaires. Source : CoinPaprika ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â sans clÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©.',
-  search:    'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒâ€šÃ‚Â Recherche coins/exchanges par nom ou symbole. Utilisez le champ "Recherche". Source : CoinPaprika ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â sans clÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©.',
-  exchanges: 'ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€šÃ‚ÂÃƒâ€šÃ‚Â¦ Liste des exchanges avec volume 24h et mÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©tadonnÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©es. Source : CoinPaprika ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â sans clÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©.',
+  prices:    'ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¿ Prix en temps rÃƒÆ’Ã‚Â©el de toutes les paires USDT sur Binance (BTC, ETH, BNB, SOLÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦). Source : Binance Public API ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â sans clÃƒÆ’Ã‚Â©.',
+  top:       'ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã…Â  Tous les coins classÃƒÆ’Ã‚Â©s par market cap via CoinPaprika. RÃƒÆ’Ã‚Â©sultats triÃƒÆ’Ã‚Â©s par rank (BTC #1, ETH #2ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦). Source : CoinPaprika ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â sans clÃƒÆ’Ã‚Â©.',
+  global:    'ÃƒÂ°Ã…Â¸Ã…â€™Ã‚Â Capitalisation totale du marchÃƒÆ’Ã‚Â© crypto, dominance BTC/ETH, volume 24h global. Source : CoinPaprika ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â sans clÃƒÆ’Ã‚Â©.',
+  trending:  'ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ‚Â¥ Coins triÃƒÆ’Ã‚Â©s par volume 24h (meilleure approximation du trending disponible sans clÃƒÆ’Ã‚Â©). Source : CoinPaprika ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â sans clÃƒÆ’Ã‚Â©.',
+  detail:    'ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã¢â‚¬Â¹ Fiche complÃƒÆ’Ã‚Â¨te d\'un coin : prix USD/EUR/BTC, ATH, supply, liens officiels. Utilisez le champ "Coin ID". Source : CoinPaprika ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â sans clÃƒÆ’Ã‚Â©.',
+  history:   'ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‹â€  Historique OHLCV d\'un coin. Indiquez le coin et le nombre de jours. ÃƒÂ¢Ã¢â‚¬Â°Ã‚Â¤1 jour = donnÃƒÆ’Ã‚Â©es horaires. Source : CoinPaprika ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â sans clÃƒÆ’Ã‚Â©.',
+  search:    'ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ‚Â Recherche coins/exchanges par nom ou symbole. Utilisez le champ "Recherche". Source : CoinPaprika ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â sans clÃƒÆ’Ã‚Â©.',
+  exchanges: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â¦ Liste des exchanges avec volume 24h et mÃƒÆ’Ã‚Â©tadonnÃƒÆ’Ã‚Â©es. Source : CoinPaprika ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â sans clÃƒÆ’Ã‚Â©.',
 };
 
 var CRYPTO_ACTION_REQUIRED = {
