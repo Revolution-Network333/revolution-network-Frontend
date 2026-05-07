@@ -300,7 +300,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
       <div class="form-foot">
         <button class="btn-run" id="runBtn" onclick="runJob()">
           <span class="spinner"></span>
-          <span class="run-txt">â–¶ Create Job</span>
+          <span class="run-txt">▶ Create Job</span>
         </button>
         <button class="btn-sec" onclick="copyPayload()">{ } JSON</button>
         <span class="ep-label">POST /api/enterprise/v1/jobs</span>
@@ -901,7 +901,7 @@ function renderConsole(){
     '</div>'+
     '<textarea class="console-input" id="consoleInput" placeholder="// Enter JavaScript code to execute...&#10;// Example:&#10;const result = [1,2,3].map(x => x * 2);&#10;return result;"></textarea>'+
     '<div class="console-actions">'+
-    '<button class="btn-run" onclick="runConsoleCode()">â–¶ Execute</button>'+
+    '<button class="btn-run" onclick="runConsoleCode()">▶ Execute</button>'+
     '<button class="btn-sec" onclick="runConsoleCodeRemote()">🌐 Execute via API</button>'+
     '</div>'+
     '<div class="console-output" id="consoleOutput">'+
