@@ -1849,7 +1849,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
           });
 
           /* ---------- ROUTING ---------- */
-          if (isAuthenticated()) {
+         if (isAuthenticated() || new URLSearchParams(window.location.search).get('token')) {
             showApp();
           } else {
             document.addEventListener('DOMContentLoaded', showLanding);
