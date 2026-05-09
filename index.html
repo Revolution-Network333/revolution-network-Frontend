@@ -98,29 +98,30 @@
 #landing-page [data-r]{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
 #landing-page [data-r].vis{opacity:1;transform:none}
 /* NODE OPERATOR SECTION */
-#landing-page .ln-node-section{padding:5rem 2rem;position:relative;}
+#landing-page .ln-node-section{padding:6rem 2rem;position:relative;border-top:1px solid rgba(255,255,255,0.05);}
 #landing-page .ln-node-inner{max-width:1100px;margin:0 auto;}
-#landing-page .ln-node-banner{background:rgba(210,25,25,0.08);backdrop-filter:blur(16px);border:1px solid rgba(210,25,25,0.25);border-radius:20px;padding:3rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;position:relative;overflow:hidden;}
-#landing-page .ln-node-banner::before{content:'';position:absolute;top:-60px;right:-60px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(210,25,25,0.18) 0%,transparent 70%);pointer-events:none;}
-@media(max-width:768px){#landing-page .ln-node-banner{grid-template-columns:1fr}#landing-page .ln-links{display:none}}
-#landing-page .ln-node-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(210,25,25,0.15);border:1px solid rgba(210,25,25,0.35);padding:.3rem .9rem;border-radius:999px;font-size:.75rem;font-family:'DM Mono',monospace;color:#ff6b6b;letter-spacing:.06em;margin-bottom:1.2rem;}
-#landing-page .ln-node-h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.6rem,3vw,2.2rem);letter-spacing:-0.02em;margin-bottom:1rem;line-height:1.15;}
-#landing-page .ln-node-h2 span{color:#ff6b6b}
-#landing-page .ln-node-desc{color:#a0aec0;font-size:.95rem;line-height:1.7;margin-bottom:1.5rem;font-weight:300;}
-#landing-page .ln-node-perks{display:flex;flex-direction:column;gap:.75rem;margin-bottom:2rem;}
-#landing-page .ln-node-perk{display:flex;align-items:flex-start;gap:.75rem;font-size:.9rem;color:#c8d3e0;line-height:1.5;}
-#landing-page .ln-node-perk-icon{width:28px;height:28px;min-width:28px;border-radius:8px;background:rgba(210,25,25,0.18);display:flex;align-items:center;justify-content:center;font-size:.9rem;margin-top:1px;}
+#landing-page .ln-node-banner{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+#landing-page .ln-node-banner::before{display:none;}
+@media(max-width:768px){#landing-page .ln-node-banner{grid-template-columns:1fr;gap:3rem}#landing-page .ln-links{display:none}}
+#landing-page .ln-node-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(74,240,196,.08);border:1px solid rgba(74,240,196,.2);padding:.35rem 1rem;border-radius:999px;font-size:.75rem;font-family:'DM Mono',monospace;color:#4af0c4;letter-spacing:.06em;margin-bottom:1.5rem;}
+#landing-page .ln-node-h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.2rem,4vw,3.2rem);letter-spacing:-0.03em;margin-bottom:1.25rem;line-height:1.08;}
+#landing-page .ln-node-h2 span{color:#4af0c4}
+#landing-page .ln-node-desc{color:#7a8799;font-size:1rem;line-height:1.75;margin-bottom:2rem;font-weight:300;max-width:460px;}
+#landing-page .ln-node-perks{display:flex;flex-direction:column;gap:1rem;margin-bottom:2.5rem;}
+#landing-page .ln-node-perk{display:flex;align-items:flex-start;gap:1rem;font-size:.9rem;color:#c8d3e0;line-height:1.55;}
+#landing-page .ln-node-perk-icon{width:32px;height:32px;min-width:32px;border-radius:8px;background:rgba(74,240,196,.08);border:1px solid rgba(74,240,196,.15);display:flex;align-items:center;justify-content:center;font-size:.95rem;margin-top:1px;}
 #landing-page .ln-node-btns{display:flex;gap:.75rem;flex-wrap:wrap;}
-#landing-page .ln-node-btn-p{background:linear-gradient(135deg,#d21919,#ff4444);color:#fff;padding:.75rem 1.5rem;border-radius:10px;font-weight:600;font-size:.92rem;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;box-shadow:0 4px 20px rgba(210,25,25,0.3);}
-#landing-page .ln-node-btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(210,25,25,0.45)}
-#landing-page .ln-node-btn-s{background:transparent;color:#e8edf5;padding:.75rem 1.5rem;border-radius:10px;border:1px solid rgba(255,255,255,0.15);font-weight:500;font-size:.92rem;text-decoration:none;display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:all .2s;}
-#landing-page .ln-node-btn-s:hover{border-color:rgba(255,107,107,0.4);color:#ff6b6b;background:rgba(210,25,25,0.07)}
-#landing-page .ln-node-cards{display:flex;flex-direction:column;gap:1rem;}
-#landing-page .ln-node-card{background:rgba(8,12,18,0.6);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;}
-#landing-page .ln-node-card-ico{font-size:1.5rem;min-width:40px;text-align:center;}
-#landing-page .ln-node-card-label{font-family:'DM Mono',monospace;font-size:.72rem;color:#ff6b6b;margin-bottom:.2rem;letter-spacing:.05em;text-transform:uppercase;}
-#landing-page .ln-node-card-val{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;color:#e8edf5;}
-#landing-page .ln-node-card-sub{font-size:.8rem;color:#7a8799;margin-top:.1rem;}
+#landing-page .ln-node-btn-p{background:#4af0c4;color:#080c12;padding:.85rem 1.75rem;border-radius:10px;font-weight:700;font-size:.95rem;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;}
+#landing-page .ln-node-btn-p:hover{opacity:.9;transform:translateY(-2px);box-shadow:0 8px 28px rgba(74,240,196,.25)}
+#landing-page .ln-node-btn-s{background:transparent;color:#e8edf5;padding:.85rem 1.75rem;border-radius:10px;border:1px solid rgba(255,255,255,.15);font-weight:500;font-size:.95rem;text-decoration:none;display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:all .2s;}
+#landing-page .ln-node-btn-s:hover{border-color:rgba(74,240,196,.35);color:#4af0c4;background:rgba(74,240,196,.05)}
+#landing-page .ln-node-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+#landing-page .ln-node-card{background:rgba(13,18,25,0.75);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:1.5rem;display:flex;flex-direction:column;gap:.5rem;transition:border-color .2s;}
+#landing-page .ln-node-card:hover{border-color:rgba(74,240,196,.2);}
+#landing-page .ln-node-card-ico{font-size:1.75rem;margin-bottom:.25rem;}
+#landing-page .ln-node-card-label{font-family:'DM Mono',monospace;font-size:.7rem;color:#4af0c4;letter-spacing:.08em;text-transform:uppercase;}
+#landing-page .ln-node-card-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:#e8edf5;line-height:1.1;}
+#landing-page .ln-node-card-sub{font-size:.8rem;color:#7a8799;line-height:1.5;margin-top:.1rem;}
 </style>
 </head>
 <body class="dark-theme">
@@ -411,78 +412,59 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
   <section class="ln-node-section" id="node-operators">
     <div class="ln-node-inner">
       <div class="ln-node-banner" data-r>
-
-        <!-- LEFT: pitch -->
         <div>
-          <div class="ln-node-tag" data-ln="node.tag">⚡ Pour les opérateurs de nodes</div>
-          <h2 class="ln-node-h2" data-ln="node.h2">Contribue au réseau.<br><span data-ln="node.h2.accent">Reçois des ATH.</span></h2>
-          <p class="ln-node-desc" data-ln="node.desc">
-            Pas besoin de serveur dédié ni de compétences avancées. Installe le node Revolution sur ta machine, laisse-le tourner en arrière-plan, et accumule des points convertis en ATH lors des airdrops saisonniers.
-          </p>
+          <div class="ln-node-tag">🪂 Pour les opérateurs de nodes</div>
+          <h2 class="ln-node-h2">Fais tourner un node.<br><span>Gagne des tokens ATH.</span></h2>
+          <p class="ln-node-desc">Pas besoin de serveur dédié. Installe le node Revolution sur ton PC Windows, laisse-le tourner en arrière-plan, et accumule des points convertis en ATH à chaque airdrop saisonnier.</p>
           <div class="ln-node-perks">
             <div class="ln-node-perk">
               <div class="ln-node-perk-icon">🪂</div>
-              <div data-ln="node.perk1"><strong>Airdrop saisonnier</strong> — tes points s'accumulent à chaque job traité et sont convertis en tokens ATH lors des distributions périodiques.</div>
+              <div><strong>Airdrop saisonnier</strong> — tes points s'accumulent à chaque job traité et sont distribués en tokens ATH périodiquement.</div>
             </div>
             <div class="ln-node-perk">
               <div class="ln-node-perk-icon">📶</div>
-              <div data-ln="node.perk2"><strong>Seulement ta bande passante</strong> — le node utilise ta connexion internet inutilisée. Léger, discret, configurable.</div>
+              <div><strong>Juste ta bande passante</strong> — le node est léger, discret, tourne en arrière-plan sans impacter tes performances.</div>
             </div>
             <div class="ln-node-perk">
               <div class="ln-node-perk-icon">📈</div>
-              <div data-ln="node.perk3"><strong>Multiplicateur de réputation</strong> — plus ton uptime est élevé, plus tu accumules de points et plus ta part de l'airdrop est importante.</div>
+              <div><strong>Multiplicateur d'uptime</strong> — plus tu es fiable, plus ta part de l'airdrop est élevée. 99 %+ = bonus x2.</div>
             </div>
             <div class="ln-node-perk">
               <div class="ln-node-perk-icon">🛡️</div>
-              <div data-ln="node.perk4"><strong>Aucun risque</strong> — chaque job s'exécute en sandbox isolé. Ton système n'est jamais exposé.</div>
+              <div><strong>Zéro risque</strong> — chaque job s'exécute en sandbox isolé. Ton système n'est jamais exposé.</div>
             </div>
           </div>
           <div class="ln-node-btns">
-            <button class="ln-node-btn-p" onclick="showLoginFromLanding()" data-ln="node.btn.primary">
-              🚀 Installer le node
-            </button>
-            <a class="ln-node-btn-s" href="https://discord.gg/eadE7uK6ss" target="_blank" data-ln="node.btn.secondary">
-              En savoir plus →
-            </a>
+            <button class="ln-node-btn-p" onclick="showLoginFromLanding()">🚀 Installer le node gratuitement</button>
+            <a class="ln-node-btn-s" href="https://discord.gg/eadE7uK6ss" target="_blank">Rejoindre le Discord →</a>
           </div>
         </div>
-
-        <!-- RIGHT: metrics cards -->
         <div class="ln-node-cards">
           <div class="ln-node-card">
             <div class="ln-node-card-ico">🪂</div>
-            <div>
-              <div class="ln-node-card-label" data-ln="node.card1.label">Airdrop saisonnier</div>
-              <div class="ln-node-card-val" data-ln="node.card1.val">ATH tokens</div>
-              <div class="ln-node-card-sub" data-ln="node.card1.sub">Distribués périodiquement selon tes points accumulés</div>
-            </div>
+            <div class="ln-node-card-label">Récompense</div>
+            <div class="ln-node-card-val">ATH tokens</div>
+            <div class="ln-node-card-sub">Distribués à chaque airdrop selon tes points</div>
           </div>
           <div class="ln-node-card">
-            <div class="ln-node-card-ico">⭐</div>
-            <div>
-              <div class="ln-node-card-label" data-ln="node.card2.label">Points par job</div>
-              <div class="ln-node-card-val" data-ln="node.card2.val">+Points</div>
-              <div class="ln-node-card-sub" data-ln="node.card2.sub">Chaque job traité incrémente ton compteur de points</div>
-            </div>
+            <div class="ln-node-card-ico">⚡</div>
+            <div class="ln-node-card-label">Par job traité</div>
+            <div class="ln-node-card-val">+Points</div>
+            <div class="ln-node-card-sub">Chaque requête du réseau incrémente ton score</div>
           </div>
           <div class="ln-node-card">
             <div class="ln-node-card-ico">🏆</div>
-            <div>
-              <div class="ln-node-card-label" data-ln="node.card3.label">Score de réputation</div>
-              <div class="ln-node-card-val" data-ln="node.card3.val">Priorité de jobs</div>
-              <div class="ln-node-card-sub" data-ln="node.card3.sub">Plus tu es fiable, plus ta part d'airdrop est élevée</div>
-            </div>
+            <div class="ln-node-card-label">Réputation</div>
+            <div class="ln-node-card-val">Priorité jobs</div>
+            <div class="ln-node-card-sub">Les nodes fiables reçoivent plus de jobs et de points</div>
           </div>
           <div class="ln-node-card">
             <div class="ln-node-card-ico">🕐</div>
-            <div>
-              <div class="ln-node-card-label" data-ln="node.card4.label">Uptime bonus</div>
-              <div class="ln-node-card-val" data-ln="node.card4.val">×Multiplicateur</div>
-              <div class="ln-node-card-sub" data-ln="node.card4.sub">99 %+ uptime booste ton score pour l'airdrop suivant</div>
-            </div>
+            <div class="ln-node-card-label">Uptime bonus</div>
+            <div class="ln-node-card-val">×2 Multiplicateur</div>
+            <div class="ln-node-card-sub">99 %+ uptime booste ta part à chaque airdrop</div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
@@ -611,9 +593,9 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
   <!-- PRICING -->
   <section class="ln-pricing" id="pricing">
     <style>
-      .ln-pricing { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
-      .ln-pricing-grid-top { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 1.25rem; }
-      .ln-pricing-grid-bot { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+      .ln-pricing { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
+      .ln-pricing-grid-top { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1.25rem; margin-bottom: 1.25rem; }
+      .ln-pricing-grid-bot { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1.25rem; }
       @media(max-width:900px){ .ln-pricing-grid-top,.ln-pricing-grid-bot{ grid-template-columns:1fr 1fr; } }
       @media(max-width:580px){ .ln-pricing-grid-top,.ln-pricing-grid-bot{ grid-template-columns:1fr; } }
       .ln-pc { background: rgba(13,18,25,0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 1.75rem; position: relative; overflow: hidden; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; }
@@ -627,14 +609,14 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
       .ln-ribbon--green { background: #4af0c4; color: #080808; }
       .ln-ribbon--amber { background: #d97706; color: #fff; }
       .ln-ribbon--red   { background: #d21919; color: #fff; }
-      .ln-pc-tag { display: inline-flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .06em; margin-bottom: 1rem; text-transform: uppercase; color: #7a8799; }
+      .ln-pc-tag { display: inline-flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace !important; font-size: .7rem; letter-spacing: .06em; margin-bottom: 1rem; text-transform: uppercase; color: #7a8799; }
       .ln-pc-tag::before { content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
       .ln-pc-tag--cyan   { color: #4af0c4; }
       .ln-pc-tag--amber  { color: #f59e0b; }
       .ln-pc-tag--red    { color: #ff6b6b; }
       .ln-pc-tag--green  { color: #4ade80; }
-      .ln-pc-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: .4rem; line-height: 1.2; }
-      .ln-pc-price { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2.4rem; line-height: 1; margin-bottom: .15rem; letter-spacing: -.02em; }
+      .ln-pc-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: .5rem; line-height: 1.2; color: #e8edf5; }
+      .ln-pc-price { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2rem; line-height: 1; margin-bottom: .15rem; letter-spacing: -.02em; }
       .ln-pc-price-custom { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.7rem; line-height: 1; margin-bottom: .15rem; }
       .ln-pc-period { font-size: .8rem; font-weight: 400; color: #7a8799; font-family: 'DM Sans', sans-serif; margin-left: 4px; }
       .ln-pc-gb { font-family: 'DM Mono', monospace; font-size: .8rem; color: #4af0c4; margin-bottom: 1.25rem; }
@@ -10348,5 +10330,231 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
         }
 
     </script>
-<script src="grid-bg.js"></script></body>
+<script>/**
+ * grid-bg.js — Revolution Network
+ * Fond quadrillage rouge avec effet lumière souris
+ * Inclure avant </body> dans index.html
+ */
+(function () {
+  const canvas = document.createElement('canvas');
+  canvas.id = 'grid-bg';
+  canvas.style.cssText = [
+    'position:fixed',
+    'top:0',
+    'left:0',
+    'width:100%',
+    'height:100%',
+    'z-index:0',
+    'pointer-events:none',
+    'display:block',
+  ].join(';');
+  document.body.insertBefore(canvas, document.body.firstChild);
+
+  // S'assurer que .app et les autres éléments directs sont au dessus
+  const style = document.createElement('style');
+  style.textContent = `
+    body > *:not(#grid-bg) { position: relative; z-index: 1; }
+  `;
+  document.head.appendChild(style);
+
+  const ctx = canvas.getContext('2d');
+  const CELL = 40;
+  const RADIUS = 180;
+  let mouse = { x: -9999, y: -9999 };
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function draw() {
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // Fond noir
+    ctx.fillStyle = '#080808';
+    ctx.fillRect(0, 0, W, H);
+
+    const cols = Math.ceil(W / CELL) + 1;
+    const rows = Math.ceil(H / CELL) + 1;
+
+    // Lignes de la grille
+    for (let c = 0; c < cols; c++) {
+      for (let r = 0; r < rows; r++) {
+        const x = c * CELL;
+        const y = r * CELL;
+        const dx = x - mouse.x;
+        const dy = y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const intensity = Math.max(0, 1 - dist / RADIUS);
+        const alpha = 0.07 + intensity * 0.88;
+
+        ctx.strokeStyle = `rgba(210, 25, 25, ${alpha})`;
+        ctx.lineWidth = 0.5 + intensity * 0.9;
+
+        if (c < cols - 1) {
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + CELL, y);
+          ctx.stroke();
+        }
+        if (r < rows - 1) {
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x, y + CELL);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Points aux intersections
+    for (let c = 0; c < cols; c++) {
+      for (let r = 0; r < rows; r++) {
+        const x = c * CELL;
+        const y = r * CELL;
+        const dx = x - mouse.x;
+        const dy = y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const intensity = Math.max(0, 1 - dist / RADIUS);
+        if (intensity > 0.04) {
+          ctx.beginPath();
+          ctx.arc(x, y, 2 * intensity, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 70, 70, ${intensity * 0.9})`;
+          ctx.fill();
+        }
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+  window.addEventListener('mouseleave', () => {
+    mouse.x = -9999;
+    mouse.y = -9999;
+  });
+  window.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    mouse.x = t.clientX;
+    mouse.y = t.clientY;
+  }, { passive: true });
+  window.addEventListener('resize', resize);
+
+  resize();
+  draw();
+})();
+</script>
+<script>
+(function() {
+  var ref = new URLSearchParams(window.location.search).get('ref');
+  if (!ref) return;
+
+  var configs = {
+    node: {
+      badge: '🪂 Node Operator · Airdrop ATH',
+      h1: 'Installe un node.<br><span style="color:#4af0c4">Gagne des tokens ATH.</span>',
+      sub: 'Fais tourner le node Revolution en arrière-plan sur ton PC Windows. Chaque job traité t\'accumule des points convertis en tokens ATH lors des airdrops. Gratuit, 5 minutes d\'installation.',
+      cta1: { text: '🚀 Installer le node gratuitement →', action: 'showLoginFromLanding()' },
+      cta2: { text: 'Rejoindre le Discord', href: 'https://discord.gg/eadE7uK6ss' },
+      statsLabel: { nodes: 'Nodes actifs', jobs: 'Jobs traités', uptime: 'Uptime réseau', users: 'Opérateurs récompensés' },
+      hideStats: ['ls-nodes'],
+      scrollTo: 'node-operators',
+      bannerMsg: '🎁 Accès anticipé — les premiers opérateurs reçoivent un multiplicateur x2 sur leurs points',
+    },
+    dev: {
+      badge: '⚡ API · DePIN · Compute',
+      h1: '10 compute types.<br><span style="color:#4af0c4">Une seule API.</span>',
+      sub: 'Scraping, OCR, exécution de code, traitement de données — tout passe par le même endpoint. Pas de SDK requis, juste curl. 3 GB gratuits par semaine.',
+      cta1: { text: 'Accéder au Dashboard →', action: 'showLoginFromLanding()' },
+      cta2: { text: 'Voir la doc API', href: '#quickstart' },
+      statsLabel: { nodes: 'Nodes actifs', jobs: 'Jobs traités', uptime: 'Uptime réseau', users: 'Développeurs actifs' },
+      scrollTo: 'quickstart',
+      bannerMsg: '🚀 3 GB gratuits dès l\'inscription — aucune carte bancaire requise',
+    }
+  };
+
+  var cfg = configs[ref];
+  if (!cfg) return;
+
+  function waitReady(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  waitReady(function() {
+    var lp = document.getElementById('landing-page');
+    if (!lp) return;
+
+    // Badge
+    var badge = lp.querySelector('[data-ln="badge"]');
+    if (badge) badge.textContent = cfg.badge;
+
+    // H1
+    var h1 = lp.querySelector('.ln-h1');
+    if (h1) h1.innerHTML = cfg.h1;
+
+    // Sub
+    var sub = lp.querySelector('.ln-sub');
+    if (sub) sub.textContent = cfg.sub;
+
+    // CTA buttons
+    var actions = lp.querySelector('.ln-actions');
+    if (actions) {
+      actions.innerHTML =
+        '<button class="ln-btn-p" onclick="' + cfg.cta1.action + '">' + cfg.cta1.text + '</button>' +
+        '<a class="ln-btn-s" href="' + cfg.cta2.href + '">' + cfg.cta2.text + '</a>';
+    }
+
+    // Banner promo en haut
+    var nav = lp.querySelector('nav');
+    if (nav && cfg.bannerMsg) {
+      var banner = document.createElement('div');
+      banner.style.cssText = 'background:rgba(74,240,196,.1);border-bottom:1px solid rgba(74,240,196,.2);padding:.5rem 2rem;text-align:center;font-size:.82rem;color:#4af0c4;font-family:"DM Mono",monospace;letter-spacing:.02em;';
+      banner.textContent = cfg.bannerMsg;
+      lp.insertBefore(banner, nav);
+    }
+
+    // Pour ref=node : cacher "Nodes actifs" et "Utilisateurs" des stats
+    // et ne garder que Jobs traités + Uptime (plus flatteurs)
+    if (ref === 'node') {
+      var statNodes = lp.querySelector('#ls-nodes');
+      if (statNodes) {
+        var parentStat = statNodes.closest('.ln-stat');
+        if (parentStat) parentStat.style.display = 'none';
+      }
+      var statUsers = lp.querySelector('#ls-users');
+      if (statUsers) {
+        var parentStatU = statUsers.closest('.ln-stat');
+        if (parentStatU) parentStatU.style.display = 'none';
+      }
+      // Scroll automatique vers section node operators après 1s
+      setTimeout(function() {
+        var nodeSection = document.getElementById('node-operators');
+        if (nodeSection) {
+          nodeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 800);
+    }
+
+    // Pour ref=dev : cacher "Utilisateurs" (chiffre faible)
+    if (ref === 'dev') {
+      var statU = lp.querySelector('#ls-users');
+      if (statU) {
+        var pU = statU.closest('.ln-stat');
+        if (pU) pU.style.display = 'none';
+      }
+    }
+
+    // Tracking simple dans console (remplace par ton analytics)
+    console.log('[RN] Landing variant:', ref);
+  });
+})();
+</script>
+</body>
 </html>
