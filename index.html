@@ -50,6 +50,12 @@
 #landing-page .ln-stats{display:flex;gap:2px;flex-wrap:wrap;justify-content:center;background:rgba(255,255,255,0.03);backdrop-filter:blur(12px);border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);max-width:800px;margin:0 auto;}
 #landing-page .ln-stat{flex:1;min-width:140px;background:rgba(15,22,33,0.75);backdrop-filter:blur(12px);padding:1.25rem 1.5rem;text-align:center;}
 #landing-page .ln-stat-val{font-family:'Syne',sans-serif;font-weight:700;font-size:1.75rem;color:#4af0c4;display:block;transition:all .4s ease;}
+#landing-page .ln-stat-status{display:inline-flex;align-items:center;gap:7px;font-size:1.05rem;font-family:'DM Mono',monospace;font-weight:600;letter-spacing:.03em;}
+#landing-page .ln-stat-status.online{color:#4af0c4;}
+#landing-page .ln-stat-status.maintenance{color:#f59e0b;}
+#landing-page .ln-stat-status .sdot{width:9px;height:9px;border-radius:50%;flex-shrink:0;display:inline-block;}
+#landing-page .ln-stat-status.online .sdot{background:#4af0c4;animation:lnpulse 1.5s infinite;}
+#landing-page .ln-stat-status.maintenance .sdot{background:#f59e0b;}
 #landing-page .ln-stat-label{font-size:.78rem;color:#7a8799;margin-top:.2rem;font-family:'DM Mono',monospace;}
 #landing-page .ln-live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#4af0c4;animation:lnpulse 1.5s infinite;margin-right:4px;vertical-align:middle;}
 /* CODE */
@@ -168,8 +174,8 @@
     <!-- LIVE STATS from backend -->
     <div class="ln-stats">
       <div class="ln-stat">
-        <span class="ln-stat-val" id="ls-nodes">—</span>
-        <div class="ln-stat-label"><span class="ln-live-dot"></span><span data-ln="stat.nodes">Nodes actifs</span></div>
+        <span class="ln-stat-val" id="ls-nodes"><span class="ln-stat-status maintenance"><span class="sdot"></span>Maintenance</span></span>
+        <div class="ln-stat-label"><span data-ln="stat.nodes">Réseau nodes</span></div>
       </div>
       <div class="ln-stat">
         <span class="ln-stat-val" id="ls-jobs">—</span>
@@ -179,10 +185,7 @@
         <span class="ln-stat-val" id="ls-uptime">—</span>
         <div class="ln-stat-label"><span class="ln-live-dot"></span><span data-ln="stat.uptime">Uptime réseau</span></div>
       </div>
-      <div class="ln-stat">
-        <span class="ln-stat-val" id="ls-users">—</span>
-        <div class="ln-stat-label"><span class="ln-live-dot"></span><span data-ln="stat.users">Utilisateurs</span></div>
-      </div>
+
     </div>
   </section>
 
@@ -1737,6 +1740,16 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
             if (el) el.textContent = val;
           }
 
+          function setStatStatus(id, online) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (online) {
+              el.innerHTML = '<span class="ln-stat-status online"><span class="sdot"></span>En ligne</span>';
+            } else {
+              el.innerHTML = '<span class="ln-stat-status maintenance"><span class="sdot"></span>Maintenance</span>';
+            }
+          }
+
           async function fetchStats() {
             const base = (typeof API_BASE !== 'undefined') ? API_BASE : BACKEND;
             const token = localStorage.getItem('token');
@@ -1765,19 +1778,19 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 const uptime = flat.uptime        ?? flat.networkUptime  ?? flat.network_uptime ?? flat.availability   ?? flat.uptimePct;
                 const users  = flat.users         ?? flat.totalUsers     ?? flat.total_users   ?? flat.registered_users ?? flat.userCount;
                 if (nodes != null || jobs != null || users != null) {
-                  if (nodes  != null) setStatVal('ls-nodes',  fmtNum(nodes));
+                  setStatStatus('ls-nodes', nodes != null && nodes > 0);
                   if (jobs   != null) setStatVal('ls-jobs',   fmtNum(jobs));
                   if (uptime != null) setStatVal('ls-uptime', fmtUptime(uptime));
-                  if (users  != null) setStatVal('ls-users',  fmtNum(users));
+                  setStatStatus('ls-users', users != null && users > 0);
                   return;
                 }
               }
             }
-            // All endpoints failed — show static placeholder values
-            setStatVal('ls-nodes',  '—');
+            // All endpoints failed — nodes/users → Maintenance badge, others stay —
+            setStatStatus('ls-nodes', false);
             setStatVal('ls-jobs',   '—');
             setStatVal('ls-uptime', '—');
-            setStatVal('ls-users',  '—');
+            setStatStatus('ls-users', false);
           }
 
           let statsInited = false;
