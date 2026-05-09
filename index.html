@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="styles.css">
     <script async src="https://js.stripe.com/v3/buy-button.js"></script>
 <style>
-#landing-page{display:none;position:fixed;inset:0;z-index:9999;background:transparent;color:#e8edf5;font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;overflow-y:auto;}
+.app{display:none;}#landing-page{display:block;position:fixed;inset:0;z-index:9999;background:#080c12;color:#e8edf5;font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;overflow-y:auto;}
 #landing-page *,#landing-page *::before,#landing-page *::after{box-sizing:border-box;margin:0;padding:0}
 #landing-page nav{position:sticky;top:0;z-index:100;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,12,18,0.55);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);}
 #landing-page .ln-logo{display:flex;align-items:center;gap:10px;font-family:'DM Sans',sans-serif;font-weight:400;font-size:1rem;color:#e8edf5;text-decoration:none;letter-spacing:0.01em;}
@@ -1730,7 +1730,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
 
           function showApp() {
             lp.style.display = 'none';
-            if (app) app.style.display = '';
+            if (app) app.style.display = 'flex';
           }
 
           window.showLoginFromLanding = function() {
@@ -10348,5 +10348,115 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
         }
 
     </script>
-<script src="grid-bg.js"></script></body>
+<script src="grid-bg.js"></script>
+<script>
+(function() {
+  var ref = new URLSearchParams(window.location.search).get('ref');
+  if (!ref) return;
+
+  var configs = {
+    node: {
+      badge: '🪂 Node Operator · Airdrop ATH',
+      h1: 'Installe un node.<br><span style="color:#4af0c4">Gagne des tokens ATH.</span>',
+      sub: 'Fais tourner le node Revolution en arrière-plan sur ton PC Windows. Chaque job traité t\'accumule des points convertis en tokens ATH lors des airdrops. Gratuit, 5 minutes d\'installation.',
+      cta1: { text: '🚀 Installer le node gratuitement →', action: 'showLoginFromLanding()' },
+      cta2: { text: 'Rejoindre le Discord', href: 'https://discord.gg/eadE7uK6ss' },
+      statsLabel: { nodes: 'Nodes actifs', jobs: 'Jobs traités', uptime: 'Uptime réseau', users: 'Opérateurs récompensés' },
+      hideStats: ['ls-nodes'],
+      scrollTo: 'node-operators',
+      bannerMsg: '🎁 Accès anticipé — les premiers opérateurs reçoivent un multiplicateur x2 sur leurs points',
+    },
+    dev: {
+      badge: '⚡ API · DePIN · Compute',
+      h1: '10 compute types.<br><span style="color:#4af0c4">Une seule API.</span>',
+      sub: 'Scraping, OCR, exécution de code, traitement de données — tout passe par le même endpoint. Pas de SDK requis, juste curl. 3 GB gratuits par semaine.',
+      cta1: { text: 'Accéder au Dashboard →', action: 'showLoginFromLanding()' },
+      cta2: { text: 'Voir la doc API', href: '#quickstart' },
+      statsLabel: { nodes: 'Nodes actifs', jobs: 'Jobs traités', uptime: 'Uptime réseau', users: 'Développeurs actifs' },
+      scrollTo: 'quickstart',
+      bannerMsg: '🚀 3 GB gratuits dès l\'inscription — aucune carte bancaire requise',
+    }
+  };
+
+  var cfg = configs[ref];
+  if (!cfg) return;
+
+  function waitReady(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  waitReady(function() {
+    var lp = document.getElementById('landing-page');
+    if (!lp) return;
+
+    // Badge
+    var badge = lp.querySelector('[data-ln="badge"]');
+    if (badge) badge.textContent = cfg.badge;
+
+    // H1
+    var h1 = lp.querySelector('.ln-h1');
+    if (h1) h1.innerHTML = cfg.h1;
+
+    // Sub
+    var sub = lp.querySelector('.ln-sub');
+    if (sub) sub.textContent = cfg.sub;
+
+    // CTA buttons
+    var actions = lp.querySelector('.ln-actions');
+    if (actions) {
+      actions.innerHTML =
+        '<button class="ln-btn-p" onclick="' + cfg.cta1.action + '">' + cfg.cta1.text + '</button>' +
+        '<a class="ln-btn-s" href="' + cfg.cta2.href + '">' + cfg.cta2.text + '</a>';
+    }
+
+    // Banner promo en haut
+    var nav = lp.querySelector('nav');
+    if (nav && cfg.bannerMsg) {
+      var banner = document.createElement('div');
+      banner.style.cssText = 'background:rgba(74,240,196,.1);border-bottom:1px solid rgba(74,240,196,.2);padding:.5rem 2rem;text-align:center;font-size:.82rem;color:#4af0c4;font-family:"DM Mono",monospace;letter-spacing:.02em;';
+      banner.textContent = cfg.bannerMsg;
+      lp.insertBefore(banner, nav);
+    }
+
+    // Pour ref=node : cacher "Nodes actifs" et "Utilisateurs" des stats
+    // et ne garder que Jobs traités + Uptime (plus flatteurs)
+    if (ref === 'node') {
+      var statNodes = lp.querySelector('#ls-nodes');
+      if (statNodes) {
+        var parentStat = statNodes.closest('.ln-stat');
+        if (parentStat) parentStat.style.display = 'none';
+      }
+      var statUsers = lp.querySelector('#ls-users');
+      if (statUsers) {
+        var parentStatU = statUsers.closest('.ln-stat');
+        if (parentStatU) parentStatU.style.display = 'none';
+      }
+      // Scroll automatique vers section node operators après 1s
+      setTimeout(function() {
+        var nodeSection = document.getElementById('node-operators');
+        if (nodeSection) {
+          nodeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 800);
+    }
+
+    // Pour ref=dev : cacher "Utilisateurs" (chiffre faible)
+    if (ref === 'dev') {
+      var statU = lp.querySelector('#ls-users');
+      if (statU) {
+        var pU = statU.closest('.ln-stat');
+        if (pU) pU.style.display = 'none';
+      }
+    }
+
+    // Tracking simple dans console (remplace par ton analytics)
+    console.log('[RN] Landing variant:', ref);
+  });
+})();
+</script>
+</body>
 </html>
