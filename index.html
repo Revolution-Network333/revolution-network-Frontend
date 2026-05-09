@@ -174,7 +174,7 @@
     <!-- LIVE STATS from backend -->
     <div class="ln-stats">
       <div class="ln-stat">
-        <span class="ln-stat-val" id="ls-nodes"><span class="ln-stat-status maintenance"><span class="sdot"></span>Maintenance</span></span>
+        <span class="ln-stat-val" id="ls-nodes"><span class="ln-stat-status maintenance"><span class="sdot"></span>—</span></span>
         <div class="ln-stat-label"><span data-ln="stat.nodes">Réseau nodes</span></div>
       </div>
       <div class="ln-stat">
@@ -234,7 +234,7 @@
       <div class="ln-code-card">
         <div class="ln-code-hdr">
           <div class="ln-dots"><span></span><span></span><span></span></div>
-          <span class="ln-code-lang">bash · Scraping intelligent</span>
+          <span class="ln-code-lang" data-ln="qs.card3.title">bash · Scraping intelligent</span>
         </div>
         <div class="ln-code-body"><span class="lc"># Mode auto — fallback intelligent browser/css/ai</span>
 <span class="lf">curl</span> <span class="ls">-X POST</span> https://api.revolution-network.fr/api/enterprise/v1/jobs \
@@ -251,7 +251,7 @@
       <div class="ln-code-card">
         <div class="ln-code-hdr">
           <div class="ln-dots"><span></span><span></span><span></span></div>
-          <span class="ln-code-lang">javascript · SDK npm</span>
+          <span class="ln-code-lang" data-ln="qs.card4.title">javascript · SDK npm</span>
         </div>
         <div class="ln-code-body"><span class="lk">import</span> { RevolutionClient } <span class="lk">from</span> <span class="ls">'revolution-sdk'</span>
 
@@ -276,56 +276,56 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
     <div class="ln-node-inner">
       <div class="ln-node-banner" data-r>
         <div>
-          <div class="ln-node-tag">🪂 Pour les opérateurs de nodes</div>
-          <h2 class="ln-node-h2">Fais tourner un node.<br><span>Gagne des tokens ATH.</span></h2>
-          <p class="ln-node-desc">Pas besoin de serveur dédié. Installe le node Revolution sur ton PC Windows, laisse-le tourner en arrière-plan, et accumule des points convertis en ATH à chaque airdrop saisonnier.</p>
+          <div class="ln-node-tag" data-ln="node.tag">🪂 Pour les opérateurs de nodes</div>
+          <h2 class="ln-node-h2" data-ln="node.h2">Fais tourner un node.<br><span>Gagne des tokens ATH.</span></h2>
+          <p class="ln-node-desc" data-ln="node.desc">Pas besoin de serveur dédié. Installe le node Revolution sur ton PC Windows, laisse-le tourner en arrière-plan, et accumule des points convertis en ATH à chaque airdrop saisonnier.</p>
           <div class="ln-node-perks">
             <div class="ln-node-perk">
               <div class="ln-node-perk-icon">🪂</div>
-              <div><strong>Airdrop saisonnier</strong> — tes points s'accumulent à chaque job traité et sont distribués en tokens ATH périodiquement.</div>
+              <div data-ln="node.perk1"><strong>Airdrop saisonnier</strong> — tes points s'accumulent à chaque job traité et sont distribués en tokens ATH périodiquement.</div>
             </div>
             <div class="ln-node-perk">
               <div class="ln-node-perk-icon">📶</div>
-              <div><strong>Juste ta bande passante</strong> — le node est léger, discret, tourne en arrière-plan sans impacter tes performances.</div>
+              <div data-ln="node.perk2"><strong>Juste ta bande passante</strong> — le node est léger, discret, tourne en arrière-plan sans impacter tes performances.</div>
             </div>
             <div class="ln-node-perk">
               <div class="ln-node-perk-icon">📈</div>
-              <div><strong>Multiplicateur d'uptime</strong> — plus tu es fiable, plus ta part de l'airdrop est élevée. 99 %+ = bonus x2.</div>
+              <div data-ln="node.perk3"><strong>Multiplicateur d'uptime</strong> — plus tu es fiable, plus ta part de l'airdrop est élevée. 99 %+ = bonus x2.</div>
             </div>
             <div class="ln-node-perk">
               <div class="ln-node-perk-icon">🛡️</div>
-              <div><strong>Zéro risque</strong> — chaque job s'exécute en sandbox isolé. Ton système n'est jamais exposé.</div>
+              <div data-ln="node.perk4"><strong>Zéro risque</strong> — chaque job s'exécute en sandbox isolé. Ton système n'est jamais exposé.</div>
             </div>
           </div>
           <div class="ln-node-btns">
-            <button class="ln-node-btn-p" onclick="showLoginFromLanding()">🚀 Installer le node gratuitement</button>
-            <a class="ln-node-btn-s" href="https://discord.gg/eadE7uK6ss" target="_blank">Rejoindre le Discord →</a>
+            <button class="ln-node-btn-p" onclick="showLoginFromLanding()" data-ln="node.btn.primary">🚀 Installer le node gratuitement</button>
+            <a class="ln-node-btn-s" href="https://discord.gg/eadE7uK6ss" target="_blank" data-ln="node.btn.secondary">Rejoindre le Discord →</a>
           </div>
         </div>
         <div class="ln-node-cards">
           <div class="ln-node-card">
             <div class="ln-node-card-ico">🪂</div>
-            <div class="ln-node-card-label">Récompense</div>
-            <div class="ln-node-card-val">ATH tokens</div>
-            <div class="ln-node-card-sub">Distribués à chaque airdrop selon tes points</div>
+            <div class="ln-node-card-label" data-ln="node.card1.label">Récompense</div>
+            <div class="ln-node-card-val" data-ln="node.card1.val">ATH tokens</div>
+            <div class="ln-node-card-sub" data-ln="node.card1.sub">Distribués à chaque airdrop selon tes points</div>
           </div>
           <div class="ln-node-card">
             <div class="ln-node-card-ico">⚡</div>
-            <div class="ln-node-card-label">Par job traité</div>
-            <div class="ln-node-card-val">+Points</div>
-            <div class="ln-node-card-sub">Chaque requête du réseau incrémente ton score</div>
+            <div class="ln-node-card-label" data-ln="node.card2.label">Par job traité</div>
+            <div class="ln-node-card-val" data-ln="node.card2.val">+Points</div>
+            <div class="ln-node-card-sub" data-ln="node.card2.sub">Chaque requête du réseau incrémente ton score</div>
           </div>
           <div class="ln-node-card">
             <div class="ln-node-card-ico">🏆</div>
-            <div class="ln-node-card-label">Réputation</div>
-            <div class="ln-node-card-val">Priorité jobs</div>
-            <div class="ln-node-card-sub">Les nodes fiables reçoivent plus de jobs et de points</div>
+            <div class="ln-node-card-label" data-ln="node.card3.label">Réputation</div>
+            <div class="ln-node-card-val" data-ln="node.card3.val">Priorité jobs</div>
+            <div class="ln-node-card-sub" data-ln="node.card3.sub">Les nodes fiables reçoivent plus de jobs et de points</div>
           </div>
           <div class="ln-node-card">
             <div class="ln-node-card-ico">🕐</div>
-            <div class="ln-node-card-label">Uptime bonus</div>
-            <div class="ln-node-card-val">×2 Multiplicateur</div>
-            <div class="ln-node-card-sub">99 %+ uptime booste ta part à chaque airdrop</div>
+            <div class="ln-node-card-label" data-ln="node.card4.label">Uptime bonus</div>
+            <div class="ln-node-card-val" data-ln="node.card4.val">×2 Multiplicateur</div>
+            <div class="ln-node-card-sub" data-ln="node.card4.sub">99 %+ uptime booste ta part à chaque airdrop</div>
           </div>
         </div>
       </div>
@@ -1125,28 +1125,28 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'cta.btn.primary': 'Accéder au Dashboard',
               'cta.btn.secondary': 'Rejoindre le Discord',
               'nav.nodes': 'Opérateurs de nodes',
-              'node.tag': '⚡ Pour les opérateurs de nodes',
-              'node.h2': 'Contribue au réseau.<br><span>Reçois des ATH.</span>',
-              'node.h2.accent': 'Reçois des ATH.',
-              'node.desc': "Pas besoin de serveur dédié ni de compétences avancées. Installe le node Revolution sur ta machine, laisse-le tourner en arrière-plan, et accumule des points convertis en ATH lors des airdrops saisonniers.",
-              'node.perk1': '<strong>Airdrop saisonnier</strong> — tes points s\'accumulent à chaque job traité et sont convertis en tokens ATH lors des distributions périodiques.',
-              'node.perk2': '<strong>Seulement ta bande passante</strong> — le node utilise ta connexion internet inutilisée. Léger, discret, configurable.',
-              'node.perk3': '<strong>Multiplicateur de réputation</strong> — plus ton uptime est élevé, plus ta part de l\'airdrop est importante.',
-              'node.perk4': '<strong>Aucun risque</strong> — chaque job s\'exécute en sandbox isolé. Ton système n\'est jamais exposé.',
-              'node.btn.primary': '🚀 Installer le node',
-              'node.btn.secondary': 'En savoir plus →',
-              'node.card1.label': 'Airdrop saisonnier',
+              'node.tag': '🪂 Pour les opérateurs de nodes',
+              'node.h2': 'Fais tourner un node.<br><span>Gagne des tokens ATH.</span>',
+              'node.h2.accent': 'Gagne des tokens ATH.',
+              'node.desc': "Pas besoin de serveur dédié. Installe le node Revolution sur ton PC Windows, laisse-le tourner en arrière-plan, et accumule des points convertis en ATH à chaque airdrop saisonnier.",
+              'node.perk1': "<strong>Airdrop saisonnier</strong> — tes points s'accumulent à chaque job traité et sont distribués en tokens ATH périodiquement.",
+              'node.perk2': "<strong>Juste ta bande passante</strong> — le node est léger, discret, tourne en arrière-plan sans impacter tes performances.",
+              'node.perk3': "<strong>Multiplicateur d'uptime</strong> — plus tu es fiable, plus ta part de l'airdrop est élevée. 99 %+ = bonus x2.",
+              'node.perk4': "<strong>Zéro risque</strong> — chaque job s'exécute en sandbox isolé. Ton système n'est jamais exposé.",
+              'node.btn.primary': '🚀 Installer le node gratuitement',
+              'node.btn.secondary': 'Rejoindre le Discord →',
+              'node.card1.label': 'Récompense',
               'node.card1.val': 'ATH tokens',
-              'node.card1.sub': 'Distribués périodiquement selon tes points accumulés',
-              'node.card2.label': 'Points par job',
+              'node.card1.sub': 'Distribués à chaque airdrop selon tes points',
+              'node.card2.label': 'Par job traité',
               'node.card2.val': '+Points',
-              'node.card2.sub': 'Chaque job traité incrémente ton compteur de points',
-              'node.card3.label': 'Score de réputation',
-              'node.card3.val': 'Priorité de jobs',
-              'node.card3.sub': "Plus tu es fiable, plus ta part d'airdrop est élevée",
+              'node.card2.sub': 'Chaque requête du réseau incrémente ton score',
+              'node.card3.label': 'Réputation',
+              'node.card3.val': 'Priorité jobs',
+              'node.card3.sub': 'Les nodes fiables reçoivent plus de jobs et de points',
               'node.card4.label': 'Uptime bonus',
-              'node.card4.val': '×Multiplicateur',
-              'node.card4.sub': '99 %+ uptime booste ton score pour l\'airdrop suivant',
+              'node.card4.val': '×2 Multiplicateur',
+              'node.card4.sub': "99 %+ uptime booste ta part à chaque airdrop",
               'pricing.label': '// tarification',
               'pricing.title': 'Un forfait pour chaque usage',
               'pricing.subtitle': 'Consommation déduite de ton volume mensuel. Pas de frais cachés, pas d\'engagement — résilie quand tu veux.',
@@ -1280,6 +1280,12 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'pos.note': 'Pour les acteurs enterprise comme Bright Data ou AWS, ce n\'est pas une concurrence — c\'est une couche d\'expansion.',
               // Pricing free gb
               'pricing.free.gb': '🚀 3 GB / semaine',
+              // Extra code cards
+              'qs.card3.title': 'bash · Scraping intelligent',
+              'qs.card4.title': 'javascript · SDK npm',
+              // Status badges
+              'stat.online': 'En ligne',
+              'stat.maintenance': 'Maintenance',
             },
             en: {
               'nav.jobs': 'Jobs',
@@ -1476,6 +1482,12 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'pos.note': 'For enterprise players like Bright Data or AWS, this isn\'t competition — it\'s an expansion layer.',
               // Pricing free gb
               'pricing.free.gb': '🚀 3 GB / week',
+              // Extra code cards
+              'qs.card3.title': 'bash · Smart scraping',
+              'qs.card4.title': 'javascript · npm SDK',
+              // Status badges
+              'stat.online': 'Online',
+              'stat.maintenance': 'Maintenance',
             },
             es: {
               'nav.jobs': 'Jobs',
@@ -1672,6 +1684,12 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'pos.note': 'Para actores enterprise como Bright Data o AWS, esto no es competencia — es una capa de expansión.',
               // Pricing free gb
               'pricing.free.gb': '🚀 3 GB / semana',
+              // Extra code cards
+              'qs.card3.title': 'bash · Scraping inteligente',
+              'qs.card4.title': 'javascript · SDK npm',
+              // Status badges
+              'stat.online': 'En línea',
+              'stat.maintenance': 'Mantenimiento',
             }
           };
 
@@ -1692,6 +1710,19 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               const key = el.getAttribute('data-ln');
               const val = dict[key];
               if (val !== undefined) el.innerHTML = val;
+            });
+            // Refresh status badges (they are set by setStatStatus which reads getLnLang)
+            // Re-render any visible status badges with the new language
+            ['ls-nodes', 'ls-users'].forEach(id => {
+              const el = document.getElementById(id);
+              if (!el) return;
+              const span = el.querySelector('.ln-stat-status');
+              if (!span) return;
+              const isOnline = span.classList.contains('online');
+              const onlineLabel = dict['stat.online'] || 'En ligne';
+              const maintenanceLabel = dict['stat.maintenance'] || 'Maintenance';
+              const label = isOnline ? onlineLabel : maintenanceLabel;
+              span.lastChild.textContent = label;
             });
           }
 
@@ -1743,10 +1774,13 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
           function setStatStatus(id, online) {
             const el = document.getElementById(id);
             if (!el) return;
+            const dict = LN_I18N[getLnLang()] || LN_I18N.fr;
+            const onlineLabel = dict['stat.online'] || 'En ligne';
+            const maintenanceLabel = dict['stat.maintenance'] || 'Maintenance';
             if (online) {
-              el.innerHTML = '<span class="ln-stat-status online"><span class="sdot"></span>En ligne</span>';
+              el.innerHTML = '<span class="ln-stat-status online"><span class="sdot"></span>' + onlineLabel + '</span>';
             } else {
-              el.innerHTML = '<span class="ln-stat-status maintenance"><span class="sdot"></span>Maintenance</span>';
+              el.innerHTML = '<span class="ln-stat-status maintenance"><span class="sdot"></span>' + maintenanceLabel + '</span>';
             }
           }
 
