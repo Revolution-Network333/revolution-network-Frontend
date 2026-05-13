@@ -21,7 +21,7 @@
   // S'assurer que .app et les autres éléments directs sont au dessus
   const style = document.createElement('style');
   style.textContent = `
-    body > *:not(#grid-bg) { position: relative; z-index: 1; }
+    body > *:not(#grid-bg):not(#faq-bubble-btn):not(#faq-chat-panel) { position: relative; z-index: 1; }
   `;
   document.head.appendChild(style);
 
