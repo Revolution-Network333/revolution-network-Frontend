@@ -32,6 +32,96 @@
 #landing-page .ln-dot{width:8px;height:8px;border-radius:50%;background:#4af0c4;box-shadow:0 0 12px #4af0c4;animation:lnpulse 2s ease-in-out infinite;}
 @keyframes lnpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
 @keyframes adminNodePulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(2.2);opacity:0}}
+
+/* ===== MOBILE RESPONSIVE — iPhone fix ===== */
+@media(max-width:640px){
+
+  /* NAV */
+  #landing-page nav{padding:0 1rem;height:56px;}
+  #landing-page .ln-logo{font-size:.9rem;}
+  #landing-page nav > div:last-child{gap:6px;}
+  #landing-page #ln-lang-switch{font-size:.75rem;padding:4px 6px;}
+  #landing-page .ln-cta-btn{padding:.45rem .9rem;font-size:.8rem;}
+
+  /* HERO */
+  #landing-page .ln-hero{padding:5rem 1.25rem 3rem;min-height:100svh;}
+  #landing-page .ln-badge{font-size:.72rem;padding:.3rem .8rem;margin-bottom:1.25rem;}
+  #landing-page .ln-h1{font-size:clamp(2rem,9vw,2.8rem);line-height:1.08;margin-bottom:1rem;}
+  #landing-page .ln-sub{font-size:.95rem;margin-bottom:1.75rem;}
+  #landing-page .ln-actions{flex-direction:column;align-items:stretch;gap:.75rem;margin-bottom:2.5rem;}
+  #landing-page .ln-btn-p,#landing-page .ln-btn-s{justify-content:center;width:100%;padding:.85rem 1.5rem;}
+
+  /* STATS */
+  #landing-page .ln-stats{flex-direction:column;gap:1px;border-radius:12px;}
+  #landing-page .ln-stat{padding:1rem 1.25rem;}
+  #landing-page .ln-stat-val{font-size:1.4rem;}
+
+  /* SECTIONS */
+  #landing-page .ln-section{padding:3rem 1.25rem;}
+  #landing-page .ln-h2{font-size:clamp(1.5rem,7vw,2rem);}
+  #landing-page .ln-muted{font-size:.9rem;margin-bottom:2rem;}
+
+  /* CODE CARDS — scrollable horizontally instead of overflowing */
+  #landing-page .ln-code-grid{grid-template-columns:1fr;gap:1rem;}
+  #landing-page .ln-code-body{font-size:.75rem;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+
+  /* JOBS GRID */
+  #landing-page .ln-jobs-grid{grid-template-columns:1fr 1fr;gap:1px;}
+  #landing-page .ln-job{padding:1rem;}
+  #landing-page .ln-job-icon{font-size:1.25rem;margin-bottom:.5rem;}
+
+  /* STEPS */
+  #landing-page .ln-steps{grid-template-columns:1fr;gap:1.5rem;}
+
+  /* NODE SECTION */
+  #landing-page .ln-node-section{padding:3rem 1.25rem;}
+  #landing-page .ln-node-banner{grid-template-columns:1fr;gap:2rem;}
+  #landing-page .ln-node-h2{font-size:clamp(1.7rem,8vw,2.4rem);}
+  #landing-page .ln-node-cards{grid-template-columns:1fr 1fr;gap:.75rem;}
+  #landing-page .ln-node-card{padding:1rem;}
+  #landing-page .ln-node-card-val{font-size:1.1rem;}
+  #landing-page .ln-node-btns{flex-direction:column;align-items:stretch;}
+  #landing-page .ln-node-btn-p,#landing-page .ln-node-btn-s{justify-content:center;width:100%;}
+
+  /* TOKENOMICS & COMPETITIVE — force single column */
+  #landing-page [style*="grid-template-columns:1fr 1fr"],
+  #landing-page [style*="grid-template-columns: 1fr 1fr"]{
+    display:flex!important;flex-direction:column!important;gap:1.25rem!important;
+  }
+
+  /* PRICING */
+  .ln-pricing{padding:3rem 1.25rem!important;}
+  .ln-pricing-grid-top,.ln-pricing-grid-bot{grid-template-columns:1fr!important;}
+
+  /* CTA */
+  #landing-page .ln-cta{padding:3.5rem 1.25rem;}
+  #landing-page .ln-cta h2{font-size:clamp(1.75rem,8vw,2.5rem);}
+  #landing-page .ln-cta-acts{flex-direction:column;align-items:stretch;}
+  #landing-page .ln-cta-acts .ln-btn-p,
+  #landing-page .ln-cta-acts .ln-btn-s,
+  #landing-page .ln-cta-acts button,
+  #landing-page .ln-cta-acts a{width:100%;justify-content:center;text-align:center;}
+
+  /* FOOTER */
+  #landing-page footer{flex-direction:column;align-items:flex-start;padding:1.5rem 1.25rem;gap:.75rem;}
+  #landing-page .ln-flinks{gap:1rem;}
+  #landing-page .ln-fcopy{font-size:.78rem;}
+
+  /* PREVENT GLOBAL OVERFLOW */
+  #landing-page{overflow-x:hidden;}
+  #landing-page *{max-width:100%;word-break:break-word;}
+  #landing-page .ln-code-body *{max-width:none;word-break:normal;}
+}
+
+/* Medium — tablette */
+@media(min-width:641px) and (max-width:900px){
+  #landing-page .ln-hero{padding:6rem 1.75rem 3rem;}
+  #landing-page .ln-section{padding:4rem 1.75rem;}
+  #landing-page .ln-node-section{padding:4rem 1.75rem;}
+  #landing-page .ln-node-banner{grid-template-columns:1fr;gap:2.5rem;}
+  #landing-page .ln-steps{grid-template-columns:1fr 1fr;}
+  .ln-pricing{padding:4rem 1.75rem!important;}
+}
 #landing-page .ln-links{display:flex;align-items:center;gap:2rem}
 #landing-page .ln-links a{color:#7a8799;text-decoration:none;font-size:.875rem;transition:color .2s}
 #landing-page .ln-links a:hover{color:#e8edf5}
