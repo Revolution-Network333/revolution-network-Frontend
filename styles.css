@@ -1388,6 +1388,7 @@ tr:nth-child(3) .rank-number {
   position: fixed;
   right: 18px;
   bottom: 18px;
+  left: unset;
   width: 56px;
   height: 56px;
   border-radius: 9999px;
@@ -1398,7 +1399,7 @@ tr:nth-child(3) .rank-number {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 9999;
+  z-index: 10001;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
   transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
 }
@@ -1414,13 +1415,14 @@ tr:nth-child(3) .rank-number {
   position: fixed;
   right: 18px;
   bottom: 86px;
+  left: unset;
   width: min(360px, calc(100vw - 36px));
   height: min(520px, calc(100vh - 120px));
   background: rgba(17, 24, 39, 0.96);
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 16px;
   overflow: hidden;
-  z-index: 9999;
+  z-index: 10001;
   box-shadow: 0 18px 60px rgba(0,0,0,0.55);
   display: none;
   backdrop-filter: blur(10px);
