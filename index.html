@@ -4963,7 +4963,53 @@ main();</code></pre>
             })
             .then(r => r.json())
             .then(d => {
-                const list = Array.isArray(d.points) ? d.points : [];
+                const rawList = Array.isArray(d.points) ? d.points : [];
+                const granularityVal = select.value || "daily";
+                const buckets = {};
+                rawList.forEach(p => {
+                    const dObj = new Date(p.period);
+                    if (Number.isNaN(dObj.getTime())) return;
+                    let key;
+                    if (granularityVal === "yearly") {
+                        key = String(dObj.getFullYear());
+                    } else if (granularityVal === "monthly") {
+                        key = `${dObj.getFullYear()}-${String(dObj.getMonth()+1).padStart(2,"0")}`;
+                    } else if (granularityVal === "weekly") {
+                        const tmp = new Date(Date.UTC(dObj.getFullYear(), dObj.getMonth(), dObj.getDate()));
+                        const dayNum = tmp.getUTCDay() || 7;
+                        tmp.setUTCDate(tmp.getUTCDate() + 4 - dayNum);
+                        const isoYear = tmp.getUTCFullYear();
+                        const startOfYear = new Date(Date.UTC(isoYear, 0, 1));
+                        const week = Math.ceil((((tmp - startOfYear) / 86400000) + 1) / 7);
+                        key = `${isoYear}-W${String(week).padStart(2,"0")}`;
+                    } else {
+                        key = dObj.toISOString().slice(0, 10);
+                    }
+                    if (!buckets[key]) buckets[key] = { period: key, points: 0 };
+                    buckets[key].points += Number(p.points) || 0;
+                });
+                const nodesBuckets = {};
+                (Array.isArray(d.nodes) ? d.nodes : []).forEach(n => {
+                    const dObj = new Date(n.period);
+                    if (Number.isNaN(dObj.getTime())) return;
+                    let key;
+                    if (granularityVal === "yearly") key = String(dObj.getFullYear());
+                    else if (granularityVal === "monthly") key = `${dObj.getFullYear()}-${String(dObj.getMonth()+1).padStart(2,"0")}`;
+                    else if (granularityVal === "weekly") {
+                        const tmp = new Date(Date.UTC(dObj.getFullYear(), dObj.getMonth(), dObj.getDate()));
+                        const dayNum = tmp.getUTCDay() || 7;
+                        tmp.setUTCDate(tmp.getUTCDate() + 4 - dayNum);
+                        const isoYear = tmp.getUTCFullYear();
+                        const startOfYear = new Date(Date.UTC(isoYear, 0, 1));
+                        const week = Math.ceil((((tmp - startOfYear) / 86400000) + 1) / 7);
+                        key = `${isoYear}-W${String(week).padStart(2,"0")}`;
+                    } else key = dObj.toISOString().slice(0, 10);
+                    if (!nodesBuckets[key]) nodesBuckets[key] = 0;
+                    nodesBuckets[key] += n.sessions || 0;
+                });
+                const list = Object.values(buckets).sort((a,b) => a.period < b.period ? 1 : -1);
+                d.nodes = Object.entries(nodesBuckets).map(([period, sessions]) => ({ period, sessions }));
+                const _list = list;
                 if (list.length > 0) {
                     const rows = list.map(p => {
                         const nodeEntry = (d.nodes || []).find(n => n.period === p.period);
@@ -10709,6 +10755,7 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
 </script>
 </body>
 </html>
+
 
 
 
