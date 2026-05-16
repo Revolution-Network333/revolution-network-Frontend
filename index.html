@@ -4941,7 +4941,7 @@ main();</code></pre>
                     if (totalHrs >= 48) {
                         const days = Math.floor(totalHrs / 24);
                         const remHrs = totalHrs % 24;
-                        ut.textContent = remHrs > 0 ? `${days.toLocaleString()}j ${remHrs}h` : `${days.toLocaleString()}j`;
+                        ut.textContent = `${days.toLocaleString()} jours`;
                     } else {
                         ut.textContent = `${totalHrs.toLocaleString()}h`;
                     }
@@ -10743,4 +10743,5 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
 </script>
 </body>
 </html>
+
 
