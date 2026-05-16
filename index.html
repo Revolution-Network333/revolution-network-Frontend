@@ -4937,8 +4937,14 @@ main();</code></pre>
                 if (an) an.textContent = data.activeNodes;
                 const ut = document.getElementById('net-total-uptime');
                 if (ut) {
-                    const hrs = Math.floor(data.totalUptimeSeconds / 3600);
-                    ut.textContent = `${hrs.toLocaleString()}h`;
+                    const totalHrs = Math.floor(data.totalUptimeSeconds / 3600);
+                    if (totalHrs >= 48) {
+                        const days = Math.floor(totalHrs / 24);
+                        const remHrs = totalHrs % 24;
+                        ut.textContent = remHrs > 0 ? `${days.toLocaleString()}j ${remHrs}h` : `${days.toLocaleString()}j`;
+                    } else {
+                        ut.textContent = `${totalHrs.toLocaleString()}h`;
+                    }
                 }
                 const bw = document.getElementById('net-total-bw');
                 if (bw) {
@@ -10737,3 +10743,4 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
 </script>
 </body>
 </html>
+
