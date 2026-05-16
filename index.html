@@ -4756,11 +4756,6 @@ main();</code></pre>
                             <div class="network-stat-label">Network Status</div>
                             <div class="network-stat-value status-live" id="net-status">LIVE</div>
                         </div>
-
-                        <div class="network-stat-item">
-                            <div class="network-stat-label">Total Uptime</div>
-                            <div class="network-stat-value neon-text-green" id="net-total-uptime">0h</div>
-                        </div>
                         <div class="network-stat-item">
                             <div class="network-stat-label">Bandwidth Processed</div>
                             <div class="network-stat-value neon-text-purple" id="net-total-bw">0 MB</div>
@@ -4935,17 +4930,6 @@ main();</code></pre>
                 if (ns) ns.textContent = data.status;
                 const an = document.getElementById('net-active-nodes');
                 if (an) an.textContent = data.activeNodes;
-                const ut = document.getElementById('net-total-uptime');
-                if (ut) {
-                    const totalHrs = Math.floor(data.totalUptimeSeconds / 3600);
-                    if (totalHrs >= 48) {
-                        const days = Math.floor(totalHrs / 24);
-                        const remHrs = totalHrs % 24;
-                        ut.textContent = `${days.toLocaleString()} jours`;
-                    } else {
-                        ut.textContent = `${totalHrs.toLocaleString()}h`;
-                    }
-                }
                 const bw = document.getElementById('net-total-bw');
                 if (bw) {
                     const totalBytes = data.totalBytesProcessed;
@@ -10743,5 +10727,7 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
 </script>
 </body>
 </html>
+
+
 
 
