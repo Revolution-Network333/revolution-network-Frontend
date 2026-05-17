@@ -284,7 +284,7 @@
         <option value="en">EN</option>
         <option value="es">ES</option>
       </select>
-      <button class="ln-cta-btn" onclick="showLoginFromLanding()" id="ln-signin-btn">Se connecter ?</button>
+      <button class="ln-cta-btn" onclick="showLoginFromLanding()" id="ln-signin-btn">Se connecter</button>
     </div>
   </nav>
 
@@ -296,7 +296,7 @@
     <h1 class="ln-h1" data-ln="hero.h1.before">Compute décentralisé.<br><span data-ln="hero.h1.accent">Une seule API.</span></h1>
     <p class="ln-sub" data-ln="hero.sub">Scraping, OCR, code execution et data processing. Alimenté par un réseau mondial de nodes distribués. Pas de vendor lock-in.</p>
     <div class="ln-actions">
-      <button class="ln-btn-p" onclick="showLoginFromLanding()"><span data-ln="hero.cta.primary">Accéder au Dashboard</span> <span>?</span></button>
+      <button class="ln-btn-p" onclick="showLoginFromLanding()"><span data-ln="hero.cta.primary">Accéder au Dashboard</span> </button>
       <a class="ln-btn-s" href="https://discord.gg/eadE7uK6ss" target="_blank" data-ln="hero.cta.secondary">Rejoindre le Discord</a>
     </div>
 
@@ -888,7 +888,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
     <h2 data-r data-ln="cta.h2">Commence à builder<br>aujourd'hui.</h2>
     <p data-r data-ln="cta.sub">3 GB gratuits par semaine. Aucune carte bancaire requise.</p>
     <div class="ln-cta-acts" data-r>
-      <button class="ln-btn-p" onclick="showLoginFromLanding()"><span data-ln="cta.btn.primary">Accéder au Dashboard</span> <span>?</span></button>
+      <button class="ln-btn-p" onclick="showLoginFromLanding()"><span data-ln="cta.btn.primary">Accéder au Dashboard</span> </button>
       <a class="ln-btn-s" href="https://discord.gg/eadE7uK6ss" target="_blank" data-ln="cta.btn.secondary">Rejoindre le Discord</a>
     </div>
   </section>
@@ -1218,7 +1218,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
               'nav.jobs': 'Jobs',
               'nav.how': 'Comment ça marche',
               'nav.discord': 'Discord',
-              'nav.signin': 'Se connecter ?',
+              'nav.signin': 'Se connecter',
               'badge': 'DePIN · Compute · API',
               'hero.h1.before': 'Compute décentralisé.',
               'hero.h1.accent': 'Une seule API.',
@@ -1420,7 +1420,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
               'nav.jobs': 'Jobs',
               'nav.how': 'How it works',
               'nav.discord': 'Discord',
-              'nav.signin': 'Sign in ?',
+              'nav.signin': 'Sign in',
               'badge': 'DePIN · Compute · API',
               'hero.h1.before': 'Decentralized compute.',
               'hero.h1.accent': 'One single API.',
@@ -1622,7 +1622,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
               'nav.jobs': 'Jobs',
               'nav.how': 'Cómo funciona',
               'nav.discord': 'Discord',
-              'nav.signin': 'Iniciar sesión ?',
+              'nav.signin': 'Iniciar sesi\u00f3n',
               'badge': 'DePIN · Compute · API',
               'hero.h1.before': 'Compute descentralizado.',
               'hero.h1.accent': 'Una sola API.',
@@ -1833,7 +1833,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
             if (sel) sel.value = lang;
             // Update signin button text
             const signinBtn = document.getElementById('ln-signin-btn');
-            if (signinBtn) signinBtn.textContent = dict['nav.signin'] || 'Se connecter ?';
+            if (signinBtn) signinBtn.textContent = dict['nav.signin'] || 'Se connecter';
             // Update all data-ln elements
             document.querySelectorAll('#landing-page [data-ln]').forEach(el => {
               const key = el.getAttribute('data-ln');
