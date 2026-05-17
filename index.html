@@ -8293,7 +8293,7 @@ function initializeShopPage() {
             const list=el('rn-bw-sub-list');if(!list)return;list.innerHTML='';
             SUBS.forEach(sub=>{
               const row=document.createElement('div');row.className='rn-bw-subrow'+(sub.id===curSubId?' rn-bw-subrow-on':'');
-              row.innerHTML='<div><div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:.75rem;">'+sub.id.charAt(0).toUpperCase()+sub.id.slice(1)+'</div><div style="font-family:\'DM Mono\',monospace;font-size:.52rem;color:#7a8799;margin-top:1px;">'+sub.gb+' GB \u00b7 '+sub.cr.toLocaleString('fr-FR')+' '+t('shop.sub.credits_month')</div></div><div style="text-align:right;"><div style="font-family:\'Syne\',sans-serif;font-weight:800;font-size:.82rem;color:#4af0c4;">'+sub.eur+' \u20ac</div><span style="font-family:\'DM Mono\',monospace;font-size:.5rem;color:#7a8799;">/mois</span></div>';
+              row.innerHTML='<div><div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:.75rem;">'+sub.id.charAt(0).toUpperCase()+sub.id.slice(1)+'</div><div style="font-family:\'DM Mono\',monospace;font-size:.52rem;color:#7a8799;margin-top:1px;">'+sub.gb+' GB \u00b7 '+sub.cr.toLocaleString('fr-FR')+' '+t('shop.sub.credits_month')+'</div></div><div style="text-align:right;"><div style="font-family:\'Syne\',sans-serif;font-weight:800;font-size:.82rem;color:#4af0c4;">'+sub.eur+' \u20ac</div><span style="font-family:\'DM Mono\',monospace;font-size:.5rem;color:#7a8799;">/mois</span></div>';
               row.onclick=()=>{document.querySelectorAll('.rn-bw-subrow').forEach(r=>r.classList.remove('rn-bw-subrow-on'));row.classList.add('rn-bw-subrow-on');updSub(sub);};
               list.appendChild(row);
             });
