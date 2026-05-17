@@ -5057,6 +5057,7 @@ main();</code></pre>
                 }
                 const ar = document.getElementById('net-api-reqs');
                 if (ar) ar.textContent = data.apiRequestsHandled.toLocaleString();
+                try { localStorage.setItem('rn_cache_netstats', JSON.stringify(data)); } catch(e) {}
             }).catch(err => console.error('Network stats error:', err));
 
             fetch(`${API_BASE}/api/user/stats`, {
@@ -5087,6 +5088,7 @@ main();</code></pre>
                     
                     const activeNodes = document.getElementById('dashboard-active-nodes');
                     if (activeNodes) activeNodes.textContent = data.today.today_sessions || 0;
+                try { localStorage.setItem('rn_cache_userstats', JSON.stringify(data)); } catch(e) {}
                 }
             })
             .catch(err => console.error('Dashboard update error:', err));
