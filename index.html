@@ -8103,7 +8103,7 @@ function initializeShopPage() {
             el('rn-bw-err-cr').textContent='';
           }
 
-          function updSub(sub){
+          function updSub(sub){if(!el('rn-bw-sub-gb'))return;
             curSubId=sub.id;
             el('rn-bw-sub-gb').textContent=sub.gb.toLocaleString('fr-FR');
             el('rn-bw-sub-price').textContent=fe(sub.eur);
