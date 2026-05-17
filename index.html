@@ -241,6 +241,22 @@
 #landing-page .ln-node-card-label{font-family:'DM Mono',monospace;font-size:.7rem;color:#4af0c4;letter-spacing:.08em;text-transform:uppercase;}
 #landing-page .ln-node-card-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:#e8edf5;line-height:1.1;}
 #landing-page .ln-node-card-sub{font-size:.8rem;color:#7a8799;line-height:1.5;margin-top:.1rem;}
+
+/* ── Recharge widget ─────────────────────────────────────────────── */
+.rn-bw-tab{padding:.28rem .6rem;border-radius:5px;font-family:'DM Mono',monospace;font-size:.56rem;cursor:pointer;border:1px solid rgba(255,255,255,0.08);background:transparent;color:#7a8799;transition:all .18s;}
+.rn-bw-tab-on{background:rgba(74,240,196,0.1)!important;border-color:rgba(74,240,196,0.3)!important;color:#4af0c4!important;}
+.rn-bw-panel{display:none;}.rn-bw-panel-on{display:block;}
+.rn-bw-pcard{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:7px;padding:.45rem .3rem;text-align:center;cursor:pointer;transition:all .18s;}
+.rn-bw-pcard:hover{border-color:rgba(74,240,196,0.3);}
+.rn-bw-pcard-on{border-color:rgba(74,240,196,0.5)!important;background:rgba(74,240,196,0.05)!important;}
+.rn-bw-slbl{font-family:'DM Mono',monospace;font-size:.53rem;color:#7a8799;text-align:center;width:25%;transition:color .15s;}
+.rn-bw-slbl-on{color:#4af0c4!important;}
+#rn-bw-sl::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;background:#4af0c4;border-radius:50%;cursor:pointer;box-shadow:0 0 0 3px rgba(74,240,196,0.18);}
+.rn-bw-subrow{display:flex;align-items:center;justify-content:space-between;padding:.55rem .7rem;border:1px solid rgba(255,255,255,0.07);border-radius:7px;background:rgba(255,255,255,0.03);cursor:pointer;transition:all .18s;gap:.5rem;}
+.rn-bw-subrow:hover{border-color:rgba(74,240,196,0.3);}
+.rn-bw-subrow-on{border-color:rgba(74,240,196,0.5)!important;background:rgba(74,240,196,0.05)!important;}
+#rn-bw-btn-cr:hover,#rn-bw-btn-sub:hover{opacity:.88;}
+#rn-bw-btn-cr:disabled,#rn-bw-btn-sub:disabled{opacity:.4;cursor:default;background:#4a5568;color:#9ca3af;}
 </style>
 </head>
 <body class="dark-theme">
@@ -7365,6 +7381,108 @@ main();</code></pre>
                         <h1 class="page-title">${t('shop.title')}</h1>
                     </div>
                     <div class="shop-warning">${t('shop.warning.banner')}</div>
+                <!-- ═══════════════════════════════════════════════════════════
+                     RECHARGE BANDE PASSANTE + ABONNEMENT — widget billing
+                     ═══════════════════════════════════════════════════════ -->
+                <div id="rn-bw-wrap" style="width:100%;margin-bottom:2rem;">
+
+                  <!-- En-tête section -->
+                  <div style="margin-bottom:1.25rem;">
+                    <span style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#4af0c4;display:block;margin-bottom:.35rem;">// recharge & abonnements</span>
+                    <p style="font-size:.78rem;color:#7a8799;font-weight:300;line-height:1.6;max-width:480px;">Achète de la bande passante en une fois ou souscris un plan mensuel — le prix s'adapte à ta sélection.</p>
+                  </div>
+
+                  <!-- Grille 2 colonnes -->
+                  <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+
+                    <!-- ── Carte recharge GB ────────────────── -->
+                    <div class="rn-bw-card" style="flex:1;min-width:280px;max-width:400px;background:#0d1219;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:1.1rem;">
+                      <span style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:#4af0c4;display:block;margin-bottom:.3rem;">// achat ponctuel</span>
+                      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;margin-bottom:.2rem;">Recharge de bande passante</div>
+                      <p style="font-size:.63rem;color:#7a8799;font-weight:300;line-height:1.5;margin-bottom:.8rem;">Paiement unique · Crédité immédiatement après confirmation Stripe.</p>
+
+                      <!-- Onglets -->
+                      <div style="display:flex;gap:.3rem;margin-bottom:.8rem;" id="rn-bw-tabs">
+                        <button class="rn-bw-tab rn-bw-tab-on" onclick="rnBwSwitch('palier',this)">Paliers</button>
+                        <button class="rn-bw-tab" onclick="rnBwSwitch('slider',this)">Curseur</button>
+                        <button class="rn-bw-tab" onclick="rnBwSwitch('custom',this)">Libre</button>
+                      </div>
+
+                      <!-- Panel paliers -->
+                      <div id="rn-bw-p-palier" class="rn-bw-panel rn-bw-panel-on">
+                        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.35rem;margin-bottom:.8rem;" id="rn-bw-pgrid"></div>
+                      </div>
+
+                      <!-- Panel slider -->
+                      <div id="rn-bw-p-slider" class="rn-bw-panel">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:.2rem;" id="rn-bw-slbls"></div>
+                        <input type="range" id="rn-bw-sl" min="0" max="3" step="1" value="0" oninput="rnBwOnSlider(this.value)" style="-webkit-appearance:none;appearance:none;width:100%;height:3px;background:rgba(74,240,196,0.15);border-radius:2px;outline:none;cursor:pointer;margin:.45rem 0 .8rem;">
+                      </div>
+
+                      <!-- Panel custom -->
+                      <div id="rn-bw-p-custom" class="rn-bw-panel">
+                        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.8rem;flex-wrap:wrap;">
+                          <span style="font-family:'DM Mono',monospace;font-size:.58rem;color:#7a8799;white-space:nowrap;">Volume (GB)</span>
+                          <div style="display:flex;align-items:center;border:1px solid rgba(255,255,255,0.1);border-radius:6px;overflow:hidden;background:rgba(255,255,255,0.03);flex:1;min-width:80px;">
+                            <input type="number" id="rn-bw-cg" min="1" max="9999" value="50" oninput="rnBwOnCustom(this.value)" style="background:none;border:none;outline:none;color:#fff;font-family:'DM Mono',monospace;font-size:.7rem;padding:.35rem .45rem;width:100%;">
+                            <span style="padding:.35rem .45rem;color:#4af0c4;font-family:'DM Mono',monospace;font-size:.62rem;border-left:1px solid rgba(255,255,255,0.06);">GB</span>
+                          </div>
+                          <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;color:#4af0c4;white-space:nowrap;" id="rn-bw-cpout">5,00 €</span>
+                        </div>
+                      </div>
+
+                      <!-- Preview -->
+                      <div style="background:rgba(74,240,196,0.04);border:1px solid rgba(74,240,196,0.18);border-radius:8px;padding:.65rem .85rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.8rem;flex-wrap:wrap;">
+                        <div>
+                          <div style="font-family:'DM Mono',monospace;font-size:.5rem;color:#7a8799;margin-bottom:.15rem;">volume sélectionné</div>
+                          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:-.02em;"><span id="rn-bw-ogb">50</span><small style="font-size:.58rem;font-weight:400;color:#7a8799;margin-left:3px;font-family:'DM Sans',sans-serif;">GB</small></div>
+                        </div>
+                        <div>
+                          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#4af0c4;letter-spacing:-.02em;" id="rn-bw-oprice">5,00 €</div>
+                          <span style="font-family:'DM Mono',monospace;font-size:.5rem;color:#7a8799;display:block;text-align:right;">paiement unique</span>
+                        </div>
+                        <div style="width:100%;display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.2rem;">
+                          <span style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:999px;font-family:'DM Mono',monospace;font-size:.5rem;color:#7a8799;padding:.12rem .45rem;" id="rn-bw-opack">Pack Starter</span>
+                          <span style="background:rgba(74,240,196,0.05);border:1px solid rgba(74,240,196,0.2);border-radius:999px;font-family:'DM Mono',monospace;font-size:.5rem;color:#4af0c4;padding:.12rem .45rem;display:none;" id="rn-bw-osav"></span>
+                        </div>
+                      </div>
+
+                      <button id="rn-bw-btn-cr" onclick="rnBwDoCredits()" style="width:100%;padding:.55rem 1rem;border-radius:7px;font-weight:600;font-size:.72rem;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:#4af0c4;color:#080808;transition:opacity .18s;">Acheter 50 GB — 5,00 €</button>
+                      <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:#ff6b6b;text-align:center;margin-top:.35rem;min-height:.75rem;" id="rn-bw-err-cr"></div>
+                    </div>
+
+                    <!-- ── Carte abonnement ──────────────────── -->
+                    <div class="rn-bw-card" style="flex:1;min-width:280px;max-width:400px;background:#0d1219;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:1.1rem;">
+                      <span style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:#4af0c4;display:block;margin-bottom:.3rem;">// plan mensuel</span>
+                      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;margin-bottom:.2rem;">Abonnement mensuel</div>
+                      <p style="font-size:.63rem;color:#7a8799;font-weight:300;line-height:1.5;margin-bottom:.8rem;">GB + crédits renouvelés chaque mois · Annulable à tout moment.</p>
+
+                      <!-- Liste plans -->
+                      <div style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:.8rem;" id="rn-bw-sub-list"></div>
+
+                      <!-- Preview abonnement -->
+                      <div style="background:rgba(74,240,196,0.04);border:1px solid rgba(74,240,196,0.18);border-radius:8px;padding:.65rem .85rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.8rem;flex-wrap:wrap;">
+                        <div>
+                          <div style="font-family:'DM Mono',monospace;font-size:.5rem;color:#7a8799;margin-bottom:.15rem;">plan sélectionné</div>
+                          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:-.02em;"><span id="rn-bw-sub-gb">60</span><small style="font-size:.58rem;font-weight:400;color:#7a8799;margin-left:3px;font-family:'DM Sans',sans-serif;">GB/mois</small></div>
+                        </div>
+                        <div>
+                          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#4af0c4;letter-spacing:-.02em;" id="rn-bw-sub-price">5,00 €</div>
+                          <span style="font-family:'DM Mono',monospace;font-size:.5rem;color:#7a8799;display:block;text-align:right;">/mois</span>
+                        </div>
+                        <div style="width:100%;margin-top:.2rem;">
+                          <span style="background:rgba(74,240,196,0.05);border:1px solid rgba(74,240,196,0.2);border-radius:999px;font-family:'DM Mono',monospace;font-size:.5rem;color:#4af0c4;padding:.12rem .45rem;" id="rn-bw-sub-cr-pill">6 000 crédits/mois</span>
+                        </div>
+                      </div>
+
+                      <button id="rn-bw-btn-sub" onclick="rnBwDoSub()" style="width:100%;padding:.55rem 1rem;border-radius:7px;font-weight:600;font-size:.72rem;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:#4af0c4;color:#080808;transition:opacity .18s;">S'abonner — Novice 5 €/mois</button>
+                      <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:#ff6b6b;text-align:center;margin-top:.35rem;min-height:.75rem;" id="rn-bw-err-sub"></div>
+                    </div>
+
+                  </div><!-- /grid -->
+                </div><!-- /rn-bw-wrap -->
+                <!-- ═══════════════════════════════════════════════════════════ -->
+
                     
                     <div class="api-section">
                         <div id="shop-list" class="shop-grid"></div>
@@ -7962,6 +8080,141 @@ function initializeShopPage() {
                 });
             }).catch(()=>{});
         }
+
+        // ── Recharge + Abonnement widget ─────────────────────────────────────
+        (function rnBwInit() {
+          const PAL  = [{id:'starter',gb:50,eur:5},{id:'standard',gb:200,eur:15},{id:'pro',gb:500,eur:30},{id:'expert',gb:1150,eur:60}];
+          const SAV  = [null,'25%','40%','48%'];
+          const SUBS = [{id:'novice',gb:60,eur:5,cr:6000},{id:'standard',gb:250,eur:20,cr:25000},{id:'pro',gb:500,eur:40,cr:55000},{id:'premium',gb:1500,eur:100,cr:160000}];
+          const fe   = n => n.toFixed(2).replace('.',',')+' \u20ac';
+          const el   = id => document.getElementById(id);
+          function cp(gb){if(gb<=50)return gb*(5/50);if(gb<=200)return 5+(gb-50)*(10/150);if(gb<=500)return 15+(gb-200)*(15/300);if(gb<=1150)return 30+(gb-500)*(30/650);return 60+(gb-1150)*0.052;}
+
+          let curGb=50,curEur=5,curPack='starter',curIdx=0,curSubId='novice',curMode='palier';
+
+          function updCr(gb,eur,pid,idx){
+            curGb=gb;curEur=parseFloat(eur.toFixed(2));curPack=pid;
+            el('rn-bw-ogb').textContent=gb.toLocaleString('fr-FR');
+            el('rn-bw-oprice').textContent=fe(eur);
+            const sav=(typeof idx==='number'&&idx>0)?SAV[idx]:null;
+            if(sav){el('rn-bw-osav').textContent='-'+sav+' économies';el('rn-bw-osav').style.display='';}else el('rn-bw-osav').style.display='none';
+            el('rn-bw-opack').textContent='Pack '+pid.charAt(0).toUpperCase()+pid.slice(1);
+            el('rn-bw-btn-cr').textContent='Acheter '+gb+' GB \u2014 '+fe(eur);
+            el('rn-bw-err-cr').textContent='';
+          }
+
+          function updSub(sub){
+            curSubId=sub.id;
+            el('rn-bw-sub-gb').textContent=sub.gb.toLocaleString('fr-FR');
+            el('rn-bw-sub-price').textContent=fe(sub.eur);
+            el('rn-bw-sub-cr-pill').textContent=sub.cr.toLocaleString('fr-FR')+' cr\u00e9dits/mois';
+            el('rn-bw-btn-sub').textContent='S\u2019abonner \u2014 '+sub.id.charAt(0).toUpperCase()+sub.id.slice(1)+' '+sub.eur+' \u20ac/mois';
+            el('rn-bw-err-sub').textContent='';
+          }
+
+          function renderP(){
+            const g=el('rn-bw-pgrid');if(!g)return;g.innerHTML='';
+            PAL.forEach((p,i)=>{
+              const d=document.createElement('div');d.className='rn-bw-pcard'+(i===curIdx?' rn-bw-pcard-on':'');
+              d.innerHTML='<div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:.63rem;margin-bottom:.12rem;">'+p.gb+' GB</div><div style="font-family:\'DM Mono\',monospace;font-size:.56rem;color:#4af0c4;">'+p.eur+' \u20ac</div><div style="font-family:\'DM Mono\',monospace;font-size:.5rem;color:#f59e0b;margin-top:.08rem;min-height:.6rem;">'+(i>0?'-'+SAV[i]:'')+'</div>';
+              d.onclick=()=>{document.querySelectorAll('.rn-bw-pcard').forEach(c=>c.classList.remove('rn-bw-pcard-on'));d.classList.add('rn-bw-pcard-on');curIdx=i;updCr(PAL[i].gb,PAL[i].eur,PAL[i].id,i);};
+              g.appendChild(d);
+            });
+          }
+
+          function renderSL(){
+            const s=el('rn-bw-slbls');if(!s)return;s.innerHTML='';
+            PAL.forEach((p,i)=>{const sp=document.createElement('span');sp.className='rn-bw-slbl'+(i===curIdx?' rn-bw-slbl-on':'');sp.textContent=p.gb+'GB';s.appendChild(sp);});
+          }
+
+          function renderSubs(){
+            const list=el('rn-bw-sub-list');if(!list)return;list.innerHTML='';
+            SUBS.forEach(sub=>{
+              const row=document.createElement('div');row.className='rn-bw-subrow'+(sub.id===curSubId?' rn-bw-subrow-on':'');
+              row.innerHTML='<div><div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:.75rem;">'+sub.id.charAt(0).toUpperCase()+sub.id.slice(1)+'</div><div style="font-family:\'DM Mono\',monospace;font-size:.52rem;color:#7a8799;margin-top:1px;">'+sub.gb+' GB \u00b7 '+sub.cr.toLocaleString('fr-FR')+' cr\u00e9dits/mois</div></div><div style="text-align:right;"><div style="font-family:\'Syne\',sans-serif;font-weight:800;font-size:.82rem;color:#4af0c4;">'+sub.eur+' \u20ac</div><span style="font-family:\'DM Mono\',monospace;font-size:.5rem;color:#7a8799;">/mois</span></div>';
+              row.onclick=()=>{document.querySelectorAll('.rn-bw-subrow').forEach(r=>r.classList.remove('rn-bw-subrow-on'));row.classList.add('rn-bw-subrow-on');updSub(sub);};
+              list.appendChild(row);
+            });
+          }
+
+          window.rnBwSwitch=function(m,btn){
+            curMode=m;
+            document.querySelectorAll('.rn-bw-tab').forEach(t=>{t.classList.remove('rn-bw-tab-on');});btn.classList.add('rn-bw-tab-on');
+            ['palier','slider','custom'].forEach(x=>{const p=el('rn-bw-p-'+x);if(p){p.classList.remove('rn-bw-panel-on');}});
+            const panel=el('rn-bw-p-'+m);if(panel)panel.classList.add('rn-bw-panel-on');
+            if(m==='palier'){renderP();updCr(PAL[curIdx].gb,PAL[curIdx].eur,PAL[curIdx].id,curIdx);}
+            else if(m==='slider'){renderSL();const sl=el('rn-bw-sl');if(sl)sl.value=curIdx;rnBwOnSlider(curIdx);}
+            else{rnBwOnCustom(el('rn-bw-cg')?el('rn-bw-cg').value:50);}
+          };
+
+          window.rnBwOnSlider=function(v){
+            const i=parseInt(v);curIdx=i;
+            document.querySelectorAll('.rn-bw-slbl').forEach((l,j)=>l.classList.toggle('rn-bw-slbl-on',j===i));
+            updCr(PAL[i].gb,PAL[i].eur,PAL[i].id,i);
+          };
+
+          window.rnBwOnCustom=function(v){
+            const gb=Math.max(1,Math.round(parseFloat(v)||1));
+            const eur=cp(gb);
+            const o=el('rn-bw-cpout');if(o)o.textContent=fe(eur);
+            let pid='starter';for(let i=PAL.length-1;i>=0;i--){if(gb>=PAL[i].gb){pid=PAL[i].id;break;}}
+            updCr(gb,eur,pid,null);
+          };
+
+          function getToken(){return localStorage.getItem('token')||localStorage.getItem('authToken')||localStorage.getItem('jwt')||localStorage.getItem('accessToken');}
+
+          window.rnBwDoCredits=async function(){
+            const token=getToken();if(!token){el('rn-bw-err-cr').textContent='Connectez-vous pour acheter.';return;}
+            const btn=el('rn-bw-btn-cr');btn.disabled=true;btn.textContent='Redirection...';
+            try{
+              const res=await fetch(API_BASE+'/api/billing/credits/checkout',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({pack_id:curPack,gb:curGb,amount_eur:curEur})});
+              const data=await res.json();
+              if(data.url)window.location.href=data.url;
+              else throw new Error(data.error||'no url');
+            }catch(e){
+              el('rn-bw-err-cr').textContent='Erreur : '+(e.message||'paiement impossible');
+              btn.disabled=false;btn.textContent='Acheter '+curGb+' GB \u2014 '+fe(curEur);
+            }
+          };
+
+          window.rnBwDoSub=async function(){
+            const token=getToken();if(!token){el('rn-bw-err-sub').textContent='Connectez-vous pour vous abonner.';return;}
+            const btn=el('rn-bw-btn-sub');btn.disabled=true;btn.textContent='Redirection...';
+            try{
+              const res=await fetch(API_BASE+'/api/billing/subscription/checkout',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({plan_id:curSubId})});
+              const data=await res.json();
+              if(data.url)window.location.href=data.url;
+              else throw new Error(data.error||'no url');
+            }catch(e){
+              el('rn-bw-err-sub').textContent='Erreur : '+(e.message||'abonnement impossible');
+              const sub=SUBS.find(s=>s.id===curSubId)||SUBS[0];
+              btn.disabled=false;btn.textContent='S\u2019abonner \u2014 '+sub.id.charAt(0).toUpperCase()+sub.id.slice(1)+' '+sub.eur+' \u20ac/mois';
+            }
+          };
+
+          // Gestion retour Stripe (success / cancelled)
+          (function(){
+            const params=new URLSearchParams(window.location.search);
+            const pay=params.get('payment');
+            if(pay==='success'){
+              const b=document.createElement('div');
+              b.style.cssText='position:fixed;top:1rem;right:1rem;background:#0d1219;border:1px solid rgba(74,240,196,0.4);border-radius:8px;padding:.75rem 1.1rem;font-family:"DM Mono",monospace;font-size:.65rem;color:#4af0c4;z-index:9999;max-width:260px;';
+              b.textContent='✓ Paiement confirmé — bande passante créditée.';
+              document.body.appendChild(b);setTimeout(()=>b.remove(),5000);
+              history.replaceState({},'',window.location.pathname);
+            } else if(pay==='cancelled'){
+              const b=document.createElement('div');
+              b.style.cssText='position:fixed;top:1rem;right:1rem;background:#0d1219;border:1px solid rgba(255,107,107,0.35);border-radius:8px;padding:.75rem 1.1rem;font-family:"DM Mono",monospace;font-size:.65rem;color:#ff6b6b;z-index:9999;max-width:260px;';
+              b.textContent='Paiement annulé.';
+              document.body.appendChild(b);setTimeout(()=>b.remove(),4000);
+              history.replaceState({},'',window.location.pathname);
+            }
+          })();
+
+          renderP();renderSL();renderSubs();updCr(50,5,'starter',0);updSub(SUBS[0]);
+        })();
+        // ── Fin recharge widget ───────────────────────────────────────────────
+
         function getAdminShopHTML() {
             return `
                 <div class="page-content">
