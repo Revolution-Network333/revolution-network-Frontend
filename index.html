@@ -7431,7 +7431,7 @@ main();</code></pre>
                     <div class="page-header">
                         <h1 class="page-title">${t('shop.title')}</h1>
                     </div>
-                    <div class="shop-warning">${t('shop.warning.banner')}</div>
+
                 <!-- -----------------------------------------------------------
                      RECHARGE BANDE PASSANTE + ABONNEMENT — widget billing
                      ------------------------------------------------------- -->
@@ -8030,6 +8030,7 @@ function handlePresaleBuy(itemId) {
 }
 
 function initializeShopPage() {
+    if (typeof window.rnBwRenderSubs === 'function') { window.rnBwRenderSubs(); }
     function formatPrice(v, currency) {
         try {
             const num = parseFloat(v);
@@ -8275,6 +8276,7 @@ function initializeShopPage() {
             });
           }
 
+          window.rnBwRenderSubs=function(){renderSubs();updSub(SUBS[0]);};
           window.rnBwSwitch=function(m,btn){
             curMode=m;
             document.querySelectorAll('.rn-bw-tab').forEach(t=>{t.classList.remove('rn-bw-tab-on');});btn.classList.add('rn-bw-tab-on');
