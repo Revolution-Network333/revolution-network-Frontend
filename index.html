@@ -2331,16 +2331,35 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// ??</span>
                 'shop.crypto.min': 'Minimum 10 ATH',
                 'shop.crypto.btn': 'Acheter',
                 'shop.crypto.err_min': 'Minimum 10 ATH',
-                'shop.crypto.err_login': 'Connectez-vous pour acheter.',
+                'shop.crypto.err_login': t('shop.bw.err_login'),
                 'shop.node.title': 'Node Passif — Supporter Node',
                 'shop.node.subtitle': '150,00 € — paiement unique',
-                'shop.node.desc': 'Soutenez Revolution Network en achetant un Node Passif. Ce node génère des récompenses ATH à chaque airdrop saisonnier selon votre uptime.',
-                'shop.node.f1': 'Récompenses ATH à chaque airdrop',
-                'shop.node.f2': 'Multiplicateur uptime inclus',
-                'shop.node.f3': 'Sandbox isolé — zéro risque',
-                'shop.node.f4': 'Tableau de bord dédié',
-                'shop.node.btn': 'Acheter le Node — 150 €',
-                'shop.node.err_login': 'Connectez-vous pour acheter.',
+                'shop.bw.section': '// Recharge & Abonnements',
+                'shop.bw.intro': "Ach\u00e8te de la bande passante en une fois ou souscris un plan mensuel \u2014 le prix s\'adapte \u00e0 ta s\u00e9lection.",
+                'shop.bw.one_time_tag': '// Achat ponctuel',
+                'shop.bw.title': 'Recharge de bande passante',
+                'shop.bw.subtitle': 'Paiement unique \u00b7 Cr\u00e9dit\u00e9 imm\u00e9diatement apr\u00e8s confirmation Stripe.',
+                'shop.bw.tab_paliers': 'Paliers',
+                'shop.bw.tab_curseur': 'Curseur',
+                'shop.bw.tab_libre': 'Libre',
+                'shop.bw.custom_label': 'Volume (GB)',
+                'shop.bw.selected_vol': 'volume s\u00e9lectionn\u00e9',
+                'shop.bw.one_time_lbl': 'paiement unique',
+                'shop.bw.btn_buy': 'Acheter',
+                'shop.bw.err_login': 'Connectez-vous pour acheter.',
+                'shop.bw.err_pay': 'paiement impossible',
+                'shop.sub.tag': '// Plan mensuel',
+                'shop.sub.title': 'Abonnement mensuel',
+                'shop.sub.subtitle': 'GB + cr\u00e9dits renouvel\u00e9s chaque mois \u00b7 Annulable \u00e0 tout moment.',
+                'shop.sub.selected': 'plan s\u00e9lectionn\u00e9',
+                'shop.sub.gb_month': 'GB/mois',
+                'shop.sub.per_month': '/mois',
+                'shop.sub.credits_month': 'cr\u00e9dits/mois',
+                'shop.sub.btn_prefix': "S\'abonner \u2014",
+                'shop.sub.err_login': 'Connectez-vous pour vous abonner.',
+                'shop.sub.err_sub': 'abonnement impossible',
+                'shop.redirecting': 'Redirection...',
+                'shop.err_prefix': 'Erreur\u00a0: ',
                 'wallet.event.stake_start': 'Stake démarré',
                 'wallet.event.stake_end': 'Stake clôturé',
                 'wallet.event.withdraw': 'Retrait',
@@ -2774,47 +2793,32 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// ??</span>
                 'shop.crypto.err_login': 'Please sign in to buy.',
                 'shop.node.title': 'Passive Node — Supporter Node',
                 'shop.node.subtitle': '€150.00 — one-time payment',
-                'shop.node.desc': 'Support Revolution Network by purchasing a Passive Node. This node generates ATH rewards at each seasonal airdrop based on your uptime.',
-                'shop.node.f1': 'ATH rewards at each airdrop',
-                'shop.node.f2': 'Uptime multiplier included',
-                'shop.node.f3': 'Isolated sandbox — zero risk',
-                'shop.node.f4': 'Dedicated dashboard',
-                'shop.node.btn': 'Buy Node — €150',
-                'shop.node.err_login': 'Please sign in to buy.',
-                'wallet.event.stake_start': 'Stake started',
-                'wallet.event.stake_end': 'Stake closed',
-                'wallet.event.withdraw': 'Withdraw',
-                'wallet.event.credit': 'Credit',
-                'wallet.event.nft_node': 'Node Buy (Passive)',
-                'wallet.title': 'Aether Wallet (ATH)',
-                'wallet.balance': 'Aether Balance',
-                'wallet.stake.active': 'Active Stake',
-                'wallet.none': 'None',
-                'wallet.staking.title': 'Staking — 16% APY',
-                'wallet.stake.balance': 'Wallet balance',
-                'wallet.stake.amount': 'Amount to stake (Aether)',
-                'wallet.stake.btn': 'Stake',
-                'wallet.withdraw.amount': 'Withdraw (Aether)',
-                'wallet.withdraw.btn': 'Withdraw',
-                'wallet.unstake.btn': 'Unstake and credit',
-                'wallet.notice': 'Simulated interest. Withdrawal actually reduces your Aether balance.',
-                'wallet.history': 'History',
-                'wallet.nfts.title': 'NFTs',
-                'wallet.nfts.none': 'No NFTs',
-                'wallet.nfts.node': 'Node (Passive)',
-                'download.title': 'Download',
-                'download.p2p.title': 'P2P Network',
-                'download.p2p.desc': 'A peer”‘to”‘peer network connects users directly. Each browser becomes a node participating in computation and exchange.',
-                'download.p2p.list.resilience': 'Resilience',
-                'download.p2p.list.scalability': 'Scalability',
-                'download.p2p.list.privacy': 'Privacy',
-                'download.p2p.note': 'The browser becomes a distributed and instant I”‘Tech platform.',
-                'download.start.title': 'Start mining',
-                'download.start.step1': 'Download the Windows installer',
-                'download.start.step2': 'Install the app on your PC',
-                'download.start.step3': 'Sign in and click ?',
-                'download.points.note': 'Points make you eligible for the future airdrop.',
-                'download.android.coming_soon': 'Coming Soon',
+                'shop.bw.section': '// Bandwidth & Subscriptions',
+                'shop.bw.intro': 'Buy bandwidth once or subscribe to a monthly plan \u2014 price adjusts to your selection.',
+                'shop.bw.one_time_tag': '// One-time purchase',
+                'shop.bw.title': 'Bandwidth Top-up',
+                'shop.bw.subtitle': 'One-time payment \u00b7 Credited instantly after Stripe confirmation.',
+                'shop.bw.tab_paliers': 'Tiers',
+                'shop.bw.tab_curseur': 'Slider',
+                'shop.bw.tab_libre': 'Custom',
+                'shop.bw.custom_label': 'Volume (GB)',
+                'shop.bw.selected_vol': 'selected volume',
+                'shop.bw.one_time_lbl': 'one-time payment',
+                'shop.bw.btn_buy': 'Buy',
+                'shop.bw.err_login': 'Please log in to purchase.',
+                'shop.bw.err_pay': 'payment failed',
+                'shop.sub.tag': '// Monthly plan',
+                'shop.sub.title': 'Monthly Subscription',
+                'shop.sub.subtitle': 'GB + credits renewed each month \u00b7 Cancel anytime.',
+                'shop.sub.selected': 'selected plan',
+                'shop.sub.gb_month': 'GB/month',
+                'shop.sub.per_month': '/month',
+                'shop.sub.credits_month': 'credits/month',
+                'shop.sub.btn_prefix': 'Subscribe \u2014',
+                'shop.sub.err_login': 'Please log in to subscribe.',
+                'shop.sub.err_sub': 'subscription failed',
+                'shop.redirecting': 'Redirecting...',
+                'shop.err_prefix': 'Error: ',
                 'download.android.coming_soon_desc': 'The Android mobile app is under development.',
                 'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.43/Revolution-Network-Node-Setup-1.0.43.exe',
                 'download.mac_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1-MAC/Revolution-Network-Node-Setup-1.0.23.dmg',
@@ -3474,13 +3478,32 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// ??</span>
                 'shop.crypto.err_login': 'Inicia sesión para comprar.',
                 'shop.node.title': 'Nodo Pasivo — Supporter Node',
                 'shop.node.subtitle': '150,00 € — pago único',
-                'shop.node.desc': 'Apoya Revolution Network comprando un Nodo Pasivo. Este nodo genera recompensas ATH en cada airdrop estacional según tu uptime.',
-                'shop.node.f1': 'Recompensas ATH en cada airdrop',
-                'shop.node.f2': 'Multiplicador de uptime incluido',
-                'shop.node.f3': 'Sandbox aislado — riesgo cero',
-                'shop.node.f4': 'Panel dedicado',
-                'shop.node.btn': 'Comprar Nodo — 150 €',
-                'shop.node.err_login': 'Inicia sesión para comprar.',
+                'shop.bw.section': '// Ancho de banda & Suscripciones',
+                'shop.bw.intro': 'Compra ancho de banda una vez o suscr\u00edbete a un plan mensual \u2014 el precio se adapta a tu selecci\u00f3n.',
+                'shop.bw.one_time_tag': '// Compra \u00fanica',
+                'shop.bw.title': 'Recarga de ancho de banda',
+                'shop.bw.subtitle': 'Pago \u00fanico \u00b7 Acreditado inmediatamente tras confirmaci\u00f3n de Stripe.',
+                'shop.bw.tab_paliers': 'Niveles',
+                'shop.bw.tab_curseur': 'Deslizador',
+                'shop.bw.tab_libre': 'Libre',
+                'shop.bw.custom_label': 'Volumen (GB)',
+                'shop.bw.selected_vol': 'volumen seleccionado',
+                'shop.bw.one_time_lbl': 'pago \u00fanico',
+                'shop.bw.btn_buy': 'Comprar',
+                'shop.bw.err_login': 'Inicia sesi\u00f3n para comprar.',
+                'shop.bw.err_pay': 'pago fallido',
+                'shop.sub.tag': '// Plan mensual',
+                'shop.sub.title': 'Suscripci\u00f3n mensual',
+                'shop.sub.subtitle': 'GB + cr\u00e9ditos renovados cada mes \u00b7 Cancelable en cualquier momento.',
+                'shop.sub.selected': 'plan seleccionado',
+                'shop.sub.gb_month': 'GB/mes',
+                'shop.sub.per_month': '/mes',
+                'shop.sub.credits_month': 'cr\u00e9ditos/mes',
+                'shop.sub.btn_prefix': 'Suscribirse \u2014',
+                'shop.sub.err_login': 'Inicia sesi\u00f3n para suscribirte.',
+                'shop.sub.err_sub': 'suscripci\u00f3n fallida',
+                'shop.redirecting': 'Redirigiendo...',
+                'shop.err_prefix': 'Error: ',
                 'wallet.event.stake_start': 'Stake iniciado',
                 'wallet.event.stake_end': 'Stake cerrado',
                 'wallet.event.withdraw': 'Retiro',
@@ -7439,8 +7462,8 @@ main();</code></pre>
 
                   <!-- En-tête section -->
                   <div style="margin-bottom:1.25rem;">
-                    <span style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#4af0c4;display:block;margin-bottom:.35rem;">// recharge & abonnements</span>
-                    <p style="font-size:.78rem;color:#7a8799;font-weight:300;line-height:1.6;max-width:480px;">Achète de la bande passante en une fois ou souscris un plan mensuel — le prix s'adapte à ta sélection.</p>
+                    <span style="font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#4af0c4;display:block;margin-bottom:.35rem;">${t('shop.bw.section')}</span>
+                    <p style="font-size:.78rem;color:#7a8799;font-weight:300;line-height:1.6;max-width:480px;">${t('shop.bw.intro')}</p>
                   </div>
 
                   <!-- Grille 2 colonnes -->
@@ -7448,15 +7471,15 @@ main();</code></pre>
 
                     <!-- -- Carte recharge GB ------------------ -->
                     <div class="rn-bw-card" style="flex:1;min-width:280px;max-width:400px;background:#0d1219;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:1.1rem;">
-                      <span style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:#4af0c4;display:block;margin-bottom:.3rem;">// achat ponctuel</span>
-                      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;margin-bottom:.2rem;">Recharge de bande passante</div>
-                      <p style="font-size:.63rem;color:#7a8799;font-weight:300;line-height:1.5;margin-bottom:.8rem;">Paiement unique · Crédité immédiatement après confirmation Stripe.</p>
+                      <span style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:#4af0c4;display:block;margin-bottom:.3rem;">${t('shop.bw.one_time_tag')}</span>
+                      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;margin-bottom:.2rem;">${t('shop.bw.title')}</div>
+                      <p style="font-size:.63rem;color:#7a8799;font-weight:300;line-height:1.5;margin-bottom:.8rem;">${t('shop.bw.subtitle')}</p>
 
                       <!-- Onglets -->
                       <div style="display:flex;gap:.3rem;margin-bottom:.8rem;" id="rn-bw-tabs">
-                        <button class="rn-bw-tab rn-bw-tab-on" onclick="rnBwSwitch('palier',this)">Paliers</button>
-                        <button class="rn-bw-tab" onclick="rnBwSwitch('slider',this)">Curseur</button>
-                        <button class="rn-bw-tab" onclick="rnBwSwitch('custom',this)">Libre</button>
+                        <button class="rn-bw-tab rn-bw-tab-on" onclick="rnBwSwitch('palier',this)">${t('shop.bw.tab_paliers')}</button>
+                        <button class="rn-bw-tab" onclick="rnBwSwitch('slider',this)">${t('shop.bw.tab_curseur')}</button>
+                        <button class="rn-bw-tab" onclick="rnBwSwitch('custom',this)">${t('shop.bw.tab_libre')}</button>
                       </div>
 
                       <!-- Panel paliers -->
@@ -7473,7 +7496,7 @@ main();</code></pre>
                       <!-- Panel custom -->
                       <div id="rn-bw-p-custom" class="rn-bw-panel">
                         <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.8rem;flex-wrap:wrap;">
-                          <span style="font-family:'DM Mono',monospace;font-size:.58rem;color:#7a8799;white-space:nowrap;">Volume (GB)</span>
+                          <span style="font-family:'DM Mono',monospace;font-size:.58rem;color:#7a8799;white-space:nowrap;">${t('shop.bw.custom_label')}</span>
                           <div style="display:flex;align-items:center;border:1px solid rgba(255,255,255,0.1);border-radius:6px;overflow:hidden;background:rgba(255,255,255,0.03);flex:1;min-width:80px;">
                             <input type="number" id="rn-bw-cg" min="1" max="9999" value="50" oninput="rnBwOnCustom(this.value)" style="background:none;border:none;outline:none;color:#fff;font-family:'DM Mono',monospace;font-size:.7rem;padding:.35rem .45rem;width:100%;">
                             <span style="padding:.35rem .45rem;color:#4af0c4;font-family:'DM Mono',monospace;font-size:.62rem;border-left:1px solid rgba(255,255,255,0.06);">GB</span>
@@ -7485,12 +7508,12 @@ main();</code></pre>
                       <!-- Preview -->
                       <div style="background:rgba(74,240,196,0.04);border:1px solid rgba(74,240,196,0.18);border-radius:8px;padding:.65rem .85rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.8rem;flex-wrap:wrap;">
                         <div>
-                          <div style="font-family:'DM Mono',monospace;font-size:.5rem;color:#7a8799;margin-bottom:.15rem;">volume sélectionné</div>
+                          <div style="font-family:'DM Mono',monospace;font-size:.5rem;color:#7a8799;margin-bottom:.15rem;">${t('shop.bw.selected_vol')}</div>
                           <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:-.02em;"><span id="rn-bw-ogb">50</span><small style="font-size:.58rem;font-weight:400;color:#7a8799;margin-left:3px;font-family:'DM Sans',sans-serif;">GB</small></div>
                         </div>
                         <div>
                           <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#4af0c4;letter-spacing:-.02em;" id="rn-bw-oprice">5,00 €</div>
-                          <span style="font-family:'DM Mono',monospace;font-size:.5rem;color:#7a8799;display:block;text-align:right;">paiement unique</span>
+                          <span style="font-family:'DM Mono',monospace;font-size:.5rem;color:#7a8799;display:block;text-align:right;">${t('shop.bw.one_time_lbl')}</span>
                         </div>
                         <div style="width:100%;display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.2rem;">
                           <span style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:999px;font-family:'DM Mono',monospace;font-size:.5rem;color:#7a8799;padding:.12rem .45rem;" id="rn-bw-opack">Pack Starter</span>
@@ -7498,15 +7521,15 @@ main();</code></pre>
                         </div>
                       </div>
 
-                      <button id="rn-bw-btn-cr" onclick="rnBwDoCredits()" style="width:100%;padding:.55rem 1rem;border-radius:7px;font-weight:600;font-size:.72rem;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:#4af0c4;color:#080808;transition:opacity .18s;">Acheter 50 GB — 5,00 €</button>
+                      <button id="rn-bw-btn-cr" onclick="rnBwDoCredits()" style="width:100%;padding:.55rem 1rem;border-radius:7px;font-weight:600;font-size:.72rem;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:#4af0c4;color:#080808;transition:opacity .18s;"> 50 GB — 5,00 €</button>
                       <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:#ff6b6b;text-align:center;margin-top:.35rem;min-height:.75rem;" id="rn-bw-err-cr"></div>
                     </div>
 
                     <!-- -- Carte abonnement -------------------- -->
                     <div class="rn-bw-card" style="flex:1;min-width:280px;max-width:400px;background:#0d1219;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:1.1rem;">
-                      <span style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:#4af0c4;display:block;margin-bottom:.3rem;">// plan mensuel</span>
-                      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;margin-bottom:.2rem;">Abonnement mensuel</div>
-                      <p style="font-size:.63rem;color:#7a8799;font-weight:300;line-height:1.5;margin-bottom:.8rem;">GB + crédits renouvelés chaque mois · Annulable à tout moment.</p>
+                      <span style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:#4af0c4;display:block;margin-bottom:.3rem;">${t('shop.sub.tag')}</span>
+                      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.85rem;margin-bottom:.2rem;">${t('shop.sub.title')}</div>
+                      <p style="font-size:.63rem;color:#7a8799;font-weight:300;line-height:1.5;margin-bottom:.8rem;">${t('shop.sub.subtitle')}</p>
 
                       <!-- Liste plans -->
                       <div style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:.8rem;" id="rn-bw-sub-list"></div>
@@ -7514,19 +7537,19 @@ main();</code></pre>
                       <!-- Preview abonnement -->
                       <div style="background:rgba(74,240,196,0.04);border:1px solid rgba(74,240,196,0.18);border-radius:8px;padding:.65rem .85rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.8rem;flex-wrap:wrap;">
                         <div>
-                          <div style="font-family:'DM Mono',monospace;font-size:.5rem;color:#7a8799;margin-bottom:.15rem;">plan sélectionné</div>
-                          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:-.02em;"><span id="rn-bw-sub-gb">60</span><small style="font-size:.58rem;font-weight:400;color:#7a8799;margin-left:3px;font-family:'DM Sans',sans-serif;">GB/mois</small></div>
+                          <div style="font-family:'DM Mono',monospace;font-size:.5rem;color:#7a8799;margin-bottom:.15rem;">${t('shop.sub.selected')}</div>
+                          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:-.02em;"><span id="rn-bw-sub-gb">60</span><small style="font-size:.58rem;font-weight:400;color:#7a8799;margin-left:3px;font-family:'DM Sans',sans-serif;">${t('shop.sub.gb_month')}</small></div>
                         </div>
                         <div>
                           <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#4af0c4;letter-spacing:-.02em;" id="rn-bw-sub-price">5,00 €</div>
-                          <span style="font-family:'DM Mono',monospace;font-size:.5rem;color:#7a8799;display:block;text-align:right;">/mois</span>
+                          <span style="font-family:'DM Mono',monospace;font-size:.5rem;color:#7a8799;display:block;text-align:right;">${t('shop.sub.per_month')}</span>
                         </div>
                         <div style="width:100%;margin-top:.2rem;">
                           <span style="background:rgba(74,240,196,0.05);border:1px solid rgba(74,240,196,0.2);border-radius:999px;font-family:'DM Mono',monospace;font-size:.5rem;color:#4af0c4;padding:.12rem .45rem;" id="rn-bw-sub-cr-pill">6 000 crédits/mois</span>
                         </div>
                       </div>
 
-                      <button id="rn-bw-btn-sub" onclick="rnBwDoSub()" style="width:100%;padding:.55rem 1rem;border-radius:7px;font-weight:600;font-size:.72rem;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:#4af0c4;color:#080808;transition:opacity .18s;">S'abonner — Novice 5 €/mois</button>
+                      <button id="rn-bw-btn-sub" onclick="rnBwDoSub()" style="width:100%;padding:.55rem 1rem;border-radius:7px;font-weight:600;font-size:.72rem;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:#4af0c4;color:#080808;transition:opacity .18s;"> Novice 5 €/mois</button>
                       <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:#ff6b6b;text-align:center;margin-top:.35rem;min-height:.75rem;" id="rn-bw-err-sub"></div>
                     </div>
 
@@ -8238,7 +8261,7 @@ function initializeShopPage() {
             const sav=(typeof idx==='number'&&idx>0)?SAV[idx]:null;
             if(sav){el('rn-bw-osav').textContent='-'+sav+' économies';el('rn-bw-osav').style.display='';}else el('rn-bw-osav').style.display='none';
             el('rn-bw-opack').textContent='Pack '+pid.charAt(0).toUpperCase()+pid.slice(1);
-            el('rn-bw-btn-cr').textContent='Acheter '+gb+' GB \u2014 '+fe(eur);
+            el('rn-bw-btn-cr').textContent=t('shop.bw.btn_buy')+' '+gb+' GB \u2014 '+fe(eur);
             el('rn-bw-err-cr').textContent='';
           }
 
@@ -8246,8 +8269,8 @@ function initializeShopPage() {
             curSubId=sub.id;
             el('rn-bw-sub-gb').textContent=sub.gb.toLocaleString('fr-FR');
             el('rn-bw-sub-price').textContent=fe(sub.eur);
-            el('rn-bw-sub-cr-pill').textContent=sub.cr.toLocaleString('fr-FR')+' cr\u00e9dits/mois';
-            el('rn-bw-btn-sub').textContent='S\u2019abonner \u2014 '+sub.id.charAt(0).toUpperCase()+sub.id.slice(1)+' '+sub.eur+' \u20ac/mois';
+            el('rn-bw-sub-cr-pill').textContent=sub.cr.toLocaleString('fr-FR')+' '+(typeof t==='function'?t('shop.sub.credits_month'):'crédits/mois');
+            el('rn-bw-btn-sub').textContent=t('shop.sub.btn_prefix')+' '+sub.id.charAt(0).toUpperCase()+sub.id.slice(1)+' '+sub.eur+' \u20ac/mois';
             el('rn-bw-err-sub').textContent='';
           }
 
@@ -8270,7 +8293,7 @@ function initializeShopPage() {
             const list=el('rn-bw-sub-list');if(!list)return;list.innerHTML='';
             SUBS.forEach(sub=>{
               const row=document.createElement('div');row.className='rn-bw-subrow'+(sub.id===curSubId?' rn-bw-subrow-on':'');
-              row.innerHTML='<div><div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:.75rem;">'+sub.id.charAt(0).toUpperCase()+sub.id.slice(1)+'</div><div style="font-family:\'DM Mono\',monospace;font-size:.52rem;color:#7a8799;margin-top:1px;">'+sub.gb+' GB \u00b7 '+sub.cr.toLocaleString('fr-FR')+' cr\u00e9dits/mois</div></div><div style="text-align:right;"><div style="font-family:\'Syne\',sans-serif;font-weight:800;font-size:.82rem;color:#4af0c4;">'+sub.eur+' \u20ac</div><span style="font-family:\'DM Mono\',monospace;font-size:.5rem;color:#7a8799;">/mois</span></div>';
+              row.innerHTML='<div><div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:.75rem;">'+sub.id.charAt(0).toUpperCase()+sub.id.slice(1)+'</div><div style="font-family:\'DM Mono\',monospace;font-size:.52rem;color:#7a8799;margin-top:1px;">'+sub.gb+' GB \u00b7 '+sub.cr.toLocaleString('fr-FR')+' '+t('shop.sub.credits_month')</div></div><div style="text-align:right;"><div style="font-family:\'Syne\',sans-serif;font-weight:800;font-size:.82rem;color:#4af0c4;">'+sub.eur+' \u20ac</div><span style="font-family:\'DM Mono\',monospace;font-size:.5rem;color:#7a8799;">/mois</span></div>';
               row.onclick=()=>{document.querySelectorAll('.rn-bw-subrow').forEach(r=>r.classList.remove('rn-bw-subrow-on'));row.classList.add('rn-bw-subrow-on');updSub(sub);};
               list.appendChild(row);
             });
@@ -8304,31 +8327,31 @@ function initializeShopPage() {
           function getToken(){return localStorage.getItem('token')||localStorage.getItem('authToken')||localStorage.getItem('jwt')||localStorage.getItem('accessToken');}
 
           window.rnBwDoCredits=async function(){
-            const token=getToken();if(!token){el('rn-bw-err-cr').textContent='Connectez-vous pour acheter.';return;}
-            const btn=el('rn-bw-btn-cr');btn.disabled=true;btn.textContent='Redirection...';
+            const token=getToken();if(!token){el('rn-bw-err-cr').textContent=(typeof t==='function'?t('shop.bw.err_login'):'Connectez-vous pour acheter.');return;}
+            const btn=el('rn-bw-btn-cr');btn.disabled=true;btn.textContent=t('shop.redirecting');
             try{
               const res=await fetch(API_BASE+'/api/billing/credits/checkout',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({pack_id:curPack,gb:curGb,amount_eur:curEur})});
               const data=await res.json();
               if(data.url)window.location.href=data.url;
               else throw new Error(data.error||'no url');
             }catch(e){
-              el('rn-bw-err-cr').textContent='Erreur : '+(e.message||'paiement impossible');
+              el('rn-bw-err-cr').textContent=t('shop.err_prefix')+(e.message||t('shop.bw.err_pay'));
               btn.disabled=false;btn.textContent='Acheter '+curGb+' GB \u2014 '+fe(curEur);
             }
           };
 
           window.rnBwDoSub=async function(){
-            const token=getToken();if(!token){el('rn-bw-err-sub').textContent='Connectez-vous pour vous abonner.';return;}
-            const btn=el('rn-bw-btn-sub');btn.disabled=true;btn.textContent='Redirection...';
+            const token=getToken();if(!token){el('rn-bw-err-sub').textContent=t('shop.sub.err_login');return;}
+            const btn=el('rn-bw-btn-sub');btn.disabled=true;btn.textContent=t('shop.redirecting');
             try{
               const res=await fetch(API_BASE+'/api/billing/subscription/checkout',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({plan_id:curSubId})});
               const data=await res.json();
               if(data.url)window.location.href=data.url;
               else throw new Error(data.error||'no url');
             }catch(e){
-              el('rn-bw-err-sub').textContent='Erreur : '+(e.message||'abonnement impossible');
+              el('rn-bw-err-sub').textContent=t('shop.err_prefix')+(e.message||t('shop.sub.err_sub'));
               const sub=SUBS.find(s=>s.id===curSubId)||SUBS[0];
-              btn.disabled=false;btn.textContent='S\u2019abonner \u2014 '+sub.id.charAt(0).toUpperCase()+sub.id.slice(1)+' '+sub.eur+' \u20ac/mois';
+              btn.disabled=false;btn.textContent=t('shop.sub.btn_prefix')+' '+sub.id.charAt(0).toUpperCase()+sub.id.slice(1)+' '+sub.eur+' \u20ac/mois';
             }
           };
 
@@ -8411,7 +8434,7 @@ function initializeShopPage() {
               if(data.url) window.location.href = data.url;
               else throw new Error(data.error||'no url');
             } catch(e){
-              if(errEl) errEl.textContent = 'Erreur : '+(e.message||'paiement impossible');
+              if(errEl) errEl.textContent = t('shop.err_prefix')+(e.message||t('shop.bw.err_pay'));
               if(btn){ btn.disabled=false; btn.textContent=(typeof t==='function'?t('shop.crypto.btn'):'')||'Acheter'; }
             }
           };
