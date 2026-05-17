@@ -8192,6 +8192,13 @@ function initializeShopPage() {
             }
           };
 
+          // Re-enable buttons on browser back
+          window.addEventListener('pageshow', function(e){
+            const b1=document.getElementById('rn-bw-btn-cr');
+            const b2=document.getElementById('rn-bw-btn-sub');
+            if(b1&&b1.disabled){b1.disabled=false;}
+            if(b2&&b2.disabled){b2.disabled=false;}
+          });
           // Gestion retour Stripe (success / cancelled)
           (function(){
             const params=new URLSearchParams(window.location.search);
