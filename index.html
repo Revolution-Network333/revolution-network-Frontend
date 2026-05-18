@@ -2055,7 +2055,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
             : 'https://api.revolution-network.fr';
         
         const LANGS = { fr: { locale: 'fr-FR' }, en: { locale: 'en-US' }, es: { locale: 'es-ES' } };
-        let currentLang = localStorage.getItem('lang') || 'fr';
+        const browserLang = navigator.language?.slice(0,2); const defaultLang = ['fr','en','es'].includes(browserLang) ? browserLang : 'en'; let currentLang = localStorage.getItem('lang') || defaultLang;
         let currentLocale = LANGS[currentLang]?.locale || 'fr-FR';
         const i18n = {
             fr: {
