@@ -1132,8 +1132,13 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                             <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                         </svg>
                         <span id="header-notifications-dot" style="position:absolute;right:6px;bottom:6px;width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 8px rgba(239,68,68,0.7);display:none;"></span>
-                    </button>
-                    <img src="/logo_profil.jpg" class="user-avatar" alt="Profil" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;">
+                    </button>                    <div class="profile-dropdown-container">
+                      <img src="/logo_profil.jpg" class="user-avatar profile-picture" alt="Profil" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%; cursor: pointer;" id="profilePictureDropdown">
+                      <div class="profile-dropdown" id="profileDropdown">
+                        <a href="/profil" class="dropdown-option">Aller sur le profil</a>
+                        <a href="#" class="dropdown-option" id="changeProfilePic">Changer la photo de profil</a>
+                      </div>
+                    </div>
                     <button id="header-login-btn" class="profile-btn primary" style="display:none;" onclick="setPage('login')">Sign in</button>
                     <select id="lang-switch" style="margin-left:10px;padding:6px 8px;border-radius:8px;background:#0b0f14;color:#fff;border:1px solid #1f2937;">
                         <option value="fr">FR</option>
@@ -11063,7 +11068,7 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
 <script>/**
  * grid-bg.js — Revolution Network
  * Fond quadrillage rouge avec effet lumière souris
- * Inclure avant </body> dans index.html
+ 
  */
 (function () {
   const canvas = document.createElement('canvas');
@@ -11286,14 +11291,9 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
   });
 })();
 </script>
+<script src="script.js"></script>
+<div class="image-scroll-container" id="imageScrollContainer">
+  <div class="image-scroll" id="imageScroll"></div>
+</div>
 </body>
-</html>
-
-
-
-
-
-
-
-
 
