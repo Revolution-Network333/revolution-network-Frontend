@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <script>
@@ -8,12 +8,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
     <meta name="google-adsense-account" content="ca-pub-6620583007706439">
-    <meta name="description" content="API compute decentralisee pour scraping, OCR, code execution et data processing. 3 GB gratuits par semaine. Reseau mondial de nodes DePIN.">
+    <meta name="description" content="Decentralized compute API for scraping, OCR, code execution and data processing. 3 GB free per week. Worldwide DePIN node network.">
     <link rel="canonical" href="https://revolution-network.fr/">
-    <meta property="og:title" content="Revolution Network - API Compute Decentralisee">
-    <meta property="og:description" content="Scraping, OCR, code execution et data processing via une seule API. 3 GB gratuits/semaine.">
+    <meta property="og:title" content="Revolution Network - Decentralized Compute API">
+    <meta property="og:description" content="Scraping, OCR, code execution and data processing via one API. 3 GB free/week.">
     <meta property="og:url" content="https://revolution-network.fr/">
     <meta property="og:type" content="website">
+    <meta property="og:image" content="https://revolution-network.fr/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Revolution Network - Decentralized Compute API">
+    <meta name="twitter:description" content="Scraping, OCR, code execution and data processing via one API. 3 GB free/week.">
+    <meta name="twitter:image" content="https://revolution-network.fr/og-image.png">
     <title>Révolution Network - Dashboard</title>
     <link rel="icon" type="image/x-icon" href="nexon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="chrome-extension/assets/icon-32.png">
@@ -241,6 +246,22 @@
 #landing-page .ln-node-card-label{font-family:'DM Mono',monospace;font-size:.7rem;color:#4af0c4;letter-spacing:.08em;text-transform:uppercase;}
 #landing-page .ln-node-card-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:#e8edf5;line-height:1.1;}
 #landing-page .ln-node-card-sub{font-size:.8rem;color:#7a8799;line-height:1.5;margin-top:.1rem;}
+
+/* -- Recharge widget ----------------------------------------------- */
+.rn-bw-tab{padding:.28rem .6rem;border-radius:5px;font-family:'DM Mono',monospace;font-size:.56rem;cursor:pointer;border:1px solid rgba(255,255,255,0.08);background:transparent;color:#7a8799;transition:all .18s;}
+.rn-bw-tab-on{background:rgba(74,240,196,0.1)!important;border-color:rgba(74,240,196,0.3)!important;color:#4af0c4!important;}
+.rn-bw-panel{display:none;}.rn-bw-panel-on{display:block;}
+.rn-bw-pcard{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:7px;padding:.45rem .3rem;text-align:center;cursor:pointer;transition:all .18s;}
+.rn-bw-pcard:hover{border-color:rgba(74,240,196,0.3);}
+.rn-bw-pcard-on{border-color:rgba(74,240,196,0.5)!important;background:rgba(74,240,196,0.05)!important;}
+.rn-bw-slbl{font-family:'DM Mono',monospace;font-size:.53rem;color:#7a8799;text-align:center;width:25%;transition:color .15s;}
+.rn-bw-slbl-on{color:#4af0c4!important;}
+#rn-bw-sl::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;background:#4af0c4;border-radius:50%;cursor:pointer;box-shadow:0 0 0 3px rgba(74,240,196,0.18);}
+.rn-bw-subrow{display:flex;align-items:center;justify-content:space-between;padding:.55rem .7rem;border:1px solid rgba(255,255,255,0.07);border-radius:7px;background:rgba(255,255,255,0.03);cursor:pointer;transition:all .18s;gap:.5rem;}
+.rn-bw-subrow:hover{border-color:rgba(74,240,196,0.3);}
+.rn-bw-subrow-on{border-color:rgba(74,240,196,0.5)!important;background:rgba(74,240,196,0.05)!important;}
+#rn-bw-btn-cr:hover,#rn-bw-btn-sub:hover{opacity:.88;}
+#rn-bw-btn-cr:disabled,#rn-bw-btn-sub:disabled{opacity:.4;cursor:default;background:#4a5568;color:#9ca3af;}
 </style>
 </head>
 <body class="dark-theme">
@@ -268,7 +289,7 @@
         <option value="en">EN</option>
         <option value="es">ES</option>
       </select>
-      <button class="ln-cta-btn" onclick="showLoginFromLanding()" id="ln-signin-btn">Se connecter →</button>
+      <button class="ln-cta-btn" onclick="showLoginFromLanding()" id="ln-signin-btn">Se connecter</button>
     </div>
   </nav>
 
@@ -280,7 +301,7 @@
     <h1 class="ln-h1" data-ln="hero.h1.before">Compute décentralisé.<br><span data-ln="hero.h1.accent">Une seule API.</span></h1>
     <p class="ln-sub" data-ln="hero.sub">Scraping, OCR, code execution et data processing. Alimenté par un réseau mondial de nodes distribués. Pas de vendor lock-in.</p>
     <div class="ln-actions">
-      <button class="ln-btn-p" onclick="showLoginFromLanding()"><span data-ln="hero.cta.primary">Accéder au Dashboard</span> <span>→</span></button>
+      <button class="ln-btn-p" onclick="showLoginFromLanding()"><span data-ln="hero.cta.primary">Accéder au Dashboard</span> </button>
       <a class="ln-btn-s" href="https://discord.gg/eadE7uK6ss" target="_blank" data-ln="hero.cta.secondary">Rejoindre le Discord</a>
     </div>
 
@@ -378,7 +399,7 @@
 })
 
 <span class="lk">const</span> result = <span class="lk">await</span> client.<span class="lf">jobs</span>.<span class="lf">waitForResult</span>(job.job_id)
-console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</span></div>
+console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</span></div>
       </div>
 
     </div>
@@ -389,16 +410,16 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
     <div class="ln-node-inner">
       <div class="ln-node-banner" data-r>
         <div>
-          <div class="ln-node-tag" data-ln="node.tag">🪂 Pour les opérateurs de nodes</div>
+          <div class="ln-node-tag" data-ln="node.tag">🖥️ Pour les opérateurs de nodes</div>
           <h2 class="ln-node-h2" data-ln="node.h2">Fais tourner un node.<br><span>Gagne des tokens ATH.</span></h2>
           <p class="ln-node-desc" data-ln="node.desc">Pas besoin de serveur dédié. Installe le node Revolution sur ton PC Windows, laisse-le tourner en arrière-plan, et accumule des points convertis en ATH à chaque airdrop saisonnier.</p>
           <div class="ln-node-perks">
             <div class="ln-node-perk">
-              <div class="ln-node-perk-icon">🪂</div>
+              <div class="ln-node-perk-icon">🪙</div>
               <div data-ln="node.perk1"><strong>Airdrop saisonnier</strong> — tes points s'accumulent à chaque job traité et sont distribués en tokens ATH périodiquement.</div>
             </div>
             <div class="ln-node-perk">
-              <div class="ln-node-perk-icon">📶</div>
+              <div class="ln-node-perk-icon">⚡</div>
               <div data-ln="node.perk2"><strong>Juste ta bande passante</strong> — le node est léger, discret, tourne en arrière-plan sans impacter tes performances.</div>
             </div>
             <div class="ln-node-perk">
@@ -406,36 +427,36 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               <div data-ln="node.perk3"><strong>Multiplicateur d'uptime</strong> — plus tu es fiable, plus ta part de l'airdrop est élevée. 99 %+ = bonus x2.</div>
             </div>
             <div class="ln-node-perk">
-              <div class="ln-node-perk-icon">🛡️</div>
+              <div class="ln-node-perk-icon">🔒</div>
               <div data-ln="node.perk4"><strong>Zéro risque</strong> — chaque job s'exécute en sandbox isolé. Ton système n'est jamais exposé.</div>
             </div>
           </div>
           <div class="ln-node-btns">
-            <button class="ln-node-btn-p" onclick="showLoginFromLanding()" data-ln="node.btn.primary">🚀 Installer le node gratuitement</button>
-            <a class="ln-node-btn-s" href="https://discord.gg/eadE7uK6ss" target="_blank" data-ln="node.btn.secondary">Rejoindre le Discord →</a>
+            <button class="ln-node-btn-p" onclick="showLoginFromLanding()" data-ln="node.btn.primary">⬇️ Installer le node gratuitement</button>
+            <a class="ln-node-btn-s" href="https://discord.gg/eadE7uK6ss" target="_blank" data-ln="node.btn.secondary">Rejoindre le Discord ?</a>
           </div>
         </div>
         <div class="ln-node-cards">
           <div class="ln-node-card">
-            <div class="ln-node-card-ico">🪂</div>
+            <div class="ln-node-card-ico">⚡</div>
             <div class="ln-node-card-label" data-ln="node.card1.label">Récompense</div>
             <div class="ln-node-card-val" data-ln="node.card1.val">ATH tokens</div>
             <div class="ln-node-card-sub" data-ln="node.card1.sub">Distribués à chaque airdrop selon tes points</div>
           </div>
           <div class="ln-node-card">
-            <div class="ln-node-card-ico">⚡</div>
+            <div class="ln-node-card-ico">?</div>
             <div class="ln-node-card-label" data-ln="node.card2.label">Par job traité</div>
             <div class="ln-node-card-val" data-ln="node.card2.val">+Points</div>
             <div class="ln-node-card-sub" data-ln="node.card2.sub">Chaque requête du réseau incrémente ton score</div>
           </div>
           <div class="ln-node-card">
-            <div class="ln-node-card-ico">🏆</div>
+            <div class="ln-node-card-ico">💎</div>
             <div class="ln-node-card-label" data-ln="node.card3.label">Réputation</div>
             <div class="ln-node-card-val" data-ln="node.card3.val">Priorité jobs</div>
             <div class="ln-node-card-sub" data-ln="node.card3.sub">Les nodes fiables reçoivent plus de jobs et de points</div>
           </div>
           <div class="ln-node-card">
-            <div class="ln-node-card-ico">🕐</div>
+            <div class="ln-node-card-ico">💎</div>
             <div class="ln-node-card-label" data-ln="node.card4.label">Uptime bonus</div>
             <div class="ln-node-card-val" data-ln="node.card4.val">×2 Multiplicateur</div>
             <div class="ln-node-card-sub" data-ln="node.card4.sub">99 %+ uptime booste ta part à chaque airdrop</div>
@@ -451,16 +472,16 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
     <h2 class="ln-h2" data-r data-ln="jobs.h2">10 types de compute,<br>un seul endpoint.</h2>
     <p class="ln-muted" data-r data-ln="jobs.sub">De l'extraction de données à la conversion vidéo, tout passe par la même API.</p>
     <div class="ln-jobs-grid" data-r>
-      <div class="ln-job"><span class="ln-job-icon">🔍</span><div class="ln-job-name">http_get</div><div class="ln-job-desc" data-ln="job.http_get.desc">Analyse web simple</div><div class="ln-job-cost">~1 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">🤖</span><div class="ln-job-name">scrape_get</div><div class="ln-job-desc" data-ln="job.scrape_get.desc">Scraping intelligent (auto/browser/css/ai)</div><div class="ln-job-cost">~2 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">🌐</span><div class="ln-job-name">http_get</div><div class="ln-job-desc" data-ln="job.http_get.desc">Analyse web simple</div><div class="ln-job-cost">~1 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">🕷️</span><div class="ln-job-name">scrape_get</div><div class="ln-job-desc" data-ln="job.scrape_get.desc">Scraping intelligent (auto/browser/css/ai)</div><div class="ln-job-cost">~2 MB</div></div>
       <div class="ln-job"><span class="ln-job-icon">📄</span><div class="ln-job-name">ocr_pdf</div><div class="ln-job-desc" data-ln="job.ocr_pdf.desc">OCR / Extraction PDF</div><div class="ln-job-cost">~20 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">🖼️</span><div class="ln-job-name">image_svg_generate</div><div class="ln-job-desc" data-ln="job.image_svg.desc">Génération SVG avec texte</div><div class="ln-job-cost">~2 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">🎨</span><div class="ln-job-name">image_svg_generate</div><div class="ln-job-desc" data-ln="job.image_svg.desc">Génération SVG avec texte</div><div class="ln-job-cost">~2 MB</div></div>
       <div class="ln-job"><span class="ln-job-icon">⚙️</span><div class="ln-job-name">code_run_js</div><div class="ln-job-desc" data-ln="job.code_run_js.desc">Exécution JS (sandbox VM)</div><div class="ln-job-cost">~5 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">📝</span><div class="ln-job-name">text_transform</div><div class="ln-job-desc" data-ln="job.text_transform.desc">Transformation de texte</div><div class="ln-job-cost">~1 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">📄</span><div class="ln-job-name">text_generate_template</div><div class="ln-job-desc" data-ln="job.text_template.desc">Génération de template</div><div class="ln-job-cost">~1 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">🧪</span><div class="ln-job-name">content_check</div><div class="ln-job-desc" data-ln="job.content_check.desc">Vérification de contenu</div><div class="ln-job-cost">~5 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">📊</span><div class="ln-job-name">data_processing</div><div class="ln-job-desc" data-ln="job.data_processing.desc">Traitement de données</div><div class="ln-job-cost">~100 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">📈</span><div class="ln-job-name">csv_stats</div><div class="ln-job-desc" data-ln="job.csv_stats.desc">Statistiques CSV</div><div class="ln-job-cost">~10 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">✏️</span><div class="ln-job-name">text_transform</div><div class="ln-job-desc" data-ln="job.text_transform.desc">Transformation de texte</div><div class="ln-job-cost">~1 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">📝</span><div class="ln-job-name">text_generate_template</div><div class="ln-job-desc" data-ln="job.text_template.desc">Génération de template</div><div class="ln-job-cost">~1 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">✅</span><div class="ln-job-name">content_check</div><div class="ln-job-desc" data-ln="job.content_check.desc">Vérification de contenu</div><div class="ln-job-cost">~5 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">🔄</span><div class="ln-job-name">data_processing</div><div class="ln-job-desc" data-ln="job.data_processing.desc">Traitement de données</div><div class="ln-job-cost">~100 MB</div></div>
+      <div class="ln-job"><span class="ln-job-icon">📊</span><div class="ln-job-name">csv_stats</div><div class="ln-job-desc" data-ln="job.csv_stats.desc">Statistiques CSV</div><div class="ln-job-cost">~10 MB</div></div>
     </div>
   </section>
 
@@ -534,19 +555,19 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
     </div>
     <div data-r style="display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; max-width:700px; margin:0 auto; text-align:left;">
       <div style="display:flex; align-items:flex-start; gap:.75rem; padding:1rem 1.25rem; background:rgba(13,18,26,0.5); border:1px solid rgba(255,255,255,0.06); border-radius:10px;">
-        <span style="color:#4af0c4; margin-top:2px; flex-shrink:0;">→</span>
+        <span style="color:#4af0c4; margin-top:2px; flex-shrink:0;">?</span>
         <div style="font-size:.85rem; color:#9ca3af;" data-ln="market.b1"><strong style="color:#c8d3e0;">Web scraping infra</strong> — marché multi-milliards sans alternative décentralisée</div>
       </div>
       <div style="display:flex; align-items:flex-start; gap:.75rem; padding:1rem 1.25rem; background:rgba(13,18,26,0.5); border:1px solid rgba(255,255,255,0.06); border-radius:10px;">
-        <span style="color:#4af0c4; margin-top:2px; flex-shrink:0;">→</span>
+        <span style="color:#4af0c4; margin-top:2px; flex-shrink:0;">?</span>
         <div style="font-size:.85rem; color:#9ca3af;" data-ln="market.b2"><strong style="color:#c8d3e0;">Automation APIs</strong> — écosystèmes Zapier-like avides de backends fiables</div>
       </div>
       <div style="display:flex; align-items:flex-start; gap:.75rem; padding:1rem 1.25rem; background:rgba(13,18,26,0.5); border:1px solid rgba(255,255,255,0.06); border-radius:10px;">
-        <span style="color:#4af0c4; margin-top:2px; flex-shrink:0;">→</span>
+        <span style="color:#4af0c4; margin-top:2px; flex-shrink:0;">?</span>
         <div style="font-size:.85rem; color:#9ca3af;" data-ln="market.b3"><strong style="color:#c8d3e0;">DePIN compute</strong> — catégorie émergente avec mécaniques token éprouvées</div>
       </div>
       <div style="display:flex; align-items:flex-start; gap:.75rem; padding:1rem 1.25rem; background:rgba(13,18,26,0.5); border:1px solid rgba(255,255,255,0.06); border-radius:10px;">
-        <span style="color:#4af0c4; margin-top:2px; flex-shrink:0;">→</span>
+        <span style="color:#4af0c4; margin-top:2px; flex-shrink:0;">?</span>
         <div style="font-size:.85rem; color:#9ca3af;" data-ln="market.b4"><strong style="color:#c8d3e0;">AI data pipelines</strong> — demande infra la plus rapide en entreprise tech</div>
       </div>
     </div>
@@ -562,7 +583,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
         <div class="ln-step-n" style="color:#4af0c4;">Phase 1</div>
         <h3 data-ln="roadmap.p1.title">Foundation</h3>
         <p style="color:#7a8799;" data-ln="roadmap.p1.desc">Lancement API, beta nodes, jobs compute de base (scrape, OCR, vidéo).</p>
-        <div style="margin-top:.75rem; display:inline-block; font-family:'DM Mono',monospace; font-size:.7rem; padding:.2rem .6rem; border-radius:999px; background:rgba(74,240,196,.1); color:#4af0c4; border:1px solid rgba(74,240,196,.2);" data-ln="roadmap.status.current">✓ En cours</div>
+        <div style="margin-top:.75rem; display:inline-block; font-family:'DM Mono',monospace; font-size:.7rem; padding:.2rem .6rem; border-radius:999px; background:rgba(74,240,196,.1); color:#4af0c4; border:1px solid rgba(74,240,196,.2);" data-ln="roadmap.status.current">? En cours</div>
       </div>
       <div class="ln-step">
         <div class="ln-step-n">Phase 2</div>
@@ -633,32 +654,32 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
       <!-- Right: utility pillars -->
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:.75rem;">
         <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:1rem;">
-          <div style="font-size:1.1rem; margin-bottom:.4rem;">💳</div>
+          <div style="font-size:1.1rem; margin-bottom:.4rem;">⚡</div>
           <div style="font-size:.82rem; font-weight:600; color:#c8d3e0; margin-bottom:.2rem;">API Payments</div>
           <div style="font-size:.78rem; color:#7a8799;" data-ln="tok.u1.desc">Payer les jobs en ATH</div>
         </div>
         <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:1rem;">
-          <div style="font-size:1.1rem; margin-bottom:.4rem;">🏆</div>
+          <div style="font-size:1.1rem; margin-bottom:.4rem;">⚡</div>
           <div style="font-size:.82rem; font-weight:600; color:#c8d3e0; margin-bottom:.2rem;">Node Rewards</div>
           <div style="font-size:.78rem; color:#7a8799;" data-ln="tok.u2.desc">Gagner ATH en traitant des jobs</div>
         </div>
         <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:1rem;">
-          <div style="font-size:1.1rem; margin-bottom:.4rem;">🗳️</div>
+          <div style="font-size:1.1rem; margin-bottom:.4rem;">🚀</div>
           <div style="font-size:.82rem; font-weight:600; color:#c8d3e0; margin-bottom:.2rem;">Governance</div>
           <div style="font-size:.78rem; color:#7a8799;" data-ln="tok.u3.desc">Voter sur les mises à jour du protocole</div>
         </div>
         <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:1rem;">
-          <div style="font-size:1.1rem; margin-bottom:.4rem;">🔒</div>
+          <div style="font-size:1.1rem; margin-bottom:.4rem;">⚡</div>
           <div style="font-size:.82rem; font-weight:600; color:#c8d3e0; margin-bottom:.2rem;">Staking</div>
           <div style="font-size:.78rem; color:#7a8799;" data-ln="tok.u4.desc">Booster la priorité des nodes</div>
         </div>
         <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:1rem;">
-          <div style="font-size:1.1rem; margin-bottom:.4rem;">🔥</div>
+          <div style="font-size:1.1rem; margin-bottom:.4rem;">⚡</div>
           <div style="font-size:.82rem; font-weight:600; color:#c8d3e0; margin-bottom:.2rem;">Burn Mechanism</div>
           <div style="font-size:.78rem; color:#7a8799;" data-ln="tok.u5.desc">% des frais API brûlés définitivement</div>
         </div>
         <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:1rem;">
-          <div style="font-size:1.1rem; margin-bottom:.4rem;">🛒</div>
+          <div style="font-size:1.1rem; margin-bottom:.4rem;">⚡</div>
           <div style="font-size:.82rem; font-weight:600; color:#c8d3e0; margin-bottom:.2rem;">Marketplace</div>
           <div style="font-size:.78rem; color:#7a8799;" data-ln="tok.u6.desc">Trader du compute peer-to-peer</div>
         </div>
@@ -674,18 +695,18 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
     <div data-r style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:stretch;">
       <!-- Competitors -->
       <div style="background:rgba(13,18,26,0.6); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:2rem;">
-        <div style="font-size:.78rem; font-family:'DM Mono',monospace; color:#7a8799; text-transform:uppercase; letter-spacing:.08em; margin-bottom:1.25rem;" data-ln="pos.others.label">❌ Les autres</div>
+        <div style="font-size:.78rem; font-family:'DM Mono',monospace; color:#7a8799; text-transform:uppercase; letter-spacing:.08em; margin-bottom:1.25rem;" data-ln="pos.others.label">? Les autres</div>
         <div style="display:flex; flex-direction:column; gap:1rem;">
           <div style="display:flex; align-items:flex-start; gap:.75rem; padding:.85rem 1rem; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid rgba(255,255,255,0.05);">
-            <span style="color:#ef4444; font-size:.9rem; flex-shrink:0; margin-top:1px;">✕</span>
+            <span style="color:#ef4444; font-size:.9rem; flex-shrink:0; margin-top:1px;">?</span>
             <div style="font-size:.85rem; color:#9ca3af;" data-ln="pos.c1"><strong style="color:#c8d3e0;">Réseaux VPN DePIN</strong> — bande passante sans exécution</div>
           </div>
           <div style="display:flex; align-items:flex-start; gap:.75rem; padding:.85rem 1rem; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid rgba(255,255,255,0.05);">
-            <span style="color:#ef4444; font-size:.9rem; flex-shrink:0; margin-top:1px;">✕</span>
+            <span style="color:#ef4444; font-size:.9rem; flex-shrink:0; margin-top:1px;">?</span>
             <div style="font-size:.85rem; color:#9ca3af;" data-ln="pos.c2"><strong style="color:#c8d3e0;">Réseaux GPU-only</strong> — compute lourd, aucun workload web</div>
           </div>
           <div style="display:flex; align-items:flex-start; gap:.75rem; padding:.85rem 1rem; background:rgba(255,255,255,0.03); border-radius:10px; border:1px solid rgba(255,255,255,0.05);">
-            <span style="color:#ef4444; font-size:.9rem; flex-shrink:0; margin-top:1px;">✕</span>
+            <span style="color:#ef4444; font-size:.9rem; flex-shrink:0; margin-top:1px;">?</span>
             <div style="font-size:.85rem; color:#9ca3af;" data-ln="pos.c3"><strong style="color:#c8d3e0;">API providers statiques</strong> — centralisés, fragiles, chers à l'échelle</div>
           </div>
         </div>
@@ -693,13 +714,13 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
       <!-- Revolution -->
       <div style="background:rgba(74,240,196,0.04); border:1px solid rgba(74,240,196,0.2); border-radius:16px; padding:2rem; position:relative; overflow:hidden;">
         <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(74,240,196,0.08) 0%,transparent 70%);pointer-events:none;"></div>
-        <div style="font-size:.78rem; font-family:'DM Mono',monospace; color:#4af0c4; text-transform:uppercase; letter-spacing:.08em; margin-bottom:1.25rem;" data-ln="pos.rev.label">✓ Revolution Network</div>
+        <div style="font-size:.78rem; font-family:'DM Mono',monospace; color:#4af0c4; text-transform:uppercase; letter-spacing:.08em; margin-bottom:1.25rem;" data-ln="pos.rev.label">? Revolution Network</div>
         <p style="font-size:.92rem; color:#c8d3e0; line-height:1.7; margin-bottom:1.25rem;" data-ln="pos.rev.desc">Le seul réseau d'exécution <strong style="color:#4af0c4;">general-purpose</strong> conçu pour les workloads web, data et AI — élastique, décentralisé, et modulaire.</p>
         <div style="display:flex; flex-direction:column; gap:.6rem;">
-          <div style="display:flex; align-items:center; gap:.6rem; font-size:.83rem; color:#9ca3af;" data-ln="pos.r1"><span style="color:#4af0c4;">✓</span> Web scraping distribué</div>
-          <div style="display:flex; align-items:center; gap:.6rem; font-size:.83rem; color:#9ca3af;" data-ln="pos.r2"><span style="color:#4af0c4;">✓</span> Orchestration API multi-étapes</div>
-          <div style="display:flex; align-items:center; gap:.6rem; font-size:.83rem; color:#9ca3af;" data-ln="pos.r3"><span style="color:#4af0c4;">✓</span> Traitement AI et data pipelines</div>
-          <div style="display:flex; align-items:center; gap:.6rem; font-size:.83rem; color:#9ca3af;" data-ln="pos.r4"><span style="color:#4af0c4;">✓</span> Incentives token natifs (ATH)</div>
+          <div style="display:flex; align-items:center; gap:.6rem; font-size:.83rem; color:#9ca3af;" data-ln="pos.r1"><span style="color:#4af0c4;">?</span> Web scraping distribué</div>
+          <div style="display:flex; align-items:center; gap:.6rem; font-size:.83rem; color:#9ca3af;" data-ln="pos.r2"><span style="color:#4af0c4;">?</span> Orchestration API multi-étapes</div>
+          <div style="display:flex; align-items:center; gap:.6rem; font-size:.83rem; color:#9ca3af;" data-ln="pos.r3"><span style="color:#4af0c4;">?</span> Traitement AI et data pipelines</div>
+          <div style="display:flex; align-items:center; gap:.6rem; font-size:.83rem; color:#9ca3af;" data-ln="pos.r4"><span style="color:#4af0c4;">?</span> Incentives token natifs (ATH)</div>
         </div>
         <div style="margin-top:1.25rem; font-size:.8rem; font-style:italic; color:#7a8799; padding-top:1rem; border-top:1px solid rgba(74,240,196,0.12);" data-ln="pos.note">Pour les acteurs enterprise comme Bright Data ou AWS, ce n'est pas une concurrence — c'est une couche d'expansion.</div>
       </div>
@@ -765,7 +786,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
         <span class="ln-pc-tag ln-pc-tag--green" data-ln="pricing.tag.free">Gratuit</span>
         <div class="ln-pc-name" data-ln="pricing.free.name">Forfait Free</div>
         <div class="ln-pc-price">0,00<span class="ln-pc-period" data-ln="pricing.period">/ mois</span></div>
-        <div class="ln-pc-gb" data-ln="pricing.free.gb">🚀 3 GB / semaine</div>
+        <div class="ln-pc-gb" data-ln="pricing.free.gb">📦 3 GB / semaine</div>
         <div class="ln-pc-div"></div>
         <ul class="ln-pc-feats">
           <li data-ln="pricing.free.f1">3 GB compute / semaine (réinit. hebdo)</li>
@@ -781,7 +802,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
         <span class="ln-pc-tag" data-ln="pricing.tag.novice">Novice</span>
         <div class="ln-pc-name" data-ln="pricing.novice.name">Novice API Plan – 60 GB</div>
         <div class="ln-pc-price">5,00 €<span class="ln-pc-period" data-ln="pricing.period">/ mois</span></div>
-        <div class="ln-pc-gb">🚀 <span data-ln="pricing.novice.gb">60 GB / par mois</span></div>
+        <div class="ln-pc-gb">📦 <span data-ln="pricing.novice.gb">60 GB / par mois</span></div>
         <div class="ln-pc-div"></div>
         <ul class="ln-pc-feats">
           <li data-ln="pricing.novice.f1">Forfait bande passante Novice</li>
@@ -799,7 +820,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
         <span class="ln-pc-tag ln-pc-tag--cyan" data-ln="pricing.tag.popular">Populaire</span>
         <div class="ln-pc-name" data-ln="pricing.standard.name">Standard Plan – 250 GB</div>
         <div class="ln-pc-price">20,00 €<span class="ln-pc-period" data-ln="pricing.period">/ mois</span></div>
-        <div class="ln-pc-gb">🚀 <span data-ln="pricing.standard.gb">250 GB / par mois</span></div>
+        <div class="ln-pc-gb">📦 <span data-ln="pricing.standard.gb">250 GB / par mois</span></div>
         <div class="ln-pc-div"></div>
         <ul class="ln-pc-feats">
           <li data-ln="pricing.standard.f1">Volume mensuel : 250 GB</li>
@@ -817,7 +838,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
         <span class="ln-pc-tag" data-ln="pricing.tag.pro">Pro</span>
         <div class="ln-pc-name" data-ln="pricing.pro.name">Pro Plan – 500 GB</div>
         <div class="ln-pc-price">40,00 €<span class="ln-pc-period" data-ln="pricing.period">/ mois</span></div>
-        <div class="ln-pc-gb">🚀 <span data-ln="pricing.pro.gb">500 GB / par mois</span></div>
+        <div class="ln-pc-gb">📦 <span data-ln="pricing.pro.gb">500 GB / par mois</span></div>
         <div class="ln-pc-div"></div>
         <ul class="ln-pc-feats">
           <li data-ln="pricing.pro.f1">Volume mensuel : 500 GB</li>
@@ -834,7 +855,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
         <span class="ln-pc-tag ln-pc-tag--amber" data-ln="pricing.tag.best">Meilleur ratio</span>
         <div class="ln-pc-name" data-ln="pricing.premium.name">Premium Plan – 1 500 GB</div>
         <div class="ln-pc-price">100,00 €<span class="ln-pc-period" data-ln="pricing.period">/ mois</span></div>
-        <div class="ln-pc-gb">🚀 <span data-ln="pricing.premium.gb">1 500 GB / par mois</span></div>
+        <div class="ln-pc-gb">📦 <span data-ln="pricing.premium.gb">1 500 GB / par mois</span></div>
         <div class="ln-pc-div"></div>
         <ul class="ln-pc-feats">
           <li data-ln="pricing.premium.f1">Volume mensuel : 1 500 GB</li>
@@ -851,7 +872,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
         <span class="ln-pc-tag ln-pc-tag--red" data-ln="pricing.tag.custom">Sur Mesure</span>
         <div class="ln-pc-name" data-ln="pricing.custom.name">Sur Mesure</div>
         <div class="ln-pc-price-custom" data-ln="pricing.custom.price">Sur devis<span class="ln-pc-period" data-ln="pricing.period">/ mois</span></div>
-        <div class="ln-pc-gb">⚡ <span data-ln="pricing.custom.gb">Volume illimité ou spécifique</span></div>
+        <div class="ln-pc-gb">? <span data-ln="pricing.custom.gb">Volume illimité ou spécifique</span></div>
         <div class="ln-pc-div"></div>
         <ul class="ln-pc-feats">
           <li data-ln="pricing.custom.f1">SLA personnalisé</li>
@@ -872,7 +893,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
     <h2 data-r data-ln="cta.h2">Commence à builder<br>aujourd'hui.</h2>
     <p data-r data-ln="cta.sub">3 GB gratuits par semaine. Aucune carte bancaire requise.</p>
     <div class="ln-cta-acts" data-r>
-      <button class="ln-btn-p" onclick="showLoginFromLanding()"><span data-ln="cta.btn.primary">Accéder au Dashboard</span> <span>→</span></button>
+      <button class="ln-btn-p" onclick="showLoginFromLanding()"><span data-ln="cta.btn.primary">Accéder au Dashboard</span> </button>
       <a class="ln-btn-s" href="https://discord.gg/eadE7uK6ss" target="_blank" data-ln="cta.btn.secondary">Rejoindre le Discord</a>
     </div>
   </section>
@@ -1024,7 +1045,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
                     </svg>
-                    <span>🚨 Réparation GB</span>
+                    <span>🔧 Réparation GB</span>
                 </button>
                 <button id="menu-wallet" class="menu-item" onclick="setPage('wallet')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1112,7 +1133,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                         </svg>
                         <span id="header-notifications-dot" style="position:absolute;right:6px;bottom:6px;width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 8px rgba(239,68,68,0.7);display:none;"></span>
                     </button>
-                    <div class="user-avatar">M</div>
+                    <img src="/logo_profil.jpg" class="user-avatar" alt="Profil">
                     <button id="header-login-btn" class="profile-btn primary" style="display:none;" onclick="setPage('login')">Sign in</button>
                     <select id="lang-switch" style="margin-left:10px;padding:6px 8px;border-radius:8px;background:#0b0f14;color:#fff;border:1px solid #1f2937;">
                         <option value="fr">FR</option>
@@ -1202,7 +1223,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'nav.jobs': 'Jobs',
               'nav.how': 'Comment ça marche',
               'nav.discord': 'Discord',
-              'nav.signin': 'Se connecter →',
+              'nav.signin': 'Se connecter',
               'badge': 'DePIN · Compute · API',
               'hero.h1.before': 'Compute décentralisé.',
               'hero.h1.accent': 'Une seule API.',
@@ -1238,7 +1259,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'cta.btn.primary': 'Accéder au Dashboard',
               'cta.btn.secondary': 'Rejoindre le Discord',
               'nav.nodes': 'Opérateurs de nodes',
-              'node.tag': '🪂 Pour les opérateurs de nodes',
+              'node.tag': '🖥️ Pour les opérateurs de nodes',
               'node.h2': 'Fais tourner un node.<br><span>Gagne des tokens ATH.</span>',
               'node.h2.accent': 'Gagne des tokens ATH.',
               'node.desc': "Pas besoin de serveur dédié. Installe le node Revolution sur ton PC Windows, laisse-le tourner en arrière-plan, et accumule des points convertis en ATH à chaque airdrop saisonnier.",
@@ -1246,8 +1267,8 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'node.perk2': "<strong>Juste ta bande passante</strong> — le node est léger, discret, tourne en arrière-plan sans impacter tes performances.",
               'node.perk3': "<strong>Multiplicateur d'uptime</strong> — plus tu es fiable, plus ta part de l'airdrop est élevée. 99 %+ = bonus x2.",
               'node.perk4': "<strong>Zéro risque</strong> — chaque job s'exécute en sandbox isolé. Ton système n'est jamais exposé.",
-              'node.btn.primary': '🚀 Installer le node gratuitement',
-              'node.btn.secondary': 'Rejoindre le Discord →',
+              'node.btn.primary': '⬇️ Installer le node gratuitement',
+              'node.btn.secondary': 'Rejoindre le Discord ?',
               'node.card1.label': 'Récompense',
               'node.card1.val': 'ATH tokens',
               'node.card1.sub': 'Distribués à chaque airdrop selon tes points',
@@ -1360,7 +1381,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'roadmap.p3.desc': 'Abonnements enterprise, scaling DePIN, déploiement du système de gouvernance.',
               'roadmap.p4.title': 'Décentralisation',
               'roadmap.p4.desc': 'Protocole entièrement décentralisé, marketplace compute mondial, gouvernance DAO.',
-              'roadmap.status.current': '✓ En cours',
+              'roadmap.status.current': '? En cours',
               'roadmap.status.upcoming': 'À venir',
               // Tokenomics
               'tok.label': 'Tokenomics',
@@ -1380,19 +1401,19 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'pos.label': 'Positionnement',
               'pos.h2': 'Les autres sont étroits.<br>Nous sommes general-purpose.',
               'pos.sub': 'Aucun concurrent n\'adresse simultanément les quatre verticaux où Revolution Network opère.',
-              'pos.others.label': '❌ Les autres',
+              'pos.others.label': '? Les autres',
               'pos.c1': '<strong style="color:#c8d3e0;">Réseaux VPN DePIN</strong> — bande passante sans exécution',
               'pos.c2': '<strong style="color:#c8d3e0;">Réseaux GPU-only</strong> — compute lourd, aucun workload web',
               'pos.c3': '<strong style="color:#c8d3e0;">API providers statiques</strong> — centralisés, fragiles, chers à l\'échelle',
-              'pos.rev.label': '✓ Revolution Network',
+              'pos.rev.label': '? Revolution Network',
               'pos.rev.desc': 'Le seul réseau d\'exécution <strong style="color:#4af0c4;">general-purpose</strong> conçu pour les workloads web, data et AI — élastique, décentralisé, et modulaire.',
-              'pos.r1': '<span style="color:#4af0c4;">✓</span> Web scraping distribué',
-              'pos.r2': '<span style="color:#4af0c4;">✓</span> Orchestration API multi-étapes',
-              'pos.r3': '<span style="color:#4af0c4;">✓</span> Traitement AI et data pipelines',
-              'pos.r4': '<span style="color:#4af0c4;">✓</span> Incentives token natifs (ATH)',
+              'pos.r1': '<span style="color:#4af0c4;">?</span> Web scraping distribué',
+              'pos.r2': '<span style="color:#4af0c4;">?</span> Orchestration API multi-étapes',
+              'pos.r3': '<span style="color:#4af0c4;">?</span> Traitement AI et data pipelines',
+              'pos.r4': '<span style="color:#4af0c4;">?</span> Incentives token natifs (ATH)',
               'pos.note': 'Pour les acteurs enterprise comme Bright Data ou AWS, ce n\'est pas une concurrence — c\'est une couche d\'expansion.',
               // Pricing free gb
-              'pricing.free.gb': '🚀 3 GB / semaine',
+              'pricing.free.gb': '📦 3 GB / semaine',
               // Extra code cards
               'qs.card3.title': 'bash · Scraping intelligent',
               'qs.card4.title': 'javascript · SDK npm',
@@ -1404,7 +1425,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'nav.jobs': 'Jobs',
               'nav.how': 'How it works',
               'nav.discord': 'Discord',
-              'nav.signin': 'Sign in →',
+              'nav.signin': 'Sign in',
               'badge': 'DePIN · Compute · API',
               'hero.h1.before': 'Decentralized compute.',
               'hero.h1.accent': 'One single API.',
@@ -1440,7 +1461,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'cta.btn.primary': 'Go to Dashboard',
               'cta.btn.secondary': 'Join our Discord',
               'nav.nodes': 'Node operators',
-              'node.tag': '⚡ For node operators',
+              'node.tag': '? For node operators',
               'node.h2': 'Contribute to the network.<br><span>Earn ATH.</span>',
               'node.h2.accent': 'Earn ATH.',
               'node.desc': 'No dedicated server or advanced skills needed. Install the Revolution node on your machine, let it run in the background, and accumulate points converted into ATH tokens at each seasonal airdrop.',
@@ -1448,8 +1469,8 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'node.perk2': '<strong>Just your bandwidth</strong> — the node uses your idle internet connection. Lightweight, discreet, configurable.',
               'node.perk3': '<strong>Reputation multiplier</strong> — the higher your uptime, the larger your share of each airdrop.',
               'node.perk4': '<strong>Zero risk</strong> — every job runs in an isolated sandbox. Your system is never exposed.',
-              'node.btn.primary': '🚀 Install the node',
-              'node.btn.secondary': 'Learn more →',
+              'node.btn.primary': '⬇️ Install the node',
+              'node.btn.secondary': 'Learn more ?',
               'node.card1.label': 'Seasonal airdrop',
               'node.card1.val': 'ATH tokens',
               'node.card1.sub': 'Distributed periodically based on your accumulated points',
@@ -1562,7 +1583,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'roadmap.p3.desc': 'Enterprise subscriptions, DePIN scaling, governance system deployment.',
               'roadmap.p4.title': 'Decentralization',
               'roadmap.p4.desc': 'Fully decentralized protocol, global compute marketplace, DAO governance.',
-              'roadmap.status.current': '✓ In progress',
+              'roadmap.status.current': '? In progress',
               'roadmap.status.upcoming': 'Coming soon',
               // Tokenomics
               'tok.label': 'Tokenomics',
@@ -1582,19 +1603,19 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'pos.label': 'Positioning',
               'pos.h2': 'Others are narrow.<br>We are general-purpose.',
               'pos.sub': 'No competitor simultaneously addresses the four verticals where Revolution Network operates.',
-              'pos.others.label': '❌ The others',
+              'pos.others.label': '? The others',
               'pos.c1': '<strong style="color:#c8d3e0;">DePIN VPN networks</strong> — bandwidth without execution',
               'pos.c2': '<strong style="color:#c8d3e0;">GPU-only networks</strong> — heavy compute, no web workloads',
               'pos.c3': '<strong style="color:#c8d3e0;">Static API providers</strong> — centralized, fragile, expensive at scale',
-              'pos.rev.label': '✓ Revolution Network',
+              'pos.rev.label': '? Revolution Network',
               'pos.rev.desc': 'The only <strong style="color:#4af0c4;">general-purpose</strong> execution network designed for web, data and AI workloads — elastic, decentralized, and modular.',
-              'pos.r1': '<span style="color:#4af0c4;">✓</span> Distributed web scraping',
-              'pos.r2': '<span style="color:#4af0c4;">✓</span> Multi-step API orchestration',
-              'pos.r3': '<span style="color:#4af0c4;">✓</span> AI processing and data pipelines',
-              'pos.r4': '<span style="color:#4af0c4;">✓</span> Native token incentives (ATH)',
+              'pos.r1': '<span style="color:#4af0c4;">?</span> Distributed web scraping',
+              'pos.r2': '<span style="color:#4af0c4;">?</span> Multi-step API orchestration',
+              'pos.r3': '<span style="color:#4af0c4;">?</span> AI processing and data pipelines',
+              'pos.r4': '<span style="color:#4af0c4;">?</span> Native token incentives (ATH)',
               'pos.note': 'For enterprise players like Bright Data or AWS, this isn\'t competition — it\'s an expansion layer.',
               // Pricing free gb
-              'pricing.free.gb': '🚀 3 GB / week',
+              'pricing.free.gb': '📦 3 GB / week',
               // Extra code cards
               'qs.card3.title': 'bash · Smart scraping',
               'qs.card4.title': 'javascript · npm SDK',
@@ -1606,7 +1627,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'nav.jobs': 'Jobs',
               'nav.how': 'Cómo funciona',
               'nav.discord': 'Discord',
-              'nav.signin': 'Iniciar sesión →',
+              'nav.signin': 'Iniciar sesi\u00f3n',
               'badge': 'DePIN · Compute · API',
               'hero.h1.before': 'Compute descentralizado.',
               'hero.h1.accent': 'Una sola API.',
@@ -1642,7 +1663,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'cta.btn.primary': 'Ir al Dashboard',
               'cta.btn.secondary': 'Unirse al Discord',
               'nav.nodes': 'Operadores de nodos',
-              'node.tag': '⚡ Para operadores de nodos',
+              'node.tag': '? Para operadores de nodos',
               'node.h2': 'Contribuye a la red.<br><span>Recibe ATH.</span>',
               'node.h2.accent': 'Recibe ATH.',
               'node.desc': 'No necesitas servidor dedicado ni conocimientos avanzados. Instala el nodo Revolution en tu máquina, déjalo correr en segundo plano y acumula puntos convertidos en ATH en cada airdrop estacional.',
@@ -1650,8 +1671,8 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'node.perk2': '<strong>Solo tu ancho de banda</strong> — el nodo usa tu conexión inactiva. Ligero, discreto, configurable.',
               'node.perk3': '<strong>Multiplicador de reputación</strong> — a mayor uptime, mayor será tu parte del airdrop.',
               'node.perk4': '<strong>Cero riesgo</strong> — cada job se ejecuta en un sandbox aislado. Tu sistema nunca queda expuesto.',
-              'node.btn.primary': '🚀 Instalar el nodo',
-              'node.btn.secondary': 'Más información →',
+              'node.btn.primary': '⬇️ Instalar el nodo',
+              'node.btn.secondary': 'Más información ?',
               'node.card1.label': 'Airdrop estacional',
               'node.card1.val': 'ATH tokens',
               'node.card1.sub': 'Distribuidos periódicamente según tus puntos acumulados',
@@ -1764,7 +1785,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'roadmap.p3.desc': 'Suscripciones enterprise, escalado DePIN, despliegue del sistema de gobernanza.',
               'roadmap.p4.title': 'Descentralización',
               'roadmap.p4.desc': 'Protocolo completamente descentralizado, marketplace compute mundial, gobernanza DAO.',
-              'roadmap.status.current': '✓ En curso',
+              'roadmap.status.current': '? En curso',
               'roadmap.status.upcoming': 'Próximamente',
               // Tokenomics
               'tok.label': 'Tokenomics',
@@ -1784,19 +1805,19 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
               'pos.label': 'Posicionamiento',
               'pos.h2': 'Los demás son limitados.<br>Nosotros somos general-purpose.',
               'pos.sub': 'Ningún competidor aborda simultáneamente los cuatro verticales donde opera Revolution Network.',
-              'pos.others.label': '❌ Los demás',
+              'pos.others.label': '? Los demás',
               'pos.c1': '<strong style="color:#c8d3e0;">Redes VPN DePIN</strong> — ancho de banda sin ejecución',
               'pos.c2': '<strong style="color:#c8d3e0;">Redes GPU-only</strong> — compute pesado, sin workloads web',
               'pos.c3': '<strong style="color:#c8d3e0;">API providers estáticos</strong> — centralizados, frágiles, caros a escala',
-              'pos.rev.label': '✓ Revolution Network',
+              'pos.rev.label': '? Revolution Network',
               'pos.rev.desc': 'La única red de ejecución <strong style="color:#4af0c4;">general-purpose</strong> diseñada para workloads web, data e AI — elástica, descentralizada y modular.',
-              'pos.r1': '<span style="color:#4af0c4;">✓</span> Web scraping distribuido',
-              'pos.r2': '<span style="color:#4af0c4;">✓</span> Orquestación API multi-paso',
-              'pos.r3': '<span style="color:#4af0c4;">✓</span> Procesamiento AI y data pipelines',
-              'pos.r4': '<span style="color:#4af0c4;">✓</span> Incentivos token nativos (ATH)',
+              'pos.r1': '<span style="color:#4af0c4;">?</span> Web scraping distribuido',
+              'pos.r2': '<span style="color:#4af0c4;">?</span> Orquestación API multi-paso',
+              'pos.r3': '<span style="color:#4af0c4;">?</span> Procesamiento AI y data pipelines',
+              'pos.r4': '<span style="color:#4af0c4;">?</span> Incentivos token nativos (ATH)',
               'pos.note': 'Para actores enterprise como Bright Data o AWS, esto no es competencia — es una capa de expansión.',
               // Pricing free gb
-              'pricing.free.gb': '🚀 3 GB / semana',
+              'pricing.free.gb': '📦 3 GB / semana',
               // Extra code cards
               'qs.card3.title': 'bash · Scraping inteligente',
               'qs.card4.title': 'javascript · SDK npm',
@@ -1817,7 +1838,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
             if (sel) sel.value = lang;
             // Update signin button text
             const signinBtn = document.getElementById('ln-signin-btn');
-            if (signinBtn) signinBtn.textContent = dict['nav.signin'] || 'Se connecter →';
+            if (signinBtn) signinBtn.textContent = dict['nav.signin'] || 'Se connecter';
             // Update all data-ln elements
             document.querySelectorAll('#landing-page [data-ln]').forEach(el => {
               const key = el.getAttribute('data-ln');
@@ -1933,7 +1954,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 }
               }
             }
-            // All endpoints failed — nodes/users → Maintenance badge, others stay —
+            // All endpoints failed — nodes/users ? Maintenance badge, others stay —
             setStatStatus('ls-nodes', false);
             setStatVal('ls-jobs',   '1 075+');
             setStatVal('ls-uptime', '—');
@@ -2034,7 +2055,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
             : 'https://api.revolution-network.fr';
         
         const LANGS = { fr: { locale: 'fr-FR' }, en: { locale: 'en-US' }, es: { locale: 'es-ES' } };
-        let currentLang = localStorage.getItem('lang') || 'fr';
+        const browserLang = navigator.language?.slice(0,2); const defaultLang = ['fr','en','es'].includes(browserLang) ? browserLang : 'en'; let currentLang = localStorage.getItem('lang') || defaultLang;
         let currentLocale = LANGS[currentLang]?.locale || 'fr-FR';
         const i18n = {
             fr: {
@@ -2249,13 +2270,13 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'enterprise.free_tier.video': 'Jobs vidéo désactivés',
                 'enterprise.topup.title': 'Achat de points supplémentaires (top-up)',
                 'shop.title': 'Boutique',
-                'shop.warning.banner': '⚠️ 90% des bénéfices du shop sont reversés au marketcap de la crypto pour renforcer le projet.',
+                'shop.warning.banner': '💰 90% des bénéfices du shop sont reversés au marketcap de la crypto pour renforcer le projet.',
                 'shop.empty': 'Aucune annonce pour le moment',
                 'shop.item.details.title': "Détails de l'article",
                 'shop.plans.title': 'Choisir un forfait',
                 'shop.plans.empty': 'Aucun abonnement disponible pour le moment',
-                'shop.example.costs': '🧠 Exemple de coût en points (simple)',
-                'shop.example.info': 'ⓘ Info: valeurs indicatives selon complexité',
+                'shop.example.costs': '💡 Exemple de coût en points (simple)',
+                'shop.example.info': '? Info: valeurs indicatives selon complexité',
                 'shop.activate_vpn': 'Activer le VPN',
                 'shop.activate_auto': 'Activer l’Auto”‘minage',
                 'shop.buy_now': 'Acheter maintenant',
@@ -2281,9 +2302,9 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'shop.plan.recommended_suffix': ' (recommandé)',
                 'shop.plan.button.request_quote': 'Demander un devis',
                 'shop.plan.button.subscribe': 'S’abonner',
-                'shop.plan.display.basic': '🟦 BASIC',
-                'shop.plan.display.pro_recommended': '🟪 PRO (recommandé)',
-                'shop.plan.display.business': '🟧 BUSINESS',
+                'shop.plan.display.basic': '⭐ BASIC',
+                'shop.plan.display.pro_recommended': '🚀 PRO (recommandé)',
+                'shop.plan.display.business': '💎 BUSINESS',
                 'shop.plan.feature.basic.1': 'Accès API',
                 'shop.plan.feature.basic.2': 'Dashboard entreprise',
                 'shop.plan.feature.basic.3': 'Support standard',
@@ -2308,6 +2329,49 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'shop.cost.text_transform': 'Transformation de texte',
                 'shop.cost.text_template': 'Génération de template texte',
                 'shop.cost.code_js': 'Exécution code JS (sandbox)',
+                'shop.crypto.title': 'Acheter des tokens ATH',
+                'shop.crypto.subtitle': 'Pré-vente — 0,10 € / ATH',
+                'shop.crypto.qty_label': 'Quantité ATH',
+                'shop.crypto.price_label': 'Total',
+                'shop.crypto.min': 'Minimum 10 ATH',
+                'shop.crypto.btn': 'Acheter',
+                'shop.crypto.err_min': 'Minimum 10 ATH',
+                'shop.crypto.err_login': 'Connectez-vous pour acheter.',
+                'shop.node.title': 'Node Passif — Supporter Node',
+                'shop.node.subtitle': '150,00 € — paiement unique',
+                'shop.bw.section': '// Recharge & Abonnements',
+                'shop.bw.intro': "Ach\u00e8te de la bande passante en une fois ou souscris un plan mensuel \u2014 le prix s\'adapte \u00e0 ta s\u00e9lection.",
+                'shop.bw.one_time_tag': '// Achat ponctuel',
+                'shop.bw.title': 'Recharge de bande passante',
+                'shop.bw.subtitle': 'Paiement unique \u00b7 Cr\u00e9dit\u00e9 imm\u00e9diatement apr\u00e8s confirmation Stripe.',
+                'shop.bw.tab_paliers': 'Paliers',
+                'shop.bw.tab_curseur': 'Curseur',
+                'shop.bw.tab_libre': 'Libre',
+                'shop.bw.custom_label': 'Volume (GB)',
+                'shop.bw.selected_vol': 'volume s\u00e9lectionn\u00e9',
+                'shop.bw.one_time_lbl': 'paiement unique',
+                'shop.bw.btn_buy': 'Acheter',
+                'shop.bw.err_login': 'Connectez-vous pour acheter.',
+                'shop.bw.err_pay': 'paiement impossible',
+                'shop.sub.tag': '// Plan mensuel',
+                'shop.sub.title': 'Abonnement mensuel',
+                'shop.sub.subtitle': 'GB + cr\u00e9dits renouvel\u00e9s chaque mois \u00b7 Annulable \u00e0 tout moment.',
+                'shop.sub.selected': 'plan s\u00e9lectionn\u00e9',
+                'shop.sub.gb_month': 'GB/mois',
+                'shop.sub.per_month': '/mois',
+                'shop.sub.credits_month': 'cr\u00e9dits/mois',
+                'shop.sub.btn_prefix': "S\'abonner \u2014",
+                'shop.sub.err_login': 'Connectez-vous pour vous abonner.',
+                'shop.sub.err_sub': 'abonnement impossible',
+                'shop.redirecting': 'Redirection...',
+                'shop.err_prefix': 'Erreur\u00a0: ',
+                'shop.node.desc': 'Soutenez Revolution Network en achetant un Node Passif. Ce node génère des récompenses ATH à chaque airdrop saisonnier selon votre uptime.',
+                'shop.node.f1': 'Récompenses ATH à chaque airdrop',
+                'shop.node.f2': 'Multiplicateur uptime inclus',
+                'shop.node.f3': 'Sandbox isolé — zéro risque',
+                'shop.node.f4': 'Tableau de bord dédié',
+                'shop.node.btn': 'Acheter le Node — 150 €',
+                'shop.node.err_login': 'Connectez-vous pour acheter.',
                 'wallet.event.stake_start': 'Stake démarré',
                 'wallet.event.stake_end': 'Stake clôturé',
                 'wallet.event.withdraw': 'Retrait',
@@ -2317,7 +2381,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'wallet.balance': 'Solde Aether',
                 'wallet.stake.active': 'Stake actif',
                 'wallet.none': 'Aucun',
-                'wallet.staking.title': 'Staking — 36.5% APY',
+                'wallet.staking.title': 'Staking — 16% APY',
                 'wallet.stake.balance': 'Solde Wallet',
                 'wallet.stake.amount': 'Montant à staker (Aether)',
                 'wallet.stake.btn': 'Stake',
@@ -2339,11 +2403,11 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'download.start.title': 'Démarrer le minage',
                 'download.start.step1': 'Téléchargez l’installateur Windows',
                 'download.start.step2': 'Installez l’application sur votre PC',
-                'download.start.step3': 'Connectez-vous et cliquez sur ▶',
+                'download.start.step3': 'Connectez-vous et cliquez sur ?',
                 'download.points.note': 'Les points rendent éligible au futur airdrop.',
                 'download.install': 'Download Node (.exe)',
                 'download.guide': 'Aide',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.43/Revolution-Network-Node-Setup-1.0.43.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.48/Revolution-Network-Node-Setup-1.0.48.exe',
                 'download.mac_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1-MAC/Revolution-Network-Node-Setup-1.0.23.dmg',
                 'download.mac.title': 'Version macOS (Beta)',
                 'download.mac.install': 'Download Node (.dmg)',
@@ -2374,8 +2438,8 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'download.recommended.step3': 'Choisissez le dossier d’installation si nécessaire.',
                 'download.recommended.step4': 'Un raccourci sera créé sur votre bureau.',
                 'download.recommended.step5': 'Lancez l’application et connectez-vous via le bouton “Sign in via website”.',
-                'download.recommended.step6': 'Appuyez sur le bouton ▶ pour commencer à gagner des points.',
-                'download.security.title': '🛡️ Sécurité & Windows SmartScreen',
+                'download.recommended.step6': 'Appuyez sur le bouton ? pour commencer à gagner des points.',
+                'download.security.title': '🔒 Sécurité & Windows SmartScreen',
                 'download.security.desc': "Lors de l'installation, Windows peut afficher un message d'alerte (\"Windows a protégé votre ordinateur\"). **Rassurez-vous, c'est tout à fait normal.** En tant que développeurs indépendants, notre application n'est pas encore \"connue\" par les serveurs de Microsoft. L'application est 100% sûre et ne contient aucun logiciel malveillant.",
                 'download.security.procedure': 'Pour continuer l\'installation, cliquez simplement sur **"Informations complémentaires"** puis sur le bouton **"Exécuter quand même"**.',
                 'tasks.title': 'Airdrop & Tâches',
@@ -2672,13 +2736,13 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'enterprise.free_tier.video': 'Video jobs disabled',
                 'enterprise.topup.title': 'Buy extra points (top-up)',
                 'shop.title': 'Shop',
-                'shop.warning.banner': '⚠️ 90% of shop profit is reinvested to strengthen the project.',
+                'shop.warning.banner': '💰 90% of shop profit is reinvested to strengthen the project.',
                 'shop.empty': 'No items available at the moment',
                 'shop.item.details.title': 'Item details',
                 'shop.plans.title': 'Choose plan',
                 'shop.plans.empty': 'No subscriptions available at the moment',
-                'shop.example.costs': '🧠 Example point costs (simple)',
-                'shop.example.info': 'ⓘ Info: indicative values based on complexity',
+                'shop.example.costs': '💡 Example point costs (simple)',
+                'shop.example.info': '? Info: indicative values based on complexity',
                 'shop.activate_vpn': 'Activate VPN',
                 'shop.activate_auto': 'Activate Auto”‘mining',
                 'shop.buy_now': 'Buy now',
@@ -2704,9 +2768,9 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'shop.plan.recommended_suffix': ' (recommended)',
                 'shop.plan.button.request_quote': 'Request quote',
                 'shop.plan.button.subscribe': 'Subscribe',
-                'shop.plan.display.basic': '🟦 BASIC',
-                'shop.plan.display.pro_recommended': '🟪 PRO (recommended)',
-                'shop.plan.display.business': '🟧 BUSINESS',
+                'shop.plan.display.basic': '⭐ BASIC',
+                'shop.plan.display.pro_recommended': '🚀 PRO (recommended)',
+                'shop.plan.display.business': '💎 BUSINESS',
                 'shop.plan.feature.basic.1': 'API access',
                 'shop.plan.feature.basic.2': 'Enterprise dashboard',
                 'shop.plan.feature.basic.3': 'Standard support',
@@ -2731,42 +2795,51 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'shop.cost.text_transform': 'Text transformation',
                 'shop.cost.text_template': 'Text template generation',
                 'shop.cost.code_js': 'JS code execution (sandbox)',
-                'wallet.event.stake_start': 'Stake started',
-                'wallet.event.stake_end': 'Stake closed',
-                'wallet.event.withdraw': 'Withdraw',
-                'wallet.event.credit': 'Credit',
-                'wallet.event.nft_node': 'Node Buy (Passive)',
-                'wallet.title': 'Aether Wallet (ATH)',
-                'wallet.balance': 'Aether Balance',
-                'wallet.stake.active': 'Active Stake',
-                'wallet.none': 'None',
-                'wallet.staking.title': 'Staking — 36.5% APY',
-                'wallet.stake.balance': 'Wallet balance',
-                'wallet.stake.amount': 'Amount to stake (Aether)',
-                'wallet.stake.btn': 'Stake',
-                'wallet.withdraw.amount': 'Withdraw (Aether)',
-                'wallet.withdraw.btn': 'Withdraw',
-                'wallet.unstake.btn': 'Unstake and credit',
-                'wallet.notice': 'Simulated interest. Withdrawal actually reduces your Aether balance.',
-                'wallet.history': 'History',
-                'wallet.nfts.title': 'NFTs',
-                'wallet.nfts.none': 'No NFTs',
-                'wallet.nfts.node': 'Node (Passive)',
-                'download.title': 'Download',
-                'download.p2p.title': 'P2P Network',
-                'download.p2p.desc': 'A peer”‘to”‘peer network connects users directly. Each browser becomes a node participating in computation and exchange.',
-                'download.p2p.list.resilience': 'Resilience',
-                'download.p2p.list.scalability': 'Scalability',
-                'download.p2p.list.privacy': 'Privacy',
-                'download.p2p.note': 'The browser becomes a distributed and instant I”‘Tech platform.',
-                'download.start.title': 'Start mining',
-                'download.start.step1': 'Download the Windows installer',
-                'download.start.step2': 'Install the app on your PC',
-                'download.start.step3': 'Sign in and click ▶',
-                'download.points.note': 'Points make you eligible for the future airdrop.',
-                'download.android.coming_soon': 'Coming Soon',
+                'shop.crypto.title': 'Buy ATH Tokens',
+                'shop.crypto.subtitle': 'Pre-sale — €0.10 / ATH',
+                'shop.crypto.qty_label': 'ATH Quantity',
+                'shop.crypto.price_label': 'Total',
+                'shop.crypto.min': 'Minimum 10 ATH',
+                'shop.crypto.btn': 'Buy',
+                'shop.crypto.err_min': 'Minimum 10 ATH',
+                'shop.crypto.err_login': 'Please sign in to buy.',
+                'shop.node.title': 'Passive Node — Supporter Node',
+                'shop.node.subtitle': '€150.00 — one-time payment',
+                'shop.bw.section': '// Bandwidth & Subscriptions',
+                'shop.bw.intro': 'Buy bandwidth once or subscribe to a monthly plan \u2014 price adjusts to your selection.',
+                'shop.bw.one_time_tag': '// One-time purchase',
+                'shop.bw.title': 'Bandwidth Top-up',
+                'shop.bw.subtitle': 'One-time payment \u00b7 Credited instantly after Stripe confirmation.',
+                'shop.bw.tab_paliers': 'Tiers',
+                'shop.bw.tab_curseur': 'Slider',
+                'shop.bw.tab_libre': 'Custom',
+                'shop.bw.custom_label': 'Volume (GB)',
+                'shop.bw.selected_vol': 'selected volume',
+                'shop.bw.one_time_lbl': 'one-time payment',
+                'shop.bw.btn_buy': 'Buy',
+                'shop.bw.err_login': 'Please log in to purchase.',
+                'shop.bw.err_pay': 'payment failed',
+                'shop.sub.tag': '// Monthly plan',
+                'shop.sub.title': 'Monthly Subscription',
+                'shop.sub.subtitle': 'GB + credits renewed each month \u00b7 Cancel anytime.',
+                'shop.sub.selected': 'selected plan',
+                'shop.sub.gb_month': 'GB/month',
+                'shop.sub.per_month': '/month',
+                'shop.sub.credits_month': 'credits/month',
+                'shop.sub.btn_prefix': 'Subscribe \u2014',
+                'shop.sub.err_login': 'Please log in to subscribe.',
+                'shop.sub.err_sub': 'subscription failed',
+                'shop.redirecting': 'Redirecting...',
+                'shop.err_prefix': 'Error: ',
+                'shop.node.desc': 'Support Revolution Network by purchasing a Passive Node. This node generates ATH rewards at each seasonal airdrop based on your uptime.',
+                'shop.node.f1': 'ATH rewards at each airdrop',
+                'shop.node.f2': 'Uptime multiplier included',
+                'shop.node.f3': 'Isolated sandbox — zero risk',
+                'shop.node.f4': 'Dedicated dashboard',
+                'shop.node.btn': 'Buy the Node — 150 €',
+                'shop.node.err_login': 'Log in to purchase.',
                 'download.android.coming_soon_desc': 'The Android mobile app is under development.',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.43/Revolution-Network-Node-Setup-1.0.43.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.48/Revolution-Network-Node-Setup-1.0.48.exe',
                 'download.mac_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1-MAC/Revolution-Network-Node-Setup-1.0.23.dmg',
                 'download.mac.title': 'macOS Version (Beta)',
                 'download.mac.install': 'Download Node (.dmg)',
@@ -2795,8 +2868,8 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'download.recommended.step3': 'Choose the installation folder if necessary.',
                 'download.recommended.step4': 'A shortcut will be created on your desktop.',
                 'download.recommended.step5': 'Launch the app and sign in via the “Sign in via website” button.',
-                'download.recommended.step6': 'Press the ▶ button to start earning points.',
-                'download.security.title': '🛡️ Security & Windows SmartScreen',
+                'download.recommended.step6': 'Press the ? button to start earning points.',
+                'download.security.title': '🔒 Security & Windows SmartScreen',
                 'download.security.desc': "During installation, Windows may display a warning message (\"Windows protected your PC\"). **Rest assured, this is completely normal.** As independent developers, our application is not yet \"known\" by Microsoft's servers. The application is 100% safe and contains no malware.",
                 'download.security.procedure': 'To continue with the installation, simply click on **"More info"** and then on the **"Run anyway"** button.',
                 'tasks.title': 'Tasks',
@@ -2933,13 +3006,13 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'enterprise.free_tier.video': 'Video jobs disabled',
                 'enterprise.topup.title': 'Buy extra points (top-up)',
                 'shop.title': 'Shop',
-                'shop.warning.banner': '⚠️ 90% of shop profit is reinvested to strengthen the project.',
+                'shop.warning.banner': '💰 90% of shop profit is reinvested to strengthen the project.',
                 'shop.empty': 'No items available right now',
                 'shop.item.details.title': 'Item details',
                 'shop.plans.title': 'Choose a plan',
                 'shop.plans.empty': 'No subscriptions available right now',
-                'shop.example.costs': '🧠 Example point costs (simple)',
-                'shop.example.info': 'ⓘ Info: indicative values by complexity',
+                'shop.example.costs': '💡 Example point costs (simple)',
+                'shop.example.info': '? Info: indicative values by complexity',
                 'shop.activate_vpn': 'Enable VPN',
                 'shop.activate_auto': 'Enable Auto”‘mining',
                 'shop.buy_now': 'Buy now',
@@ -2965,9 +3038,9 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'shop.plan.recommended_suffix': ' (recommended)',
                 'shop.plan.button.request_quote': 'Request a quote',
                 'shop.plan.button.subscribe': 'Subscribe',
-                'shop.plan.display.basic': '🟦 BASIC',
-                'shop.plan.display.pro_recommended': '🟪 PRO (recommended)',
-                'shop.plan.display.business': '🟧 BUSINESS',
+                'shop.plan.display.basic': '⭐ BASIC',
+                'shop.plan.display.pro_recommended': '🚀 PRO (recommended)',
+                'shop.plan.display.business': '💎 BUSINESS',
                 'shop.plan.feature.basic.1': 'API access',
                 'shop.plan.feature.basic.2': 'Enterprise dashboard',
                 'shop.plan.feature.basic.3': 'Standard support',
@@ -3001,7 +3074,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'wallet.balance': 'Aether balance',
                 'wallet.stake.active': 'Active stake',
                 'wallet.none': 'None',
-                'wallet.staking.title': 'Staking — 36.5% APY',
+                'wallet.staking.title': 'Staking — 16% APY',
                 'wallet.stake.balance': 'Wallet balance',
                 'wallet.stake.amount': 'Amount to stake (Aether)',
                 'wallet.stake.btn': 'Stake',
@@ -3023,7 +3096,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'download.start.title': 'Start Mining',
                 'download.start.step1': 'Download the Windows installer',
                 'download.start.step2': 'Install the app on your PC',
-                'download.start.step3': 'Sign in and click ▶',
+                'download.start.step3': 'Sign in and click ?',
                 'download.points.note': 'Points make you eligible for the future airdrop.',
                 'download.install': 'Start Installation (.exe)',
                 'download.guide': 'Help',
@@ -3041,8 +3114,8 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'download.recommended.step3': 'Choose the installation folder if necessary.',
                 'download.recommended.step4': 'A shortcut will be created on your desktop.',
                 'download.recommended.step5': 'Launch the app and sign in via the “Sign in via website” button.',
-                'download.recommended.step6': 'Press the ▶ button to start earning points.',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.43/Revolution-Network-Node-Setup-1.0.43.exe',
+                'download.recommended.step6': 'Press the ? button to start earning points.',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.48/Revolution-Network-Node-Setup-1.0.48.exe',
                 'download.mac_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1-MAC/Revolution-Network-Node-Setup-1.0.23.dmg',
                 'download.mac.title': 'macOS Version (Beta)',
                 'download.mac.install': 'Download Node (.dmg)',
@@ -3355,13 +3428,13 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'enterprise.free_tier.video': 'Jobs de video desactivados',
                 'enterprise.topup.title': 'Comprar puntos extra (top-up)',
                 'shop.title': 'Tienda',
-                'shop.warning.banner': '⚠️ El 90% del beneficio de la tienda se reinvierte para fortalecer el proyecto.',
+                'shop.warning.banner': '💰 El 90% del beneficio de la tienda se reinvierte para fortalecer el proyecto.',
                 'shop.empty': 'No hay artículos disponibles por el momento',
                 'shop.item.details.title': 'Detalles del artículo',
                 'shop.plans.title': 'Elegir plan',
                 'shop.plans.empty': 'No hay suscripciones disponibles por el momento',
-                'shop.example.costs': '🧠 Ejemplo de costos en puntos (simple)',
-                'shop.example.info': 'ⓘ Info: valores indicativos según complejidad',
+                'shop.example.costs': '💡 Ejemplo de costos en puntos (simple)',
+                'shop.example.info': '? Info: valores indicativos según complejidad',
                 'shop.activate_vpn': 'Activar VPN',
                 'shop.activate_auto': 'Activar Auto”‘minería',
                 'shop.buy_now': 'Comprar ahora',
@@ -3387,9 +3460,9 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'shop.plan.recommended_suffix': ' (recomendado)',
                 'shop.plan.button.request_quote': 'Solicitar presupuesto',
                 'shop.plan.button.subscribe': 'Suscribirse',
-                'shop.plan.display.basic': '🟦 BASIC',
-                'shop.plan.display.pro_recommended': '🟪 PRO (recomendado)',
-                'shop.plan.display.business': '🟧 BUSINESS',
+                'shop.plan.display.basic': '⭐ BASIC',
+                'shop.plan.display.pro_recommended': '🚀 PRO (recomendado)',
+                'shop.plan.display.business': '💎 BUSINESS',
                 'shop.plan.feature.basic.1': 'Acceso a la API',
                 'shop.plan.feature.basic.2': 'Panel de empresa',
                 'shop.plan.feature.basic.3': 'Soporte estándar',
@@ -3414,6 +3487,49 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'shop.cost.text_transform': 'Transformación de texto',
                 'shop.cost.text_template': 'Generación de plantillas de texto',
                 'shop.cost.code_js': 'Ejecución de código JS (sandbox)',
+                'shop.crypto.title': 'Comprar tokens ATH',
+                'shop.crypto.subtitle': 'Preventa — 0,10 € / ATH',
+                'shop.crypto.qty_label': 'Cantidad ATH',
+                'shop.crypto.price_label': 'Total',
+                'shop.crypto.min': 'Mínimo 10 ATH',
+                'shop.crypto.btn': 'Comprar',
+                'shop.crypto.err_min': 'Mínimo 10 ATH',
+                'shop.crypto.err_login': 'Inicia sesión para comprar.',
+                'shop.node.title': 'Nodo Pasivo — Supporter Node',
+                'shop.node.subtitle': '150,00 € — pago único',
+                'shop.bw.section': '// Ancho de banda & Suscripciones',
+                'shop.bw.intro': 'Compra ancho de banda una vez o suscr\u00edbete a un plan mensual \u2014 el precio se adapta a tu selecci\u00f3n.',
+                'shop.bw.one_time_tag': '// Compra \u00fanica',
+                'shop.bw.title': 'Recarga de ancho de banda',
+                'shop.bw.subtitle': 'Pago \u00fanico \u00b7 Acreditado inmediatamente tras confirmaci\u00f3n de Stripe.',
+                'shop.bw.tab_paliers': 'Niveles',
+                'shop.bw.tab_curseur': 'Deslizador',
+                'shop.bw.tab_libre': 'Libre',
+                'shop.bw.custom_label': 'Volumen (GB)',
+                'shop.bw.selected_vol': 'volumen seleccionado',
+                'shop.bw.one_time_lbl': 'pago \u00fanico',
+                'shop.bw.btn_buy': 'Comprar',
+                'shop.bw.err_login': 'Inicia sesi\u00f3n para comprar.',
+                'shop.bw.err_pay': 'pago fallido',
+                'shop.sub.tag': '// Plan mensual',
+                'shop.sub.title': 'Suscripci\u00f3n mensual',
+                'shop.sub.subtitle': 'GB + cr\u00e9ditos renovados cada mes \u00b7 Cancelable en cualquier momento.',
+                'shop.sub.selected': 'plan seleccionado',
+                'shop.sub.gb_month': 'GB/mes',
+                'shop.sub.per_month': '/mes',
+                'shop.sub.credits_month': 'cr\u00e9ditos/mes',
+                'shop.sub.btn_prefix': 'Suscribirse \u2014',
+                'shop.sub.err_login': 'Inicia sesi\u00f3n para suscribirte.',
+                'shop.sub.err_sub': 'suscripci\u00f3n fallida',
+                'shop.redirecting': 'Redirigiendo...',
+                'shop.err_prefix': 'Error: ',
+                'shop.node.desc': 'Apoya Revolution Network comprando un Nodo Pasivo. Este nodo genera recompensas ATH en cada airdrop estacional según tu uptime.',
+                'shop.node.f1': 'Recompensas ATH en cada airdrop',
+                'shop.node.f2': 'Multiplicador de uptime incluido',
+                'shop.node.f3': 'Sandbox aislado — cero riesgo',
+                'shop.node.f4': 'Panel dedicado',
+                'shop.node.btn': 'Comprar el Node — 150 €',
+                'shop.node.err_login': 'Inicia sesion para comprar.',
                 'wallet.event.stake_start': 'Stake iniciado',
                 'wallet.event.stake_end': 'Stake cerrado',
                 'wallet.event.withdraw': 'Retiro',
@@ -3423,7 +3539,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'wallet.balance': 'Saldo Aether',
                 'wallet.stake.active': 'Stake activo',
                 'wallet.none': 'Ninguno',
-                'wallet.staking.title': 'Staking — 36.5% APY',
+                'wallet.staking.title': 'Staking — 16% APY',
                 'wallet.stake.balance': 'Saldo de cartera',
                 'wallet.stake.amount': 'Cantidad a stakear (Aether)',
                 'wallet.stake.btn': 'Stake',
@@ -3445,7 +3561,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'download.start.title': 'Iniciar minería',
                 'download.start.step1': 'Descarga el instalador de Windows',
                 'download.start.step2': 'Instala la aplicación en tu PC',
-                'download.start.step3': 'Inicia sesión y haz clic en ▶',
+                'download.start.step3': 'Inicia sesión y haz clic en ?',
                 'download.points.note': 'Los puntos te hacen elegible para el futuro airdrop.',
                 'download.install': 'Iniciar instalación (.exe)',
                 'download.guide': 'Ayuda',
@@ -3534,7 +3650,33 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 'landing.pricing.plan.custom.f1': 'SLA personalizado',
                 'landing.pricing.plan.custom.f2': 'Prioridad dedicada',
                 'landing.pricing.plan.custom.f3': 'Infraestructura a medida',
-                'landing.pricing.plan.custom.f4': 'Soporte dedicado 24/7'
+                'landing.pricing.plan.custom.f4': 'Soporte dedicado 24/7',
+                'shop.bw.section': '// Ancho de banda & Suscripciones',
+                'shop.bw.intro': 'Compra ancho de banda una vez o suscr\u00edbete a un plan mensual \u2014 el precio se adapta a tu selecci\u00f3n.',
+                'shop.bw.one_time_tag': '// Compra \u00fanica',
+                'shop.bw.title': 'Recarga de ancho de banda',
+                'shop.bw.subtitle': 'Pago \u00fanico \u00b7 Acreditado inmediatamente tras confirmaci\u00f3n de Stripe.',
+                'shop.bw.tab_paliers': 'Niveles',
+                'shop.bw.tab_curseur': 'Deslizador',
+                'shop.bw.tab_libre': 'Libre',
+                'shop.bw.custom_label': 'Volumen (GB)',
+                'shop.bw.selected_vol': 'volumen seleccionado',
+                'shop.bw.one_time_lbl': 'pago \u00fanico',
+                'shop.bw.btn_buy': 'Comprar',
+                'shop.bw.err_login': 'Inicia sesi\u00f3n para comprar.',
+                'shop.bw.err_pay': 'pago fallido',
+                'shop.sub.tag': '// Plan mensual',
+                'shop.sub.title': 'Suscripci\u00f3n mensual',
+                'shop.sub.subtitle': 'GB + cr\u00e9ditos renovados cada mes \u00b7 Cancelable en cualquier momento.',
+                'shop.sub.selected': 'plan seleccionado',
+                'shop.sub.gb_month': 'GB/mes',
+                'shop.sub.per_month': '/mes',
+                'shop.sub.credits_month': 'cr\u00e9ditos/mes',
+                'shop.sub.btn_prefix': 'Suscribirse \u2014',
+                'shop.sub.err_login': 'Inicia sesi\u00f3n para suscribirte.',
+                'shop.sub.err_sub': 'suscripci\u00f3n fallida',
+                'shop.redirecting': 'Redirigiendo...',
+                'shop.err_prefix': 'Error: ',
             }
         };
         function t(key) {
@@ -3732,7 +3874,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                 if (apiCred) apiCred.style.display = 'none';
                 if (headerRankBadge) headerRankBadge.style.display = 'none';
                 if (headerLogoutBtn) headerLogoutBtn.style.display = 'none';
-                if (userAvatar) userAvatar.style.display = 'none';
+                // if (userAvatar) userAvatar.style.display = "none";  // D�sactiv� : avatar toujours visible
                 if (supportBtn) supportBtn.style.display = 'none';
                 if (adminSupportBtn) adminSupportBtn.style.display = 'none';
                 const headerLoginBtn = document.getElementById('header-login-btn');
@@ -3805,10 +3947,10 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                     // Parrainage supprimé: pas d’affichage de parrainés
 
                     if (userAvatar) {
-                        userAvatar.style.display = 'flex';
-                        if (data.user.profile_picture_url) {
-                            // Ensure the URL is absolute if it starts with /public
-                            const bgUrl = `${API_BASE}${data.user.profile_picture_url}?t=${Date.now()}`;
+                        // Avatar forc� � logo_profil.jpg (ne pas modifier)
+                        userAvatar.src = "/logo_profil.jpg";
+                        userAvatar.style.display = "flex";
+                    }
                             userAvatar.style.backgroundImage = `url('${bgUrl}')`;
                             userAvatar.textContent = '';
                         } else if (data.user.username) {
@@ -4246,7 +4388,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                     </div>
 
                     <div class="page-header" style="justify-content: center; margin-bottom: 40px; width: 100%;">
-                        <h1 class="page-title neon-text" style="font-size: 2.5rem; text-transform: uppercase; letter-spacing: 4px; text-align: center; width: 100%;">
+                        <h1 class="page-title neon-text" style="font-size: 1.4rem; text-transform: uppercase; letter-spacing: 0.12em; text-align: center; width: 100%;">
                             ${t('login.title')}
                         </h1>
                     </div>
@@ -4493,7 +4635,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 🎉</spa
                     </div>
 
                     <div id="docs-scraping" class="glass-card" style="padding: 18px; border-radius: 14px; border: 1px solid #1f2937; background: rgba(17, 24, 39, 0.35); margin-bottom: 14px;">
-                        <h2 style="margin:0 0 10px 0;">🤖 ${t('docs.section.scraping')}</h2>
+                        <h2 style="margin:0 0 10px 0;">🕷️ ${t('docs.section.scraping')}</h2>
                         <div style="color:#9ca3af; line-height:1.7;">
                             <div style="margin-bottom:12px;"><strong>${t('docs.scraping.modes_title')}</strong> :</div>
                             <div>• <strong>auto</strong> (${t('docs.scraping.modes.auto')})</div>
@@ -4756,11 +4898,6 @@ main();</code></pre>
                             <div class="network-stat-label">Network Status</div>
                             <div class="network-stat-value status-live" id="net-status">LIVE</div>
                         </div>
-
-                        <div class="network-stat-item">
-                            <div class="network-stat-label">Total Uptime</div>
-                            <div class="network-stat-value neon-text-green" id="net-total-uptime">0h</div>
-                        </div>
                         <div class="network-stat-item">
                             <div class="network-stat-label">Bandwidth Processed</div>
                             <div class="network-stat-value neon-text-purple" id="net-total-bw">0 MB</div>
@@ -4788,7 +4925,7 @@ main();</code></pre>
                                 </div>
                                 <div class="stat-title">
                                     ${t('overview.seasonRewards')}
-                                    <span class="info-icon">ⓘ</span>
+                                    
                                 </div>
                             </div>
                             <div class="stat-value" id="dashboard-season-points">0</div>
@@ -4804,32 +4941,14 @@ main();</code></pre>
                                 </div>
                                 <div class="stat-title">
                                     ${t('overview.todayRewards')}
-                                    <span class="info-icon">ⓘ</span>
+                                    
                                 </div>
                             </div>
                             <div class="stat-value" id="dashboard-today-points">0</div>
                             <div class="stat-label">${t('overview.points')}</div>
                         </div>
 
-                        <div class="stat-card node-status">
-                            <div class="stat-header-row">
-                                <div class="stat-title">${t('overview.nodesStatus')}</div>
-                            </div>
-                            <div class="node-details">
-                                <div class="node-row">
-                                    <span>${t('overview.nodes')}</span>
-                                    <span class="node-type">${t('overview.nodeType')}</span>
-                                </div>
-                                <div class="node-row">
-                                    <span>${t('overview.total')}</span>
-                                    <span class="node-value" id="dashboard-total-nodes">0</span>
-                                </div>
-                                <div class="node-row">
-                                    <span>${t('overview.connected')}</span>
-                                    <span class="node-value connected" id="dashboard-active-nodes">0</span>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
 
                     <div class="chart-section">
@@ -4935,11 +5054,6 @@ main();</code></pre>
                 if (ns) ns.textContent = data.status;
                 const an = document.getElementById('net-active-nodes');
                 if (an) an.textContent = data.activeNodes;
-                const ut = document.getElementById('net-total-uptime');
-                if (ut) {
-                    const hrs = Math.floor(data.totalUptimeSeconds / 3600);
-                    ut.textContent = `${hrs.toLocaleString()}h`;
-                }
                 const bw = document.getElementById('net-total-bw');
                 if (bw) {
                     const totalBytes = data.totalBytesProcessed;
@@ -4948,6 +5062,7 @@ main();</code></pre>
                 }
                 const ar = document.getElementById('net-api-reqs');
                 if (ar) ar.textContent = data.apiRequestsHandled.toLocaleString();
+                try { localStorage.setItem('rn_cache_netstats', JSON.stringify(data)); } catch(e) {}
             }).catch(err => console.error('Network stats error:', err));
 
             fetch(`${API_BASE}/api/user/stats`, {
@@ -4978,6 +5093,7 @@ main();</code></pre>
                     
                     const activeNodes = document.getElementById('dashboard-active-nodes');
                     if (activeNodes) activeNodes.textContent = data.today.today_sessions || 0;
+                try { localStorage.setItem('rn_cache_userstats', JSON.stringify(data)); } catch(e) {}
                 }
             })
             .catch(err => console.error('Dashboard update error:', err));
@@ -4991,7 +5107,53 @@ main();</code></pre>
             })
             .then(r => r.json())
             .then(d => {
-                const list = Array.isArray(d.points) ? d.points : [];
+                const rawList = Array.isArray(d.points) ? d.points : [];
+                const granularityVal = select.value || "daily";
+                const buckets = {};
+                rawList.forEach(p => {
+                    const dObj = new Date(p.period);
+                    if (Number.isNaN(dObj.getTime())) return;
+                    let key;
+                    if (granularityVal === "yearly") {
+                        key = String(dObj.getFullYear());
+                    } else if (granularityVal === "monthly") {
+                        key = `${dObj.getFullYear()}-${String(dObj.getMonth()+1).padStart(2,"0")}`;
+                    } else if (granularityVal === "weekly") {
+                        const tmp = new Date(Date.UTC(dObj.getFullYear(), dObj.getMonth(), dObj.getDate()));
+                        const dayNum = tmp.getUTCDay() || 7;
+                        tmp.setUTCDate(tmp.getUTCDate() + 4 - dayNum);
+                        const isoYear = tmp.getUTCFullYear();
+                        const startOfYear = new Date(Date.UTC(isoYear, 0, 1));
+                        const week = Math.ceil((((tmp - startOfYear) / 86400000) + 1) / 7);
+                        key = `${isoYear}-W${String(week).padStart(2,"0")}`;
+                    } else {
+                        key = dObj.toISOString().slice(0, 10);
+                    }
+                    if (!buckets[key]) buckets[key] = { period: key, points: 0 };
+                    buckets[key].points += Number(p.points) || 0;
+                });
+                const nodesBuckets = {};
+                (Array.isArray(d.nodes) ? d.nodes : []).forEach(n => {
+                    const dObj = new Date(n.period);
+                    if (Number.isNaN(dObj.getTime())) return;
+                    let key;
+                    if (granularityVal === "yearly") key = String(dObj.getFullYear());
+                    else if (granularityVal === "monthly") key = `${dObj.getFullYear()}-${String(dObj.getMonth()+1).padStart(2,"0")}`;
+                    else if (granularityVal === "weekly") {
+                        const tmp = new Date(Date.UTC(dObj.getFullYear(), dObj.getMonth(), dObj.getDate()));
+                        const dayNum = tmp.getUTCDay() || 7;
+                        tmp.setUTCDate(tmp.getUTCDate() + 4 - dayNum);
+                        const isoYear = tmp.getUTCFullYear();
+                        const startOfYear = new Date(Date.UTC(isoYear, 0, 1));
+                        const week = Math.ceil((((tmp - startOfYear) / 86400000) + 1) / 7);
+                        key = `${isoYear}-W${String(week).padStart(2,"0")}`;
+                    } else key = dObj.toISOString().slice(0, 10);
+                    if (!nodesBuckets[key]) nodesBuckets[key] = 0;
+                    nodesBuckets[key] += n.sessions || 0;
+                });
+                const list = Object.values(buckets).sort((a,b) => a.period < b.period ? 1 : -1);
+                d.nodes = Object.entries(nodesBuckets).map(([period, sessions]) => ({ period, sessions }));
+                const _list = list;
                 if (list.length > 0) {
                     const rows = list.map(p => {
                         const nodeEntry = (d.nodes || []).find(n => n.period === p.period);
@@ -5387,7 +5549,7 @@ main();</code></pre>
             return `
                 <div class="page-content futuristic-referral">
                     <div class="page-header" style="justify-content: center; margin-bottom: 40px;">
-                        <h1 class="page-title neon-text" style="font-size: 2.5rem; text-transform: uppercase; letter-spacing: 4px;">
+                        <h1 class="page-title neon-text" style="font-size: 1.4rem; text-transform: uppercase; letter-spacing: 0.12em;">
                             ${t('referrals.title')}
                         </h1>
                     </div>
@@ -5688,7 +5850,7 @@ main();</code></pre>
                         const data = await res.json();
 
                         if (data.success) {
-                            connectWalletBtn.textContent = '✅ Connecté';
+                            connectWalletBtn.textContent = '? Connecté';
                             connectWalletBtn.style.background = '#14532d';
                             setTimeout(() => {
                                 connectWalletBtn.textContent = 'Connecter Wallet';
@@ -6177,20 +6339,7 @@ main();</code></pre>
 
                     <!-- Dashboard Stats Section -->
                     <div class="stats-grid" style="margin-bottom: 24px;">
-                        <div class="stat-card glass-card neon-border-green">
-                            <div class="stat-header">
-                                <div class="stat-icon green">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M5 12.55V17a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4.45"></path>
-                                        <path d="M7 15l5 5 5-5"></path>
-                                        <path d="M12 15V3"></path>
-                                    </svg>
-                                </div>
-                                <div class="stat-title">Bande Passante Disponible</div>
-                            </div>
-                            <div class="stat-value neon-text-green" id="ent-bandwidth-val">0 Mbps</div>
-                            <div class="stat-label">Réseau décentralisé</div>
-                        </div>
+                        
 
                         <div class="stat-card glass-card neon-border-purple">
                             <div class="stat-header">
@@ -6274,16 +6423,16 @@ main();</code></pre>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr><td>🖼️ <strong>image_svg_generate</strong></td><td style="color:#9ca3af;">Génération SVG avec texte</td><td style="text-align:right; color:#86efac; font-weight:600;">~2 MB</td></tr>
-                                        <tr><td>📝 <strong>text_transform</strong></td><td style="color:#9ca3af;">Transformation de texte</td><td style="text-align:right; color:#86efac; font-weight:600;">~1 MB</td></tr>
-                                        <tr><td>📄 <strong>text_generate_template</strong></td><td style="color:#9ca3af;">Génération de template</td><td style="text-align:right; color:#86efac; font-weight:600;">~1 MB</td></tr>
+                                        <tr><td>🎨 <strong>image_svg_generate</strong></td><td style="color:#9ca3af;">Génération SVG avec texte</td><td style="text-align:right; color:#86efac; font-weight:600;">~2 MB</td></tr>
+                                        <tr><td>✏️ <strong>text_transform</strong></td><td style="color:#9ca3af;">Transformation de texte</td><td style="text-align:right; color:#86efac; font-weight:600;">~1 MB</td></tr>
+                                        <tr><td>📝 <strong>text_generate_template</strong></td><td style="color:#9ca3af;">Génération de template</td><td style="text-align:right; color:#86efac; font-weight:600;">~1 MB</td></tr>
                                         <tr><td>⚙️ <strong>code_run_js</strong></td><td style="color:#9ca3af;">Exécution JS (sandbox VM)</td><td style="text-align:right; color:#86efac; font-weight:600;">~5 MB</td></tr>
-                                        <tr><td>🔍 <strong>http_get</strong></td><td style="color:#9ca3af;">Analyse Web simple</td><td style="text-align:right; color:#86efac; font-weight:600;">~1 MB</td></tr>
-                                        <tr><td>🤖 <strong>scrape_get</strong></td><td style="color:#9ca3af;">Scraping intelligent (auto/browser/css/ai)</td><td style="text-align:right; color:#86efac; font-weight:600;">~2 MB</td></tr>
-                                        <tr><td>🧪 <strong>content_check</strong></td><td style="color:#9ca3af;">Vérification de contenu</td><td style="text-align:right; color:#86efac; font-weight:600;">~5 MB</td></tr>
+                                        <tr><td>🌐 <strong>http_get</strong></td><td style="color:#9ca3af;">Analyse Web simple</td><td style="text-align:right; color:#86efac; font-weight:600;">~1 MB</td></tr>
+                                        <tr><td>🕷️ <strong>scrape_get</strong></td><td style="color:#9ca3af;">Scraping intelligent (auto/browser/css/ai)</td><td style="text-align:right; color:#86efac; font-weight:600;">~2 MB</td></tr>
+                                        <tr><td>✅ <strong>content_check</strong></td><td style="color:#9ca3af;">Vérification de contenu</td><td style="text-align:right; color:#86efac; font-weight:600;">~5 MB</td></tr>
                                         <tr><td>📄 <strong>ocr_pdf</strong></td><td style="color:#9ca3af;">OCR / Extraction PDF</td><td style="text-align:right; color:#60a5fa; font-weight:600;">~20 MB</td></tr>
-                                        <tr><td>📊 <strong>data_processing</strong></td><td style="color:#9ca3af;">Traitement de données</td><td style="text-align:right; color:#fbbf24; font-weight:600;">~100 MB</td></tr>
-                                        <tr><td>📈 <strong>csv_stats</strong></td><td style="color:#9ca3af;">Statistiques CSV</td><td style="text-align:right; color:#60a5fa; font-weight:600;">~10 MB</td></tr>
+                                        <tr><td>🔄 <strong>data_processing</strong></td><td style="color:#9ca3af;">Traitement de données</td><td style="text-align:right; color:#fbbf24; font-weight:600;">~100 MB</td></tr>
+                                        <tr><td>📊 <strong>csv_stats</strong></td><td style="color:#9ca3af;">Statistiques CSV</td><td style="text-align:right; color:#60a5fa; font-weight:600;">~10 MB</td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -6329,7 +6478,7 @@ main();</code></pre>
                                     <td>${p.type}</td>
                                     <td><span class="status-badge ${p.status}">${p.status}</span></td>
                                     <td>${new Date(p.timestamp).toLocaleString()}</td>
-                                    <td>${p.hasResult ? '✅ Vérifiée' : '⏳ En attente'}</td>
+                                    <td>${p.hasResult ? '? Vérifiée' : '? En attente'}</td>
                                 </tr>
                             `).join('');
                         } else {
@@ -6722,7 +6871,7 @@ main();</code></pre>
                                 const timerEl = document.getElementById(`task-timer-${st.taskId}`);
                                 if (timerEl) timerEl.textContent = t('tasks.validated');
 
-                                // Si c'est early_adopter → afficher félicitations basé sur approved (source de vérité)
+                                // Si c'est early_adopter ? afficher félicitations basé sur approved (source de vérité)
                                 const taskType = btn.getAttribute('data-type');
                                 if (taskType === 'early_adopter') {
                                     const taskItem = btn.closest('.task-item');
@@ -6737,7 +6886,7 @@ main();</code></pre>
                                             const congratsDiv = document.createElement('div');
                                             congratsDiv.className = 'ea-congrats glass-card';
                                             congratsDiv.style.cssText = 'margin-top:12px;padding:12px;border:1px solid #fbbf24;background:rgba(251,191,36,0.1);border-radius:12px;animation:pulse-gold 2s infinite;';
-                                            congratsDiv.innerHTML = '<div style="color:#fbbf24;font-size:1.1em;font-weight:bold;margin-bottom:4px;">🎊 Félicitations Early Adopter !</div><div style="color:#e5e7eb;font-size:0.85em;margin-top:4px;">Vous êtes l\'un des 50 premiers utilisateurs. Votre grade <span style="color:#fbbf24;font-weight:bold;">GOLD</span> et vos <span style="color:#fbbf24;font-weight:bold;">100 Aether</span> ont été crédités !</div>';
+                                            congratsDiv.innerHTML = '<div style="color:#fbbf24;font-size:1.1em;font-weight:bold;margin-bottom:4px;">🏆 Félicitations Early Adopter !</div><div style="color:#e5e7eb;font-size:0.85em;margin-top:4px;">Vous êtes l\'un des 50 premiers utilisateurs. Votre grade <span style="color:#fbbf24;font-weight:bold;">GOLD</span> et vos <span style="color:#fbbf24;font-weight:bold;">100 Aether</span> ont été crédités !</div>';
                                             
                                             extraInfo.appendChild(congratsDiv);
                                             
@@ -6797,7 +6946,7 @@ main();</code></pre>
                                                     const congratsDiv = document.createElement('div');
                                                     congratsDiv.className = 'ea-congrats glass-card';
                                                     congratsDiv.style.cssText = 'margin-top:12px;padding:12px;border:1px solid #fbbf24;background:rgba(251,191,36,0.1);border-radius:12px;animation:pulse-gold 2s infinite;';
-                                                    congratsDiv.innerHTML = '<div style="color:#fbbf24;font-size:1.1em;font-weight:bold;margin-bottom:4px;">🎊 Félicitations Early Adopter !</div><div style="color:#e5e7eb;font-size:0.85em;margin-top:4px;">Vous êtes l\'un des 50 premiers utilisateurs. Votre grade <span style="color:#fbbf24;font-weight:bold;">GOLD</span> et vos <span style="color:#fbbf24;font-weight:bold;">100 Aether</span> ont été crédités !</div>';
+                                                    congratsDiv.innerHTML = '<div style="color:#fbbf24;font-size:1.1em;font-weight:bold;margin-bottom:4px;">🏆 Félicitations Early Adopter !</div><div style="color:#e5e7eb;font-size:0.85em;margin-top:4px;">Vous êtes l\'un des 50 premiers utilisateurs. Votre grade <span style="color:#fbbf24;font-weight:bold;">GOLD</span> et vos <span style="color:#fbbf24;font-weight:bold;">100 Aether</span> ont été crédités !</div>';
                                                     
                                                     extraInfo.appendChild(congratsDiv);
                                                     
@@ -6994,7 +7143,7 @@ main();</code></pre>
                             <input id="admin-search-input" type="text" placeholder="Recherche (username ou email)"
                                    style="padding:8px;border:1px solid #374151;border-radius:6px;background:#111827;color:#e5e7eb;min-width:260px;">
                             <button class="profile-btn" id="admin-search-btn">Rechercher</button>
-                            <button class="profile-btn" onclick="openAdminNotificationModal()" title="Créer une notification">📣 Notification</button>
+                            <button class="profile-btn" onclick="openAdminNotificationModal()" title="Créer une notification">🔔 Notification</button>
                             <div id="admin-active-nodes-bubble" title="Nodes actifs sur le réseau en ce moment" style="display:inline-flex;align-items:center;gap:7px;background:rgba(74,240,196,0.12);border:1.5px solid rgba(74,240,196,0.35);border-radius:999px;padding:7px 16px 7px 12px;font-size:13px;font-weight:600;color:#4af0c4;cursor:default;white-space:nowrap;min-width:110px;transition:background .3s;">
                                 <span style="position:relative;display:inline-flex;align-items:center;justify-content:center;width:10px;height:10px;">
                                     <span style="position:absolute;inset:0;border-radius:50%;background:#4af0c4;animation:adminNodePulse 1.8s ease-in-out infinite;opacity:.5;"></span>
@@ -7105,7 +7254,7 @@ main();</code></pre>
                         <td>${u.email || ''}</td>
                         <td>
                             ${u.grade || '-'}
-                            ${u.cancel_at_period_end ? '<span class="badge badge-warning" title="Annulation planifiée">◷</span>' : ''}
+                            ${u.cancel_at_period_end ? '<span class="badge badge-warning" title="Annulation planifiée">?</span>' : ''}
                         </td>
                         <td>${u.points || 0}</td>
                         <td>${u.referral_count || 0}</td>
@@ -7346,7 +7495,196 @@ main();</code></pre>
                     <div class="page-header">
                         <h1 class="page-title">${t('shop.title')}</h1>
                     </div>
-                    <div class="shop-warning">${t('shop.warning.banner')}</div>
+
+                <!-- -----------------------------------------------------------
+                     RECHARGE BANDE PASSANTE + ABONNEMENT — widget billing
+                     ------------------------------------------------------- -->
+                <div id="rn-bw-wrap" style="width:100%;margin-bottom:2rem;">
+
+                  <!-- En-tête section -->
+                  <div style="margin-bottom:1.8rem;">
+                    <span style="font-family:'DM Mono',monospace;font-size:0.79rem;letter-spacing:.1em;text-transform:uppercase;color:#4af0c4;display:block;margin-bottom:.35rem;">${t('shop.bw.section')}</span>
+                    <p style="font-size:1.0rem;color:#7a8799;font-weight:300;line-height:1.6;max-width:640px;">${t('shop.bw.intro')}</p>
+                  </div>
+
+                  <!-- Grille 2 colonnes -->
+                  <div style="display:flex;gap:1.8rem;flex-wrap:wrap;">
+
+                    <!-- -- Carte recharge GB ------------------ -->
+                    <div class="rn-bw-card" style="flex:1;min-width:360px;max-width:520px;background:#0d1219;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:1.7rem;">
+                      <span style="font-family:'DM Mono',monospace;font-size:0.74rem;letter-spacing:.08em;text-transform:uppercase;color:#4af0c4;display:block;margin-bottom:.3rem;">${t('shop.bw.one_time_tag')}</span>
+                      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.09rem;margin-bottom:.2rem;">${t('shop.bw.title')}</div>
+                      <p style="font-size:0.81rem;color:#7a8799;font-weight:300;line-height:1.5;margin-bottom:.8rem;">${t('shop.bw.subtitle')}</p>
+
+                      <!-- Onglets -->
+                      <div style="display:flex;gap:.3rem;margin-bottom:.8rem;" id="rn-bw-tabs">
+                        <button class="rn-bw-tab rn-bw-tab-on" onclick="rnBwSwitch('palier',this)">${t('shop.bw.tab_paliers')}</button>
+                        <button class="rn-bw-tab" onclick="rnBwSwitch('slider',this)">${t('shop.bw.tab_curseur')}</button>
+                        <button class="rn-bw-tab" onclick="rnBwSwitch('custom',this)">${t('shop.bw.tab_libre')}</button>
+                      </div>
+
+                      <!-- Panel paliers -->
+                      <div id="rn-bw-p-palier" class="rn-bw-panel rn-bw-panel-on">
+                        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.35rem;margin-bottom:.8rem;" id="rn-bw-pgrid"></div>
+                      </div>
+
+                      <!-- Panel slider -->
+                      <div id="rn-bw-p-slider" class="rn-bw-panel">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:.2rem;" id="rn-bw-slbls"></div>
+                        <input type="range" id="rn-bw-sl" min="0" max="3" step="1" value="0" oninput="rnBwOnSlider(this.value)" style="-webkit-appearance:none;appearance:none;width:100%;height:3px;background:rgba(74,240,196,0.15);border-radius:2px;outline:none;cursor:pointer;margin:.45rem 0 .8rem;">
+                      </div>
+
+                      <!-- Panel custom -->
+                      <div id="rn-bw-p-custom" class="rn-bw-panel">
+                        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.8rem;flex-wrap:wrap;">
+                          <span style="font-family:'DM Mono',monospace;font-size:0.74rem;color:#7a8799;white-space:nowrap;">${t('shop.bw.custom_label')}</span>
+                          <div style="display:flex;align-items:center;border:1px solid rgba(255,255,255,0.1);border-radius:6px;overflow:hidden;background:rgba(255,255,255,0.03);flex:1;min-width:80px;">
+                            <input type="number" id="rn-bw-cg" min="1" max="9999" value="50" oninput="rnBwOnCustom(this.value)" style="background:none;border:none;outline:none;color:#fff;font-family:'DM Mono',monospace;font-size:0.9rem;padding:.35rem .45rem;width:100%;">
+                            <span style="padding:.35rem .45rem;color:#4af0c4;font-family:'DM Mono',monospace;font-size:0.79rem;border-left:1px solid rgba(255,255,255,0.06);">GB</span>
+                          </div>
+                          <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;color:#4af0c4;white-space:nowrap;" id="rn-bw-cpout">5,00 €</span>
+                        </div>
+                      </div>
+
+                      <!-- Preview -->
+                      <div style="background:rgba(74,240,196,0.04);border:1px solid rgba(74,240,196,0.18);border-radius:8px;padding:.65rem .85rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.8rem;flex-wrap:wrap;">
+                        <div>
+                          <div style="font-family:'DM Mono',monospace;font-size:0.64rem;color:#7a8799;margin-bottom:.15rem;">${t('shop.bw.selected_vol')}</div>
+                          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.41rem;letter-spacing:-.02em;"><span id="rn-bw-ogb">50</span><small style="font-size:0.74rem;font-weight:400;color:#7a8799;margin-left:3px;font-family:'DM Sans',sans-serif;">GB</small></div>
+                        </div>
+                        <div>
+                          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.41rem;color:#4af0c4;letter-spacing:-.02em;" id="rn-bw-oprice">5,00 €</div>
+                          <span style="font-family:'DM Mono',monospace;font-size:0.64rem;color:#7a8799;display:block;text-align:right;">${t('shop.bw.one_time_lbl')}</span>
+                        </div>
+                        <div style="width:100%;display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.2rem;">
+                          <span style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:999px;font-family:'DM Mono',monospace;font-size:0.64rem;color:#7a8799;padding:.12rem .45rem;" id="rn-bw-opack">Pack Starter</span>
+                          <span style="background:rgba(74,240,196,0.05);border:1px solid rgba(74,240,196,0.2);border-radius:999px;font-family:'DM Mono',monospace;font-size:0.64rem;color:#4af0c4;padding:.12rem .45rem;display:none;" id="rn-bw-osav"></span>
+                        </div>
+                      </div>
+
+                      <button id="rn-bw-btn-cr" onclick="rnBwDoCredits()" style="width:100%;padding:.55rem 1rem;border-radius:7px;font-weight:600;font-size:0.92rem;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:#4af0c4;color:#080808;transition:opacity .18s;"> 50 GB — 5,00 €</button>
+                      <div style="font-family:'DM Mono',monospace;font-size:0.74rem;color:#ff6b6b;text-align:center;margin-top:.35rem;min-height:.75rem;" id="rn-bw-err-cr"></div>
+                    </div>
+
+                    <!-- -- Carte abonnement -------------------- -->
+                    <div class="rn-bw-card" style="flex:1;min-width:360px;max-width:520px;background:#0d1219;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:1.7rem;">
+                      <span style="font-family:'DM Mono',monospace;font-size:0.74rem;letter-spacing:.08em;text-transform:uppercase;color:#4af0c4;display:block;margin-bottom:.3rem;">${t('shop.sub.tag')}</span>
+                      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.09rem;margin-bottom:.2rem;">${t('shop.sub.title')}</div>
+                      <p style="font-size:0.81rem;color:#7a8799;font-weight:300;line-height:1.5;margin-bottom:.8rem;">${t('shop.sub.subtitle')}</p>
+
+                      <!-- Liste plans -->
+                      <div style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:.8rem;" id="rn-bw-sub-list"></div>
+
+                      <!-- Preview abonnement -->
+                      <div style="background:rgba(74,240,196,0.04);border:1px solid rgba(74,240,196,0.18);border-radius:8px;padding:.65rem .85rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.8rem;flex-wrap:wrap;">
+                        <div>
+                          <div style="font-family:'DM Mono',monospace;font-size:0.64rem;color:#7a8799;margin-bottom:.15rem;">${t('shop.sub.selected')}</div>
+                          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.41rem;letter-spacing:-.02em;"><span id="rn-bw-sub-gb">60</span><small style="font-size:0.74rem;font-weight:400;color:#7a8799;margin-left:3px;font-family:'DM Sans',sans-serif;">${t('shop.sub.gb_month')}</small></div>
+                        </div>
+                        <div>
+                          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.41rem;color:#4af0c4;letter-spacing:-.02em;" id="rn-bw-sub-price">5,00 €</div>
+                          <span style="font-family:'DM Mono',monospace;font-size:0.64rem;color:#7a8799;display:block;text-align:right;">${t('shop.sub.per_month')}</span>
+                        </div>
+                        <div style="width:100%;margin-top:.2rem;">
+                          <span style="background:rgba(74,240,196,0.05);border:1px solid rgba(74,240,196,0.2);border-radius:999px;font-family:'DM Mono',monospace;font-size:0.64rem;color:#4af0c4;padding:.12rem .45rem;" id="rn-bw-sub-cr-pill">6 000 crédits/mois</span>
+                        </div>
+                      </div>
+
+                      <button id="rn-bw-btn-sub" onclick="rnBwDoSub()" style="width:100%;padding:.55rem 1rem;border-radius:7px;font-weight:600;font-size:0.92rem;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:#4af0c4;color:#080808;transition:opacity .18s;"> Novice 5 €/mois</button>
+                      <div style="font-family:'DM Mono',monospace;font-size:0.74rem;color:#ff6b6b;text-align:center;margin-top:.35rem;min-height:.75rem;" id="rn-bw-err-sub"></div>
+                    </div>
+
+                  </div><!-- /grid -->
+                </div><!-- /rn-bw-wrap -->
+
+                <!-- Panel 3 : Crypto ATH -->
+                <div id="rn-crypto-wrap" style="width:100%;margin-bottom:2rem;">
+                  <div style="background:linear-gradient(135deg,rgba(74,240,196,0.04) 0%,rgba(13,18,25,0) 100%);border:1px solid rgba(74,240,196,0.15);border-radius:14px;padding:1.4rem 1.5rem 1.2rem;">
+                    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
+                      <div style="width:36px;height:36px;border-radius:10px;background:rgba(74,240,196,0.1);border:1px solid rgba(74,240,196,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4af0c4" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                      </div>
+                      <div>
+                        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.22rem;color:#fff;">${t('shop.crypto.title')}</div>
+                        <div style="font-family:'DM Mono',monospace;font-size:0.77rem;color:#4af0c4;margin-top:.1rem;">${t('shop.crypto.subtitle')}</div>
+                      </div>
+                    </div>
+                    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;">
+                      <button onclick="rnCrSetQty(100)" id="rn-cr-p100" style="flex:1;min-width:80px;padding:.4rem .6rem;border-radius:7px;border:1px solid rgba(74,240,196,0.35);background:rgba(74,240,196,0.08);color:#4af0c4;font-family:'DM Mono',monospace;font-size:0.83rem;cursor:pointer;transition:all .15s;">x100 &mdash; 10 &euro;</button>
+                      <button onclick="rnCrSetQty(500)" id="rn-cr-p500" style="flex:1;min-width:80px;padding:.4rem .6rem;border-radius:7px;border:1px solid rgba(74,240,196,0.2);background:transparent;color:#7a8799;font-family:'DM Mono',monospace;font-size:0.83rem;cursor:pointer;transition:all .15s;">x500 &mdash; 50 &euro;</button>
+                      <button onclick="rnCrSetQty(5000)" id="rn-cr-p5000" style="flex:1;min-width:80px;padding:.4rem .6rem;border-radius:7px;border:1px solid rgba(74,240,196,0.2);background:transparent;color:#7a8799;font-family:'DM Mono',monospace;font-size:0.83rem;cursor:pointer;transition:all .15s;">x5000 &mdash; 500 &euro;</button>
+                    </div>
+                    <div style="margin-bottom:.75rem;">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">
+                        <span style="font-family:'DM Mono',monospace;font-size:0.83rem;color:#9ca3af;">${t('shop.crypto.qty_label')}</span>
+                        <div style="display:flex;align-items:center;gap:.5rem;">
+                          <input id="rn-cr-input" type="number" min="10" max="100000" value="100" oninput="rnCrOnInput(this.value)" style="width:90px;background:rgba(255,255,255,0.05);border:1px solid rgba(74,240,196,0.25);border-radius:6px;padding:.3rem .5rem;color:#fff;font-family:'DM Mono',monospace;font-size:0.96rem;text-align:right;outline:none;" />
+                          <span style="font-family:'DM Mono',monospace;font-size:0.83rem;color:#4af0c4;">ATH</span>
+                        </div>
+                      </div>
+                      <input id="rn-cr-slider" type="range" min="10" max="10000" value="100" step="10" oninput="rnCrOnSlider(this.value)" style="width:100%;accent-color:#4af0c4;cursor:pointer;" />
+                      <div style="display:flex;justify-content:space-between;margin-top:.2rem;">
+                        <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:#4d5a6a;">10 ATH</span>
+                        <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:#4d5a6a;">10 000 ATH</span>
+                      </div>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:.6rem .9rem;margin-bottom:.9rem;display:flex;justify-content:space-between;align-items:center;">
+                      <div>
+                        <div style="font-family:'DM Mono',monospace;font-size:0.74rem;color:#7a8799;">${t('shop.crypto.price_label')}</div>
+                        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.66rem;color:#fff;margin-top:.1rem;"><span id="rn-cr-total">10,00</span> <span style="font-size:0.9rem;color:#9ca3af;">&euro;</span></div>
+                      </div>
+                      <div style="text-align:right;">
+                        <div style="font-family:'DM Mono',monospace;font-size:0.77rem;color:#4af0c4;font-weight:600;"><span id="rn-cr-ath-disp">100</span> ATH</div>
+                        <div style="font-family:'DM Mono',monospace;font-size:0.67rem;color:#4d5a6a;margin-top:.1rem;">0,10 &euro; / ATH</div>
+                      </div>
+                    </div>
+                    <button id="rn-cr-btn" onclick="rnCrDoBuy()" style="width:100%;padding:.6rem 1rem;border-radius:7px;font-weight:700;font-size:1.0rem;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:#4af0c4;color:#080808;transition:opacity .18s;">${t('shop.crypto.btn')}</button>
+                    <div style="font-family:'DM Mono',monospace;font-size:0.74rem;color:#ff6b6b;text-align:center;margin-top:.35rem;min-height:.75rem;" id="rn-cr-err"></div>
+                  </div>
+                </div>
+
+                <!-- Panel 4 : Node Passif -->
+                <div id="rn-node-wrap" style="width:100%;margin-bottom:2rem;">
+                  <div style="background:linear-gradient(135deg,rgba(124,58,237,0.06) 0%,rgba(13,18,25,0) 100%);border:1px solid rgba(124,58,237,0.2);border-radius:14px;padding:1.4rem 1.5rem 1.2rem;">
+                    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
+                      <div style="width:36px;height:36px;border-radius:10px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><circle cx="12" cy="10" r="3"/></svg>
+                      </div>
+                      <div>
+                        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.22rem;color:#fff;">${t('shop.node.title')}</div>
+                        <div style="font-family:'DM Mono',monospace;font-size:0.77rem;color:#a78bfa;margin-top:.1rem;">${t('shop.node.subtitle')}</div>
+                      </div>
+                    </div>
+                    <p style="font-family:'DM Sans',sans-serif;font-size:0.96rem;color:#9ca3af;line-height:1.55;margin-bottom:1rem;">${t('shop.node.desc')}</p>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.45rem;margin-bottom:1.1rem;">
+                      <div style="display:flex;align-items:center;gap:.45rem;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.15);border-radius:7px;padding:.45rem .6rem;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span style="font-family:'DM Sans',sans-serif;font-size:0.83rem;color:#d1d5db;">${t('shop.node.f1')}</span>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:.45rem;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.15);border-radius:7px;padding:.45rem .6rem;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span style="font-family:'DM Sans',sans-serif;font-size:0.83rem;color:#d1d5db;">${t('shop.node.f2')}</span>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:.45rem;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.15);border-radius:7px;padding:.45rem .6rem;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span style="font-family:'DM Sans',sans-serif;font-size:0.83rem;color:#d1d5db;">${t('shop.node.f3')}</span>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:.45rem;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.15);border-radius:7px;padding:.45rem .6rem;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span style="font-family:'DM Sans',sans-serif;font-size:0.83rem;color:#d1d5db;">${t('shop.node.f4')}</span>
+                      </div>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.2);border-radius:8px;padding:.6rem .9rem;margin-bottom:.9rem;display:flex;justify-content:space-between;align-items:center;">
+                      <span style="font-family:'DM Mono',monospace;font-size:0.79rem;color:#9ca3af;">Node Passif &times; 1</span>
+                      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.66rem;color:#fff;">150,00 <span style="font-size:0.9rem;color:#9ca3af;">&euro;</span></span>
+                    </div>
+                    <button id="rn-nd-btn" onclick="rnNdDoBuy()" style="width:100%;padding:.6rem 1rem;border-radius:7px;font-weight:700;font-size:1.0rem;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:#a78bfa;color:#fff;transition:opacity .18s;">${t('shop.node.btn')}</button>
+                    <div style="font-family:'DM Mono',monospace;font-size:0.74rem;color:#ff6b6b;text-align:center;margin-top:.35rem;min-height:.75rem;" id="rn-nd-err"></div>
+                  </div>
+                </div>
+
+                <!-- ----------------------------------------------------------- -->
+
                     
                     <div class="api-section">
                         <div id="shop-list" class="shop-grid"></div>
@@ -7433,29 +7771,7 @@ main();</code></pre>
                                     <button class="profile-btn" style="padding:10px 14px;cursor:not-allowed;">${t('download.ios.coming_soon')}</button>
                                 </div>
                             </div>
-                            <div style="min-width:240px;flex:1 1 340px;">
-                                <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-                                    <div style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.25);">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"></path><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
-                                    </div>
-                                    <div>
-                                        <div style="font-size:1.05rem;font-weight:800;color:#fff;">Android <span style="font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:9999px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;vertical-align:middle;margin-left:6px;letter-spacing:0.5px;">BÉTA</span></div>
-                                        <div style="font-size:0.85rem;color:#9ca3af;">Application mobile native</div>
-                                    </div>
-                                </div>
-                                <div style="margin-top:8px;padding:8px 12px;border-radius:8px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);font-size:0.8rem;color:#fbbf24;line-height:1.4;">
-                                    🧪 <strong>Programme Bêta</strong> — Cette version est en test. Des bugs peuvent survenir. Vos retours nous aident à améliorer l'app !
-                                </div>
-                                <div style="display:flex; align-items:center; gap:16px; margin-top:12px;">
-                                    <div style="flex:1;text-align:center;padding:20px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:12px;">
-                                        <div style="font-size:1.2rem;font-weight:800;color:#fbbf24;margin-bottom:8px;">QR code Android</div>
-                                        <div style="margin:12px 0;">
-                                            <img src="qr-code.png" alt="QR Code Android" style="width:150px;height:150px;border:2px solid rgba(245,158,11,0.3);border-radius:8px;">
-                                        </div>
-                                        <div style="font-size:0.85rem;color:#d1d5db;">Scannez pour télécharger l'APK</div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                             <div style="min-width:240px;flex:1 1 360px;">
                                 <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;">
                                     <div style="border:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.18);border-radius:12px;padding:12px;">
@@ -7756,6 +8072,8 @@ function handlePresaleBuy(itemId) {
 }
 
 function initializeShopPage() {
+    if (typeof window.rnBwRenderSubs === 'function') { window.rnBwRenderSubs(); }
+    if (typeof window.rnBwRenderP === 'function') { window.rnBwRenderP(); }
     function formatPrice(v, currency) {
         try {
             const num = parseFloat(v);
@@ -7853,7 +8171,7 @@ function initializeShopPage() {
                     if (isStandard) gbPerMonth = 250;
                     if (isPro) gbPerMonth = 500;
                     if (isPremium) gbPerMonth = 1500;
-                    const pointsLabel = gbPerMonth ? `🚀 ${gbPerMonth} GB / ${t('shop.plan.period') || 'mois'}` : '';
+                    const pointsLabel = gbPerMonth ? `📦 ${gbPerMonth} GB / ${t('shop.plan.period') || 'mois'}` : '';
 
                     let recommendedTag = '';
                     if (isPro) recommendedTag = `<div class="plan-tag">${t('shop.plan.tag.recommended')}</div>`;
@@ -7944,6 +8262,239 @@ function initializeShopPage() {
                 });
             }).catch(()=>{});
         }
+
+        // -- Recharge + Abonnement widget -------------------------------------
+        (function rnBwInit() {
+          const PAL  = [{id:'starter',gb:50,eur:5},{id:'standard',gb:200,eur:15},{id:'pro',gb:500,eur:30},{id:'expert',gb:1150,eur:60}];
+          const SAV  = [null,'25%','40%','48%'];
+          const SUBS = [{id:'novice',gb:60,eur:5,cr:60},{id:'standard',gb:250,eur:20,cr:250},{id:'pro',gb:500,eur:40,cr:500},{id:'premium',gb:1500,eur:100,cr:1500}];
+          const fe   = n => n.toFixed(2).replace('.',',')+' \u20ac';
+          const el   = id => document.getElementById(id);
+          function cp(gb){if(gb<=50)return gb*(5/50);if(gb<=200)return 5+(gb-50)*(10/150);if(gb<=500)return 15+(gb-200)*(15/300);if(gb<=1150)return 30+(gb-500)*(30/650);return 60+(gb-1150)*0.052;}
+
+          let curGb=50,curEur=5,curPack='starter',curIdx=0,curSubId='novice',curMode='palier';
+
+          function updCr(gb,eur,pid,idx){if(!el('rn-bw-ogb'))return;
+            curGb=gb;curEur=parseFloat(eur.toFixed(2));curPack=pid;
+            el('rn-bw-ogb').textContent=gb.toLocaleString('fr-FR');
+            el('rn-bw-oprice').textContent=fe(eur);
+            const sav=(typeof idx==='number'&&idx>0)?SAV[idx]:null;
+            if(sav){el('rn-bw-osav').textContent='-'+sav+' économies';el('rn-bw-osav').style.display='';}else el('rn-bw-osav').style.display='none';
+            el('rn-bw-opack').textContent='Pack '+pid.charAt(0).toUpperCase()+pid.slice(1);
+            el('rn-bw-btn-cr').textContent=t('shop.bw.btn_buy')+' '+gb+' GB \u2014 '+fe(eur);
+            el('rn-bw-err-cr').textContent='';
+          }
+
+          function updSub(sub){if(!el('rn-bw-sub-gb'))return;
+            curSubId=sub.id;
+            el('rn-bw-sub-gb').textContent=sub.gb.toLocaleString('fr-FR');
+            el('rn-bw-sub-price').textContent=fe(sub.eur);
+            el('rn-bw-sub-cr-pill').textContent=sub.cr.toLocaleString('fr-FR')+' '+(typeof t==='function'?t('shop.sub.credits_month'):'crédits/mois');
+            el('rn-bw-btn-sub').textContent=t('shop.sub.btn_prefix')+' '+sub.id.charAt(0).toUpperCase()+sub.id.slice(1)+' '+sub.eur+' \u20ac/mois';
+            el('rn-bw-err-sub').textContent='';
+          }
+
+          function renderP(){
+            const g=el('rn-bw-pgrid');if(!g)return;g.innerHTML='';
+            PAL.forEach((p,i)=>{
+              const d=document.createElement('div');d.className='rn-bw-pcard'+(i===curIdx?' rn-bw-pcard-on':'');
+              d.innerHTML='<div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:.63rem;margin-bottom:.12rem;">'+p.gb+' GB</div><div style="font-family:\'DM Mono\',monospace;font-size:.56rem;color:#4af0c4;">'+p.eur+' \u20ac</div><div style="font-family:\'DM Mono\',monospace;font-size:.5rem;color:#f59e0b;margin-top:.08rem;min-height:.6rem;">'+(i>0?'-'+SAV[i]:'')+'</div>';
+              d.onclick=()=>{document.querySelectorAll('.rn-bw-pcard').forEach(c=>c.classList.remove('rn-bw-pcard-on'));d.classList.add('rn-bw-pcard-on');curIdx=i;updCr(PAL[i].gb,PAL[i].eur,PAL[i].id,i);};
+              g.appendChild(d);
+            });
+          }
+
+          function renderSL(){
+            const s=el('rn-bw-slbls');if(!s)return;s.innerHTML='';
+            PAL.forEach((p,i)=>{const sp=document.createElement('span');sp.className='rn-bw-slbl'+(i===curIdx?' rn-bw-slbl-on':'');sp.textContent=p.gb+'GB';s.appendChild(sp);});
+          }
+
+          function renderSubs(){
+            const list=el('rn-bw-sub-list');if(!list)return;list.innerHTML='';
+            SUBS.forEach(sub=>{
+              const row=document.createElement('div');row.className='rn-bw-subrow'+(sub.id===curSubId?' rn-bw-subrow-on':'');
+              row.innerHTML='<div><div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:0.96rem;">'+sub.id.charAt(0).toUpperCase()+sub.id.slice(1)+'</div><div style="font-family:\'DM Mono\',monospace;font-size:0.67rem;color:#7a8799;margin-top:1px;">'+sub.gb+' GB \u00b7 '+sub.cr.toLocaleString('fr-FR')+' '+t('shop.sub.credits_month')+'</div></div><div style="text-align:right;"><div style="font-family:\'Syne\',sans-serif;font-weight:800;font-size:1.05rem;color:#4af0c4;">'+sub.eur+' \u20ac</div><span style="font-family:\'DM Mono\',monospace;font-size:0.64rem;color:#7a8799;">/mois</span></div>';
+              row.onclick=()=>{document.querySelectorAll('.rn-bw-subrow').forEach(r=>r.classList.remove('rn-bw-subrow-on'));row.classList.add('rn-bw-subrow-on');updSub(sub);};
+              list.appendChild(row);
+            });
+          }
+
+          window.rnBwRenderSubs=function(){renderSubs();updSub(SUBS[0]);};
+          window.rnBwRenderP=function(){renderP();updCr(PAL[0].gb,PAL[0].eur,PAL[0].id,0);};
+          window.rnBwSwitch=function(m,btn){
+            curMode=m;
+            document.querySelectorAll('.rn-bw-tab').forEach(t=>{t.classList.remove('rn-bw-tab-on');});btn.classList.add('rn-bw-tab-on');
+            ['palier','slider','custom'].forEach(x=>{const p=el('rn-bw-p-'+x);if(p){p.classList.remove('rn-bw-panel-on');}});
+            const panel=el('rn-bw-p-'+m);if(panel)panel.classList.add('rn-bw-panel-on');
+            if(m==='palier'){renderP();updCr(PAL[curIdx].gb,PAL[curIdx].eur,PAL[curIdx].id,curIdx);}
+            else if(m==='slider'){renderSL();const sl=el('rn-bw-sl');if(sl)sl.value=curIdx;rnBwOnSlider(curIdx);}
+            else{rnBwOnCustom(el('rn-bw-cg')?el('rn-bw-cg').value:50);}
+          };
+
+          window.rnBwOnSlider=function(v){
+            const i=parseInt(v);curIdx=i;
+            document.querySelectorAll('.rn-bw-slbl').forEach((l,j)=>l.classList.toggle('rn-bw-slbl-on',j===i));
+            updCr(PAL[i].gb,PAL[i].eur,PAL[i].id,i);
+          };
+
+          window.rnBwOnCustom=function(v){
+            const gb=Math.max(1,Math.round(parseFloat(v)||1));
+            const eur=cp(gb);
+            const o=el('rn-bw-cpout');if(o)o.textContent=fe(eur);
+            let pid='starter';for(let i=PAL.length-1;i>=0;i--){if(gb>=PAL[i].gb){pid=PAL[i].id;break;}}
+            updCr(gb,eur,pid,null);
+          };
+
+          function getToken(){return localStorage.getItem('token')||localStorage.getItem('authToken')||localStorage.getItem('jwt')||localStorage.getItem('accessToken');}
+
+          window.rnBwDoCredits=async function(){
+            const token=getToken();if(!token){el('rn-bw-err-cr').textContent=(typeof t==='function'?t('shop.bw.err_login'):'Connectez-vous pour acheter.');return;}
+            const btn=el('rn-bw-btn-cr');btn.disabled=true;btn.textContent=t('shop.redirecting');
+            try{
+              const res=await fetch(API_BASE+'/api/billing/credits/checkout',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({pack_id:curPack,gb:curGb,amount_eur:curEur})});
+              const data=await res.json();
+              if(data.url)window.location.href=data.url;
+              else throw new Error(data.error||'no url');
+            }catch(e){
+              el('rn-bw-err-cr').textContent=t('shop.err_prefix')+(e.message||t('shop.bw.err_pay'));
+              btn.disabled=false;btn.textContent='Acheter '+curGb+' GB \u2014 '+fe(curEur);
+            }
+          };
+
+          window.rnBwDoSub=async function(){
+            const token=getToken();if(!token){el('rn-bw-err-sub').textContent=t('shop.sub.err_login');return;}
+            const btn=el('rn-bw-btn-sub');btn.disabled=true;btn.textContent=t('shop.redirecting');
+            try{
+              const res=await fetch(API_BASE+'/api/billing/subscription/checkout',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({plan_id:curSubId})});
+              const data=await res.json();
+              if(data.url)window.location.href=data.url;
+              else throw new Error(data.error||'no url');
+            }catch(e){
+              el('rn-bw-err-sub').textContent=t('shop.err_prefix')+(e.message||t('shop.sub.err_sub'));
+              const sub=SUBS.find(s=>s.id===curSubId)||SUBS[0];
+              btn.disabled=false;btn.textContent=t('shop.sub.btn_prefix')+' '+sub.id.charAt(0).toUpperCase()+sub.id.slice(1)+' '+sub.eur+' \u20ac/mois';
+            }
+          };
+
+          // Re-enable buttons on browser back
+          window.addEventListener('pageshow', function(e){
+            const b1=document.getElementById('rn-bw-btn-cr');
+            const b2=document.getElementById('rn-bw-btn-sub');
+            if(b1&&b1.disabled){b1.disabled=false;}
+            if(b2&&b2.disabled){b2.disabled=false;}
+          });
+          // Re-enable buttons on browser back
+          window.addEventListener('pageshow', function(e){
+            const b1=document.getElementById('rn-bw-btn-cr');
+            const b2=document.getElementById('rn-bw-btn-sub');
+            if(b1&&b1.disabled){b1.disabled=false;}
+            if(b2&&b2.disabled){b2.disabled=false;}
+          });
+          // Gestion retour Stripe (success / cancelled)
+          (function(){
+            const params=new URLSearchParams(window.location.search);
+            const pay=params.get('payment');
+            if(pay==='success'){
+              const b=document.createElement('div');
+              b.style.cssText='position:fixed;top:1rem;right:1rem;background:#0d1219;border:1px solid rgba(74,240,196,0.4);border-radius:8px;padding:.75rem 1.1rem;font-family:"DM Mono",monospace;font-size:.65rem;color:#4af0c4;z-index:9999;max-width:260px;';
+              b.textContent='? Paiement confirmé — bande passante créditée.';
+              document.body.appendChild(b);setTimeout(()=>b.remove(),5000);
+              history.replaceState({},'',window.location.pathname);
+            } else if(pay==='cancelled'){
+              const b=document.createElement('div');
+              b.style.cssText='position:fixed;top:1rem;right:1rem;background:#0d1219;border:1px solid rgba(255,107,107,0.35);border-radius:8px;padding:.75rem 1.1rem;font-family:"DM Mono",monospace;font-size:.65rem;color:#ff6b6b;z-index:9999;max-width:260px;';
+              b.textContent='Paiement annulé.';
+              document.body.appendChild(b);setTimeout(()=>b.remove(),4000);
+              history.replaceState({},'',window.location.pathname);
+            }
+          })();
+
+          renderP();renderSL();renderSubs();updCr(50,5,'starter',0);updSub(SUBS[0]);
+        })();
+        // -- Fin recharge widget -----------------------------------------------
+        // Widget Crypto ATH
+        (function(){
+          var ATH_PRICE = 0.10;
+          var MIN_QTY = 10;
+          var curQty = 100;
+          function elC(id){ return document.getElementById(id); }
+          function fmtEur(v){ return v.toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+          function rnCrUpdate(qty){
+            curQty = Math.max(MIN_QTY, Math.round(qty));
+            var eur = parseFloat((curQty * ATH_PRICE).toFixed(2));
+            var inp = elC('rn-cr-input'); if(inp) inp.value = curQty;
+            var sld = elC('rn-cr-slider'); if(sld) sld.value = Math.min(curQty, parseInt(sld.max));
+            var tot = elC('rn-cr-total'); if(tot) tot.textContent = fmtEur(eur);
+            var ath = elC('rn-cr-ath-disp'); if(ath) ath.textContent = curQty.toLocaleString('fr-FR');
+            [['rn-cr-p100',100],['rn-cr-p500',500],['rn-cr-p5000',5000]].forEach(function(x){
+              var b=elC(x[0]); if(!b) return;
+              if(curQty===x[1]){ b.style.background='rgba(74,240,196,0.08)'; b.style.borderColor='rgba(74,240,196,0.35)'; b.style.color='#4af0c4'; }
+              else { b.style.background='transparent'; b.style.borderColor='rgba(74,240,196,0.2)'; b.style.color='#7a8799'; }
+            });
+          }
+          window.rnCrSetQty   = function(q){ rnCrUpdate(q); };
+          window.rnCrOnInput  = function(v){ rnCrUpdate(parseInt(v)||MIN_QTY); };
+          window.rnCrOnSlider = function(v){ rnCrUpdate(parseInt(v)); };
+          window.rnCrDoBuy = async function(){
+            var errEl = elC('rn-cr-err');
+            var btn   = elC('rn-cr-btn');
+            if(!elC('rn-cr-input')) return;
+            var token = localStorage.getItem('token')||localStorage.getItem('authToken')||localStorage.getItem('jwt')||localStorage.getItem('accessToken');
+            if(!token){ if(errEl) errEl.textContent = (typeof t==='function'?t('shop.crypto.err_login'):'')||'Connectez-vous.'; return; }
+            if(curQty < MIN_QTY){ if(errEl) errEl.textContent = (typeof t==='function'?t('shop.crypto.err_min'):'')||'Minimum 10 ATH'; return; }
+            if(errEl) errEl.textContent = '';
+            if(btn){ btn.disabled=true; btn.textContent='Redirection...'; }
+            try {
+              var eur = parseFloat((curQty * ATH_PRICE).toFixed(2));
+              var res = await fetch(API_BASE+'/api/billing/crypto/checkout',{
+                method:'POST',
+                headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+                body: JSON.stringify({ ath_qty: curQty, amount_eur: eur })
+              });
+              var data = await res.json();
+              if(data.url) window.location.href = data.url;
+              else throw new Error(data.error||'no url');
+            } catch(e){
+              if(errEl) errEl.textContent = t('shop.err_prefix')+(e.message||t('shop.bw.err_pay'));
+              if(btn){ btn.disabled=false; btn.textContent=(typeof t==='function'?t('shop.crypto.btn'):'')||'Acheter'; }
+            }
+          };
+          window.addEventListener('pageshow', function(){
+            var b=elC('rn-cr-btn'); if(b&&b.disabled){b.disabled=false;b.textContent=(typeof t==='function'?t('shop.crypto.btn'):'')||'Acheter';}
+          });
+        })();
+
+        // Widget Node Passif
+        (function(){
+          function elN(id){ return document.getElementById(id); }
+          window.rnNdDoBuy = async function(){
+            var errEl = elN('rn-nd-err');
+            var btn   = elN('rn-nd-btn');
+            if(!elN('rn-nd-btn')) return;
+            var token = localStorage.getItem('token')||localStorage.getItem('authToken')||localStorage.getItem('jwt')||localStorage.getItem('accessToken');
+            if(!token){ if(errEl) errEl.textContent = (typeof t==='function'?t('shop.node.err_login'):'')||'Connectez-vous.'; return; }
+            if(errEl) errEl.textContent = '';
+            if(btn){ btn.disabled=true; btn.textContent='Redirection...'; }
+            try {
+              var res = await fetch(API_BASE+'/api/billing/node/checkout',{
+                method:'POST',
+                headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+                body: JSON.stringify({ node_type: 'passive_supporter' })
+              });
+              var data = await res.json();
+              if(data.url) window.location.href = data.url;
+              else throw new Error(data.error||'no url');
+            } catch(e){
+              if(errEl) errEl.textContent = 'Erreur : '+(e.message||'paiement impossible');
+              if(btn){ btn.disabled=false; btn.textContent=(typeof t==='function'?t('shop.node.btn'):'')||'Acheter le Node'; }
+            }
+          };
+          window.addEventListener('pageshow', function(){
+            var b=elN('rn-nd-btn'); if(b&&b.disabled){b.disabled=false;b.textContent=(typeof t==='function'?t('shop.node.btn'):'')||'Acheter le Node';}
+          });
+        })();
+        // Fin widgets Crypto + Node
+
         function getAdminShopHTML() {
             return `
                 <div class="page-content">
@@ -7955,7 +8506,7 @@ function initializeShopPage() {
                         </div>
                     </div>
                     <div class="shop-warning">
-                        ⚠️ Information: 90% des bénéfices du shop seront reversés dans le marketcap de la crypto afin de soutenir le projet et renforcer la valeur long terme.
+                        ℹ️ Information: 90% des bénéfices du shop seront reversés dans le marketcap de la crypto afin de soutenir le projet et renforcer la valeur long terme.
                     </div>
                     <table class="data-table" id="admin-shop-table">
                         <thead>
@@ -8773,7 +9324,7 @@ function initializeShopPage() {
             return `
                 <div class="page-content futuristic-wallet">
                     <div class="page-header" style="justify-content: center; margin-bottom: 40px;">
-                        <h1 class="page-title neon-text" style="font-size: 2.5rem; text-transform: uppercase; letter-spacing: 4px;">
+                        <h1 class="page-title neon-text" style="font-size: 1.4rem; text-transform: uppercase; letter-spacing: 0.12em;">
                             ${t('wallet.title')}
                         </h1>
                     </div>
@@ -9013,18 +9564,18 @@ function initializeShopPage() {
                     <table class="data-table" id="airdrop-table">
                         <thead>
                             <tr>
-                                <th data-sort="id" style="cursor:pointer">ID ↕</th>
-                                <th data-sort="email" style="cursor:pointer">Utilisateur ↕</th>
-                                <th data-sort="score" style="cursor:pointer">Score Airdrop ↕</th>
-                                <th data-sort="value" style="cursor:pointer" title="VALUE : revenus (dépenses + abonnements API avec loyalty factor)">VALUE ↕</th>
-                                <th data-sort="usage" style="cursor:pointer" title="USAGE : activité réseau (jobs, jours actifs, fiabilité nœud)">USAGE ↕</th>
-                                <th data-sort="growth" style="cursor:pointer" title="GROWTH : parrainages pondérés par qualité">GROWTH ↕</th>
-                                <th data-sort="bonus" style="cursor:pointer" title="Bonus : multiplicateur de score">Bonus ↕</th>
-                                <th data-sort="allocation" style="cursor:pointer">Allocation (Tokens) ↕</th>
-                                <th data-sort="spent" style="cursor:pointer">Dépensé (€) ↕</th>
-                                <th data-sort="points" style="cursor:pointer">Points ↕</th>
-                                <th data-sort="days" style="cursor:pointer">Jours Actifs ↕</th>
-                                <th data-sort="ath" style="cursor:pointer">Solde Aether ↕</th>
+                                <th data-sort="id" style="cursor:pointer">ID ?</th>
+                                <th data-sort="email" style="cursor:pointer">Utilisateur ?</th>
+                                <th data-sort="score" style="cursor:pointer">Score Airdrop ?</th>
+                                <th data-sort="value" style="cursor:pointer" title="VALUE : revenus (dépenses + abonnements API avec loyalty factor)">VALUE ?</th>
+                                <th data-sort="usage" style="cursor:pointer" title="USAGE : activité réseau (jobs, jours actifs, fiabilité nœud)">USAGE ?</th>
+                                <th data-sort="growth" style="cursor:pointer" title="GROWTH : parrainages pondérés par qualité">GROWTH ?</th>
+                                <th data-sort="bonus" style="cursor:pointer" title="Bonus : multiplicateur de score">Bonus ?</th>
+                                <th data-sort="allocation" style="cursor:pointer">Allocation (Tokens) ?</th>
+                                <th data-sort="spent" style="cursor:pointer">Dépensé (€) ?</th>
+                                <th data-sort="points" style="cursor:pointer">Points ?</th>
+                                <th data-sort="days" style="cursor:pointer">Jours Actifs ?</th>
+                                <th data-sort="ath" style="cursor:pointer">Solde Aether ?</th>
                                 <th>Dernier Calcul</th>
                             </tr>
                         </thead>
@@ -9242,7 +9793,7 @@ function initializeShopPage() {
             }
 
             function updateWithdrawButton(enabled) {
-                btnWithdraw.textContent = enabled ? '✅ Retraits Activés' : '⛔ Retraits Désactivés';
+                btnWithdraw.textContent = enabled ? '? Retraits Activés' : '? Retraits Désactivés';
                 btnWithdraw.className = enabled ? 'profile-btn' : 'profile-btn secondary'; 
                 if (enabled) {
                     btnWithdraw.style.backgroundColor = '#22c55e'; // Green
@@ -9563,12 +10114,12 @@ function initializeShopPage() {
                     refreshHeader();
                 });
             }
-            const headerAvatar = document.querySelector('.user-avatar');
+            const headerAvatar = document.querySelector(".user-avatar");
             if (headerAvatar) {
-                headerAvatar.style.cursor = 'pointer';
-                headerAvatar.addEventListener('click', () => setPage('profile'));
+                headerAvatar.src = "/logo_profil.jpg"; // Force logo pour tous
+                headerAvatar.style.cursor = "pointer";
+                headerAvatar.onclick = () => setPage("profile");
             }
-            const headerLoginBtn = document.getElementById('header-login-btn');
             if (headerLoginBtn) {
                 headerLoginBtn.addEventListener('click', openLoginPanel);
             }
@@ -9724,7 +10275,7 @@ function initializeShopPage() {
 
             container.innerHTML = `
                 <div class="support-header">
-                    <button class="profile-btn" onclick="loadUserTickets()" style="padding:4px 8px;margin-right:10px;">←</button>
+                    <button class="profile-btn" onclick="loadUserTickets()" style="padding:4px 8px;margin-right:10px;">?</button>
                     <div style="font-weight:600;">${subject}</div>
                     <div></div>
                 </div>
@@ -9839,7 +10390,7 @@ function initializeShopPage() {
                                !isClosed ? `
                                  <div style="display:flex;gap:8px;">
                                      <textarea class="chat-input" id="chat-input-text" placeholder="Répondre..." style="flex:1;padding:8px;border-radius:4px;border:1px solid #374151;background:#1f2937;color:white;resize:none;height:40px;"></textarea>
-                                     <label for="chat-file-input" class="profile-btn" style="padding:8px;cursor:pointer;">📷</label>
+                                     <label for="chat-file-input" class="profile-btn" style="padding:8px;cursor:pointer;">📎</label>
                                      <input type="file" id="chat-file-input" accept="image/*" style="display:none;" onchange="if(this.files[0]) sendSupportMessage(this.files[0])">
                                      <button class="profile-btn primary" onclick="sendSupportMessage()">Envoyer</button>
                                  </div>
@@ -10041,14 +10592,14 @@ function initializeShopPage() {
                     <option value="en">EN</option>
                     <option value="es">ES</option>
                   </select>
-                  <button class="faq-chat-close" id="faq-chat-close">✕</button>
+                  <button class="faq-chat-close" id="faq-chat-close">?</button>
                 </div>
               </div>
               <div class="faq-chat-body" id="faq-chat-body"></div>
               <div class="faq-quick-actions" id="faq-quick-actions"></div>
               <div class="faq-chat-input">
                 <textarea id="faq-chat-input" placeholder="Pose ta question…"></textarea>
-                <button class="faq-chat-send" id="faq-chat-send">➤</button>
+                <button class="faq-chat-send" id="faq-chat-send">?</button>
               </div>
             `;
 
@@ -10121,7 +10672,7 @@ Le but : construire une communauté active et récompenser l’engagement réel.
 - Va dans la section "Download" du dashboard.
 - Télécharge l'installateur Windows (.exe).
 - Installe l'application et connecte-toi avec tes identifiants.
-- Appuie sur ▶ pour démarrer le minage.
+- Appuie sur ? pour démarrer le minage.
 
 L'application est 100% sûre. Si Windows SmartScreen affiche une alerte, clique sur "Informations complémentaires" puis "Exécuter quand même".`
                     },
@@ -10189,7 +10740,7 @@ Suis-nous pour les dernières annonces et mises à jour !`
 - Create an account and sign in.
 - Download the Windows installer directly from the dashboard.
 - Install the app and sign in with your credentials.
-- Press ▶ to start mining.
+- Press ? to start mining.
 
 The app is 100% safe. If Windows SmartScreen shows an alert, click "More info" then "Run anyway".`
                     },
@@ -10248,7 +10799,7 @@ Follow us for the latest announcements and updates!`
 - Ve a la sección "Download" en el dashboard.
 - Descarga el instalador de Windows (.exe).
 - Instala la aplicación e inicia sesión con tus credenciales.
-- Presiona ▶ para comenzar a minar.
+- Presiona ? para comenzar a minar.
 
 La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz clic en "Más información" y luego en "Ejecutar de todos modos".`
                     },
@@ -10482,7 +11033,7 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
         async function repairGB() {
             if (!confirm('Réparer les GB de tous les utilisateurs ?')) return;
             const btn = document.getElementById('emergency-gb-repair-v2');
-            if (btn) { btn.textContent = '⏳ En cours...'; btn.disabled = true; }
+            if (btn) { btn.textContent = '? En cours...'; btn.disabled = true; }
             const token = localStorage.getItem('token');
             try {
                 const r = await fetch(`${API_BASE}/api/admin/emergency/fix-all-gb`, {
@@ -10490,9 +11041,9 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const d = await r.json();
-                alert(d.success ? `✅ ${d.message} — ${d.fixed} users réparés` : '❌ ' + d.error);
-            } catch(e) { alert('❌ ' + e.message); }
-            if (btn) { btn.textContent = '🚨 RéPARER GB'; btn.disabled = false; }
+                alert(d.success ? `? ${d.message} — ${d.fixed} users réparés` : '? ' + d.error);
+            } catch(e) { alert('? ' + e.message); }
+            if (btn) { btn.textContent = '🔧 RÉPARER GB'; btn.disabled = false; }
         }
 
         async function clearJobsHistory() {
@@ -10504,8 +11055,8 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const d = await r.json();
-                alert(d.success ? `✅ ${d.message}` : '❌ ' + d.error);
-            } catch(e) { alert('❌ ' + e.message); }
+                alert(d.success ? `? ${d.message}` : '? ' + d.error);
+            } catch(e) { alert('? ' + e.message); }
         }
 
     </script>
@@ -10633,25 +11184,25 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
 
   var configs = {
     node: {
-      badge: '🪂 Node Operator · Airdrop ATH',
+      badge: '🖥️ Node Operator · Airdrop ATH',
       h1: 'Installe un node.<br><span style="color:#4af0c4">Gagne des tokens ATH.</span>',
       sub: 'Fais tourner le node Revolution en arrière-plan sur ton PC Windows. Chaque job traité t\'accumule des points convertis en tokens ATH lors des airdrops. Gratuit, 5 minutes d\'installation.',
-      cta1: { text: '🚀 Installer le node gratuitement →', action: 'showLoginFromLanding()' },
+      cta1: { text: '⬇️ Installer le node gratuitement !', action: 'showLoginFromLanding()' },
       cta2: { text: 'Rejoindre le Discord', href: 'https://discord.gg/eadE7uK6ss' },
       statsLabel: { nodes: 'Nodes actifs', jobs: 'Jobs traités', uptime: 'Uptime réseau', users: 'Opérateurs récompensés' },
       hideStats: ['ls-nodes'],
       scrollTo: 'node-operators',
-      bannerMsg: '🎁 Accès anticipé — les premiers opérateurs reçoivent un multiplicateur x2 sur leurs points',
+      bannerMsg: '🚀 Accès anticipé — les premiers opérateurs reçoivent un multiplicateur x2 sur leurs points',
     },
     dev: {
-      badge: '⚡ API · DePIN · Compute',
+      badge: '? API · DePIN · Compute',
       h1: '10 compute types.<br><span style="color:#4af0c4">Une seule API.</span>',
       sub: 'Scraping, OCR, exécution de code, traitement de données — tout passe par le même endpoint. Pas de SDK requis, juste curl. 3 GB gratuits par semaine.',
-      cta1: { text: 'Accéder au Dashboard →', action: 'showLoginFromLanding()' },
+      cta1: { text: 'Accéder au Dashboard ?', action: 'showLoginFromLanding()' },
       cta2: { text: 'Voir la doc API', href: '#quickstart' },
       statsLabel: { nodes: 'Nodes actifs', jobs: 'Jobs traités', uptime: 'Uptime réseau', users: 'Développeurs actifs' },
       scrollTo: 'quickstart',
-      bannerMsg: '🚀 3 GB gratuits dès l\'inscription — aucune carte bancaire requise',
+      bannerMsg: '🎁 3 GB gratuits dès l\'inscription — aucune carte bancaire requise',
     }
   };
 
@@ -10737,3 +11288,12 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+

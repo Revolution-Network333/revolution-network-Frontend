@@ -1,4 +1,4 @@
-/* Réinitialisation et styles de base */
+﻿/* RÃ©initialisation et styles de base */
 * {
   margin: 0;
   padding: 0;
@@ -15,6 +15,7 @@ img {
 }
 
 body {
+  zoom: 0.85;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   color: #ffffff;
   -webkit-font-smoothing: antialiased;
@@ -46,7 +47,7 @@ body::before {
   max-width: 100vw;
 }
 
-/* Styles de la barre latérale */
+/* Styles de la barre latÃ©rale */
 .sidebar {
   width: 280px;
   background-color: #000000;
@@ -738,7 +739,7 @@ tr:nth-child(3) .rank-number {
   color: #e5e7eb;
 }
 
-/* En-tête de page */
+/* En-tÃªte de page */
 .page-header {
   display: flex;
   align-items: center;
@@ -1234,7 +1235,7 @@ tr:nth-child(3) .rank-number {
   background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
 }
 
-/* Page des nœuds */
+/* Page des nÅ“uds */
 .add-node-btn {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   border: none;
@@ -1305,6 +1306,7 @@ tr:nth-child(3) .rank-number {
 }
 
 .shop-modal-body {
+  zoom: 0.85;
     padding: 20px;
     color: #ccc;
     line-height: 1.6;
@@ -1475,6 +1477,7 @@ tr:nth-child(3) .rank-number {
   cursor: pointer;
 }
 .faq-chat-body {
+  zoom: 0.85;
   flex: 1;
   overflow: auto;
   padding: 12px;
@@ -1692,6 +1695,7 @@ tr:nth-child(3) .rank-number {
 }
 
 .shop-modal-body {
+  zoom: 0.85;
     padding: 20px;
 }
 
@@ -1855,7 +1859,7 @@ tr:nth-child(3) .rank-number {
 }
 
 .plan-features li::before {
-  content: "✓";
+  content: "âœ“";
   margin-right: 10px;
   color: #10b981;
   font-weight: 900;
@@ -1979,6 +1983,7 @@ tr:nth-child(3) .rank-number {
 }
 
 .node-card-body {
+  zoom: 0.85;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -2044,7 +2049,7 @@ tr:nth-child(3) .rank-number {
   background: rgba(156, 163, 175, 0.2);
 }
 
-/* Page des récompenses */
+/* Page des rÃ©compenses */
 .rewards-summary {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -2891,6 +2896,7 @@ tr:nth-child(3) .rank-number {
   }
 
   body {
+  zoom: 0.85;
     background-attachment: scroll;
   }
 }
@@ -2904,7 +2910,7 @@ tr:nth-child(3) .rank-number {
 .wallet-layout {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
-  gap: 30px;
+  gap: 16px;
   align-items: start;
 }
 
@@ -2920,7 +2926,7 @@ tr:nth-child(3) .rank-number {
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
-  padding: 30px;
+  padding: 20px;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
 }
 
@@ -3018,7 +3024,7 @@ tr:nth-child(3) .rank-number {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
   gap: 20px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   background: rgba(0, 0, 0, 0.3);
   padding: 25px;
   border-radius: 20px;
@@ -3041,8 +3047,8 @@ tr:nth-child(3) .rank-number {
 }
 
 .balance-item .value {
-  font-size: 2.5rem;
-  font-weight: 800;
+  font-size: 1.6rem;
+  font-weight: 600;
   color: #fff;
   font-family: 'Inter', sans-serif;
 }
@@ -3059,8 +3065,8 @@ tr:nth-child(3) .rank-number {
 }
 
 .section-title-mini {
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 0.85rem;
+  font-weight: 600;
   margin-bottom: 20px;
   color: #fff;
   display: flex;
@@ -3644,7 +3650,7 @@ tr:nth-child(3) .rank-number {
   color: #f59e0b;
 }
 
-/* Stabilise l'entête (évite les sauts lors de l'actualisation) */
+/* Stabilise l'entÃªte (Ã©vite les sauts lors de l'actualisation) */
 .total-points { min-width: 140px; }
 .wallet-balance { min-width: 150px; }
 .api-credits { min-width: 110px; }
@@ -3657,7 +3663,7 @@ tr:nth-child(3) .rank-number {
   }
 }
 
-/* Évite un flash lors de mises à jour de texte */
+/* Ã‰vite un flash lors de mises Ã  jour de texte */
 .total-points, .wallet-balance, .api-credits {
   transition: none !important;
 }
@@ -3694,6 +3700,7 @@ tr:nth-child(3) .rank-number {
 }
 
 body {
+  zoom: 0.85;
   background-image: none;
   background:
     radial-gradient(1200px circle at 20% 0%, rgba(99, 102, 241, 0.12), transparent 60%),
@@ -4008,3 +4015,12 @@ body::before {
   color: #9ca3af;
   font-style: italic;
 }
+
+
+
+
+
+
+
+
+
