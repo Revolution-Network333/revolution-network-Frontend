@@ -1133,7 +1133,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                         </svg>
                         <span id="header-notifications-dot" style="position:absolute;right:6px;bottom:6px;width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 8px rgba(239,68,68,0.7);display:none;"></span>
                     </button>
-                    <img src="/logo_profil.jpg" class="user-avatar" alt="Profil">
+                    <div class="user-avatar">M</div>
                     <button id="header-login-btn" class="profile-btn primary" style="display:none;" onclick="setPage('login')">Sign in</button>
                     <select id="lang-switch" style="margin-left:10px;padding:6px 8px;border-radius:8px;background:#0b0f14;color:#fff;border:1px solid #1f2937;">
                         <option value="fr">FR</option>
@@ -2407,7 +2407,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                 'download.points.note': 'Les points rendent éligible au futur airdrop.',
                 'download.install': 'Download Node (.exe)',
                 'download.guide': 'Aide',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.48/Revolution-Network-Node-Setup-1.0.48.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.49/Revolution-Network-Node-Setup-1.0.49.exe',
                 'download.mac_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1-MAC/Revolution-Network-Node-Setup-1.0.23.dmg',
                 'download.mac.title': 'Version macOS (Beta)',
                 'download.mac.install': 'Download Node (.dmg)',
@@ -2839,7 +2839,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                 'shop.node.btn': 'Buy the Node — 150 €',
                 'shop.node.err_login': 'Log in to purchase.',
                 'download.android.coming_soon_desc': 'The Android mobile app is under development.',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.48/Revolution-Network-Node-Setup-1.0.48.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.49/Revolution-Network-Node-Setup-1.0.49.exe',
                 'download.mac_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1-MAC/Revolution-Network-Node-Setup-1.0.23.dmg',
                 'download.mac.title': 'macOS Version (Beta)',
                 'download.mac.install': 'Download Node (.dmg)',
@@ -3115,7 +3115,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                 'download.recommended.step4': 'A shortcut will be created on your desktop.',
                 'download.recommended.step5': 'Launch the app and sign in via the “Sign in via website” button.',
                 'download.recommended.step6': 'Press the ? button to start earning points.',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.48/Revolution-Network-Node-Setup-1.0.48.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.49/Revolution-Network-Node-Setup-1.0.49.exe',
                 'download.mac_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1-MAC/Revolution-Network-Node-Setup-1.0.23.dmg',
                 'download.mac.title': 'macOS Version (Beta)',
                 'download.mac.install': 'Download Node (.dmg)',
@@ -3874,7 +3874,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                 if (apiCred) apiCred.style.display = 'none';
                 if (headerRankBadge) headerRankBadge.style.display = 'none';
                 if (headerLogoutBtn) headerLogoutBtn.style.display = 'none';
-                // if (userAvatar) userAvatar.style.display = "none";  // D�sactiv� : avatar toujours visible
+                if (userAvatar) userAvatar.style.display = 'none';
                 if (supportBtn) supportBtn.style.display = 'none';
                 if (adminSupportBtn) adminSupportBtn.style.display = 'none';
                 const headerLoginBtn = document.getElementById('header-login-btn');
@@ -3947,10 +3947,10 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                     // Parrainage supprimé: pas d’affichage de parrainés
 
                     if (userAvatar) {
-                        // Avatar forc� � logo_profil.jpg (ne pas modifier)
-                        userAvatar.src = "/logo_profil.jpg";
-                        userAvatar.style.display = "flex";
-                    }
+                        userAvatar.style.display = 'flex';
+                        if (data.user.profile_picture_url) {
+                            // Ensure the URL is absolute if it starts with /public
+                            const bgUrl = `${API_BASE}${data.user.profile_picture_url}?t=${Date.now()}`;
                             userAvatar.style.backgroundImage = `url('${bgUrl}')`;
                             userAvatar.textContent = '';
                         } else if (data.user.username) {
@@ -10114,12 +10114,12 @@ function initializeShopPage() {
                     refreshHeader();
                 });
             }
-            const headerAvatar = document.querySelector(".user-avatar");
+            const headerAvatar = document.querySelector('.user-avatar');
             if (headerAvatar) {
-                headerAvatar.src = "/logo_profil.jpg"; // Force logo pour tous
-                headerAvatar.style.cursor = "pointer";
-                headerAvatar.onclick = () => setPage("profile");
+                headerAvatar.style.cursor = 'pointer';
+                headerAvatar.addEventListener('click', () => setPage('profile'));
             }
+            const headerLoginBtn = document.getElementById('header-login-btn');
             if (headerLoginBtn) {
                 headerLoginBtn.addEventListener('click', openLoginPanel);
             }
