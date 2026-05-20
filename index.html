@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <script>
@@ -1133,7 +1133,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// ðŸ‘‹</spa
                         </svg>
                         <span id="header-notifications-dot" style="position:absolute;right:6px;bottom:6px;width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 8px rgba(239,68,68,0.7);display:none;"></span>
                     </button>                    <div class="profile-dropdown-container">
-                      <img src="/logo_profil.jpg" class="user-avatar profile-picture" alt="Profil" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%; cursor: pointer;" id="profilePictureDropdown">
+                      <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;" /><img src="Avatar/Lucid_Origin_Create_a_retrofuturistic_cyberpunk_NFT_character__0.jpeg" class="user-avatar profile-picture" alt="Profil" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%; cursor: pointer;" id="profilePictureDropdown">
                       <div class="profile-dropdown" id="profileDropdown">
                         <a href="/profil" class="dropdown-option">Aller sur le profil</a>
                         <a href="#" class="dropdown-option" id="changeProfilePic">Changer la photo de profil</a>
@@ -3957,9 +3957,9 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// ðŸ‘‹</spa
                             // Ensure the URL is absolute if it starts with /public
                             const bgUrl = `${API_BASE}${data.user.profile_picture_url}?t=${Date.now()}`;
                             userAvatar.style.backgroundImage = `url('${bgUrl}')`;
-                            // userAvatar.textContent = "";  // Désactivé : force logo_profil.jpg
+                            // userAvatar.textContent = "";  // Dï¿½sactivï¿½ : force logo_profil.jpg
                         } else if (data.user.username) {
-                            // userAvatar.textContent = data.user.username.charAt(0).toUpperCase();  // Désactivé
+                            // userAvatar.textContent = data.user.username.charAt(0).toUpperCase();  // Dï¿½sactivï¿½
                             userAvatar.style.backgroundImage = '';
                         }
                     }
@@ -10119,7 +10119,27 @@ function initializeShopPage() {
                     refreshHeader();
                 });
             }
-            const headerAvatar = document.querySelector('.user-avatar');
+            // === Handler photo de profil ===
+        document.getElementById('changeProfilePic').addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profilePhotoInput').click();
+        });
+        document.getElementById('profilePhotoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const src = ev.target.result;
+                document.querySelectorAll('.user-avatar, .profile-picture').forEach(function(el) {
+                    if (el.tagName === 'IMG') el.src = src;
+                    else el.style.backgroundImage = "url('" + src + "')";
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+        // ===========================
+        const headerAvatar = document.querySelector('.user-avatar');
             if (headerAvatar) {
                 headerAvatar.style.cursor = 'pointer';
                 headerAvatar.addEventListener('click', () => setPage('profile'));
@@ -11296,4 +11316,7 @@ La aplicaciÃ³n es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
   <div class="image-scroll" id="imageScroll"></div>
 </div>
 </body>
+
+
+
 
