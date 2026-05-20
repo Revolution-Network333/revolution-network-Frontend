@@ -8267,7 +8267,7 @@ function initializeShopPage() {
         (function rnBwInit() {
           const PAL  = [{id:'starter',gb:50,eur:5},{id:'standard',gb:200,eur:15},{id:'pro',gb:500,eur:30},{id:'expert',gb:1150,eur:60}];
           const SAV  = [null,'25%','40%','48%'];
-          const SUBS = [{id:'novice',gb:60,eur:5,cr:6000},{id:'standard',gb:250,eur:20,cr:25000},{id:'pro',gb:500,eur:40,cr:55000},{id:'premium',gb:1500,eur:100,cr:160000}];
+          const SUBS = [{id:'novice',gb:60,eur:5,cr:60},{id:'standard',gb:250,eur:20,cr:250},{id:'pro',gb:500,eur:40,cr:500},{id:'premium',gb:1500,eur:100,cr:1500}];
           const fe   = n => n.toFixed(2).replace('.',',')+' \u20ac';
           const el   = id => document.getElementById(id);
           function cp(gb){if(gb<=50)return gb*(5/50);if(gb<=200)return 5+(gb-50)*(10/150);if(gb<=500)return 15+(gb-200)*(15/300);if(gb<=1150)return 30+(gb-500)*(30/650);return 60+(gb-1150)*0.052;}
