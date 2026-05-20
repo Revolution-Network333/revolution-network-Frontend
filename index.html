@@ -1133,7 +1133,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// ðŸ‘‹</spa
                         </svg>
                         <span id="header-notifications-dot" style="position:absolute;right:6px;bottom:6px;width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 8px rgba(239,68,68,0.7);display:none;"></span>
                     </button>
-                    <div class="user-avatar">M</div>
+                    <img src="/logo_profil.jpg" class="user-avatar" alt="Profil">
                     <button id="header-login-btn" class="profile-btn primary" style="display:none;" onclick="setPage('login')">Sign in</button>
                     <select id="lang-switch" style="margin-left:10px;padding:6px 8px;border-radius:8px;background:#0b0f14;color:#fff;border:1px solid #1f2937;">
                         <option value="fr">FR</option>
@@ -3952,9 +3952,9 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// ðŸ‘‹</spa
                             // Ensure the URL is absolute if it starts with /public
                             const bgUrl = `${API_BASE}${data.user.profile_picture_url}?t=${Date.now()}`;
                             userAvatar.style.backgroundImage = `url('${bgUrl}')`;
-                            userAvatar.textContent = '';
+                            // userAvatar.textContent = "";  // Désactivé : force logo_profil.jpg
                         } else if (data.user.username) {
-                            userAvatar.textContent = data.user.username.charAt(0).toUpperCase();
+                            // userAvatar.textContent = data.user.username.charAt(0).toUpperCase();  // Désactivé
                             userAvatar.style.backgroundImage = '';
                         }
                     }
