@@ -5039,7 +5039,7 @@ main();</code></pre>
                                 <h3>${t('overview.chart.title')}</h3>
                                 <select class="filter-select" id="overview-chart-range">
                                     <option value="daily">${t('overview.chart.daily')}</option>
-                                    <option value="weekly">${t('overview.chart.weekly')}</option>
+                                    <option value="weekly" selected>${t('overview.chart.weekly')}</option>
                                     <option value="monthly">${t('overview.chart.monthly')}</option>
                                     <option value="yearly">Annuel</option>
                                 </select>
@@ -5183,14 +5183,14 @@ main();</code></pre>
             const select = document.getElementById('overview-chart-range');
             const tbody = document.querySelector('#overview-chart-table tbody');
             if (!select || !tbody) return;
-            const granularity = select.value || 'daily';
+            const granularity = select.value || 'weekly';
             fetch(`${API_BASE}/api/rewards/calendar?granularity=${encodeURIComponent(granularity)}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             .then(r => r.json())
             .then(d => {
                 const rawList = Array.isArray(d.points) ? d.points : [];
-                const granularityVal = select.value || "daily";
+                const granularityVal = select.value || "weekly";
                 const buckets = {};
                 rawList.forEach(p => {
                     const dObj = new Date(p.period);
