@@ -2482,7 +2482,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                 'download.points.note': 'Les points rendent éligible au futur airdrop.',
                 'download.install': 'Download Node (.exe)',
                 'download.guide': 'Aide',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.53/Revolution-Network-Node-Setup-1.0.53.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.49/Revolution-Network-Node-Setup-1.0.49.exe',
                 'download.mac_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1-MAC/Revolution-Network-Node-Setup-1.0.23.dmg',
                 'download.mac.title': 'Version macOS (Beta)',
                 'download.mac.install': 'Download Node (.dmg)',
@@ -2914,7 +2914,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                 'shop.node.btn': 'Buy the Node — 150 €',
                 'shop.node.err_login': 'Log in to purchase.',
                 'download.android.coming_soon_desc': 'The Android mobile app is under development.',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.53/Revolution-Network-Node-Setup-1.0.53.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.49/Revolution-Network-Node-Setup-1.0.49.exe',
                 'download.mac_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1-MAC/Revolution-Network-Node-Setup-1.0.23.dmg',
                 'download.mac.title': 'macOS Version (Beta)',
                 'download.mac.install': 'Download Node (.dmg)',
@@ -3190,7 +3190,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                 'download.recommended.step4': 'A shortcut will be created on your desktop.',
                 'download.recommended.step5': 'Launch the app and sign in via the “Sign in via website” button.',
                 'download.recommended.step6': 'Press the ? button to start earning points.',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.53/Revolution-Network-Node-Setup-1.0.53.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.49/Revolution-Network-Node-Setup-1.0.49.exe',
                 'download.mac_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1-MAC/Revolution-Network-Node-Setup-1.0.23.dmg',
                 'download.mac.title': 'macOS Version (Beta)',
                 'download.mac.install': 'Download Node (.dmg)',
@@ -9375,78 +9375,95 @@ function initializeShopPage() {
 
         function getWalletHTML() {
             return `
-                <div class="page-content futuristic-wallet">
-                    <div class="page-header" style="justify-content: center; margin-bottom: 40px;">
-                        <h1 class="page-title neon-text" style="font-size: 1.4rem; text-transform: uppercase; letter-spacing: 0.12em;">
-                            ${t('wallet.title')}
-                        </h1>
-                    </div>
-                    
-                    <div class="wallet-layout">
-                        <!-- Left Column: Balances & Stats -->
-                        <div class="wallet-main-card glass-card neon-border-green">
-                            <div class="balance-display">
-                                <div class="balance-item main-balance">
-                                    <span class="label">${t('wallet.balance')}</span>
-                                    <div class="value-container">
-                                        <span class="value" id="wallet-balance">0</span>
-                                        <span class="unit">ATH</span>
-                                    </div>
-                                </div>
-                                <div class="balance-item active-stake">
-                                    <span class="label">${t('wallet.stake.active')}</span>
-                                    <div class="value-container">
-                                        <span class="value small" id="stake-info">${t('wallet.none')}</span>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="page-content futuristic-wallet" style="max-width:1100px;margin:0 auto;padding:24px 16px;">
 
-                            <div class="staking-actions">
-                                <h2 class="section-title-mini">${t('wallet.staking.title')}</h2>
-                                <p class="wallet-info">${t('wallet.stake.balance')}: <span id="stake-wallet-balance" class="highlight">0</span> ATH</p>
-                                
-                                <div class="action-grid">
-                                    <div class="input-group">
-                                        <label>${t('wallet.stake.amount')}</label>
-                                        <div class="input-wrapper">
-                                            <input type="number" id="stake-amount" min="0" step="0.0001" placeholder="0.00">
-                                            <button class="neon-button primary" id="stake-btn">${t('wallet.stake.btn')}</button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="input-group">
-                                        <label>${t('wallet.withdraw.amount')}</label>
-                                        <input type="number" id="withdraw-amount" min="0" step="0.0001" placeholder="Montant">
-                                    </div>
-                                    
-                                    <div class="input-group">
-                                        <label>Adresse Solana</label>
-                                        <input type="text" id="withdraw-address" placeholder="Solana Address">
-                                    </div>
-                                    
-                                    <div class="button-group">
-                                        <button class="neon-button secondary" id="withdraw-btn">${t('wallet.withdraw.btn')}</button>
-                                        <button class="neon-button outline" id="unstake-btn">${t('wallet.unstake.btn')}</button>
-                                    </div>
-                                </div>
-                                <div class="notice-box-glass">${t('wallet.notice')}</div>
+                    <!-- Header -->
+                    <div style="text-align:center;margin-bottom:32px;">
+                        <h1 class="page-title neon-text" style="font-size:1.4rem;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">${t('wallet.title')}</h1>
+                    </div>
+
+                    <!-- APY Banner -->
+                    <div style="background:linear-gradient(135deg,rgba(34,197,94,0.15),rgba(16,185,129,0.08));border:1px solid rgba(34,197,94,0.3);border-radius:16px;padding:20px 28px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+                        <div style="display:flex;align-items:center;gap:16px;">
+                            <div style="width:48px;height:48px;border-radius:12px;background:rgba(34,197,94,0.2);border:1px solid rgba(34,197,94,0.4);display:flex;align-items:center;justify-content:center;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                            </div>
+                            <div>
+                                <div style="font-size:1rem;font-weight:800;color:#fff;">Staking ATH — Rendement passif</div>
+                                <div style="font-size:0.85rem;color:#9ca3af;margin-top:2px;">Stakez vos tokens Aether et générez des intérêts automatiquement</div>
                             </div>
                         </div>
-
-                        <!-- Right Column: NFTs & History -->
-                        <div class="wallet-side-column">
-                            <div class="glass-card nft-card neon-border-blue">
-                                <h2 class="section-title-mini">${t('wallet.nfts.title')}</h2>
-                                <div id="wallet-nfts" class="nft-display"></div>
-                                <div id="wallet-nfts-history" class="history-mini"></div>
+                        <div style="display:flex;gap:24px;flex-wrap:wrap;">
+                            <div style="text-align:center;">
+                                <div style="font-size:1.8rem;font-weight:900;color:#22c55e;font-family:'DM Mono',monospace;">16%</div>
+                                <div style="font-size:0.75rem;color:#9ca3af;text-transform:uppercase;letter-spacing:0.08em;">APY</div>
                             </div>
-
-                            <div class="glass-card history-card neon-border-purple">
-                                <h2 class="section-title-mini">${t('wallet.history')}</h2>
-                                <div id="wallet-history" class="history-container"></div>
+                            <div style="text-align:center;">
+                                <div style="font-size:1.8rem;font-weight:900;color:#4af0c4;font-family:'DM Mono',monospace;">Auto</div>
+                                <div style="font-size:0.75rem;color:#9ca3af;text-transform:uppercase;letter-spacing:0.08em;">Intérêts</div>
+                            </div>
+                            <div style="text-align:center;">
+                                <div style="font-size:1.8rem;font-weight:900;color:#a78bfa;font-family:'DM Mono',monospace;">∞</div>
+                                <div style="font-size:0.75rem;color:#9ca3af;text-transform:uppercase;letter-spacing:0.08em;">Durée</div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Main grid -->
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+
+                        <!-- Balance card -->
+                        <div style="background:radial-gradient(ellipse at top left,rgba(34,197,94,0.12) 0%,transparent 60%),rgba(17,24,39,0.85);border:1px solid rgba(34,197,94,0.2);border-radius:16px;padding:24px;">
+                            <div style="font-size:0.75rem;color:#9ca3af;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">${t('wallet.balance')}</div>
+                            <div style="font-size:2.2rem;font-weight:900;color:#fff;font-family:'DM Mono',monospace;"><span id="wallet-balance">0</span> <span style="font-size:1rem;color:#22c55e;">ATH</span></div>
+                            <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);">
+                                <div style="font-size:0.75rem;color:#9ca3af;margin-bottom:4px;">${t('wallet.stake.active')}</div>
+                                <div style="font-size:0.9rem;color:#4af0c4;font-family:'DM Mono',monospace;" id="stake-info">${t('wallet.none')}</div>
+                            </div>
+                        </div>
+
+                        <!-- Stake card -->
+                        <div style="background:radial-gradient(ellipse at top right,rgba(99,102,241,0.12) 0%,transparent 60%),rgba(17,24,39,0.85);border:1px solid rgba(99,102,241,0.2);border-radius:16px;padding:24px;">
+                            <div style="font-size:0.85rem;font-weight:700;color:#fff;margin-bottom:16px;">Staker des ATH</div>
+                            <div style="font-size:0.75rem;color:#9ca3af;margin-bottom:12px;">${t('wallet.stake.balance')}: <span id="stake-wallet-balance" style="color:#4af0c4;font-family:'DM Mono',monospace;">0</span> ATH</div>
+                            <div style="display:flex;gap:8px;margin-bottom:12px;">
+                                <input type="number" id="stake-amount" min="0" step="0.0001" placeholder="0.00" style="flex:1;padding:10px 12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-size:0.9rem;outline:none;">
+                                <button id="stake-btn" style="padding:10px 18px;background:linear-gradient(135deg,rgba(34,197,94,0.3),rgba(16,185,129,0.3));border:1px solid rgba(34,197,94,0.4);border-radius:8px;color:#22c55e;font-weight:700;cursor:pointer;white-space:nowrap;">${t('wallet.stake.btn')}</button>
+                            </div>
+                            <button id="unstake-btn" style="width:100%;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#9ca3af;font-weight:600;cursor:pointer;">${t('wallet.unstake.btn')}</button>
+                        </div>
+                    </div>
+
+                    <!-- Withdraw card -->
+                    <div style="background:rgba(17,24,39,0.85);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:24px;margin-bottom:16px;">
+                        <div style="font-size:0.85rem;font-weight:700;color:#fff;margin-bottom:16px;">Retirer des ATH</div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;flex-wrap:wrap;">
+                            <div>
+                                <div style="font-size:0.75rem;color:#9ca3af;margin-bottom:6px;">${t('wallet.withdraw.amount')}</div>
+                                <input type="number" id="withdraw-amount" min="0" step="0.0001" placeholder="Montant" style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-size:0.9rem;outline:none;box-sizing:border-box;">
+                            </div>
+                            <div>
+                                <div style="font-size:0.75rem;color:#9ca3af;margin-bottom:6px;">Adresse Solana</div>
+                                <input type="text" id="withdraw-address" placeholder="Solana Address" style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-size:0.9rem;outline:none;box-sizing:border-box;">
+                            </div>
+                            <button id="withdraw-btn" style="padding:10px 20px;background:linear-gradient(135deg,rgba(59,130,246,0.25),rgba(99,102,241,0.25));border:1px solid rgba(99,102,241,0.4);border-radius:8px;color:#fff;font-weight:700;cursor:pointer;white-space:nowrap;">${t('wallet.withdraw.btn')}</button>
+                        </div>
+                        <div style="margin-top:12px;padding:10px 14px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:8px;font-size:0.8rem;color:#fbbf24;">${t('wallet.notice')}</div>
+                    </div>
+
+                    <!-- NFTs + History -->
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                        <div style="background:rgba(17,24,39,0.85);border:1px solid rgba(59,130,246,0.15);border-radius:16px;padding:24px;">
+                            <div style="font-size:0.85rem;font-weight:700;color:#fff;margin-bottom:16px;">${t('wallet.nfts.title')}</div>
+                            <div id="wallet-nfts"></div>
+                            <div id="wallet-nfts-history" style="margin-top:12px;"></div>
+                        </div>
+                        <div style="background:rgba(17,24,39,0.85);border:1px solid rgba(139,92,246,0.15);border-radius:16px;padding:24px;">
+                            <div style="font-size:0.85rem;font-weight:700;color:#fff;margin-bottom:16px;">${t('wallet.history')}</div>
+                            <div id="wallet-history"></div>
+                        </div>
+                    </div>
+
                 </div>
             `;
         }
