@@ -9734,7 +9734,7 @@ function initializeShopPage() {
             const downloadInput = document.getElementById('download-url-input');
             const btnSaveDownload = document.getElementById('btn-save-download-url');
             const downloadHint = document.getElementById('download-url-hint');
-            fetch('/api/admin/settings/download-url', { headers: { 'Authorization': 'Bearer ' + token } })
+            fetch(`${API_BASE}/api/admin/settings/download-url`, { headers: { 'Authorization': 'Bearer ' + token } })
               .then(r => r.json()).then(d => {
                 if (downloadInput) downloadInput.value = d.url || '';
                 if (downloadHint) downloadHint.textContent = d.url ? '✅ URL actuelle définie' : 'Aucune URL définie';
@@ -9745,7 +9745,7 @@ function initializeShopPage() {
               btnSaveDownload.disabled = true;
               btnSaveDownload.textContent = 'Enregistrement...';
               try {
-                const r = await fetch('/api/admin/settings/download-url', {
+                const r = await fetch(`${API_BASE}/api/admin/settings/download-url`, {
                   method: 'POST',
                   headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
                   body: JSON.stringify({ url })
