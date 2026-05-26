@@ -149,9 +149,9 @@
     Revolution Network
   </a>
   <div class="nav-links">
-    <a href="/">Accueil</a>
-    <a href="/#jobs">Tous les jobs</a>
-    <a href="/Devs_Tools.html">🛠 Tester l'API</a>
+    <a href="/" data-i18n="nav.home">Accueil</a>
+    <a href="/#jobs" data-i18n="nav.jobs">Tous les jobs</a>
+    <a href="/Devs_Tools.html" data-i18n="nav.devtools">🛠 Tester l'API</a>
     <a href="https://discord.gg/eadE7uK6ss" target="_blank">Discord</a>
   </div>
   <div style="display:flex;align-items:center;gap:10px;">
@@ -160,7 +160,7 @@
       <option value="en">EN</option>
       <option value="es">ES</option>
     </select>
-    <a class="nav-cta" href="/Devs_Tools.html">Tester maintenant →</a>
+    <a class="nav-cta" href="/Devs_Tools.html" data-i18n="nav.cta">Tester maintenant →</a>
   </div>
 </nav>
 
@@ -168,15 +168,15 @@
 <section class="hero">
   <div class="hero-glow"></div>
   <div class="breadcrumb">
-    <a href="/">Accueil</a> / <a href="/#jobs">Jobs</a> / <span id="hero-type">…</span>
+    <a href="/" data-i18n="nav.home">Accueil</a> / <a href="/#jobs" data-i18n="nav.jobs">Jobs</a> / <span id="hero-type">…</span>
   </div>
   <div class="badge"><span class="badge-dot"></span><span id="hero-badge">API · Revolution Network</span></div>
   <div class="hero-emoji" id="hero-emoji">⚙️</div>
   <h1 id="hero-h1">Chargement…</h1>
   <p class="hero-sub" id="hero-sub"></p>
   <div class="hero-actions">
-    <a class="btn-p" href="/Devs_Tools.html" id="hero-tool-btn">🛠 Tester dans le DevTools</a>
-    <a class="btn-s" href="/#quickstart">Voir la doc API →</a>
+    <a class="btn-p" href="/Devs_Tools.html" id="hero-tool-btn" data-i18n="hero.tool_btn">🛠 Tester dans le DevTools</a>
+    <a class="btn-s" href="/#quickstart" data-i18n="hero.api_doc">Voir la doc API →</a>
   </div>
   <div class="hero-chips" id="hero-chips"></div>
 
@@ -184,19 +184,19 @@
   <div style="margin-top:2.5rem;display:flex;gap:2px;background:rgba(255,255,255,0.03);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);max-width:700px;width:100%;">
     <div style="flex:1;background:rgba(15,22,33,0.75);padding:1rem 1.25rem;text-align:center;">
       <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.5rem;color:#4af0c4;">2k+</div>
-      <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:#7a8799;margin-top:.2rem;">Jobs réalisés</div>
+      <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:#7a8799;margin-top:.2rem;" data-i18n="stat.jobs">Jobs réalisés</div>
     </div>
     <div style="flex:1;background:rgba(15,22,33,0.75);padding:1rem 1.25rem;text-align:center;">
       <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.5rem;color:#4af0c4;">100%</div>
-      <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:#7a8799;margin-top:.2rem;">Taux de succès</div>
+      <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:#7a8799;margin-top:.2rem;" data-i18n="stat.success">Taux de succès</div>
     </div>
     <div style="flex:1;background:rgba(15,22,33,0.75);padding:1rem 1.25rem;text-align:center;">
       <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.5rem;color:#4af0c4;">~3s</div>
-      <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:#7a8799;margin-top:.2rem;">Latence médiane</div>
+      <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:#7a8799;margin-top:.2rem;" data-i18n="stat.latency">Latence médiane</div>
     </div>
     <div style="flex:1;background:rgba(15,22,33,0.75);padding:1rem 1.25rem;text-align:center;">
       <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.5rem;color:#4af0c4;">60+</div>
-      <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:#7a8799;margin-top:.2rem;">Jobs simultanés</div>
+      <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:#7a8799;margin-top:.2rem;" data-i18n="stat.concurrent">Jobs simultanés</div>
     </div>
   </div>
 </section>
@@ -205,7 +205,7 @@
 
 <!-- USE CASES -->
 <section data-r>
-  <div class="section-label">Cas d'usage</div>
+  <div class="section-label" data-i18n="sec.usecases">Cas d'usage</div>
   <h2 class="section-title" id="uc-title">Applications concrètes</h2>
   <p class="section-sub" id="uc-sub"></p>
   <div class="uc-grid" id="uc-grid"></div>
@@ -215,11 +215,16 @@
 
 <!-- PARAMS -->
 <section data-r>
-  <div class="section-label">Référence API</div>
-  <h2 class="section-title">Paramètres <span id="param-job-name">…</span></h2>
-  <p class="section-sub">Tous les champs acceptés par l'endpoint <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">POST /api/enterprise/v1/jobs</code></p>
+  <div class="section-label" data-i18n="sec.api_ref">Référence API</div>
+  <h2 class="section-title" data-i18n="params.title">Paramètres <span id="param-job-name">…</span></h2>
+  <p class="section-sub" data-i18n="params.sub">Tous les champs acceptés par l'endpoint <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">POST /api/enterprise/v1/jobs</code></p>
   <table class="params-table">
-    <thead><tr><th>Paramètre</th><th>Type</th><th>Requis</th><th>Description & valeurs</th></tr></thead>
+    <thead><tr>
+      <th data-i18n="table.param">Paramètre</th>
+      <th data-i18n="table.type">Type</th>
+      <th data-i18n="table.required">Requis</th>
+      <th data-i18n="table.desc">Description & valeurs</th>
+    </tr></thead>
     <tbody id="params-body"></tbody>
   </table>
 </section>
@@ -228,18 +233,18 @@
 
 <!-- CODE EXAMPLES -->
 <section data-r>
-  <div class="section-label">Exemples de code</div>
-  <h2 class="section-title">Prêt en <span>30 secondes</span></h2>
-  <p class="section-sub">Copiez-collez. Remplacez <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">YOUR_KEY</code> par votre clé API.</p>
+  <div class="section-label" data-i18n="sec.code">Exemples de code</div>
+  <h2 class="section-title" data-i18n="code.title">Prêt en <span>30 secondes</span></h2>
+  <p class="section-sub" data-i18n="code.sub">Copiez-collez. Remplacez <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">YOUR_KEY</code> par votre clé API.</p>
   <div class="code-grid" id="code-grid"></div>
 
   <!-- Try It Banner -->
   <div class="try-banner">
     <div>
-      <h3>🛠 Tester avec le <span>DevTools interactif</span></h3>
-      <p>Formulaire visuel, résultat JSON en direct, historique des requêtes — sans écrire une seule ligne de code. Parfait pour explorer l'API.</p>
+      <h3 data-i18n="devtools.title">🛠 Tester avec le <span>DevTools interactif</span></h3>
+      <p data-i18n="devtools.desc">Formulaire visuel, résultat JSON en direct, historique des requêtes — sans écrire une seule ligne de code. Parfait pour explorer l'API.</p>
     </div>
-    <a class="btn-tool" href="/Devs_Tools.html" id="tool-link">Ouvrir le DevTools →</a>
+    <a class="btn-tool" href="/Devs_Tools.html" id="tool-link" data-i18n="devtools.btn">Ouvrir le DevTools →</a>
   </div>
 </section>
 
@@ -247,29 +252,29 @@
 
 <!-- OTHER JOBS -->
 <section data-r>
-  <div class="section-label">Autres jobs disponibles</div>
-  <h2 class="section-title">Un seul <span>endpoint</span>, 10 types</h2>
-  <p class="section-sub">Tous les jobs passent par la même API. Changez juste le champ <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">type</code>.</p>
+  <div class="section-label" data-i18n="sec.other_jobs">Autres jobs disponibles</div>
+  <h2 class="section-title" data-i18n="other.title">Un seul <span>endpoint</span>, 10 types</h2>
+  <p class="section-sub" data-i18n="other.sub">Tous les jobs passent par la même API. Changez juste le champ <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">type</code>.</p>
   <div class="jobs-grid" id="other-jobs"></div>
 </section>
 
 <!-- CTA FINAL -->
 <section class="cta-final" style="z-index:1;position:relative;">
   <div class="cta-glow"></div>
-  <h2>3 GB gratuits<br>chaque <span>semaine</span></h2>
-  <p>Pas de carte bancaire. Résultats en secondes. Pas de vendor lock-in.</p>
+  <h2 data-i18n="cta.title">3 GB gratuits<br>chaque <span>semaine</span></h2>
+  <p data-i18n="cta.sub">Pas de carte bancaire. Résultats en secondes. Pas de vendor lock-in.</p>
   <div class="cta-acts">
-    <a class="btn-p" href="/">Créer un compte gratuit</a>
-    <a class="btn-s" href="/Devs_Tools.html">Tester l'API →</a>
+    <a class="btn-p" href="/" data-i18n="cta.btn.primary">Créer un compte gratuit</a>
+    <a class="btn-s" href="/Devs_Tools.html" data-i18n="cta.btn.secondary">Tester l'API →</a>
   </div>
 </section>
 
 <footer>
   <a class="logo" href="/"><span class="logo-dot"></span>Revolution Network</a>
   <div class="f-links">
-    <a href="/">Accueil</a>
-    <a href="/#jobs">Tous les jobs</a>
-    <a href="/scrape_get.html">Scraping résidentiel</a>
+    <a href="/" data-i18n="nav.home">Accueil</a>
+    <a href="/#jobs" data-i18n="nav.jobs">Tous les jobs</a>
+    <a href="/scrape_get.html" data-i18n="footer.scraping">Scraping résidentiel</a>
     <a href="/Devs_Tools.html">DevTools</a>
     <a href="https://discord.gg/eadE7uK6ss" target="_blank">Discord</a>
   </div>
@@ -277,18 +282,103 @@
 </footer>
 
 <script>
-// Language switcher — syncs with main site lang preference
-(function(){
-  const sel = document.getElementById('job-lang-switch');
-  if(!sel) return;
+/* ============================================================
+   i18n — static labels FR / EN / ES
+   ============================================================ */
+const JOB_I18N = {
+  fr: {
+    'nav.home': 'Accueil', 'nav.jobs': 'Tous les jobs', 'nav.devtools': '🛠 Tester l\'API', 'nav.cta': 'Tester maintenant →',
+    'hero.tool_btn': '🛠 Tester dans le DevTools', 'hero.api_doc': 'Voir la doc API →',
+    'stat.jobs': 'Jobs réalisés', 'stat.success': 'Taux de succès', 'stat.latency': 'Latence médiane', 'stat.concurrent': 'Jobs simultanés',
+    'sec.usecases': 'Cas d\'usage', 'sec.api_ref': 'Référence API', 'sec.code': 'Exemples de code', 'sec.other_jobs': 'Autres jobs disponibles',
+    'params.title': 'Paramètres <span id="param-job-name">…</span>',
+    'params.sub': 'Tous les champs acceptés par l\'endpoint <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">POST /api/enterprise/v1/jobs</code>',
+    'table.param': 'Paramètre', 'table.type': 'Type', 'table.required': 'Requis', 'table.desc': 'Description & valeurs',
+    'label.required': 'requis', 'label.optional': 'optionnel',
+    'code.title': 'Prêt en <span>30 secondes</span>',
+    'code.sub': 'Copiez-collez. Remplacez <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">YOUR_KEY</code> par votre clé API.',
+    'devtools.title': '🛠 Tester avec le <span>DevTools interactif</span>',
+    'devtools.desc': 'Formulaire visuel, résultat JSON en direct, historique des requêtes — sans écrire une seule ligne de code. Parfait pour explorer l\'API.',
+    'devtools.btn': 'Ouvrir le DevTools →',
+    'other.title': 'Un seul <span>endpoint</span>, 10 types',
+    'other.sub': 'Tous les jobs passent par la même API. Changez juste le champ <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">type</code>.',
+    'cta.title': '3 GB gratuits<br>chaque <span>semaine</span>',
+    'cta.sub': 'Pas de carte bancaire. Résultats en secondes. Pas de vendor lock-in.',
+    'cta.btn.primary': 'Créer un compte gratuit', 'cta.btn.secondary': 'Tester l\'API →',
+    'footer.scraping': 'Scraping résidentiel',
+  },
+  en: {
+    'nav.home': 'Home', 'nav.jobs': 'All jobs', 'nav.devtools': '🛠 Test the API', 'nav.cta': 'Try now →',
+    'hero.tool_btn': '🛠 Test in DevTools', 'hero.api_doc': 'View API docs →',
+    'stat.jobs': 'Jobs done', 'stat.success': 'Success rate', 'stat.latency': 'Median latency', 'stat.concurrent': 'Concurrent jobs',
+    'sec.usecases': 'Use cases', 'sec.api_ref': 'API Reference', 'sec.code': 'Code examples', 'sec.other_jobs': 'Other available jobs',
+    'params.title': 'Parameters <span id="param-job-name">…</span>',
+    'params.sub': 'All fields accepted by the <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">POST /api/enterprise/v1/jobs</code> endpoint',
+    'table.param': 'Parameter', 'table.type': 'Type', 'table.required': 'Required', 'table.desc': 'Description & values',
+    'label.required': 'required', 'label.optional': 'optional',
+    'code.title': 'Ready in <span>30 seconds</span>',
+    'code.sub': 'Copy-paste. Replace <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">YOUR_KEY</code> with your API key.',
+    'devtools.title': '🛠 Test with the <span>interactive DevTools</span>',
+    'devtools.desc': 'Visual form, live JSON result, request history — without writing a single line of code. Perfect for exploring the API.',
+    'devtools.btn': 'Open DevTools →',
+    'other.title': 'One <span>endpoint</span>, 10 types',
+    'other.sub': 'All jobs go through the same API. Just change the <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">type</code> field.',
+    'cta.title': '3 GB free<br>every <span>week</span>',
+    'cta.sub': 'No credit card. Results in seconds. No vendor lock-in.',
+    'cta.btn.primary': 'Create a free account', 'cta.btn.secondary': 'Test the API →',
+    'footer.scraping': 'Residential scraping',
+  },
+  es: {
+    'nav.home': 'Inicio', 'nav.jobs': 'Todos los jobs', 'nav.devtools': '🛠 Probar la API', 'nav.cta': 'Probar ahora →',
+    'hero.tool_btn': '🛠 Probar en DevTools', 'hero.api_doc': 'Ver la doc API →',
+    'stat.jobs': 'Jobs realizados', 'stat.success': 'Tasa de éxito', 'stat.latency': 'Latencia mediana', 'stat.concurrent': 'Jobs simultáneos',
+    'sec.usecases': 'Casos de uso', 'sec.api_ref': 'Referencia API', 'sec.code': 'Ejemplos de código', 'sec.other_jobs': 'Otros jobs disponibles',
+    'params.title': 'Parámetros <span id="param-job-name">…</span>',
+    'params.sub': 'Todos los campos aceptados por el endpoint <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">POST /api/enterprise/v1/jobs</code>',
+    'table.param': 'Parámetro', 'table.type': 'Tipo', 'table.required': 'Requerido', 'table.desc': 'Descripción & valores',
+    'label.required': 'requerido', 'label.optional': 'opcional',
+    'code.title': 'Listo en <span>30 segundos</span>',
+    'code.sub': 'Copia y pega. Reemplaza <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">YOUR_KEY</code> con tu clave API.',
+    'devtools.title': '🛠 Probar con el <span>DevTools interactivo</span>',
+    'devtools.desc': 'Formulario visual, resultado JSON en vivo, historial de solicitudes — sin escribir una sola línea de código. Perfecto para explorar la API.',
+    'devtools.btn': 'Abrir DevTools →',
+    'other.title': 'Un solo <span>endpoint</span>, 10 tipos',
+    'other.sub': 'Todos los jobs pasan por la misma API. Solo cambia el campo <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">type</code>.',
+    'cta.title': '3 GB gratis<br>cada <span>semana</span>',
+    'cta.sub': 'Sin tarjeta de crédito. Resultados en segundos. Sin vendor lock-in.',
+    'cta.btn.primary': 'Crear una cuenta gratuita', 'cta.btn.secondary': 'Probar la API →',
+    'footer.scraping': 'Scraping residencial',
+  }
+};
+
+function getCurrentLang() {
   const saved = localStorage.getItem('lang') || navigator.language?.slice(0,2) || 'fr';
-  const valid = ['fr','en','es'];
-  sel.value = valid.includes(saved) ? saved : 'fr';
-  sel.addEventListener('change', function(){
-    localStorage.setItem('lang', this.value);
-    window.location.href = '/?lang=' + this.value;
+  return ['fr','en','es'].includes(saved) ? saved : 'fr';
+}
+
+function applyLang(lang) {
+  const dict = JOB_I18N[lang] || JOB_I18N.fr;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key] !== undefined) el.innerHTML = dict[key];
   });
-})();
+  const sel = document.getElementById('job-lang-switch');
+  if (sel) sel.value = lang;
+}
+
+// Init lang switcher
+document.addEventListener('DOMContentLoaded', function() {
+  const sel = document.getElementById('job-lang-switch');
+  if (!sel) return;
+  const lang = getCurrentLang();
+  sel.value = lang;
+  applyLang(lang);
+  sel.addEventListener('change', function() {
+    localStorage.setItem('lang', this.value);
+    applyLang(this.value);
+    render();
+  });
+});
 </script>
 
 <script>
@@ -836,13 +926,15 @@ function render() {
   ).join('');
 
   // Params
+  const lang = getCurrentLang();
+  const dict = JOB_I18N[lang] || JOB_I18N.fr;
   document.getElementById('param-job-name').textContent = type;
   document.getElementById('params-body').innerHTML = job.params.map(p => {
     const vals = p.values.length ? `<div class="param-values">${p.values.map(v=>`<span class="param-val">${v}</span>`).join('')}</div>` : '';
     return `<tr>
       <td><span class="param-name">${p.name}</span></td>
       <td><span class="param-type">${p.type}</span></td>
-      <td>${p.req ? '<span class="param-req">requis</span>' : '<span class="param-opt">optionnel</span>'}</td>
+      <td>${p.req ? `<span class="param-req">${dict['label.required']||'requis'}</span>` : `<span class="param-opt">${dict['label.optional']||'optionnel'}</span>`}</td>
       <td><span class="param-desc">${p.desc}</span>${vals}</td>
     </tr>`;
   }).join('');
@@ -876,6 +968,7 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 
 render();
+applyLang(getCurrentLang());
 document.querySelectorAll('[data-r]').forEach(el => observer.observe(el));
 </script>
 <script src="grid-bg.js"></script>

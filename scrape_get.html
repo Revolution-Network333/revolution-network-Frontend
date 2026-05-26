@@ -235,9 +235,9 @@
     Revolution Network
   </a>
   <div class="nav-links">
-    <a href="/">Accueil</a>
-    <a href="/#jobs">Tous les jobs</a>
-    <a href="/#how">Comment ça marche</a>
+    <a href="/" data-i18n="nav.home">Accueil</a>
+    <a href="/#jobs" data-i18n="nav.jobs">Tous les jobs</a>
+    <a href="/#how" data-i18n="nav.how">Comment ça marche</a>
     <a href="https://discord.gg/eadE7uK6ss" target="_blank">Discord</a>
   </div>
   <div style="display:flex;align-items:center;gap:10px;">
@@ -246,7 +246,7 @@
       <option value="en">EN</option>
       <option value="es">ES</option>
     </select>
-    <a class="nav-cta" href="/">Accéder au Dashboard →</a>
+    <a class="nav-cta" href="/" data-i18n="nav.cta">Accéder au Dashboard →</a>
   </div>
 </nav>
 
@@ -255,38 +255,38 @@
   <div class="hero-glow"></div>
   <div class="badge">
     <span class="badge-dot"></span>
-    scrape_get · IPs Résidentielles 100%
+    <span data-i18n="badge">scrape_get · IPs Résidentielles 100%</span>
   </div>
   <h1>
-    Scraping via<br>
-    <span class="accent">vraies IPs résidentielles.</span><br>
-    <span class="strike">Pas du datacenter.</span>
+    <span data-i18n="hero.h1.line1">Scraping via</span><br>
+    <span class="accent" data-i18n="hero.h1.accent">vraies IPs résidentielles.</span><br>
+    <span class="strike" data-i18n="hero.h1.strike">Pas du datacenter.</span>
   </h1>
-  <p class="hero-sub">
+  <p class="hero-sub" data-i18n="hero.sub">
     Chaque requête part d'une vraie connexion domestique, depuis un vrai pays, sur un vrai réseau d'accès. Bypass anti-bot garanti. Zéro détection.
   </p>
   <div class="hero-actions">
-    <a class="btn-p" href="/">Essayer gratuitement — 3 GB/semaine</a>
-    <a class="btn-s" href="#quickstart">Voir le code →</a>
+    <a class="btn-p" href="/" data-i18n="hero.cta.primary">Essayer gratuitement — 3 GB/semaine</a>
+    <a class="btn-s" href="#quickstart" data-i18n="hero.cta.secondary">Voir le code →</a>
   </div>
 
   <!-- Stats bar -->
   <div class="hero-stats">
     <div class="hero-stat">
       <span class="hero-stat-val">100%</span>
-      <span class="hero-stat-label">IPs résidentielles</span>
+      <span class="hero-stat-label" data-i18n="stat.residential">IPs résidentielles</span>
     </div>
     <div class="hero-stat">
       <span class="hero-stat-val">0.08 €</span>
-      <span class="hero-stat-label">par GB</span>
+      <span class="hero-stat-label" data-i18n="stat.per_gb">par GB</span>
     </div>
     <div class="hero-stat">
       <span class="hero-stat-val">2k+</span>
-      <span class="hero-stat-label">jobs réalisés</span>
+      <span class="hero-stat-label" data-i18n="stat.jobs">jobs réalisés</span>
     </div>
     <div class="hero-stat">
       <span class="hero-stat-val">100%</span>
-      <span class="hero-stat-label">taux de succès</span>
+      <span class="hero-stat-label" data-i18n="stat.success">taux de succès</span>
     </div>
   </div>
 </section>
@@ -295,52 +295,52 @@
 <section style="padding:0 2rem 3rem;max-width:1100px;margin:0 auto;position:relative;z-index:1;" data-r>
   <div class="res-banner">
     <div class="res-banner-left">
-      <h3>🏠 Pourquoi les IPs <span>résidentielles</span> changent tout</h3>
-      <p>Les anti-bots détectent les datacenters en millisecondes — Cloudflare, Akamai, DataDome, PerimeterX. Avec Revolution Network, chaque requête provient d'un vrai foyer, d'un vrai FAI, d'une vraie adresse IP assignée par DHCP. Impossible à distinguer d'un utilisateur humain normal.</p>
+      <h3>🏠 <span data-i18n="res.title">Pourquoi les IPs <span>résidentielles</span> changent tout</span></h3>
+      <p data-i18n="res.desc">Les anti-bots détectent les datacenters en millisecondes — Cloudflare, Akamai, DataDome, PerimeterX. Avec Revolution Network, chaque requête provient d'un vrai foyer, d'un vrai FAI, d'une vraie adresse IP assignée par DHCP. Impossible à distinguer d'un utilisateur humain normal.</p>
     </div>
     <div class="res-banner-right">
-      <div class="res-chip res-chip-green">✓ Résidentiel · pas datacenter</div>
-      <div class="res-chip res-chip-green">✓ Rotation automatique par IP</div>
-      <div class="res-chip res-chip-green">✓ Géolocalisation réelle</div>
-      <div class="res-chip res-chip-blue">→ Bypass Cloudflare, DataDome, PerimeterX</div>
+      <div class="res-chip res-chip-green" data-i18n="res.chip1">✓ Résidentiel · pas datacenter</div>
+      <div class="res-chip res-chip-green" data-i18n="res.chip2">✓ Rotation automatique par IP</div>
+      <div class="res-chip res-chip-green" data-i18n="res.chip3">✓ Géolocalisation réelle</div>
+      <div class="res-chip res-chip-blue" data-i18n="res.chip4">→ Bypass Cloudflare, DataDome, PerimeterX</div>
     </div>
   </div>
 </section>
 
 <!-- VS COMPARISON -->
 <section data-r>
-  <div class="section-label">Comparaison</div>
-  <h2 class="section-title">Revolution vs <span>Bright Data</span></h2>
-  <p class="section-sub">Même qualité d'IP résidentielle. 100x moins cher. Pas de contrat annuel.</p>
+  <div class="section-label" data-i18n="vs.label">Comparaison</div>
+  <h2 class="section-title" data-i18n="vs.title">Revolution vs <span>Bright Data</span></h2>
+  <p class="section-sub" data-i18n="vs.sub">Même qualité d'IP résidentielle. 100x moins cher. Pas de contrat annuel.</p>
 
   <div class="vs-grid">
     <div class="vs-card them">
       <div class="vs-header">
         <div class="vs-title">Bright Data</div>
-        <div class="vs-tag">❌ Trop cher</div>
+        <div class="vs-tag" data-i18n="vs.them.tag">❌ Trop cher</div>
       </div>
       <div class="vs-rows">
-        <div class="vs-row"><span class="vs-key">Prix résidentiel</span><span class="vs-val">8–15 $/GB</span></div>
-        <div class="vs-row"><span class="vs-key">Engagement minimum</span><span class="vs-val">500 $/mois</span></div>
-        <div class="vs-row"><span class="vs-key">Contrat</span><span class="vs-val">Annuel obligatoire</span></div>
-        <div class="vs-row"><span class="vs-key">Setup</span><span class="vs-val">SDK propriétaire</span></div>
-        <div class="vs-row"><span class="vs-key">Source des IPs</span><span class="vs-val">Pool opaque</span></div>
-        <div class="vs-row"><span class="vs-key">GB gratuits</span><span class="vs-val">Aucun</span></div>
+        <div class="vs-row"><span class="vs-key" data-i18n="vs.row.price">Prix résidentiel</span><span class="vs-val">8–15 $/GB</span></div>
+        <div class="vs-row"><span class="vs-key" data-i18n="vs.row.min">Engagement minimum</span><span class="vs-val">500 $/mois</span></div>
+        <div class="vs-row"><span class="vs-key" data-i18n="vs.row.contract">Contrat</span><span class="vs-val" data-i18n="vs.them.contract">Annuel obligatoire</span></div>
+        <div class="vs-row"><span class="vs-key">Setup</span><span class="vs-val" data-i18n="vs.them.setup">SDK propriétaire</span></div>
+        <div class="vs-row"><span class="vs-key" data-i18n="vs.row.source">Source des IPs</span><span class="vs-val" data-i18n="vs.them.source">Pool opaque</span></div>
+        <div class="vs-row"><span class="vs-key" data-i18n="vs.row.free">GB gratuits</span><span class="vs-val" data-i18n="vs.them.free">Aucun</span></div>
       </div>
     </div>
 
     <div class="vs-card us">
       <div class="vs-header">
         <div class="vs-title">Revolution Network</div>
-        <div class="vs-tag">✓ 100x moins cher</div>
+        <div class="vs-tag" data-i18n="vs.us.tag">✓ 100x moins cher</div>
       </div>
       <div class="vs-rows">
-        <div class="vs-row"><span class="vs-key">Prix résidentiel</span><span class="vs-val">0.08 €/GB</span></div>
-        <div class="vs-row"><span class="vs-key">Engagement minimum</span><span class="vs-val">Aucun</span></div>
-        <div class="vs-row"><span class="vs-key">Contrat</span><span class="vs-val">Pay-as-you-go</span></div>
+        <div class="vs-row"><span class="vs-key" data-i18n="vs.row.price">Prix résidentiel</span><span class="vs-val">0.08 €/GB</span></div>
+        <div class="vs-row"><span class="vs-key" data-i18n="vs.row.min">Engagement minimum</span><span class="vs-val" data-i18n="vs.us.min">Aucun</span></div>
+        <div class="vs-row"><span class="vs-key" data-i18n="vs.row.contract">Contrat</span><span class="vs-val">Pay-as-you-go</span></div>
         <div class="vs-row"><span class="vs-key">Setup</span><span class="vs-val">curl + x-api-key</span></div>
-        <div class="vs-row"><span class="vs-key">Source des IPs</span><span class="vs-val">Résidentiel 100%</span></div>
-        <div class="vs-row"><span class="vs-key">GB gratuits</span><span class="vs-val">3 GB/semaine</span></div>
+        <div class="vs-row"><span class="vs-key" data-i18n="vs.row.source">Source des IPs</span><span class="vs-val" data-i18n="vs.us.source">Résidentiel 100%</span></div>
+        <div class="vs-row"><span class="vs-key" data-i18n="vs.row.free">GB gratuits</span><span class="vs-val" data-i18n="vs.us.free">3 GB/semaine</span></div>
       </div>
     </div>
   </div>
@@ -350,14 +350,14 @@
 <div class="ip-section" data-r>
   <div class="ip-inner">
     <div>
-      <div class="section-label">Réseau décentralisé</div>
-      <div class="ip-label-text">Des milliers de vraies <span>connexions domestiques</span> à travers le monde</div>
-      <p class="ip-desc">Chaque node Revolution Network est une vraie machine chez un vrai utilisateur — France Télécom, Deutsche Telekom, Comcast, NTT. Leurs IPs sont assignées par de vrais FAI résidentiels. Aucun datacenter, aucun cloud provider, aucun proxy connu.</p>
+      <div class="section-label" data-i18n="ip.label">Réseau décentralisé</div>
+      <div class="ip-label-text" data-i18n="ip.title">Des milliers de vraies <span>connexions domestiques</span> à travers le monde</div>
+      <p class="ip-desc" data-i18n="ip.desc">Chaque node Revolution Network est une vraie machine chez un vrai utilisateur — France Télécom, Deutsche Telekom, Comcast, NTT. Leurs IPs sont assignées par de vrais FAI résidentiels. Aucun datacenter, aucun cloud provider, aucun proxy connu.</p>
       <div class="ip-perks">
-        <div class="ip-perk"><div class="ip-perk-icon">🏠</div><div><strong>FAI résidentiel réel</strong> — Orange, Free, SFR, Bouygues, Comcast, BT, Vodafone... les mêmes FAI que vos utilisateurs cibles.</div></div>
-        <div class="ip-perk"><div class="ip-perk-icon">🌍</div><div><strong>50+ pays, 200+ villes</strong> — Cibler un pays précis, une ville, ou laisser le réseau choisir l'IP optimale automatiquement.</div></div>
-        <div class="ip-perk"><div class="ip-perk-icon">🔄</div><div><strong>Rotation par requête</strong> — Chaque appel API peut utiliser une IP différente, ou maintenir une session sur la même IP.</div></div>
-        <div class="ip-perk"><div class="ip-perk-icon">🛡️</div><div><strong>Score de réputation élevé</strong> — Les IPs résidentielles ont un score de confiance maximal sur tous les systèmes anti-bot.</div></div>
+        <div class="ip-perk"><div class="ip-perk-icon">🏠</div><div data-i18n="ip.perk1"><strong>FAI résidentiel réel</strong> — Orange, Free, SFR, Bouygues, Comcast, BT, Vodafone... les mêmes FAI que vos utilisateurs cibles.</div></div>
+        <div class="ip-perk"><div class="ip-perk-icon">🌍</div><div data-i18n="ip.perk2"><strong>50+ pays, 200+ villes</strong> — Cibler un pays précis, une ville, ou laisser le réseau choisir l'IP optimale automatiquement.</div></div>
+        <div class="ip-perk"><div class="ip-perk-icon">🔄</div><div data-i18n="ip.perk3"><strong>Rotation par requête</strong> — Chaque appel API peut utiliser une IP différente, ou maintenir une session sur la même IP.</div></div>
+        <div class="ip-perk"><div class="ip-perk-icon">🛡️</div><div data-i18n="ip.perk4"><strong>Score de réputation élevé</strong> — Les IPs résidentielles ont un score de confiance maximal sur tous les systèmes anti-bot.</div></div>
       </div>
     </div>
     <div class="ip-map">
@@ -387,9 +387,9 @@
 
 <!-- ANTI-BOT BYPASS -->
 <section data-r>
-  <div class="section-label">Compatibilité</div>
-  <h2 class="section-title">Tous les <span>anti-bots</span> bypassed</h2>
-  <p class="section-sub">Les IPs résidentielles passent là où les proxies datacenter sont bloqués systématiquement.</p>
+  <div class="section-label" data-i18n="bypass.label">Compatibilité</div>
+  <h2 class="section-title" data-i18n="bypass.title">Tous les <span>anti-bots</span> bypassed</h2>
+  <p class="section-sub" data-i18n="bypass.sub">Les IPs résidentielles passent là où les proxies datacenter sont bloqués systématiquement.</p>
 
   <div class="bypass-grid">
     <div class="bypass-cell"><div class="bypass-icon">☁️</div><div><div class="bypass-name">Cloudflare</div></div><span class="bypass-status">✓ Bypass</span></div>
@@ -405,65 +405,65 @@
 
 <!-- MODES DE SCRAPING -->
 <section data-r>
-  <div class="section-label">Modes disponibles</div>
-  <h2 class="section-title">4 modes de scraping,<br><span>un seul endpoint</span></h2>
-  <p class="section-sub">Du simple HTTP au scraping JavaScript full-browser — le mode <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">auto</code> choisit le meilleur selon la cible.</p>
+  <div class="section-label" data-i18n="modes.label">Modes disponibles</div>
+  <h2 class="section-title" data-i18n="modes.title">4 modes de scraping,<br><span>un seul endpoint</span></h2>
+  <p class="section-sub" data-i18n="modes.sub">Du simple HTTP au scraping JavaScript full-browser — le mode <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">auto</code> choisit le meilleur selon la cible.</p>
 
   <div class="modes-grid">
     <div class="mode-card">
       <span class="mode-icon">⚡</span>
       <div class="mode-name">mode: "css"</div>
-      <div class="mode-title">CSS Rapide</div>
-      <div class="mode-desc">HTTP + parsing CSS/HTML direct. Idéal pour les sites statiques ou serveur-rendu. Minimal overhead, réponse instantanée.</div>
+      <div class="mode-title" data-i18n="mode.css.title">CSS Rapide</div>
+      <div class="mode-desc" data-i18n="mode.css.desc">HTTP + parsing CSS/HTML direct. Idéal pour les sites statiques ou serveur-rendu. Minimal overhead, réponse instantanée.</div>
       <span class="mode-tag">~0.5s · 1 MB</span>
     </div>
     <div class="mode-card">
       <span class="mode-icon">🌐</span>
       <div class="mode-name">mode: "browser"</div>
-      <div class="mode-title">Navigateur Headless</div>
-      <div class="mode-desc">Chromium complet, JavaScript exécuté, SPA supportées, interactions simulées. Sites React/Vue/Angular inclus.</div>
+      <div class="mode-title" data-i18n="mode.browser.title">Navigateur Headless</div>
+      <div class="mode-desc" data-i18n="mode.browser.desc">Chromium complet, JavaScript exécuté, SPA supportées, interactions simulées. Sites React/Vue/Angular inclus.</div>
       <span class="mode-tag blue">~3s · 5 MB</span>
     </div>
     <div class="mode-card">
       <span class="mode-icon">🤖</span>
       <div class="mode-name">mode: "ai"</div>
-      <div class="mode-title">Extraction IA</div>
-      <div class="mode-desc">Extraction intelligente par champ sémantique. Passe l'array <code>extract</code> — le modèle trouve les données peu importe la structure HTML.</div>
+      <div class="mode-title" data-i18n="mode.ai.title">Extraction IA</div>
+      <div class="mode-desc" data-i18n="mode.ai.desc">Extraction intelligente par champ sémantique. Passe l'array <code>extract</code> — le modèle trouve les données peu importe la structure HTML.</div>
       <span class="mode-tag orange">~5s · 10 MB</span>
     </div>
     <div class="mode-card">
       <span class="mode-icon">🎯</span>
       <div class="mode-name">mode: "auto"</div>
-      <div class="mode-title">Automatique</div>
-      <div class="mode-desc">Le réseau détecte le type de protection, choisit le mode optimal et applique un fallback si nécessaire. Zéro config.</div>
-      <span class="mode-tag">Recommandé · Smart fallback</span>
+      <div class="mode-title" data-i18n="mode.auto.title">Automatique</div>
+      <div class="mode-desc" data-i18n="mode.auto.desc">Le réseau détecte le type de protection, choisit le mode optimal et applique un fallback si nécessaire. Zéro config.</div>
+      <span class="mode-tag" data-i18n="mode.auto.tag">Recommandé · Smart fallback</span>
     </div>
   </div>
 </section>
 
 <!-- USE CASES WITH TABS + CODE -->
 <section data-r>
-  <div class="section-label">Cas d'usage</div>
-  <h2 class="section-title">Prêt pour la <span>production</span></h2>
-  <p class="section-sub">Des exemples réels pour les use cases les plus courants.</p>
+  <div class="section-label" data-i18n="uc.label">Cas d'usage</div>
+  <h2 class="section-title" data-i18n="uc.title">Prêt pour la <span>production</span></h2>
+  <p class="section-sub" data-i18n="uc.sub">Des exemples réels pour les use cases les plus courants.</p>
 
   <div class="uc-tabs">
-    <button class="uc-tab active" onclick="showUC('ecom')">E-commerce</button>
-    <button class="uc-tab" onclick="showUC('seo')">SEO / SERP</button>
-    <button class="uc-tab" onclick="showUC('immo')">Immobilier</button>
-    <button class="uc-tab" onclick="showUC('social')">Social / News</button>
+    <button class="uc-tab active" onclick="showUC('ecom')" data-i18n="uc.tab.ecom">E-commerce</button>
+    <button class="uc-tab" onclick="showUC('seo')" data-i18n="uc.tab.seo">SEO / SERP</button>
+    <button class="uc-tab" onclick="showUC('immo')" data-i18n="uc.tab.immo">Immobilier</button>
+    <button class="uc-tab" onclick="showUC('social')" data-i18n="uc.tab.social">Social / News</button>
   </div>
 
   <div class="uc-panel active" id="uc-ecom">
     <div class="uc-info">
-      <h3>Monitoring de prix e-commerce</h3>
-      <p>Suivez les prix Amazon, Cdiscount, Fnac en temps réel. Les IPs résidentielles françaises contournent les blocages géographiques et les détections anti-scraping des grands retailers.</p>
+      <h3 data-i18n="uc.ecom.title">Monitoring de prix e-commerce</h3>
+      <p data-i18n="uc.ecom.desc">Suivez les prix Amazon, Cdiscount, Fnac en temps réel. Les IPs résidentielles françaises contournent les blocages géographiques et les détections anti-scraping des grands retailers.</p>
       <div class="uc-chips">
         <span class="uc-chip">Amazon.fr</span>
         <span class="uc-chip">Cdiscount</span>
         <span class="uc-chip">Fnac</span>
         <span class="uc-chip">Leboncoin</span>
-        <span class="uc-chip">Prix dynamiques</span>
+        <span class="uc-chip" data-i18n="uc.ecom.chip">Prix dynamiques</span>
       </div>
     </div>
     <div class="uc-code-card">
@@ -502,8 +502,8 @@
 
   <div class="uc-panel" id="uc-seo">
     <div class="uc-info">
-      <h3>Suivi de positions SERP Google</h3>
-      <p>Scrapez les résultats Google depuis de vraies IPs résidentielles localisées. Obtenez les vrais résultats que voient vos utilisateurs, avec personnalisation géographique réelle.</p>
+      <h3 data-i18n="uc.seo.title">Suivi de positions SERP Google</h3>
+      <p data-i18n="uc.seo.desc">Scrapez les résultats Google depuis de vraies IPs résidentielles localisées. Obtenez les vrais résultats que voient vos utilisateurs, avec personnalisation géographique réelle.</p>
       <div class="uc-chips">
         <span class="uc-chip">Google SERP</span>
         <span class="uc-chip">Bing</span>
@@ -537,8 +537,8 @@
 
   <div class="uc-panel" id="uc-immo">
     <div class="uc-info">
-      <h3>Scraping immobilier</h3>
-      <p>Leboncoin, SeLoger, Logic-Immo bloquent agressivement les datacenters. Les IPs résidentielles françaises passent sans friction. Collectez prix, surfaces, localisations en temps réel.</p>
+      <h3 data-i18n="uc.immo.title">Scraping immobilier</h3>
+      <p data-i18n="uc.immo.desc">Leboncoin, SeLoger, Logic-Immo bloquent agressivement les datacenters. Les IPs résidentielles françaises passent sans friction. Collectez prix, surfaces, localisations en temps réel.</p>
       <div class="uc-chips">
         <span class="uc-chip">Leboncoin</span>
         <span class="uc-chip">SeLoger</span>
@@ -573,8 +573,8 @@ console.<span class="fn">log</span>(listings.output) <span class="cm">// array d
 
   <div class="uc-panel" id="uc-social">
     <div class="uc-info">
-      <h3>Veille médias & réseaux sociaux</h3>
-      <p>Scrapez LinkedIn, Twitter/X, Reddit, forums sans être bloqué. Les IPs résidentielles ont le même score de confiance qu'un vrai utilisateur humain qui navigue normalement.</p>
+      <h3 data-i18n="uc.social.title">Veille médias & réseaux sociaux</h3>
+      <p data-i18n="uc.social.desc">Scrapez LinkedIn, Twitter/X, Reddit, forums sans être bloqué. Les IPs résidentielles ont le même score de confiance qu'un vrai utilisateur humain qui navigue normalement.</p>
       <div class="uc-chips">
         <span class="uc-chip">LinkedIn</span>
         <span class="uc-chip">Reddit</span>
@@ -616,9 +616,9 @@ console.<span class="fn">log</span>(listings.output) <span class="cm">// array d
 
 <!-- QUICKSTART CODE -->
 <section id="quickstart" data-r>
-  <div class="section-label">Intégration</div>
-  <h2 class="section-title">Prêt en <span>30 secondes</span></h2>
-  <p class="section-sub">Pas de SDK, pas de configuration. Un curl et c'est parti.</p>
+  <div class="section-label" data-i18n="qs.label">Intégration</div>
+  <h2 class="section-title" data-i18n="qs.title">Prêt en <span>30 secondes</span></h2>
+  <p class="section-sub" data-i18n="qs.sub">Pas de SDK, pas de configuration. Un curl et c'est parti.</p>
 
   <div class="code-grid">
     <div class="code-card">
@@ -711,11 +711,11 @@ console.<span class="fn">log</span>(result.meta.isp)  <span class="cm">// "Orang
 <!-- CTA FINAL -->
 <section class="cta-final" style="position:relative;z-index:1;">
   <div class="cta-glow"></div>
-  <h2>Commencez à scraper<br>avec de <span>vraies IPs résidentielles</span></h2>
-  <p>3 GB gratuits par semaine. Pas de carte bancaire. Résultats en 30 secondes.</p>
+  <h2 data-i18n="cta.title">Commencez à scraper<br>avec de <span>vraies IPs résidentielles</span></h2>
+  <p data-i18n="cta.sub">3 GB gratuits par semaine. Pas de carte bancaire. Résultats en 30 secondes.</p>
   <div class="cta-acts">
-    <a class="btn-p" href="/">Créer un compte gratuit</a>
-    <a class="btn-s" href="https://discord.gg/eadE7uK6ss" target="_blank">Rejoindre le Discord</a>
+    <a class="btn-p" href="/" data-i18n="cta.btn.primary">Créer un compte gratuit</a>
+    <a class="btn-s" href="https://discord.gg/eadE7uK6ss" target="_blank" data-i18n="cta.btn.secondary">Rejoindre le Discord</a>
   </div>
 </section>
 
@@ -726,8 +726,8 @@ console.<span class="fn">log</span>(result.meta.isp)  <span class="cm">// "Orang
     Revolution Network
   </a>
   <div class="f-links">
-    <a href="/">Accueil</a>
-    <a href="/#jobs">Tous les jobs</a>
+    <a href="/" data-i18n="nav.home">Accueil</a>
+    <a href="/#jobs" data-i18n="nav.jobs">Tous les jobs</a>
     <a href="/ocr_pdf.html">OCR & PDF</a>
     <a href="/code_run_js.html">Code Execution</a>
     <a href="https://discord.gg/eadE7uK6ss" target="_blank">Discord</a>
@@ -736,21 +736,7 @@ console.<span class="fn">log</span>(result.meta.isp)  <span class="cm">// "Orang
 </footer>
 
 <script>
-// Language switcher — syncs with main site lang preference
-(function(){
-  const sel = document.getElementById('sg-lang-switch');
-  if(!sel) return;
-  const saved = localStorage.getItem('lang') || navigator.language?.slice(0,2) || 'fr';
-  const valid = ['fr','en','es'];
-  sel.value = valid.includes(saved) ? saved : 'fr';
-  sel.addEventListener('change', function(){
-    localStorage.setItem('lang', this.value);
-    // Redirect to main site which handles full i18n
-    window.location.href = '/?lang=' + this.value + '#scrape_get';
-  });
-})();
-</script>
-
+// Use case tabs
 function showUC(id) {
   document.querySelectorAll('.uc-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.uc-panel').forEach(p => p.classList.remove('active'));
@@ -763,6 +749,289 @@ const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('vis'); observer.unobserve(e.target); } });
 }, { threshold: 0.1 });
 document.querySelectorAll('[data-r]').forEach(el => observer.observe(el));
+
+// ── i18n ──────────────────────────────────────────────────────
+const SG_I18N = {
+  fr: {
+    'nav.home': 'Accueil',
+    'nav.jobs': 'Tous les jobs',
+    'nav.how': 'Comment ça marche',
+    'nav.cta': 'Accéder au Dashboard →',
+    'badge': 'scrape_get · IPs Résidentielles 100%',
+    'hero.h1.line1': 'Scraping via',
+    'hero.h1.accent': 'vraies IPs résidentielles.',
+    'hero.h1.strike': 'Pas du datacenter.',
+    'hero.sub': "Chaque requête part d'une vraie connexion domestique, depuis un vrai pays, sur un vrai réseau d'accès. Bypass anti-bot garanti. Zéro détection.",
+    'hero.cta.primary': 'Essayer gratuitement — 3 GB/semaine',
+    'hero.cta.secondary': 'Voir le code →',
+    'stat.residential': 'IPs résidentielles',
+    'stat.per_gb': 'par GB',
+    'stat.jobs': 'jobs réalisés',
+    'stat.success': 'taux de succès',
+    'res.title': 'Pourquoi les IPs <span>résidentielles</span> changent tout',
+    'res.desc': "Les anti-bots détectent les datacenters en millisecondes — Cloudflare, Akamai, DataDome, PerimeterX. Avec Revolution Network, chaque requête provient d'un vrai foyer, d'un vrai FAI, d'une vraie adresse IP assignée par DHCP. Impossible à distinguer d'un utilisateur humain normal.",
+    'res.chip1': '✓ Résidentiel · pas datacenter',
+    'res.chip2': '✓ Rotation automatique par IP',
+    'res.chip3': '✓ Géolocalisation réelle',
+    'res.chip4': '→ Bypass Cloudflare, DataDome, PerimeterX',
+    'vs.label': 'Comparaison',
+    'vs.title': 'Revolution vs <span>Bright Data</span>',
+    'vs.sub': "Même qualité d'IP résidentielle. 100x moins cher. Pas de contrat annuel.",
+    'vs.them.tag': '❌ Trop cher',
+    'vs.row.price': 'Prix résidentiel',
+    'vs.row.min': 'Engagement minimum',
+    'vs.row.contract': 'Contrat',
+    'vs.row.source': 'Source des IPs',
+    'vs.row.free': 'GB gratuits',
+    'vs.them.contract': 'Annuel obligatoire',
+    'vs.them.setup': 'SDK propriétaire',
+    'vs.them.source': 'Pool opaque',
+    'vs.them.free': 'Aucun',
+    'vs.us.tag': '✓ 100x moins cher',
+    'vs.us.min': 'Aucun',
+    'vs.us.source': 'Résidentiel 100%',
+    'vs.us.free': '3 GB/semaine',
+    'ip.label': 'Réseau décentralisé',
+    'ip.title': 'Des milliers de vraies <span>connexions domestiques</span> à travers le monde',
+    'ip.desc': "Chaque node Revolution Network est une vraie machine chez un vrai utilisateur — France Télécom, Deutsche Telekom, Comcast, NTT. Leurs IPs sont assignées par de vrais FAI résidentiels. Aucun datacenter, aucun cloud provider, aucun proxy connu.",
+    'ip.perk1': '<strong>FAI résidentiel réel</strong> — Orange, Free, SFR, Bouygues, Comcast, BT, Vodafone... les mêmes FAI que vos utilisateurs cibles.',
+    'ip.perk2': '<strong>50+ pays, 200+ villes</strong> — Cibler un pays précis, une ville, ou laisser le réseau choisir l\'IP optimale automatiquement.',
+    'ip.perk3': '<strong>Rotation par requête</strong> — Chaque appel API peut utiliser une IP différente, ou maintenir une session sur la même IP.',
+    'ip.perk4': '<strong>Score de réputation élevé</strong> — Les IPs résidentielles ont un score de confiance maximal sur tous les systèmes anti-bot.',
+    'bypass.label': 'Compatibilité',
+    'bypass.title': 'Tous les <span>anti-bots</span> bypassed',
+    'bypass.sub': 'Les IPs résidentielles passent là où les proxies datacenter sont bloqués systématiquement.',
+    'modes.label': 'Modes disponibles',
+    'modes.title': '4 modes de scraping,<br><span>un seul endpoint</span>',
+    'modes.sub': 'Du simple HTTP au scraping JavaScript full-browser — le mode <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">auto</code> choisit le meilleur selon la cible.',
+    'mode.css.title': 'CSS Rapide',
+    'mode.css.desc': 'HTTP + parsing CSS/HTML direct. Idéal pour les sites statiques ou serveur-rendu. Minimal overhead, réponse instantanée.',
+    'mode.browser.title': 'Navigateur Headless',
+    'mode.browser.desc': 'Chromium complet, JavaScript exécuté, SPA supportées, interactions simulées. Sites React/Vue/Angular inclus.',
+    'mode.ai.title': 'Extraction IA',
+    'mode.ai.desc': "Extraction intelligente par champ sémantique. Passe l'array <code>extract</code> — le modèle trouve les données peu importe la structure HTML.",
+    'mode.auto.title': 'Automatique',
+    'mode.auto.desc': 'Le réseau détecte le type de protection, choisit le mode optimal et applique un fallback si nécessaire. Zéro config.',
+    'mode.auto.tag': 'Recommandé · Smart fallback',
+    'uc.label': "Cas d'usage",
+    'uc.title': 'Prêt pour la <span>production</span>',
+    'uc.sub': 'Des exemples réels pour les use cases les plus courants.',
+    'uc.tab.ecom': 'E-commerce',
+    'uc.tab.seo': 'SEO / SERP',
+    'uc.tab.immo': 'Immobilier',
+    'uc.tab.social': 'Social / News',
+    'uc.ecom.title': 'Monitoring de prix e-commerce',
+    'uc.ecom.desc': 'Suivez les prix Amazon, Cdiscount, Fnac en temps réel. Les IPs résidentielles françaises contournent les blocages géographiques et les détections anti-scraping des grands retailers.',
+    'uc.ecom.chip': 'Prix dynamiques',
+    'uc.seo.title': 'Suivi de positions SERP Google',
+    'uc.seo.desc': "Scrapez les résultats Google depuis de vraies IPs résidentielles localisées. Obtenez les vrais résultats que voient vos utilisateurs, avec personnalisation géographique réelle.",
+    'uc.immo.title': 'Scraping immobilier',
+    'uc.immo.desc': "Leboncoin, SeLoger, Logic-Immo bloquent agressivement les datacenters. Les IPs résidentielles françaises passent sans friction. Collectez prix, surfaces, localisations en temps réel.",
+    'uc.social.title': 'Veille médias & réseaux sociaux',
+    'uc.social.desc': "Scrapez LinkedIn, Twitter/X, Reddit, forums sans être bloqué. Les IPs résidentielles ont le même score de confiance qu'un vrai utilisateur humain qui navigue normalement.",
+    'qs.label': 'Intégration',
+    'qs.title': 'Prêt en <span>30 secondes</span>',
+    'qs.sub': "Pas de SDK, pas de configuration. Un curl et c'est parti.",
+    'cta.title': 'Commencez à scraper<br>avec de <span>vraies IPs résidentielles</span>',
+    'cta.sub': '3 GB gratuits par semaine. Pas de carte bancaire. Résultats en 30 secondes.',
+    'cta.btn.primary': 'Créer un compte gratuit',
+    'cta.btn.secondary': 'Rejoindre le Discord',
+  },
+  en: {
+    'nav.home': 'Home',
+    'nav.jobs': 'All jobs',
+    'nav.how': 'How it works',
+    'nav.cta': 'Go to Dashboard →',
+    'badge': 'scrape_get · 100% Residential IPs',
+    'hero.h1.line1': 'Scraping via',
+    'hero.h1.accent': 'real residential IPs.',
+    'hero.h1.strike': 'Not datacenter.',
+    'hero.sub': 'Every request comes from a real home connection, a real country, a real access network. Anti-bot bypass guaranteed. Zero detection.',
+    'hero.cta.primary': 'Try free — 3 GB/week',
+    'hero.cta.secondary': 'See the code →',
+    'stat.residential': 'Residential IPs',
+    'stat.per_gb': 'per GB',
+    'stat.jobs': 'jobs done',
+    'stat.success': 'success rate',
+    'res.title': 'Why <span>residential</span> IPs change everything',
+    'res.desc': 'Anti-bots detect datacenters in milliseconds — Cloudflare, Akamai, DataDome, PerimeterX. With Revolution Network, every request comes from a real home, a real ISP, a real DHCP-assigned IP. Indistinguishable from a normal human user.',
+    'res.chip1': '✓ Residential · not datacenter',
+    'res.chip2': '✓ Automatic per-IP rotation',
+    'res.chip3': '✓ Real geolocation',
+    'res.chip4': '→ Bypass Cloudflare, DataDome, PerimeterX',
+    'vs.label': 'Comparison',
+    'vs.title': 'Revolution vs <span>Bright Data</span>',
+    'vs.sub': 'Same residential IP quality. 100x cheaper. No annual contract.',
+    'vs.them.tag': '❌ Too expensive',
+    'vs.row.price': 'Residential price',
+    'vs.row.min': 'Minimum commitment',
+    'vs.row.contract': 'Contract',
+    'vs.row.source': 'IP source',
+    'vs.row.free': 'Free GB',
+    'vs.them.contract': 'Annual mandatory',
+    'vs.them.setup': 'Proprietary SDK',
+    'vs.them.source': 'Opaque pool',
+    'vs.them.free': 'None',
+    'vs.us.tag': '✓ 100x cheaper',
+    'vs.us.min': 'None',
+    'vs.us.source': '100% Residential',
+    'vs.us.free': '3 GB/week',
+    'ip.label': 'Decentralized network',
+    'ip.title': 'Thousands of real <span>home connections</span> worldwide',
+    'ip.desc': 'Each Revolution Network node is a real machine at a real user\'s home — France Télécom, Deutsche Telekom, Comcast, NTT. Their IPs are assigned by real residential ISPs. No datacenter, no cloud provider, no known proxy.',
+    'ip.perk1': '<strong>Real residential ISP</strong> — Orange, Free, SFR, Bouygues, Comcast, BT, Vodafone... the same ISPs as your target users.',
+    'ip.perk2': '<strong>50+ countries, 200+ cities</strong> — Target a specific country, a city, or let the network automatically pick the optimal IP.',
+    'ip.perk3': '<strong>Per-request rotation</strong> — Each API call can use a different IP, or maintain a session on the same IP.',
+    'ip.perk4': '<strong>High reputation score</strong> — Residential IPs have maximum trust scores across all anti-bot systems.',
+    'bypass.label': 'Compatibility',
+    'bypass.title': 'All <span>anti-bots</span> bypassed',
+    'bypass.sub': 'Residential IPs pass where datacenter proxies are systematically blocked.',
+    'modes.label': 'Available modes',
+    'modes.title': '4 scraping modes,<br><span>one single endpoint</span>',
+    'modes.sub': 'From simple HTTP to full-browser JavaScript scraping — <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">auto</code> mode picks the best for each target.',
+    'mode.css.title': 'Fast CSS',
+    'mode.css.desc': 'HTTP + direct CSS/HTML parsing. Ideal for static or server-rendered sites. Minimal overhead, instant response.',
+    'mode.browser.title': 'Headless Browser',
+    'mode.browser.desc': 'Full Chromium, JavaScript executed, SPAs supported, interactions simulated. React/Vue/Angular sites included.',
+    'mode.ai.title': 'AI Extraction',
+    'mode.ai.desc': 'Intelligent semantic field extraction. Pass the <code>extract</code> array — the model finds data regardless of HTML structure.',
+    'mode.auto.title': 'Automatic',
+    'mode.auto.desc': 'The network detects the protection type, picks the optimal mode, and applies fallback if needed. Zero config.',
+    'mode.auto.tag': 'Recommended · Smart fallback',
+    'uc.label': 'Use cases',
+    'uc.title': 'Ready for <span>production</span>',
+    'uc.sub': 'Real-world examples for the most common use cases.',
+    'uc.tab.ecom': 'E-commerce',
+    'uc.tab.seo': 'SEO / SERP',
+    'uc.tab.immo': 'Real Estate',
+    'uc.tab.social': 'Social / News',
+    'uc.ecom.title': 'E-commerce price monitoring',
+    'uc.ecom.desc': 'Track Amazon, Cdiscount, Fnac prices in real time. French residential IPs bypass geographic blocks and anti-scraping detection from major retailers.',
+    'uc.ecom.chip': 'Dynamic pricing',
+    'uc.seo.title': 'Google SERP position tracking',
+    'uc.seo.desc': 'Scrape Google results from real localized residential IPs. Get the actual results your users see, with real geographic personalization.',
+    'uc.immo.title': 'Real estate scraping',
+    'uc.immo.desc': 'Leboncoin, SeLoger, Logic-Immo aggressively block datacenters. French residential IPs go through without friction. Collect prices, surfaces, locations in real time.',
+    'uc.social.title': 'Media & social network monitoring',
+    'uc.social.desc': 'Scrape LinkedIn, Twitter/X, Reddit, forums without being blocked. Residential IPs have the same trust score as a real human user browsing normally.',
+    'qs.label': 'Integration',
+    'qs.title': 'Ready in <span>30 seconds</span>',
+    'qs.sub': 'No SDK, no configuration. One curl and you\'re set.',
+    'cta.title': 'Start scraping<br>with <span>real residential IPs</span>',
+    'cta.sub': '3 GB free per week. No credit card. Results in 30 seconds.',
+    'cta.btn.primary': 'Create a free account',
+    'cta.btn.secondary': 'Join Discord',
+  },
+  es: {
+    'nav.home': 'Inicio',
+    'nav.jobs': 'Todos los jobs',
+    'nav.how': 'Cómo funciona',
+    'nav.cta': 'Ir al Dashboard →',
+    'badge': 'scrape_get · IPs Residenciales 100%',
+    'hero.h1.line1': 'Scraping con',
+    'hero.h1.accent': 'IPs residenciales reales.',
+    'hero.h1.strike': 'No datacenter.',
+    'hero.sub': 'Cada solicitud proviene de una conexión doméstica real, un país real, una red de acceso real. Bypass anti-bot garantizado. Cero detección.',
+    'hero.cta.primary': 'Probar gratis — 3 GB/semana',
+    'hero.cta.secondary': 'Ver el código →',
+    'stat.residential': 'IPs residenciales',
+    'stat.per_gb': 'por GB',
+    'stat.jobs': 'jobs realizados',
+    'stat.success': 'tasa de éxito',
+    'res.title': 'Por qué las IPs <span>residenciales</span> lo cambian todo',
+    'res.desc': 'Los anti-bots detectan los datacenters en milisegundos — Cloudflare, Akamai, DataDome, PerimeterX. Con Revolution Network, cada solicitud proviene de un hogar real, un ISP real, una IP real asignada por DHCP. Indistinguible de un usuario humano normal.',
+    'res.chip1': '✓ Residencial · no datacenter',
+    'res.chip2': '✓ Rotación automática por IP',
+    'res.chip3': '✓ Geolocalización real',
+    'res.chip4': '→ Bypass Cloudflare, DataDome, PerimeterX',
+    'vs.label': 'Comparación',
+    'vs.title': 'Revolution vs <span>Bright Data</span>',
+    'vs.sub': 'Misma calidad de IP residencial. 100x más barato. Sin contrato anual.',
+    'vs.them.tag': '❌ Demasiado caro',
+    'vs.row.price': 'Precio residencial',
+    'vs.row.min': 'Compromiso mínimo',
+    'vs.row.contract': 'Contrato',
+    'vs.row.source': 'Fuente de IPs',
+    'vs.row.free': 'GB gratuitos',
+    'vs.them.contract': 'Anual obligatorio',
+    'vs.them.setup': 'SDK propietario',
+    'vs.them.source': 'Pool opaco',
+    'vs.them.free': 'Ninguno',
+    'vs.us.tag': '✓ 100x más barato',
+    'vs.us.min': 'Ninguno',
+    'vs.us.source': '100% Residencial',
+    'vs.us.free': '3 GB/semana',
+    'ip.label': 'Red descentralizada',
+    'ip.title': 'Miles de <span>conexiones domésticas</span> reales en todo el mundo',
+    'ip.desc': 'Cada nodo Revolution Network es una máquina real en casa de un usuario real — France Télécom, Deutsche Telekom, Comcast, NTT. Sus IPs son asignadas por ISPs residenciales reales. Sin datacenter, sin cloud provider, sin proxy conocido.',
+    'ip.perk1': '<strong>ISP residencial real</strong> — Orange, Free, SFR, Bouygues, Comcast, BT, Vodafone... los mismos ISPs que tus usuarios objetivo.',
+    'ip.perk2': '<strong>50+ países, 200+ ciudades</strong> — Apunta a un país específico, una ciudad, o deja que la red elija automáticamente la IP óptima.',
+    'ip.perk3': '<strong>Rotación por solicitud</strong> — Cada llamada API puede usar una IP diferente, o mantener una sesión con la misma IP.',
+    'ip.perk4': '<strong>Alta puntuación de reputación</strong> — Las IPs residenciales tienen la puntuación de confianza máxima en todos los sistemas anti-bot.',
+    'bypass.label': 'Compatibilidad',
+    'bypass.title': 'Todos los <span>anti-bots</span> bypassed',
+    'bypass.sub': 'Las IPs residenciales pasan donde los proxies de datacenter son bloqueados sistemáticamente.',
+    'modes.label': 'Modos disponibles',
+    'modes.title': '4 modos de scraping,<br><span>un solo endpoint</span>',
+    'modes.sub': 'Desde HTTP simple hasta scraping JavaScript full-browser — el modo <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">auto</code> elige el mejor según el objetivo.',
+    'mode.css.title': 'CSS Rápido',
+    'mode.css.desc': 'HTTP + parsing CSS/HTML directo. Ideal para sitios estáticos o renderizados en servidor. Overhead mínimo, respuesta instantánea.',
+    'mode.browser.title': 'Navegador Headless',
+    'mode.browser.desc': 'Chromium completo, JavaScript ejecutado, SPAs soportadas, interacciones simuladas. Sitios React/Vue/Angular incluidos.',
+    'mode.ai.title': 'Extracción IA',
+    'mode.ai.desc': 'Extracción inteligente por campo semántico. Pasa el array <code>extract</code> — el modelo encuentra los datos sin importar la estructura HTML.',
+    'mode.auto.title': 'Automático',
+    'mode.auto.desc': 'La red detecta el tipo de protección, elige el modo óptimo y aplica fallback si es necesario. Cero configuración.',
+    'mode.auto.tag': 'Recomendado · Smart fallback',
+    'uc.label': 'Casos de uso',
+    'uc.title': 'Listo para <span>producción</span>',
+    'uc.sub': 'Ejemplos reales para los casos de uso más comunes.',
+    'uc.tab.ecom': 'E-commerce',
+    'uc.tab.seo': 'SEO / SERP',
+    'uc.tab.immo': 'Inmobiliario',
+    'uc.tab.social': 'Social / Noticias',
+    'uc.ecom.title': 'Monitoreo de precios e-commerce',
+    'uc.ecom.desc': 'Sigue los precios de Amazon, Cdiscount, Fnac en tiempo real. Las IPs residenciales francesas evitan los bloqueos geográficos y la detección anti-scraping de los grandes retailers.',
+    'uc.ecom.chip': 'Precios dinámicos',
+    'uc.seo.title': 'Seguimiento de posiciones SERP de Google',
+    'uc.seo.desc': 'Scrapea resultados de Google desde IPs residenciales localizadas reales. Obtén los resultados reales que ven tus usuarios, con personalización geográfica real.',
+    'uc.immo.title': 'Scraping inmobiliario',
+    'uc.immo.desc': 'Leboncoin, SeLoger, Logic-Immo bloquean agresivamente los datacenters. Las IPs residenciales francesas pasan sin fricción. Recopila precios, superficies, ubicaciones en tiempo real.',
+    'uc.social.title': 'Monitoreo de medios y redes sociales',
+    'uc.social.desc': 'Scrapea LinkedIn, Twitter/X, Reddit, foros sin ser bloqueado. Las IPs residenciales tienen la misma puntuación de confianza que un usuario humano real navegando normalmente.',
+    'qs.label': 'Integración',
+    'qs.title': 'Listo en <span>30 segundos</span>',
+    'qs.sub': 'Sin SDK, sin configuración. Un curl y listo.',
+    'cta.title': 'Empieza a hacer scraping<br>con <span>IPs residenciales reales</span>',
+    'cta.sub': '3 GB gratis por semana. Sin tarjeta de crédito. Resultados en 30 segundos.',
+    'cta.btn.primary': 'Crear una cuenta gratuita',
+    'cta.btn.secondary': 'Unirse al Discord',
+  }
+};
+
+function applyLang(lang) {
+  const dict = SG_I18N[lang] || SG_I18N.fr;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key] !== undefined) el.innerHTML = dict[key];
+  });
+  const sel = document.getElementById('sg-lang-switch');
+  if (sel) sel.value = lang;
+}
+
+(function initLang() {
+  const sel = document.getElementById('sg-lang-switch');
+  const saved = localStorage.getItem('lang') || navigator.language?.slice(0,2) || 'fr';
+  const lang = ['fr','en','es'].includes(saved) ? saved : 'fr';
+  applyLang(lang);
+  if (sel) {
+    sel.value = lang;
+    sel.addEventListener('change', function() {
+      localStorage.setItem('lang', this.value);
+      applyLang(this.value);
+    });
+  }
+})();
 </script>
 <script src="grid-bg.js"></script>
 </body>
