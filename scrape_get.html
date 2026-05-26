@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Scraping web via IPs résidentielles 100% réelles. Bypass anti-bot garanti. 100x moins cher que Bright Data. API simple, réseau décentralisé mondial.">
+  <title>Scraping Résidentiel — Revolution Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080c12;
+      --bg2: #0d1219;
+      --bg3: #0f1621;
+      --border: rgba(255,255,255,0.06);
+      --border2: rgba(255,255,255,0.10);
+      --green: #4af0c4;
+      --green-dim: rgba(74,240,196,0.08);
+      --green-dim2: rgba(74,240,196,0.15);
+      --blue: #4a9fff;
+      --blue-dim: rgba(74,159,255,0.08);
+      --red: #ff5f5f;
+      --red-dim: rgba(255,95,95,0.08);
+      --text: #e8edf5;
+      --muted: #7a8799;
+      --muted2: #c8d3e0;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;}
+
+    /* ── GRID BACKGROUND ── */
+    /* grid-bg.js handles background */
+
+    /* ── NAV ── */
+    nav{position:sticky;top:0;z-index:100;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,12,18,0.75);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);position:relative;}
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-size:1rem;font-weight:400;}
+    .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green);animation:pulse 2s ease-in-out infinite;}
+    .nav-links{display:flex;gap:2rem;}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:.875rem;transition:color .2s;}
+    .nav-links a:hover{color:var(--text);}
+    .nav-cta{background:var(--green);color:var(--bg);padding:.5rem 1.25rem;border-radius:8px;font-weight:600;font-size:.875rem;text-decoration:none;transition:opacity .2s,transform .15s;}
+    .nav-cta:hover{opacity:.9;transform:translateY(-1px);}
+    @media(max-width:768px){.nav-links{display:none;}}
+
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+    @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+
+    /* ── HERO ── */
+    .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8rem 2rem 5rem;text-align:center;position:relative;}
+    .hero-glow{position:absolute;top:20%;left:50%;transform:translateX(-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(74,240,196,0.07) 0%,transparent 70%);pointer-events:none;}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:var(--green-dim);border:1px solid var(--green-dim2);padding:.375rem 1rem;border-radius:999px;font-size:.78rem;font-family:'DM Mono',monospace;color:var(--green);margin-bottom:2rem;letter-spacing:.05em;animation:fadeUp .6s ease both;}
+    .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
+    .hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.8rem,6vw,5rem);line-height:1.03;letter-spacing:-0.035em;margin-bottom:1.5rem;max-width:900px;animation:fadeUp .6s .1s ease both;}
+    .hero h1 .accent{color:var(--green);}
+    .hero h1 .strike{position:relative;color:var(--muted);text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:2px;}
+    .hero-sub{font-size:clamp(1rem,2vw,1.2rem);color:var(--muted);max-width:600px;margin:0 auto 2rem;line-height:1.75;font-weight:300;animation:fadeUp .6s .2s ease both;}
+    .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-bottom:3.5rem;animation:fadeUp .6s .3s ease both;}
+    .btn-p{background:var(--green);color:var(--bg);padding:.9rem 2rem;border-radius:10px;font-weight:700;font-size:1rem;text-decoration:none;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+    .btn-p:hover{opacity:.9;transform:translateY(-2px);box-shadow:0 8px 28px rgba(74,240,196,.3);}
+    .btn-s{background:transparent;color:var(--text);padding:.9rem 2rem;border-radius:10px;border:1px solid var(--border2);font-weight:500;font-size:1rem;text-decoration:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+    .btn-s:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.04);}
+
+    /* ── HERO STATS BAR ── */
+    .hero-stats{display:flex;gap:2px;background:rgba(255,255,255,0.03);border-radius:14px;overflow:hidden;border:var(--border) 1px solid;max-width:780px;margin:0 auto;width:100%;animation:fadeUp .6s .4s ease both;}
+    .hero-stat{flex:1;background:rgba(15,22,33,0.75);padding:1.25rem 1.5rem;text-align:center;}
+    .hero-stat-val{font-family:'Syne',sans-serif;font-weight:700;font-size:1.6rem;color:var(--green);display:block;}
+    .hero-stat-label{font-size:.75rem;color:var(--muted);margin-top:.2rem;font-family:'DM Mono',monospace;}
+    @media(max-width:640px){.hero-stats{flex-direction:column;gap:1px;}.hero-stat{padding:1rem 1.25rem;}}
+
+    /* ── RESIDENTIAL BANNER ── */
+    .res-banner{background:linear-gradient(135deg,rgba(74,240,196,0.06) 0%,rgba(74,159,255,0.04) 100%);border:1px solid var(--green-dim2);border-radius:16px;padding:2rem 2.5rem;max-width:1100px;margin:0 auto 0;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2rem;}
+    .res-banner-left h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;margin-bottom:.5rem;letter-spacing:-0.02em;}
+    .res-banner-left h3 span{color:var(--green);}
+    .res-banner-left p{color:var(--muted);font-size:.92rem;line-height:1.65;}
+    .res-banner-right{display:flex;flex-direction:column;gap:.5rem;flex-shrink:0;}
+    .res-chip{display:inline-flex;align-items:center;gap:.5rem;font-family:'DM Mono',monospace;font-size:.72rem;padding:.35rem .8rem;border-radius:8px;white-space:nowrap;}
+    .res-chip-green{background:var(--green-dim);border:1px solid var(--green-dim2);color:var(--green);}
+    .res-chip-blue{background:var(--blue-dim);border:1px solid rgba(74,159,255,0.2);color:var(--blue);}
+    @media(max-width:640px){.res-banner{grid-template-columns:1fr;}.res-banner-right{flex-direction:row;flex-wrap:wrap;}}
+
+    /* ── SECTIONS ── */
+    section{padding:5rem 2rem;max-width:1100px;margin:0 auto;position:relative;z-index:1;}
+    .full-bleed{max-width:100%;padding:5rem 2rem;}
+    .full-bleed-inner{max-width:1100px;margin:0 auto;}
+    .section-label{font-family:'DM Mono',monospace;font-size:.74rem;color:var(--green);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem;}
+    h2.section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(1.8rem,3vw,2.6rem);letter-spacing:-0.025em;margin-bottom:1rem;line-height:1.1;}
+    h2.section-title span{color:var(--green);}
+    .section-sub{color:var(--muted);max-width:540px;margin-bottom:3rem;font-weight:300;line-height:1.7;}
+
+    /* ── VS COMPARISON ── */
+    .vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:3rem;}
+    @media(max-width:640px){.vs-grid{grid-template-columns:1fr;}}
+    .vs-card{border-radius:16px;padding:2rem;border:1px solid var(--border);}
+    .vs-card.them{background:rgba(255,95,95,0.04);border-color:rgba(255,95,95,0.12);}
+    .vs-card.us{background:rgba(74,240,196,0.04);border-color:var(--green-dim2);}
+    .vs-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
+    .vs-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;}
+    .vs-card.them .vs-title{color:var(--red);}
+    .vs-card.us .vs-title{color:var(--green);}
+    .vs-tag{font-family:'DM Mono',monospace;font-size:.68rem;padding:.25rem .65rem;border-radius:6px;}
+    .vs-card.them .vs-tag{background:var(--red-dim);border:1px solid rgba(255,95,95,0.2);color:var(--red);}
+    .vs-card.us .vs-tag{background:var(--green-dim);border:1px solid var(--green-dim2);color:var(--green);}
+    .vs-rows{display:flex;flex-direction:column;gap:.85rem;}
+    .vs-row{display:flex;justify-content:space-between;align-items:center;font-size:.88rem;padding-bottom:.85rem;border-bottom:1px solid var(--border);}
+    .vs-row:last-child{border-bottom:none;padding-bottom:0;}
+    .vs-key{color:var(--muted);}
+    .vs-val{font-family:'DM Mono',monospace;font-weight:500;}
+    .vs-card.them .vs-val{color:var(--red);}
+    .vs-card.us .vs-val{color:var(--green);}
+
+    /* ── USE CASES TABS ── */
+    .uc-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem;margin-top:3rem;}
+    .uc-tab{padding:.5rem 1.1rem;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.85rem;cursor:pointer;transition:all .2s;font-family:'DM Mono',monospace;}
+    .uc-tab:hover,.uc-tab.active{background:var(--green-dim);border-color:var(--green-dim2);color:var(--green);}
+    .uc-panel{display:none;}
+    .uc-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;animation:fadeUp .3s ease both;}
+    @media(max-width:640px){.uc-panel.active{grid-template-columns:1fr;}}
+    .uc-info{display:flex;flex-direction:column;gap:1rem;justify-content:center;}
+    .uc-info h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1.4rem;letter-spacing:-0.02em;line-height:1.2;}
+    .uc-info p{color:var(--muted);font-size:.92rem;line-height:1.7;}
+    .uc-chips{display:flex;flex-wrap:wrap;gap:.5rem;}
+    .uc-chip{font-family:'DM Mono',monospace;font-size:.7rem;background:var(--green-dim);border:1px solid var(--green-dim2);color:var(--green);padding:.25rem .7rem;border-radius:6px;}
+    .uc-code-card{background:rgba(13,18,25,0.85);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+    .uc-code-hdr{padding:.7rem 1rem;background:rgba(17,24,32,0.9);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem;}
+    .uc-dots{display:flex;gap:5px;}
+    .uc-dots span{width:10px;height:10px;border-radius:50%;}
+    .uc-dots span:nth-child(1){background:#ff5f56;}
+    .uc-dots span:nth-child(2){background:#ffbd2e;}
+    .uc-dots span:nth-child(3){background:#27c93f;}
+    .uc-code-lang{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);margin-left:auto;}
+    .uc-code-body{padding:1.25rem;font-family:'DM Mono',monospace;font-size:.8rem;line-height:1.7;overflow-x:auto;white-space:pre;}
+    .kw{color:#c792ea;}.str{color:var(--green);}.fn{color:var(--blue);}.cm{color:#546e7a;}.hl{color:#f78c6c;}
+
+    /* ── MODES GRID ── */
+    .modes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem;margin-top:3rem;}
+    .mode-card{background:rgba(15,22,33,0.72);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:14px;padding:1.75rem;transition:border-color .2s,transform .2s;}
+    .mode-card:hover{border-color:var(--green-dim2);transform:translateY(-2px);}
+    .mode-icon{font-size:1.6rem;margin-bottom:1rem;display:block;}
+    .mode-name{font-family:'DM Mono',monospace;font-size:.8rem;color:var(--green);margin-bottom:.4rem;}
+    .mode-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:.5rem;}
+    .mode-desc{font-size:.85rem;color:var(--muted);line-height:1.6;}
+    .mode-tag{margin-top:.85rem;display:inline-flex;align-items:center;gap:.35rem;font-family:'DM Mono',monospace;font-size:.68rem;padding:.25rem .65rem;border-radius:6px;background:var(--green-dim);border:1px solid var(--green-dim2);color:var(--green);}
+    .mode-tag.blue{background:var(--blue-dim);border-color:rgba(74,159,255,0.2);color:var(--blue);}
+    .mode-tag.orange{background:rgba(249,115,22,0.08);border-color:rgba(249,115,22,0.2);color:#f97316;}
+
+    /* ── RESIDENTIAL IP SECTION ── */
+    .ip-section{background:linear-gradient(135deg,rgba(74,240,196,0.05) 0%,rgba(8,12,18,0) 60%);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:5rem 2rem;}
+    .ip-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+    @media(max-width:768px){.ip-inner{grid-template-columns:1fr;gap:3rem;}}
+    .ip-map{position:relative;height:280px;background:rgba(15,22,33,0.6);border-radius:16px;border:1px solid var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+    .ip-node{position:absolute;width:10px;height:10px;border-radius:50%;}
+    .ip-node::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid currentColor;opacity:.3;animation:nodeRing 3s ease-out infinite;}
+    @keyframes nodeRing{0%{transform:scale(1);opacity:.3}100%{transform:scale(2.5);opacity:0}}
+    .ip-label-text{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.6rem,3vw,2.4rem);letter-spacing:-0.025em;line-height:1.15;margin-bottom:1.25rem;}
+    .ip-label-text span{color:var(--green);}
+    .ip-desc{color:var(--muted);font-size:.95rem;line-height:1.75;margin-bottom:2rem;font-weight:300;}
+    .ip-perks{display:flex;flex-direction:column;gap:.85rem;}
+    .ip-perk{display:flex;align-items:flex-start;gap:.85rem;font-size:.9rem;color:var(--muted2);line-height:1.55;}
+    .ip-perk-icon{width:30px;height:30px;min-width:30px;border-radius:8px;background:var(--green-dim);border:1px solid var(--green-dim2);display:flex;align-items:center;justify-content:center;font-size:.85rem;margin-top:1px;}
+    .ip-countries{display:flex;flex-wrap:wrap;gap:.4rem;position:absolute;bottom:1.25rem;left:1.25rem;right:1.25rem;}
+    .ip-country{font-family:'DM Mono',monospace;font-size:.65rem;padding:.2rem .5rem;border-radius:5px;background:rgba(74,240,196,0.1);border:1px solid rgba(74,240,196,0.2);color:var(--green);}
+
+    /* ── CODE QUICKSTART ── */
+    .code-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:3rem;}
+    @media(max-width:768px){.code-grid{grid-template-columns:1fr;}}
+    .code-card{background:rgba(13,18,25,0.85);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+    .code-hdr{padding:.7rem 1rem;background:rgba(17,24,32,0.9);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem;}
+    .c-dots{display:flex;gap:5px;}
+    .c-dots span{width:10px;height:10px;border-radius:50%;}
+    .c-dots span:nth-child(1){background:#ff5f56;}
+    .c-dots span:nth-child(2){background:#ffbd2e;}
+    .c-dots span:nth-child(3){background:#27c93f;}
+    .code-lang{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);margin-left:auto;}
+    .code-body{padding:1.25rem;font-family:'DM Mono',monospace;font-size:.8rem;line-height:1.75;overflow-x:auto;white-space:pre;}
+
+    /* ── PRICING ── */
+    .pricing-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem;margin-top:3rem;}
+    @media(max-width:768px){.pricing-grid{grid-template-columns:1fr;}}
+    .pricing-card{background:rgba(15,22,33,0.72);border:1px solid var(--border);border-radius:16px;padding:2rem;position:relative;overflow:hidden;transition:border-color .2s;}
+    .pricing-card.featured{border-color:var(--green-dim2);background:linear-gradient(135deg,rgba(74,240,196,0.06),rgba(15,22,33,0.72));}
+    .pricing-card.featured::before{content:'Recommandé';position:absolute;top:1rem;right:1rem;font-family:'DM Mono',monospace;font-size:.65rem;background:var(--green);color:var(--bg);padding:.2rem .55rem;border-radius:5px;font-weight:500;}
+    .plan-name{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--green);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem;}
+    .plan-price{font-family:'Syne',sans-serif;font-weight:800;font-size:2.25rem;letter-spacing:-0.03em;line-height:1;margin-bottom:.25rem;}
+    .plan-price span{font-size:1rem;font-weight:400;color:var(--muted);}
+    .plan-sub{font-size:.82rem;color:var(--muted);margin-bottom:1.75rem;}
+    .plan-features{display:flex;flex-direction:column;gap:.6rem;margin-bottom:2rem;}
+    .plan-feat{display:flex;align-items:center;gap:.6rem;font-size:.85rem;color:var(--muted2);}
+    .plan-feat::before{content:'✓';color:var(--green);font-weight:700;font-family:'DM Mono',monospace;}
+    .plan-btn{display:block;text-align:center;padding:.8rem;border-radius:9px;font-weight:600;font-size:.9rem;text-decoration:none;transition:all .2s;cursor:pointer;border:none;}
+    .plan-btn-p{background:var(--green);color:var(--bg);}
+    .plan-btn-p:hover{opacity:.9;transform:translateY(-1px);}
+    .plan-btn-s{background:transparent;color:var(--text);border:1px solid var(--border2);}
+    .plan-btn-s:hover{border-color:rgba(255,255,255,.3);}
+
+    /* ── CTA FINAL ── */
+    .cta-final{text-align:center;padding:6rem 2rem;position:relative;}
+    .cta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(74,240,196,0.06),transparent 70%);pointer-events:none;}
+    .cta-final h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2rem,4vw,3.2rem);letter-spacing:-0.03em;margin-bottom:1rem;}
+    .cta-final h2 span{color:var(--green);}
+    .cta-final p{color:var(--muted);margin-bottom:2.5rem;font-weight:300;}
+    .cta-acts{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
+
+    /* ── FOOTER ── */
+    footer{border-top:1px solid var(--border);padding:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:1100px;margin:0 auto;}
+    .f-links{display:flex;gap:1.5rem;flex-wrap:wrap;}
+    .f-links a{color:var(--muted);text-decoration:none;font-size:.85rem;transition:color .2s;}
+    .f-links a:hover{color:var(--text);}
+    .f-copy{color:#4a5568;font-size:.82rem;}
+
+    /* ── REVEAL ── */
+    [data-r]{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease;}
+    [data-r].vis{opacity:1;transform:none;}
+
+    /* ── RESIDENTIAL BADGE FLOATING ── */
+    .res-float{display:inline-flex;align-items:center;gap:.4rem;font-family:'DM Mono',monospace;font-size:.68rem;background:var(--green-dim);border:1px solid var(--green-dim2);color:var(--green);padding:.2rem .6rem;border-radius:5px;vertical-align:middle;margin-left:.4rem;}
+    .res-float::before{content:'🏠';font-size:.6rem;}
+
+    /* ── ANTI BOT TABLE ── */
+    .bypass-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:2.5rem;}
+    .bypass-cell{background:rgba(15,22,33,0.72);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:.75rem;}
+    .bypass-icon{font-size:1.1rem;}
+    .bypass-name{font-size:.85rem;color:var(--text);font-weight:500;}
+    .bypass-status{margin-left:auto;font-family:'DM Mono',monospace;font-size:.68rem;color:var(--green);}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="/">
+    <span class="logo-dot"></span>
+    Revolution Network
+  </a>
+  <div class="nav-links">
+    <a href="/">Accueil</a>
+    <a href="/#jobs">Tous les jobs</a>
+    <a href="/#how">Comment ça marche</a>
+    <a href="https://discord.gg/eadE7uK6ss" target="_blank">Discord</a>
+  </div>
+  <a class="nav-cta" href="/">Accéder au Dashboard →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="badge">
+    <span class="badge-dot"></span>
+    scrape_get · IPs Résidentielles 100%
+  </div>
+  <h1>
+    Scraping via<br>
+    <span class="accent">vraies IPs résidentielles.</span><br>
+    <span class="strike">Pas du datacenter.</span>
+  </h1>
+  <p class="hero-sub">
+    Chaque requête part d'une vraie connexion domestique, depuis un vrai pays, sur un vrai réseau d'accès. Bypass anti-bot garanti. Zéro détection.
+  </p>
+  <div class="hero-actions">
+    <a class="btn-p" href="/">Essayer gratuitement — 3 GB/semaine</a>
+    <a class="btn-s" href="#quickstart">Voir le code →</a>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="hero-stat-val">100%</span>
+      <span class="hero-stat-label">IPs résidentielles</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-val">0.08 €</span>
+      <span class="hero-stat-label">par GB</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-val">2k+</span>
+      <span class="hero-stat-label">jobs réalisés</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-val">100%</span>
+      <span class="hero-stat-label">taux de succès</span>
+    </div>
+  </div>
+</section>
+
+<!-- RESIDENTIAL BANNER -->
+<section style="padding:0 2rem 3rem;max-width:1100px;margin:0 auto;position:relative;z-index:1;" data-r>
+  <div class="res-banner">
+    <div class="res-banner-left">
+      <h3>🏠 Pourquoi les IPs <span>résidentielles</span> changent tout</h3>
+      <p>Les anti-bots détectent les datacenters en millisecondes — Cloudflare, Akamai, DataDome, PerimeterX. Avec Revolution Network, chaque requête provient d'un vrai foyer, d'un vrai FAI, d'une vraie adresse IP assignée par DHCP. Impossible à distinguer d'un utilisateur humain normal.</p>
+    </div>
+    <div class="res-banner-right">
+      <div class="res-chip res-chip-green">✓ Résidentiel · pas datacenter</div>
+      <div class="res-chip res-chip-green">✓ Rotation automatique par IP</div>
+      <div class="res-chip res-chip-green">✓ Géolocalisation réelle</div>
+      <div class="res-chip res-chip-blue">→ Bypass Cloudflare, DataDome, PerimeterX</div>
+    </div>
+  </div>
+</section>
+
+<!-- VS COMPARISON -->
+<section data-r>
+  <div class="section-label">Comparaison</div>
+  <h2 class="section-title">Revolution vs <span>Bright Data</span></h2>
+  <p class="section-sub">Même qualité d'IP résidentielle. 100x moins cher. Pas de contrat annuel.</p>
+
+  <div class="vs-grid">
+    <div class="vs-card them">
+      <div class="vs-header">
+        <div class="vs-title">Bright Data</div>
+        <div class="vs-tag">❌ Trop cher</div>
+      </div>
+      <div class="vs-rows">
+        <div class="vs-row"><span class="vs-key">Prix résidentiel</span><span class="vs-val">8–15 $/GB</span></div>
+        <div class="vs-row"><span class="vs-key">Engagement minimum</span><span class="vs-val">500 $/mois</span></div>
+        <div class="vs-row"><span class="vs-key">Contrat</span><span class="vs-val">Annuel obligatoire</span></div>
+        <div class="vs-row"><span class="vs-key">Setup</span><span class="vs-val">SDK propriétaire</span></div>
+        <div class="vs-row"><span class="vs-key">Source des IPs</span><span class="vs-val">Pool opaque</span></div>
+        <div class="vs-row"><span class="vs-key">GB gratuits</span><span class="vs-val">Aucun</span></div>
+      </div>
+    </div>
+
+    <div class="vs-card us">
+      <div class="vs-header">
+        <div class="vs-title">Revolution Network</div>
+        <div class="vs-tag">✓ 100x moins cher</div>
+      </div>
+      <div class="vs-rows">
+        <div class="vs-row"><span class="vs-key">Prix résidentiel</span><span class="vs-val">0.08 €/GB</span></div>
+        <div class="vs-row"><span class="vs-key">Engagement minimum</span><span class="vs-val">Aucun</span></div>
+        <div class="vs-row"><span class="vs-key">Contrat</span><span class="vs-val">Pay-as-you-go</span></div>
+        <div class="vs-row"><span class="vs-key">Setup</span><span class="vs-val">curl + x-api-key</span></div>
+        <div class="vs-row"><span class="vs-key">Source des IPs</span><span class="vs-val">Résidentiel 100%</span></div>
+        <div class="vs-row"><span class="vs-key">GB gratuits</span><span class="vs-val">3 GB/semaine</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESIDENTIAL IP DEEP DIVE -->
+<div class="ip-section" data-r>
+  <div class="ip-inner">
+    <div>
+      <div class="section-label">Réseau décentralisé</div>
+      <div class="ip-label-text">Des milliers de vraies <span>connexions domestiques</span> à travers le monde</div>
+      <p class="ip-desc">Chaque node Revolution Network est une vraie machine chez un vrai utilisateur — France Télécom, Deutsche Telekom, Comcast, NTT. Leurs IPs sont assignées par de vrais FAI résidentiels. Aucun datacenter, aucun cloud provider, aucun proxy connu.</p>
+      <div class="ip-perks">
+        <div class="ip-perk"><div class="ip-perk-icon">🏠</div><div><strong>FAI résidentiel réel</strong> — Orange, Free, SFR, Bouygues, Comcast, BT, Vodafone... les mêmes FAI que vos utilisateurs cibles.</div></div>
+        <div class="ip-perk"><div class="ip-perk-icon">🌍</div><div><strong>50+ pays, 200+ villes</strong> — Cibler un pays précis, une ville, ou laisser le réseau choisir l'IP optimale automatiquement.</div></div>
+        <div class="ip-perk"><div class="ip-perk-icon">🔄</div><div><strong>Rotation par requête</strong> — Chaque appel API peut utiliser une IP différente, ou maintenir une session sur la même IP.</div></div>
+        <div class="ip-perk"><div class="ip-perk-icon">🛡️</div><div><strong>Score de réputation élevé</strong> — Les IPs résidentielles ont un score de confiance maximal sur tous les systèmes anti-bot.</div></div>
+      </div>
+    </div>
+    <div class="ip-map">
+      <!-- Decorative world dots -->
+      <div class="ip-node" style="top:25%;left:20%;background:#4af0c4;color:#4af0c4;"></div>
+      <div class="ip-node" style="top:30%;left:45%;background:#4af0c4;color:#4af0c4;animation-delay:.5s"></div>
+      <div class="ip-node" style="top:40%;left:55%;background:#4a9fff;color:#4a9fff;animation-delay:1s"></div>
+      <div class="ip-node" style="top:55%;left:25%;background:#4af0c4;color:#4af0c4;animation-delay:1.5s"></div>
+      <div class="ip-node" style="top:20%;left:70%;background:#4af0c4;color:#4af0c4;animation-delay:.8s"></div>
+      <div class="ip-node" style="top:60%;left:75%;background:#4a9fff;color:#4a9fff;animation-delay:.3s"></div>
+      <div class="ip-node" style="top:70%;left:50%;background:#4af0c4;color:#4af0c4;animation-delay:1.2s"></div>
+      <div class="ip-node" style="top:35%;left:82%;background:#4af0c4;color:#4af0c4;animation-delay:.6s"></div>
+      <div style="position:absolute;top:1.25rem;left:1.25rem;font-family:'DM Mono',monospace;font-size:.7rem;color:var(--green);">● Réseau live</div>
+      <div class="ip-countries">
+        <span class="ip-country">🇫🇷 France</span>
+        <span class="ip-country">🇩🇪 Allemagne</span>
+        <span class="ip-country">🇬🇧 UK</span>
+        <span class="ip-country">🇺🇸 USA</span>
+        <span class="ip-country">🇯🇵 Japon</span>
+        <span class="ip-country">🇧🇷 Brésil</span>
+        <span class="ip-country">🇳🇱 NL</span>
+        <span class="ip-country">+43 pays</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ANTI-BOT BYPASS -->
+<section data-r>
+  <div class="section-label">Compatibilité</div>
+  <h2 class="section-title">Tous les <span>anti-bots</span> bypassed</h2>
+  <p class="section-sub">Les IPs résidentielles passent là où les proxies datacenter sont bloqués systématiquement.</p>
+
+  <div class="bypass-grid">
+    <div class="bypass-cell"><div class="bypass-icon">☁️</div><div><div class="bypass-name">Cloudflare</div></div><span class="bypass-status">✓ Bypass</span></div>
+    <div class="bypass-cell"><div class="bypass-icon">🔰</div><div><div class="bypass-name">DataDome</div></div><span class="bypass-status">✓ Bypass</span></div>
+    <div class="bypass-cell"><div class="bypass-icon">🛡️</div><div><div class="bypass-name">PerimeterX</div></div><span class="bypass-status">✓ Bypass</span></div>
+    <div class="bypass-cell"><div class="bypass-icon">🔒</div><div><div class="bypass-name">Akamai Bot Manager</div></div><span class="bypass-status">✓ Bypass</span></div>
+    <div class="bypass-cell"><div class="bypass-icon">🤖</div><div><div class="bypass-name">reCAPTCHA v3</div></div><span class="bypass-status">✓ Score élevé</span></div>
+    <div class="bypass-cell"><div class="bypass-icon">🕷️</div><div><div class="bypass-name">Distil Networks</div></div><span class="bypass-status">✓ Bypass</span></div>
+    <div class="bypass-cell"><div class="bypass-icon">📦</div><div><div class="bypass-name">Amazon WAF</div></div><span class="bypass-status">✓ Bypass</span></div>
+    <div class="bypass-cell"><div class="bypass-icon">🎯</div><div><div class="bypass-name">Imperva Incapsula</div></div><span class="bypass-status">✓ Bypass</span></div>
+  </div>
+</section>
+
+<!-- MODES DE SCRAPING -->
+<section data-r>
+  <div class="section-label">Modes disponibles</div>
+  <h2 class="section-title">4 modes de scraping,<br><span>un seul endpoint</span></h2>
+  <p class="section-sub">Du simple HTTP au scraping JavaScript full-browser — le mode <code style="color:var(--green);background:var(--green-dim);padding:2px 6px;border-radius:4px;">auto</code> choisit le meilleur selon la cible.</p>
+
+  <div class="modes-grid">
+    <div class="mode-card">
+      <span class="mode-icon">⚡</span>
+      <div class="mode-name">mode: "css"</div>
+      <div class="mode-title">CSS Rapide</div>
+      <div class="mode-desc">HTTP + parsing CSS/HTML direct. Idéal pour les sites statiques ou serveur-rendu. Minimal overhead, réponse instantanée.</div>
+      <span class="mode-tag">~0.5s · 1 MB</span>
+    </div>
+    <div class="mode-card">
+      <span class="mode-icon">🌐</span>
+      <div class="mode-name">mode: "browser"</div>
+      <div class="mode-title">Navigateur Headless</div>
+      <div class="mode-desc">Chromium complet, JavaScript exécuté, SPA supportées, interactions simulées. Sites React/Vue/Angular inclus.</div>
+      <span class="mode-tag blue">~3s · 5 MB</span>
+    </div>
+    <div class="mode-card">
+      <span class="mode-icon">🤖</span>
+      <div class="mode-name">mode: "ai"</div>
+      <div class="mode-title">Extraction IA</div>
+      <div class="mode-desc">Extraction intelligente par champ sémantique. Passe l'array <code>extract</code> — le modèle trouve les données peu importe la structure HTML.</div>
+      <span class="mode-tag orange">~5s · 10 MB</span>
+    </div>
+    <div class="mode-card">
+      <span class="mode-icon">🎯</span>
+      <div class="mode-name">mode: "auto"</div>
+      <div class="mode-title">Automatique</div>
+      <div class="mode-desc">Le réseau détecte le type de protection, choisit le mode optimal et applique un fallback si nécessaire. Zéro config.</div>
+      <span class="mode-tag">Recommandé · Smart fallback</span>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES WITH TABS + CODE -->
+<section data-r>
+  <div class="section-label">Cas d'usage</div>
+  <h2 class="section-title">Prêt pour la <span>production</span></h2>
+  <p class="section-sub">Des exemples réels pour les use cases les plus courants.</p>
+
+  <div class="uc-tabs">
+    <button class="uc-tab active" onclick="showUC('ecom')">E-commerce</button>
+    <button class="uc-tab" onclick="showUC('seo')">SEO / SERP</button>
+    <button class="uc-tab" onclick="showUC('immo')">Immobilier</button>
+    <button class="uc-tab" onclick="showUC('social')">Social / News</button>
+  </div>
+
+  <div class="uc-panel active" id="uc-ecom">
+    <div class="uc-info">
+      <h3>Monitoring de prix e-commerce</h3>
+      <p>Suivez les prix Amazon, Cdiscount, Fnac en temps réel. Les IPs résidentielles françaises contournent les blocages géographiques et les détections anti-scraping des grands retailers.</p>
+      <div class="uc-chips">
+        <span class="uc-chip">Amazon.fr</span>
+        <span class="uc-chip">Cdiscount</span>
+        <span class="uc-chip">Fnac</span>
+        <span class="uc-chip">Leboncoin</span>
+        <span class="uc-chip">Prix dynamiques</span>
+      </div>
+    </div>
+    <div class="uc-code-card">
+      <div class="uc-code-hdr">
+        <div class="uc-dots"><span></span><span></span><span></span></div>
+        <span class="uc-code-lang">bash · Amazon price scraping</span>
+      </div>
+      <div class="uc-code-body"><span class="cm"># IP résidentielle française automatique</span>
+<span class="fn">curl</span> <span class="str">-X POST</span> https://api.revolution-network.fr/api/enterprise/v1/jobs \
+  <span class="str">-H</span> <span class="str">"x-api-key: YOUR_KEY"</span> \
+  <span class="str">-H</span> <span class="str">"Content-Type: application/json"</span> \
+  <span class="str">-d</span> <span class="str">'{
+  "type": "scrape_get",
+  "params": {
+    "url": "https://amazon.fr/dp/B08N5WRWNW",
+    "mode": "auto",
+    "country": "fr",
+    "extract": ["title", "price", "rating", "stock"]
+  }
+}'</span>
+
+<span class="cm"># Réponse</span>
+{
+  <span class="str">"status"</span>: <span class="str">"done"</span>,
+  <span class="str">"output"</span>: {
+    <span class="str">"title"</span>: <span class="str">"Echo Dot 4ème génération"</span>,
+    <span class="str">"price"</span>: <span class="str">"34.99"</span>,
+    <span class="str">"rating"</span>: <span class="str">"4.5"</span>,
+    <span class="str">"stock"</span>: <span class="str">"En stock"</span>
+  },
+  <span class="str">"ip_country"</span>: <span class="str">"fr"</span>,
+  <span class="str">"ip_type"</span>: <span class="str">"residential"</span>
+}</div>
+    </div>
+  </div>
+
+  <div class="uc-panel" id="uc-seo">
+    <div class="uc-info">
+      <h3>Suivi de positions SERP Google</h3>
+      <p>Scrapez les résultats Google depuis de vraies IPs résidentielles localisées. Obtenez les vrais résultats que voient vos utilisateurs, avec personnalisation géographique réelle.</p>
+      <div class="uc-chips">
+        <span class="uc-chip">Google SERP</span>
+        <span class="uc-chip">Bing</span>
+        <span class="uc-chip">Position tracking</span>
+        <span class="uc-chip">Featured snippets</span>
+        <span class="uc-chip">Local SEO</span>
+      </div>
+    </div>
+    <div class="uc-code-card">
+      <div class="uc-code-hdr">
+        <div class="uc-dots"><span></span><span></span><span></span></div>
+        <span class="uc-code-lang">bash · Google SERP scraping</span>
+      </div>
+      <div class="uc-code-body"><span class="cm"># IP résidentielle de Paris pour résultats locaux</span>
+<span class="fn">curl</span> <span class="str">-X POST</span> https://api.revolution-network.fr/api/enterprise/v1/jobs \
+  <span class="str">-H</span> <span class="str">"x-api-key: YOUR_KEY"</span> \
+  <span class="str">-H</span> <span class="str">"Content-Type: application/json"</span> \
+  <span class="str">-d</span> <span class="str">'{
+  "type": "scrape_get",
+  "params": {
+    "url": "https://google.fr/search?q=meilleur+vpn&hl=fr&gl=fr",
+    "mode": "browser",
+    "city": "Paris",
+    "extract": ["organic_results", "featured_snippet", "ads"]
+  }
+}'</span>
+
+<span class="cm"># output.organic_results[0] → position 1, title, url, snippet</span></div>
+    </div>
+  </div>
+
+  <div class="uc-panel" id="uc-immo">
+    <div class="uc-info">
+      <h3>Scraping immobilier</h3>
+      <p>Leboncoin, SeLoger, Logic-Immo bloquent agressivement les datacenters. Les IPs résidentielles françaises passent sans friction. Collectez prix, surfaces, localisations en temps réel.</p>
+      <div class="uc-chips">
+        <span class="uc-chip">Leboncoin</span>
+        <span class="uc-chip">SeLoger</span>
+        <span class="uc-chip">PAP</span>
+        <span class="uc-chip">Logic-Immo</span>
+        <span class="uc-chip">Airbnb</span>
+      </div>
+    </div>
+    <div class="uc-code-card">
+      <div class="uc-code-hdr">
+        <div class="uc-dots"><span></span><span></span><span></span></div>
+        <span class="uc-code-lang">javascript · SeLoger monitoring</span>
+      </div>
+      <div class="uc-code-body"><span class="kw">import</span> { RevolutionClient } <span class="kw">from</span> <span class="str">'revolution-sdk'</span>
+
+<span class="kw">const</span> client = <span class="kw">new</span> <span class="fn">RevolutionClient</span>({ apiKey: <span class="str">'YOUR_KEY'</span> })
+
+<span class="kw">const</span> listings = <span class="kw">await</span> client.jobs.<span class="fn">create</span>({
+  type: <span class="str">'scrape_get'</span>,
+  params: {
+    url: <span class="str">'https://seloger.com/list.htm?types=1,2&projects=1&division=75'</span>,
+    mode: <span class="str">'auto'</span>,
+    country: <span class="str">'fr'</span>,
+    <span class="cm">// IPs résidentielles françaises = pas de blocage</span>
+    extract: [<span class="str">'price'</span>, <span class="str">'surface'</span>, <span class="str">'rooms'</span>, <span class="str">'location'</span>]
+  }
+})
+
+console.<span class="fn">log</span>(listings.output) <span class="cm">// array de biens immobiliers</span></div>
+    </div>
+  </div>
+
+  <div class="uc-panel" id="uc-social">
+    <div class="uc-info">
+      <h3>Veille médias & réseaux sociaux</h3>
+      <p>Scrapez LinkedIn, Twitter/X, Reddit, forums sans être bloqué. Les IPs résidentielles ont le même score de confiance qu'un vrai utilisateur humain qui navigue normalement.</p>
+      <div class="uc-chips">
+        <span class="uc-chip">LinkedIn</span>
+        <span class="uc-chip">Reddit</span>
+        <span class="uc-chip">Hacker News</span>
+        <span class="uc-chip">Presse en ligne</span>
+        <span class="uc-chip">Forums</span>
+      </div>
+    </div>
+    <div class="uc-code-card">
+      <div class="uc-code-hdr">
+        <div class="uc-dots"><span></span><span></span><span></span></div>
+        <span class="uc-code-lang">python · veille concurrentielle</span>
+      </div>
+      <div class="uc-code-body"><span class="kw">import</span> requests, time
+
+<span class="fn">def</span> <span class="fn">scrape_residential</span>(url, extract_fields):
+    r = requests.<span class="fn">post</span>(
+        <span class="str">"https://api.revolution-network.fr/api/enterprise/v1/jobs"</span>,
+        headers={<span class="str">"x-api-key"</span>: <span class="str">"YOUR_KEY"</span>},
+        json={
+            <span class="str">"type"</span>: <span class="str">"scrape_get"</span>,
+            <span class="str">"params"</span>: {
+                <span class="str">"url"</span>: url,
+                <span class="str">"mode"</span>: <span class="str">"auto"</span>,
+                <span class="str">"extract"</span>: extract_fields
+            }
+        }
+    )
+    job_id = r.json()[<span class="str">"job_id"</span>]
+    <span class="cm"># polling jusqu'à "done"</span>
+    <span class="kw">while True</span>:
+        res = requests.<span class="fn">get</span>(<span class="str">f".../{job_id}/result"</span>, ...)
+        <span class="kw">if</span> res.json()[<span class="str">"status"</span>] == <span class="str">"done"</span>:
+            <span class="kw">return</span> res.json()[<span class="str">"output"</span>]
+        time.<span class="fn">sleep</span>(<span class="hl">1</span>)</div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICKSTART CODE -->
+<section id="quickstart" data-r>
+  <div class="section-label">Intégration</div>
+  <h2 class="section-title">Prêt en <span>30 secondes</span></h2>
+  <p class="section-sub">Pas de SDK, pas de configuration. Un curl et c'est parti.</p>
+
+  <div class="code-grid">
+    <div class="code-card">
+      <div class="code-hdr">
+        <div class="c-dots"><span></span><span></span><span></span></div>
+        <span class="code-lang">bash · Scraping minimal</span>
+      </div>
+      <div class="code-body"><span class="cm"># Scraping d'une page avec IP résidentielle auto</span>
+<span class="fn">curl</span> <span class="str">-X POST</span> \
+  https://api.revolution-network.fr/api/enterprise/v1/jobs \
+  <span class="str">-H</span> <span class="str">"x-api-key: YOUR_KEY"</span> \
+  <span class="str">-H</span> <span class="str">"Content-Type: application/json"</span> \
+  <span class="str">-d</span> <span class="str">'{
+    "type": "scrape_get",
+    "params": {
+      "url": "https://example.com",
+      "mode": "auto"
+    }
+  }'</span>
+
+<span class="cm"># → { "job_id": "job_abc123", "status": "queued" }</span></div>
+    </div>
+
+    <div class="code-card">
+      <div class="code-hdr">
+        <div class="c-dots"><span></span><span></span><span></span></div>
+        <span class="code-lang">bash · Récupérer le résultat</span>
+      </div>
+      <div class="code-body"><span class="cm"># Polling jusqu'à status = "done"</span>
+<span class="fn">curl</span> \
+  https://api.revolution-network.fr/api/enterprise/v1/jobs/<span class="hl">job_abc123</span>/result \
+  <span class="str">-H</span> <span class="str">"x-api-key: YOUR_KEY"</span>
+
+<span class="cm"># Réponse complète</span>
+{
+  <span class="str">"status"</span>: <span class="str">"done"</span>,
+  <span class="str">"output"</span>: { ... },
+  <span class="str">"meta"</span>: {
+    <span class="str">"ip_country"</span>: <span class="str">"fr"</span>,
+    <span class="str">"ip_type"</span>: <span class="str">"residential"</span>,
+    <span class="str">"isp"</span>: <span class="str">"Orange France"</span>,
+    <span class="str">"duration_ms"</span>: <span class="hl">1240</span>
+  }
+}</div>
+    </div>
+
+    <div class="code-card">
+      <div class="code-hdr">
+        <div class="c-dots"><span></span><span></span><span></span></div>
+        <span class="code-lang">bash · Géolocalisation + extraction IA</span>
+      </div>
+      <div class="code-body"><span class="cm"># IP résidentielle allemande, extraction par champ</span>
+<span class="fn">curl</span> <span class="str">-X POST</span> \
+  https://api.revolution-network.fr/api/enterprise/v1/jobs \
+  <span class="str">-H</span> <span class="str">"x-api-key: YOUR_KEY"</span> \
+  <span class="str">-H</span> <span class="str">"Content-Type: application/json"</span> \
+  <span class="str">-d</span> <span class="str">'{
+    "type": "scrape_get",
+    "params": {
+      "url": "https://amazon.de/dp/PRODUCT",
+      "mode": "ai",
+      "country": "de",
+      "extract": ["price_eur", "title", "availability"]
+    }
+  }'</span></div>
+    </div>
+
+    <div class="code-card">
+      <div class="code-hdr">
+        <div class="c-dots"><span></span><span></span><span></span></div>
+        <span class="code-lang">javascript · SDK npm</span>
+      </div>
+      <div class="code-body"><span class="kw">import</span> { RevolutionClient } <span class="kw">from</span> <span class="str">'revolution-sdk'</span>
+
+<span class="kw">const</span> client = <span class="kw">new</span> <span class="fn">RevolutionClient</span>({ apiKey: <span class="str">'YOUR_KEY'</span> })
+
+<span class="kw">const</span> result = <span class="kw">await</span> client.jobs.<span class="fn">scrape</span>({
+  url: <span class="str">'https://target-site.com'</span>,
+  mode: <span class="str">'auto'</span>,
+  country: <span class="str">'fr'</span>,  <span class="cm">// IP résidentielle française</span>
+  extract: [<span class="str">'title'</span>, <span class="str">'price'</span>]
+})
+
+console.<span class="fn">log</span>(result.output)     <span class="cm">// données extraites</span>
+console.<span class="fn">log</span>(result.meta.isp)  <span class="cm">// "Orange France" 🏠</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" style="position:relative;z-index:1;">
+  <div class="cta-glow"></div>
+  <h2>Commencez à scraper<br>avec de <span>vraies IPs résidentielles</span></h2>
+  <p>3 GB gratuits par semaine. Pas de carte bancaire. Résultats en 30 secondes.</p>
+  <div class="cta-acts">
+    <a class="btn-p" href="/">Créer un compte gratuit</a>
+    <a class="btn-s" href="https://discord.gg/eadE7uK6ss" target="_blank">Rejoindre le Discord</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a class="logo" href="/">
+    <span class="logo-dot"></span>
+    Revolution Network
+  </a>
+  <div class="f-links">
+    <a href="/">Accueil</a>
+    <a href="/#jobs">Tous les jobs</a>
+    <a href="/ocr_pdf.html">OCR & PDF</a>
+    <a href="/code_run_js.html">Code Execution</a>
+    <a href="https://discord.gg/eadE7uK6ss" target="_blank">Discord</a>
+  </div>
+  <div class="f-copy">© 2026 Revolution Network</div>
+</footer>
+
+<script>
+// Use case tabs
+function showUC(id) {
+  document.querySelectorAll('.uc-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.uc-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('uc-' + id).classList.add('active');
+}
+
+// Reveal on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('vis'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('[data-r]').forEach(el => observer.observe(el));
+</script>
+<script src="grid-bg.js"></script>
+</body>
+</html>

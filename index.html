@@ -197,6 +197,7 @@
 #landing-page .ln-jobs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;overflow:hidden;margin-top:3rem;}
 #landing-page .ln-job{background:rgba(15,22,33,0.72);backdrop-filter:blur(10px);padding:1.5rem;transition:background .2s;}
 #landing-page .ln-job:hover{background:rgba(17,24,32,0.88)}
+#landing-page .ln-job:hover .ln-job-arr{opacity:1!important;}
 #landing-page .ln-job-icon{font-size:1.5rem;margin-bottom:.75rem;display:block}
 #landing-page .ln-job-name{font-family:'DM Mono',monospace;font-size:.78rem;color:#4af0c4;margin-bottom:.3rem}
 #landing-page .ln-job-desc{font-size:.82rem;color:#7a8799;line-height:1.5}
@@ -298,8 +299,8 @@
     <div class="ln-hero-bg"></div>
     <div class="ln-grid"></div>
     <div class="ln-badge"><span class="ln-badge-dot"></span><span data-ln="badge">DePIN · Compute · API</span></div>
-    <h1 class="ln-h1" data-ln="hero.h1.before">Compute décentralisé.<br><span data-ln="hero.h1.accent">Une seule API.</span></h1>
-    <p class="ln-sub" data-ln="hero.sub">Scraping, OCR, code execution et data processing. Alimenté par un réseau mondial de nodes distribués. Pas de vendor lock-in.</p>
+    <h1 class="ln-h1" data-ln="hero.h1.before">IPs résidentielles.<br><span data-ln="hero.h1.accent">Une seule API.</span></h1>
+    <p class="ln-sub" data-ln="hero.sub">Scraping via <strong style="color:#4af0c4;font-weight:500;">vraies IPs résidentielles</strong>, OCR, code execution et data processing. <span style="color:#4af0c4;">100x moins cher que Bright Data.</span> Réseau mondial de nodes distribués. Pas de vendor lock-in.</p>
     <div class="ln-actions">
       <button class="ln-btn-p" onclick="showLoginFromLanding()"><span data-ln="hero.cta.primary">Accéder au Dashboard</span> </button>
       <a class="ln-btn-s" href="https://discord.gg/eadE7uK6ss" target="_blank" data-ln="hero.cta.secondary">Rejoindre le Discord</a>
@@ -312,15 +313,30 @@
         <div class="ln-stat-label"><span data-ln="stat.nodes">Réseau nodes</span></div>
       </div>
       <div class="ln-stat">
-        <span class="ln-stat-val" id="ls-jobs">—</span>
+        <span class="ln-stat-val" id="ls-jobs">2k+</span>
         <div class="ln-stat-label"><span class="ln-live-dot"></span><span data-ln="stat.jobs">Jobs traités</span></div>
       </div>
       <div class="ln-stat">
-        <span class="ln-stat-val" id="ls-uptime">—</span>
-        <div class="ln-stat-label"><span class="ln-live-dot"></span><span data-ln="stat.uptime">Uptime réseau</span></div>
+        <span class="ln-stat-val" id="ls-uptime">100%</span>
+        <div class="ln-stat-label"><span class="ln-live-dot"></span><span data-ln="stat.uptime">Taux de succès</span></div>
       </div>
 
     </div>
+
+    <!-- RESIDENTIAL TRUST CHIPS -->
+    <div style="margin-top:1.75rem;display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;">
+      <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(74,240,196,0.08);border:1px solid rgba(74,240,196,0.2);padding:.35rem .9rem;border-radius:999px;font-family:'DM Mono',monospace;font-size:.72rem;color:#4af0c4;">
+        <span style="width:6px;height:6px;border-radius:50%;background:#4af0c4;display:inline-block;"></span>
+        🏠 IPs résidentielles 100%
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(74,159,255,0.08);border:1px solid rgba(74,159,255,0.2);padding:.35rem .9rem;border-radius:999px;font-family:'DM Mono',monospace;font-size:.72rem;color:#4a9fff;">
+        ✓ Bypass Cloudflare · DataDome · PerimeterX
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(74,240,196,0.08);border:1px solid rgba(74,240,196,0.2);padding:.35rem .9rem;border-radius:999px;font-family:'DM Mono',monospace;font-size:.72rem;color:#4af0c4;">
+        0.08 €/GB · 100x moins cher que Bright Data
+      </div>
+    </div>
+
   </section>
 
   <!-- QUICK START CODE -->
@@ -470,18 +486,109 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
   <section class="ln-section" id="jobs">
     <div class="ln-label" data-r data-ln="jobs.label">Types de jobs</div>
     <h2 class="ln-h2" data-r data-ln="jobs.h2">10 types de compute,<br>un seul endpoint.</h2>
-    <p class="ln-muted" data-r data-ln="jobs.sub">De l'extraction de données à la conversion vidéo, tout passe par la même API.</p>
+    <p class="ln-muted" data-r data-ln="jobs.sub">Du scraping via IPs résidentielles à l'exécution de code, tout passe par la même API.</p>
+
+    <!-- Callout résidentiel -->
+    <div data-r style="background:linear-gradient(135deg,rgba(74,240,196,0.05) 0%,rgba(15,22,33,0) 80%);border:1px solid rgba(74,240,196,0.18);border-radius:12px;padding:1.25rem 1.75rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+      <div style="font-size:.9rem;color:#c8d3e0;line-height:1.55;">
+        🏠 <strong style="color:#4af0c4;">IPs résidentielles 100%</strong> — Chaque requête de scraping provient d'une vraie connexion domestique. Bypass anti-bot garanti. Cloudflare, DataDome, PerimeterX — aucun obstacle.
+      </div>
+      <a href="/scrape_get.html" style="font-family:'DM Mono',monospace;font-size:.75rem;color:#4af0c4;text-decoration:none;white-space:nowrap;padding:.4rem .9rem;border:1px solid rgba(74,240,196,0.25);border-radius:8px;transition:all .2s;" onmouseover="this.style.background='rgba(74,240,196,0.08)'" onmouseout="this.style.background='transparent'">Voir le détail →</a>
+    </div>
+
     <div class="ln-jobs-grid" data-r>
-      <div class="ln-job"><span class="ln-job-icon">&#127760;</span><div class="ln-job-name">http_get</div><div class="ln-job-desc" data-ln="job.http_get.desc">Analyse web simple</div><div class="ln-job-cost">~1 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">&#128375;&#65039;</span><div class="ln-job-name">scrape_get</div><div class="ln-job-desc" data-ln="job.scrape_get.desc">Scraping intelligent (auto/browser/css/ai)</div><div class="ln-job-cost">~2 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">&#128196;</span><div class="ln-job-name">ocr_pdf</div><div class="ln-job-desc" data-ln="job.ocr_pdf.desc">OCR / Extraction PDF</div><div class="ln-job-cost">~20 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">&#127912;</span><div class="ln-job-name">image_svg_generate</div><div class="ln-job-desc" data-ln="job.image_svg.desc">Génération SVG avec texte</div><div class="ln-job-cost">~2 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">&#9881;&#65039;</span><div class="ln-job-name">code_run_js</div><div class="ln-job-desc" data-ln="job.code_run_js.desc">Exécution JS (sandbox VM)</div><div class="ln-job-cost">~5 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">&#9999;&#65039;</span><div class="ln-job-name">text_transform</div><div class="ln-job-desc" data-ln="job.text_transform.desc">Transformation de texte</div><div class="ln-job-cost">~1 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">&#128221;</span><div class="ln-job-name">text_generate_template</div><div class="ln-job-desc" data-ln="job.text_template.desc">Génération de template</div><div class="ln-job-cost">~1 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">&#9989;</span><div class="ln-job-name">content_check</div><div class="ln-job-desc" data-ln="job.content_check.desc">Vérification de contenu</div><div class="ln-job-cost">~5 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">&#128260;</span><div class="ln-job-name">data_processing</div><div class="ln-job-desc" data-ln="job.data_processing.desc">Traitement de données</div><div class="ln-job-cost">~100 MB</div></div>
-      <div class="ln-job"><span class="ln-job-icon">&#128202;</span><div class="ln-job-name">csv_stats</div><div class="ln-job-desc" data-ln="job.csv_stats.desc">Statistiques CSV</div><div class="ln-job-cost">~10 MB</div></div>
+      <a href="/scrape_get.html" style="text-decoration:none;color:inherit;display:block;">
+        <div class="ln-job" style="border-left:2px solid rgba(74,240,196,0.4);position:relative;cursor:pointer;">
+          <span style="position:absolute;top:.85rem;right:.85rem;font-family:'DM Mono',monospace;font-size:.65rem;color:#4a9fff;opacity:0;transition:opacity .2s;" class="ln-job-arr">→</span>
+          <span class="ln-job-icon">🕷️</span>
+          <div class="ln-job-name">scrape_get</div>
+          <div class="ln-job-desc" data-ln="job.scrape_get.desc">Scraping intelligent (auto/browser/css/ai)</div>
+          <div class="ln-job-cost">~2 MB</div>
+          <div style="display:inline-flex;align-items:center;gap:.3rem;font-family:'DM Mono',monospace;font-size:.62rem;background:rgba(74,240,196,0.08);border:1px solid rgba(74,240,196,0.2);color:#4af0c4;padding:.15rem .5rem;border-radius:5px;margin-top:.5rem;">🏠 IP Résidentielle</div>
+        </div>
+      </a>
+      <a href="/http_get.html" style="text-decoration:none;color:inherit;display:block;">
+        <div class="ln-job" style="position:relative;cursor:pointer;">
+          <span style="position:absolute;top:.85rem;right:.85rem;font-family:'DM Mono',monospace;font-size:.65rem;color:#4a9fff;opacity:0;transition:opacity .2s;" class="ln-job-arr">→</span>
+          <span class="ln-job-icon">&#127760;</span>
+          <div class="ln-job-name">http_get</div>
+          <div class="ln-job-desc" data-ln="job.http_get.desc">Analyse web simple</div>
+          <div class="ln-job-cost">~1 MB</div>
+          <div style="display:inline-flex;align-items:center;gap:.3rem;font-family:'DM Mono',monospace;font-size:.62rem;background:rgba(74,240,196,0.08);border:1px solid rgba(74,240,196,0.2);color:#4af0c4;padding:.15rem .5rem;border-radius:5px;margin-top:.5rem;">🏠 IP Résidentielle</div>
+        </div>
+      </a>
+      <a href="/ocr_pdf.html" style="text-decoration:none;color:inherit;display:block;">
+        <div class="ln-job" style="position:relative;cursor:pointer;">
+          <span style="position:absolute;top:.85rem;right:.85rem;font-family:'DM Mono',monospace;font-size:.65rem;color:#4a9fff;opacity:0;transition:opacity .2s;" class="ln-job-arr">→</span>
+          <span class="ln-job-icon">&#128196;</span>
+          <div class="ln-job-name">ocr_pdf</div>
+          <div class="ln-job-desc" data-ln="job.ocr_pdf.desc">OCR / Extraction PDF</div>
+          <div class="ln-job-cost">~20 MB</div>
+        </div>
+      </a>
+      <a href="/image_svg_generate.html" style="text-decoration:none;color:inherit;display:block;">
+        <div class="ln-job" style="position:relative;cursor:pointer;">
+          <span style="position:absolute;top:.85rem;right:.85rem;font-family:'DM Mono',monospace;font-size:.65rem;color:#4a9fff;opacity:0;transition:opacity .2s;" class="ln-job-arr">→</span>
+          <span class="ln-job-icon">&#127912;</span>
+          <div class="ln-job-name">image_svg_generate</div>
+          <div class="ln-job-desc" data-ln="job.image_svg.desc">Génération SVG avec texte</div>
+          <div class="ln-job-cost">~2 MB</div>
+        </div>
+      </a>
+      <a href="/code_run_js.html" style="text-decoration:none;color:inherit;display:block;">
+        <div class="ln-job" style="position:relative;cursor:pointer;">
+          <span style="position:absolute;top:.85rem;right:.85rem;font-family:'DM Mono',monospace;font-size:.65rem;color:#4a9fff;opacity:0;transition:opacity .2s;" class="ln-job-arr">→</span>
+          <span class="ln-job-icon">&#9881;&#65039;</span>
+          <div class="ln-job-name">code_run_js</div>
+          <div class="ln-job-desc" data-ln="job.code_run_js.desc">Exécution JS (sandbox VM)</div>
+          <div class="ln-job-cost">~5 MB</div>
+        </div>
+      </a>
+      <a href="/text_transform.html" style="text-decoration:none;color:inherit;display:block;">
+        <div class="ln-job" style="position:relative;cursor:pointer;">
+          <span style="position:absolute;top:.85rem;right:.85rem;font-family:'DM Mono',monospace;font-size:.65rem;color:#4a9fff;opacity:0;transition:opacity .2s;" class="ln-job-arr">→</span>
+          <span class="ln-job-icon">&#9999;&#65039;</span>
+          <div class="ln-job-name">text_transform</div>
+          <div class="ln-job-desc" data-ln="job.text_transform.desc">Transformation de texte</div>
+          <div class="ln-job-cost">~1 MB</div>
+        </div>
+      </a>
+      <a href="/text_generate_template.html" style="text-decoration:none;color:inherit;display:block;">
+        <div class="ln-job" style="position:relative;cursor:pointer;">
+          <span style="position:absolute;top:.85rem;right:.85rem;font-family:'DM Mono',monospace;font-size:.65rem;color:#4a9fff;opacity:0;transition:opacity .2s;" class="ln-job-arr">→</span>
+          <span class="ln-job-icon">&#128221;</span>
+          <div class="ln-job-name">text_generate_template</div>
+          <div class="ln-job-desc" data-ln="job.text_template.desc">Génération de template</div>
+          <div class="ln-job-cost">~1 MB</div>
+        </div>
+      </a>
+      <a href="/content_check.html" style="text-decoration:none;color:inherit;display:block;">
+        <div class="ln-job" style="position:relative;cursor:pointer;">
+          <span style="position:absolute;top:.85rem;right:.85rem;font-family:'DM Mono',monospace;font-size:.65rem;color:#4a9fff;opacity:0;transition:opacity .2s;" class="ln-job-arr">→</span>
+          <span class="ln-job-icon">&#9989;</span>
+          <div class="ln-job-name">content_check</div>
+          <div class="ln-job-desc" data-ln="job.content_check.desc">Vérification de contenu</div>
+          <div class="ln-job-cost">~5 MB</div>
+        </div>
+      </a>
+      <a href="/data_processing.html" style="text-decoration:none;color:inherit;display:block;">
+        <div class="ln-job" style="position:relative;cursor:pointer;">
+          <span style="position:absolute;top:.85rem;right:.85rem;font-family:'DM Mono',monospace;font-size:.65rem;color:#4a9fff;opacity:0;transition:opacity .2s;" class="ln-job-arr">→</span>
+          <span class="ln-job-icon">&#128260;</span>
+          <div class="ln-job-name">data_processing</div>
+          <div class="ln-job-desc" data-ln="job.data_processing.desc">Traitement de données</div>
+          <div class="ln-job-cost">~100 MB</div>
+        </div>
+      </a>
+      <a href="/csv_stats.html" style="text-decoration:none;color:inherit;display:block;">
+        <div class="ln-job" style="position:relative;cursor:pointer;">
+          <span style="position:absolute;top:.85rem;right:.85rem;font-family:'DM Mono',monospace;font-size:.65rem;color:#4a9fff;opacity:0;transition:opacity .2s;" class="ln-job-arr">→</span>
+          <span class="ln-job-icon">&#128202;</span>
+          <div class="ln-job-name">csv_stats</div>
+          <div class="ln-job-desc" data-ln="job.csv_stats.desc">Statistiques CSV</div>
+          <div class="ln-job-cost">~10 MB</div>
+        </div>
+      </a>
     </div>
 
 <div style="margin-top:2.5rem;padding:2rem;background:rgba(15,22,33,0.72);border:1px solid rgba(255,255,255,0.06);border-radius:16px;backdrop-filter:blur(10px);">
@@ -2485,7 +2592,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                 'download.points.note': 'Les points rendent éligible au futur airdrop.',
                 'download.install': 'Download Node (.exe)',
                 'download.guide': 'Aide',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.54/Revolution-Network-Node-Setup-1.0.54.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.53/Revolution-Network-Node-Setup-1.0.53.exe',
                 'download.mac_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1-MAC/Revolution-Network-Node-Setup-1.0.23.dmg',
                 'download.mac.title': 'Version macOS (Beta)',
                 'download.mac.install': 'Download Node (.dmg)',
@@ -2917,7 +3024,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                 'shop.node.btn': 'Buy the Node — 150 €',
                 'shop.node.err_login': 'Log in to purchase.',
                 'download.android.coming_soon_desc': 'The Android mobile app is under development.',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.54/Revolution-Network-Node-Setup-1.0.54.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.53/Revolution-Network-Node-Setup-1.0.53.exe',
                 'download.mac_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1-MAC/Revolution-Network-Node-Setup-1.0.23.dmg',
                 'download.mac.title': 'macOS Version (Beta)',
                 'download.mac.install': 'Download Node (.dmg)',
@@ -3195,7 +3302,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                 'download.recommended.step4': 'A shortcut will be created on your desktop.',
                 'download.recommended.step5': 'Launch the app and sign in via the “Sign in via website” button.',
                 'download.recommended.step6': 'Press the ? button to start earning points.',
-                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.54/Revolution-Network-Node-Setup-1.0.54.exe',
+                'download.direct_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1.0.53/Revolution-Network-Node-Setup-1.0.53.exe',
                 'download.mac_link': 'https://github.com/Revolution-Network333/revolution-network-Frontend/releases/download/v1-MAC/Revolution-Network-Node-Setup-1.0.23.dmg',
                 'download.mac.title': 'macOS Version (Beta)',
                 'download.mac.install': 'Download Node (.dmg)',
@@ -7908,18 +8015,8 @@ main();</code></pre>
             const btnDmg = document.getElementById('btn-download-dmg');
             const btnHowMac = document.getElementById('btn-howto-mac');
             
-            // Charger l'URL depuis l'API
-            fetch(`${API_BASE}/api/admin/settings/download-url`)
-              .then(r => r.json())
-              .then(d => {
-                if (d.url && btnExe) {
-                  btnExe.dataset.downloadUrl = d.url;
-                }
-              }).catch(() => {});
-
             if (btnExe) btnExe.addEventListener('click', () => {
-                const apiUrl = btnExe.dataset.downloadUrl;
-                const direct = apiUrl || String(t('download.direct_link') || '');
+                const direct = String(t('download.direct_link') || '');
                 const downloadUrl = /^https?:\/\//i.test(direct) ? direct : `${API_BASE}${direct}`;
                 window.location.href = downloadUrl;
             });
@@ -9640,15 +9737,6 @@ function initializeShopPage() {
                             <div style="color:#94a3b8;font-size:0.9em;" id="airdrop-supply-hint">Chargement...</div>
                         </div>
                     </div>
-
-                    <div class="section-info-bubble" style="margin-bottom: 16px;">
-                        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-                            <div style="font-weight:600;">🔗 Lien de téléchargement Windows</div>
-                            <input id="download-url-input" type="text" placeholder="https://github.com/.../setup.exe" style="padding:8px;border-radius:6px;border:1px solid #334155;background:#1e293b;color:#fff;min-width:380px;flex:1;">
-                            <button class="profile-btn secondary" id="btn-save-download-url">Enregistrer</button>
-                            <div style="color:#94a3b8;font-size:0.9em;" id="download-url-hint">Chargement...</div>
-                        </div>
-                    </div>
                     
                     <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; gap: 8px; align-items: center;">
@@ -9739,34 +9827,6 @@ function initializeShopPage() {
             const inputSupply = document.getElementById('airdrop-circulating-supply');
             const btnSaveSupply = document.getElementById('btn-save-airdrop-supply');
             const supplyHint = document.getElementById('airdrop-supply-hint');
-
-            // Download URL
-            const downloadInput = document.getElementById('download-url-input');
-            const btnSaveDownload = document.getElementById('btn-save-download-url');
-            const downloadHint = document.getElementById('download-url-hint');
-            fetch(`${API_BASE}/api/admin/settings/download-url`, { headers: { 'Authorization': 'Bearer ' + token } })
-              .then(r => r.json()).then(d => {
-                if (downloadInput) downloadInput.value = d.url || '';
-                if (downloadHint) downloadHint.textContent = d.url ? '✅ URL actuelle définie' : 'Aucune URL définie';
-              }).catch(() => { if (downloadHint) downloadHint.textContent = 'Erreur chargement'; });
-            if (btnSaveDownload) btnSaveDownload.addEventListener('click', async () => {
-              const url = downloadInput.value.trim();
-              if (!url) return;
-              btnSaveDownload.disabled = true;
-              btnSaveDownload.textContent = 'Enregistrement...';
-              try {
-                const r = await fetch(`${API_BASE}/api/admin/settings/download-url`, {
-                  method: 'POST',
-                  headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ url })
-                });
-                const d = await r.json();
-                if (d.success) { downloadHint.textContent = '✅ Enregistré !'; }
-                else { downloadHint.textContent = '❌ ' + (d.error || 'Erreur'); }
-              } catch(e) { downloadHint.textContent = '❌ Erreur réseau'; }
-              btnSaveDownload.disabled = false;
-              btnSaveDownload.textContent = 'Enregistrer';
-            });
             
             let currentSort = 'score';
             let currentOrder = 'desc';
