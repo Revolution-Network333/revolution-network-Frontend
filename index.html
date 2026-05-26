@@ -5039,7 +5039,7 @@ main();</code></pre>
                                 <h3>${t('overview.chart.title')}</h3>
                                 <select class="filter-select" id="overview-chart-range">
                                     <option value="daily">${t('overview.chart.daily')}</option>
-                                    <option value="weekly" selected>${t('overview.chart.weekly')}</option>
+                                    <option value="weekly">${t('overview.chart.weekly')}</option>
                                     <option value="monthly">${t('overview.chart.monthly')}</option>
                                     <option value="yearly">Annuel</option>
                                 </select>
@@ -5183,14 +5183,14 @@ main();</code></pre>
             const select = document.getElementById('overview-chart-range');
             const tbody = document.querySelector('#overview-chart-table tbody');
             if (!select || !tbody) return;
-            const granularity = select.value || 'weekly';
+            const granularity = select.value || 'daily';
             fetch(`${API_BASE}/api/rewards/calendar?granularity=${encodeURIComponent(granularity)}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             .then(r => r.json())
             .then(d => {
                 const rawList = Array.isArray(d.points) ? d.points : [];
-                const granularityVal = select.value || "weekly";
+                const granularityVal = select.value || "daily";
                 const buckets = {};
                 rawList.forEach(p => {
                     const dObj = new Date(p.period);
@@ -9630,6 +9630,15 @@ function initializeShopPage() {
                             <div style="color:#94a3b8;font-size:0.9em;" id="airdrop-supply-hint">Chargement...</div>
                         </div>
                     </div>
+
+                    <div class="section-info-bubble" style="margin-bottom: 16px;">
+                        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                            <div style="font-weight:600;">🔗 Lien de téléchargement Windows</div>
+                            <input id="download-url-input" type="text" placeholder="https://github.com/.../setup.exe" style="padding:8px;border-radius:6px;border:1px solid #334155;background:#1e293b;color:#fff;min-width:380px;flex:1;">
+                            <button class="profile-btn secondary" id="btn-save-download-url">Enregistrer</button>
+                            <div style="color:#94a3b8;font-size:0.9em;" id="download-url-hint">Chargement...</div>
+                        </div>
+                    </div>
                     
                     <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; gap: 8px; align-items: center;">
@@ -9720,6 +9729,34 @@ function initializeShopPage() {
             const inputSupply = document.getElementById('airdrop-circulating-supply');
             const btnSaveSupply = document.getElementById('btn-save-airdrop-supply');
             const supplyHint = document.getElementById('airdrop-supply-hint');
+
+            // Download URL
+            const downloadInput = document.getElementById('download-url-input');
+            const btnSaveDownload = document.getElementById('btn-save-download-url');
+            const downloadHint = document.getElementById('download-url-hint');
+            fetch('/api/admin/settings/download-url', { headers: { 'Authorization': 'Bearer ' + token } })
+              .then(r => r.json()).then(d => {
+                if (downloadInput) downloadInput.value = d.url || '';
+                if (downloadHint) downloadHint.textContent = d.url ? '✅ URL actuelle définie' : 'Aucune URL définie';
+              }).catch(() => { if (downloadHint) downloadHint.textContent = 'Erreur chargement'; });
+            if (btnSaveDownload) btnSaveDownload.addEventListener('click', async () => {
+              const url = downloadInput.value.trim();
+              if (!url) return;
+              btnSaveDownload.disabled = true;
+              btnSaveDownload.textContent = 'Enregistrement...';
+              try {
+                const r = await fetch('/api/admin/settings/download-url', {
+                  method: 'POST',
+                  headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ url })
+                });
+                const d = await r.json();
+                if (d.success) { downloadHint.textContent = '✅ Enregistré !'; }
+                else { downloadHint.textContent = '❌ ' + (d.error || 'Erreur'); }
+              } catch(e) { downloadHint.textContent = '❌ Erreur réseau'; }
+              btnSaveDownload.disabled = false;
+              btnSaveDownload.textContent = 'Enregistrer';
+            });
             
             let currentSort = 'score';
             let currentOrder = 'desc';
