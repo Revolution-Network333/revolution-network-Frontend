@@ -53,7 +53,7 @@
     .hero-glow{position:absolute;top:20%;left:50%;transform:translateX(-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(74,240,196,0.07) 0%,transparent 70%);pointer-events:none;}
     .badge{display:inline-flex;align-items:center;gap:8px;background:var(--green-dim);border:1px solid var(--green-dim2);padding:.375rem 1rem;border-radius:999px;font-size:.78rem;font-family:'DM Mono',monospace;color:var(--green);margin-bottom:2rem;letter-spacing:.05em;animation:fadeUp .6s ease both;}
     .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
-    .hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.8rem,6vw,5rem);line-height:1.03;letter-spacing:-0.035em;margin-bottom:1.5rem;max-width:900px;animation:fadeUp .6s .1s ease both;}
+    .hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2rem,4vw,3.2rem);line-height:1.08;letter-spacing:-0.03em;margin-bottom:1.5rem;max-width:900px;animation:fadeUp .6s .1s ease both;}
     .hero h1 .accent{color:var(--green);}
     .hero h1 .strike{position:relative;color:var(--muted);text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:2px;}
     .hero-sub{font-size:clamp(1rem,2vw,1.2rem);color:var(--muted);max-width:600px;margin:0 auto 2rem;line-height:1.75;font-weight:300;animation:fadeUp .6s .2s ease both;}
@@ -240,7 +240,14 @@
     <a href="/#how">Comment ça marche</a>
     <a href="https://discord.gg/eadE7uK6ss" target="_blank">Discord</a>
   </div>
-  <a class="nav-cta" href="/">Accéder au Dashboard →</a>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <select id="sg-lang-switch" style="padding:5px 8px;border-radius:8px;background:#0d1219;color:#e8edf5;border:1px solid rgba(255,255,255,0.12);font-size:.82rem;cursor:pointer;">
+      <option value="fr">FR</option>
+      <option value="en">EN</option>
+      <option value="es">ES</option>
+    </select>
+    <a class="nav-cta" href="/">Accéder au Dashboard →</a>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -729,7 +736,21 @@ console.<span class="fn">log</span>(result.meta.isp)  <span class="cm">// "Orang
 </footer>
 
 <script>
-// Use case tabs
+// Language switcher — syncs with main site lang preference
+(function(){
+  const sel = document.getElementById('sg-lang-switch');
+  if(!sel) return;
+  const saved = localStorage.getItem('lang') || navigator.language?.slice(0,2) || 'fr';
+  const valid = ['fr','en','es'];
+  sel.value = valid.includes(saved) ? saved : 'fr';
+  sel.addEventListener('change', function(){
+    localStorage.setItem('lang', this.value);
+    // Redirect to main site which handles full i18n
+    window.location.href = '/?lang=' + this.value + '#scrape_get';
+  });
+})();
+</script>
+
 function showUC(id) {
   document.querySelectorAll('.uc-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.uc-panel').forEach(p => p.classList.remove('active'));

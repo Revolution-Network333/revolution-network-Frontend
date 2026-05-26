@@ -45,7 +45,7 @@
     .badge{display:inline-flex;align-items:center;gap:8px;background:var(--green-dim);border:1px solid var(--green-dim2);padding:.375rem 1rem;border-radius:999px;font-size:.78rem;font-family:'DM Mono',monospace;color:var(--green);margin-bottom:1.5rem;animation:fadeUp .5s .05s ease both;}
     .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
     .hero-emoji{font-size:3.5rem;margin-bottom:1.25rem;animation:fadeUp .5s .08s ease both;filter:drop-shadow(0 0 20px rgba(74,240,196,0.3));}
-    .hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.5rem,6vw,4.5rem);line-height:1.05;letter-spacing:-0.03em;margin-bottom:1.25rem;max-width:860px;animation:fadeUp .5s .1s ease both;}
+    .hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.8rem,4vw,3rem);line-height:1.08;letter-spacing:-0.03em;margin-bottom:1.25rem;max-width:860px;animation:fadeUp .5s .1s ease both;}
     .hero h1 .accent{color:var(--green);}
     .hero-sub{font-size:clamp(1rem,2vw,1.15rem);color:var(--muted);max-width:600px;margin:0 auto 2.5rem;line-height:1.75;font-weight:300;animation:fadeUp .5s .15s ease both;}
     .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-bottom:3rem;animation:fadeUp .5s .2s ease both;}
@@ -154,7 +154,14 @@
     <a href="/Devs_Tools.html">🛠 Tester l'API</a>
     <a href="https://discord.gg/eadE7uK6ss" target="_blank">Discord</a>
   </div>
-  <a class="nav-cta" href="/Devs_Tools.html">Tester maintenant →</a>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <select id="job-lang-switch" style="padding:5px 8px;border-radius:8px;background:#0d1219;color:#e8edf5;border:1px solid rgba(255,255,255,0.12);font-size:.82rem;cursor:pointer;">
+      <option value="fr">FR</option>
+      <option value="en">EN</option>
+      <option value="es">ES</option>
+    </select>
+    <a class="nav-cta" href="/Devs_Tools.html">Tester maintenant →</a>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -268,6 +275,21 @@
   </div>
   <div class="f-copy">© 2026 Revolution Network</div>
 </footer>
+
+<script>
+// Language switcher — syncs with main site lang preference
+(function(){
+  const sel = document.getElementById('job-lang-switch');
+  if(!sel) return;
+  const saved = localStorage.getItem('lang') || navigator.language?.slice(0,2) || 'fr';
+  const valid = ['fr','en','es'];
+  sel.value = valid.includes(saved) ? saved : 'fr';
+  sel.addEventListener('change', function(){
+    localStorage.setItem('lang', this.value);
+    window.location.href = '/?lang=' + this.value;
+  });
+})();
+</script>
 
 <script>
 /* ============================================================
