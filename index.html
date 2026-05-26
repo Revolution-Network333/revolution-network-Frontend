@@ -7908,8 +7908,18 @@ main();</code></pre>
             const btnDmg = document.getElementById('btn-download-dmg');
             const btnHowMac = document.getElementById('btn-howto-mac');
             
+            // Charger l'URL depuis l'API
+            fetch(`${API_BASE}/api/admin/settings/download-url`)
+              .then(r => r.json())
+              .then(d => {
+                if (d.url && btnExe) {
+                  btnExe.dataset.downloadUrl = d.url;
+                }
+              }).catch(() => {});
+
             if (btnExe) btnExe.addEventListener('click', () => {
-                const direct = String(t('download.direct_link') || '');
+                const apiUrl = btnExe.dataset.downloadUrl;
+                const direct = apiUrl || String(t('download.direct_link') || '');
                 const downloadUrl = /^https?:\/\//i.test(direct) ? direct : `${API_BASE}${direct}`;
                 window.location.href = downloadUrl;
             });
