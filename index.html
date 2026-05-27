@@ -2183,6 +2183,14 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
             }, 50);
           };
 
+          /* Auto-open login if ?login=1 */
+          (function(){
+            if(new URLSearchParams(window.location.search).get('login') === '1'){
+              window.__autoOpenLogin = true;
+              // Clean URL without reload
+              history.replaceState(null,'',window.location.pathname);
+            }
+          })();
 
           /* ---------- LIVE STATS ---------- */
           function fmtNum(n) {
@@ -2314,9 +2322,9 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
           /* ---------- ROUTING ---------- */
          if (isAuthenticated() || new URLSearchParams(window.location.search).get('token')) {
             showApp();
-          } else if (new URLSearchParams(window.location.search).get('login') === '1') {
-            showApp();
-            history.replaceState(null, '', window.location.pathname);
+          } else if (window.__autoOpenLogin) {
+            // Vient d'une autre page via ?login=1 → ouvrir le login directement
+            window.showLoginFromLanding();
           } else {
             document.addEventListener('DOMContentLoaded', showLanding);
             // Fallback for fast loads
