@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Rejoins Revolution Network — postes ouverts pour construire l'infrastructure compute décentralisée.">
+  <title>Jobs — Revolution Network</title>
+  <link rel="icon" href="nexon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080c12;--bg3:rgba(15,22,33,0.75);--accent:#4af0c4;--accent2:#4a9fff;--red:#e84040;--text:#e8edf5;--muted:#7a8799;--border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);}
+html{scroll-behavior:smooth;}body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;}
+nav{position:sticky;top:0;z-index:100;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,12,18,0.6);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);gap:1rem;}
+.ln-logo{display:flex;align-items:center;gap:10px;font-size:1rem;color:var(--text);text-decoration:none;flex-shrink:0;}
+.ln-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+.nav-links{display:flex;align-items:center;gap:1.75rem;}.nav-links a{color:var(--muted);text-decoration:none;font-size:.875rem;transition:color .2s;}.nav-links a:hover{color:var(--text);}
+.nav-right{display:flex;align-items:center;gap:.75rem;flex-shrink:0;}
+.lang-switcher{display:flex;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:8px;padding:3px;}
+.lang-btn{background:transparent;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:.72rem;padding:.3rem .55rem;border-radius:5px;cursor:pointer;transition:all .2s;}
+.lang-btn:hover{color:var(--text);}.lang-btn.active{background:var(--accent);color:#080c12;font-weight:700;}
+.btn-nav{background:var(--accent);color:#080c12;padding:.5rem 1.2rem;border-radius:8px;font-weight:600;font-size:.875rem;text-decoration:none;}
+@media(max-width:768px){.nav-links{display:none;}nav{padding:0 1rem;}}
+/* HERO */
+.hero{padding:7rem 2rem 4rem;text-align:center;max-width:800px;margin:0 auto;}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,240,196,.08);border:1px solid rgba(74,240,196,.2);padding:.375rem 1rem;border-radius:999px;font-size:.78rem;font-family:'DM Mono',monospace;color:var(--accent);margin-bottom:2rem;}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.5s ease-in-out infinite;}
+h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.2rem,5vw,3.75rem);line-height:1.05;letter-spacing:-0.03em;margin-bottom:1.5rem;}
+h1 span{color:var(--accent);}
+.hero-sub{font-size:1.05rem;color:var(--muted);max-width:520px;margin:0 auto;font-weight:300;line-height:1.7;}
+.stats-bar{display:flex;gap:2px;max-width:700px;margin:3rem auto 0;background:var(--border);border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+.stat-item{flex:1;background:rgba(15,22,33,.8);padding:1rem 1.5rem;text-align:center;}
+.stat-val{font-family:'Syne',sans-serif;font-weight:700;font-size:1.5rem;color:var(--accent);display:block;}
+.stat-lbl{font-size:.72rem;color:var(--muted);font-family:'DM Mono',monospace;margin-top:.15rem;}
+/* FILTER */
+.filter-bar{max-width:1100px;margin:4rem auto 0;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.filter-label{font-family:'DM Mono',monospace;font-size:.78rem;color:var(--muted);letter-spacing:.08em;}
+.filter-pills{display:flex;gap:.5rem;flex-wrap:wrap;}
+.pill{font-family:'DM Mono',monospace;font-size:.75rem;padding:.35rem .9rem;border-radius:999px;border:1px solid var(--border2);color:var(--muted);cursor:pointer;transition:all .2s;background:transparent;}
+.pill:hover,.pill.active{background:rgba(74,240,196,.08);border-color:rgba(74,240,196,.3);color:var(--accent);}
+/* JOBS */
+.jobs-container{max-width:1100px;margin:2rem auto 0;padding:0 2rem 6rem;}
+.job-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;margin-bottom:1.5rem;overflow:hidden;cursor:pointer;transition:border-color .2s;}
+.job-card:hover{border-color:rgba(74,240,196,.2);}
+.job-card.open-state .job-detail{display:block;}
+.job-card.open-state .job-arrow{transform:rotate(180deg);}
+.job-summary{padding:1.75rem 2rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
+.job-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.job-icon.blue{background:rgba(74,159,255,.1);border:1px solid rgba(74,159,255,.2);}
+.job-icon.green{background:rgba(74,240,196,.1);border:1px solid rgba(74,240,196,.2);}
+.job-icon.orange{background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.2);}
+.job-icon.purple{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);}
+.job-icon.red{background:rgba(232,64,64,.1);border:1px solid rgba(232,64,64,.2);}
+.job-main{flex:1;min-width:200px;}
+.job-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.4rem;}
+.job-meta{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;}
+.job-tag{font-size:.72rem;font-family:'DM Mono',monospace;padding:.2rem .6rem;border-radius:5px;}
+.job-tag.remote{background:rgba(74,240,196,.08);border:1px solid rgba(74,240,196,.15);color:var(--accent);}
+.job-tag.type{background:rgba(255,255,255,.05);border:1px solid var(--border2);color:var(--muted);}
+.job-tag.dept{background:rgba(74,159,255,.08);border:1px solid rgba(74,159,255,.15);color:var(--accent2);}
+.job-tag.hot{background:rgba(232,64,64,.1);border:1px solid rgba(232,64,64,.2);color:#f87171;}
+.job-right{display:flex;align-items:center;gap:1rem;flex-shrink:0;}
+.job-comp-val{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;text-align:right;}
+.job-comp-type{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);text-align:right;}
+.job-arrow{color:var(--muted);transition:transform .3s;font-size:1.1rem;width:24px;text-align:center;}
+/* DETAIL */
+.job-detail{display:none;border-top:1px solid var(--border);padding:2rem;}
+.job-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;}
+@media(max-width:768px){.job-detail-grid{grid-template-columns:1fr;}}
+.detail-section{margin-bottom:2rem;}
+.detail-title{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem;}
+.detail-list{list-style:none;display:flex;flex-direction:column;gap:.5rem;}
+.detail-list li{color:var(--muted);font-size:.88rem;padding-left:1.25rem;position:relative;line-height:1.5;}
+.detail-list li::before{content:'→';position:absolute;left:0;color:var(--accent);font-size:.8rem;line-height:1.6;}
+.detail-list li strong{color:var(--text);}
+.detail-tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem;}
+.detail-tag{font-size:.75rem;font-family:'DM Mono',monospace;background:rgba(255,255,255,.04);border:1px solid var(--border2);padding:.25rem .65rem;border-radius:5px;color:var(--muted);}
+.detail-tag.a{background:rgba(74,240,196,.06);border-color:rgba(74,240,196,.15);color:var(--accent);}
+.apply-row{margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.apply-note{font-size:.85rem;color:var(--muted);}
+.apply-note strong{color:var(--text);}
+.btn-apply{background:var(--accent);color:#080c12;padding:.75rem 1.75rem;border-radius:9px;font-weight:700;font-size:.9rem;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;}
+.btn-apply:hover{opacity:.9;transform:translateY(-1px);}
+/* SPONTANEOUS */
+.spontaneous{background:rgba(15,22,33,.6);border:1px dashed rgba(74,240,196,.25);border-radius:14px;padding:2.5rem;text-align:center;margin-top:2rem;}
+.sp-ico{font-size:2rem;margin-bottom:1rem;}
+.sp-title{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700;margin-bottom:.5rem;}
+.sp-desc{color:var(--muted);font-size:.9rem;max-width:480px;margin:0 auto 1.5rem;line-height:1.6;}
+/* CULTURE */
+.culture-section{max-width:1100px;margin:0 auto;padding:5rem 2rem;border-top:1px solid var(--border);}
+.lbl{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem;}
+h2{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(1.75rem,3vw,2.25rem);letter-spacing:-0.02em;margin-bottom:1rem;}
+.culture-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem;}
+@media(max-width:768px){.culture-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.culture-grid{grid-template-columns:1fr;}.stats-bar{flex-direction:column;gap:1px;}}
+.culture-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;}
+.culture-ico{font-size:1.5rem;margin-bottom:.75rem;}
+.culture-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.4rem;}
+.culture-desc{color:var(--muted);font-size:.85rem;line-height:1.5;}
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:1100px;margin:0 auto;}
+.flinks{display:flex;gap:1.5rem;flex-wrap:wrap;}.flinks a{color:var(--muted);text-decoration:none;font-size:.85rem;}.flinks a:hover{color:var(--text);}
+.fcopy{color:#4a5568;font-size:.82rem;}
+[data-r]{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease;}[data-r].vis{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="ln-logo" href="/"><span class="ln-dot"></span>Revolution Network</a>
+  <div class="nav-links">
+    <a href="/#jobs" data-i18n="nav_jobs_api">Jobs API</a>
+    <a href="/#node-operators" data-i18n="nav_operators">Opérateurs de nodes</a>
+    <a href="https://discord.gg/eadE7uK6ss" target="_blank" data-i18n="nav_discord">Discord</a>
+  </div>
+  <div class="nav-right">
+    <div class="lang-switcher">
+      <button class="lang-btn active" data-lang="fr" onclick="RNLang.set('fr')">FR</button>
+      <button class="lang-btn" data-lang="en" onclick="RNLang.set('en')">EN</button>
+      <button class="lang-btn" data-lang="es" onclick="RNLang.set('es')">ES</button>
+    </div>
+    <a href="/" class="btn-nav" data-i18n="nav_login">Se connecter</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" data-r>
+  <div class="badge"><span class="badge-dot"></span><span data-i18n="jobs_badge">On recrute · Remote-first · Web3 + Infra</span></div>
+  <h1 data-i18n="jobs_h1">Construis l'infrastructure<br><span>du compute décentralisé.</span></h1>
+  <p class="hero-sub" data-i18n="jobs_sub">Revolution Network est en phase de croissance rapide. On cherche des personnes qui veulent résoudre des problèmes d'infrastructure difficiles dans un contexte DePIN et Web3.</p>
+  <div class="stats-bar">
+    <div class="stat-item"><span class="stat-val" data-i18n="jobs_stat1_val">5</span><span class="stat-lbl" data-i18n="jobs_stat1_lbl">postes ouverts</span></div>
+    <div class="stat-item"><span class="stat-val" data-i18n="jobs_stat2_val">100%</span><span class="stat-lbl" data-i18n="jobs_stat2_lbl">remote</span></div>
+    <div class="stat-item"><span class="stat-val" data-i18n="jobs_stat3_val">ATH</span><span class="stat-lbl" data-i18n="jobs_stat3_lbl">token equity</span></div>
+    <div class="stat-item"><span class="stat-val" data-i18n="jobs_stat4_val">Early</span><span class="stat-lbl" data-i18n="jobs_stat4_lbl">stade</span></div>
+  </div>
+</div>
+
+<!-- FILTER -->
+<div class="filter-bar">
+  <div class="filter-label" data-i18n="jobs_open_positions">POSTES OUVERTS</div>
+  <div class="filter-pills">
+    <span class="pill active" onclick="filterJobs('all',this)" data-i18n="jobs_filter_all">Tous (5)</span>
+    <span class="pill" onclick="filterJobs('tech',this)" data-i18n="jobs_filter_tech">Tech</span>
+    <span class="pill" onclick="filterJobs('growth',this)" data-i18n="jobs_filter_growth">Growth</span>
+    <span class="pill" onclick="filterJobs('ops',this)" data-i18n="jobs_filter_ops">Ops</span>
+  </div>
+</div>
+
+<!-- JOBS -->
+<div class="jobs-container">
+
+  <!-- 1. BACKEND ENGINEER -->
+  <div class="job-card" data-dept="tech" onclick="toggleJob(this)">
+    <div class="job-summary">
+      <div class="job-icon blue">⚙️</div>
+      <div class="job-main">
+        <div class="job-title">Backend Engineer — Core API & Node Orchestration</div>
+        <div class="job-meta">
+          <span class="job-tag remote">Remote</span>
+          <span class="job-tag type">Full-time</span>
+          <span class="job-tag dept">Engineering</span>
+          <span class="job-tag hot">🔥 Prioritaire</span>
+        </div>
+      </div>
+      <div class="job-right">
+        <div><div class="job-comp-val">€40K–€70K</div><div class="job-comp-type">+ token equity ATH</div></div>
+        <div class="job-arrow">▾</div>
+      </div>
+    </div>
+    <div class="job-detail">
+      <div class="job-detail-grid">
+        <div>
+          <div class="detail-section">
+            <div class="detail-title">Le rôle</div>
+            <p style="color:var(--muted);font-size:.9rem;line-height:1.7">Tu seras l'un des premiers engineers à toucher le cœur du réseau — l'API gateway, le système de job queue, et l'orchestration des nodes. Tu concevras des systèmes distribués from scratch dans un contexte DePIN réel.</p>
+          </div>
+          <div class="detail-section">
+            <div class="detail-title">Missions principales</div>
+            <ul class="detail-list">
+              <li>Concevoir et maintenir l'API REST principale (Node.js / Fastify)</li>
+              <li>Développer le système de job queue et de dispatch vers les nodes</li>
+              <li>Implémenter les mécanismes de validation multi-node des résultats</li>
+              <li>Construire les pipelines de monitoring et alerting en temps réel</li>
+              <li>Optimiser les performances sous charge concurrente (60+ jobs simultanés)</li>
+              <li>Contribuer à l'architecture du protocole node ↔ gateway</li>
+              <li>Intégrer les nouvelles couches AI (LLM APIs) dans le pipeline</li>
+            </ul>
+          </div>
+          <div class="detail-section">
+            <div class="detail-title">Stack technique</div>
+            <div class="detail-tags">
+              <span class="detail-tag a">Node.js</span><span class="detail-tag a">Fastify</span><span class="detail-tag a">Redis</span><span class="detail-tag a">PostgreSQL</span><span class="detail-tag">Docker</span><span class="detail-tag">WebSockets</span><span class="detail-tag">Cloudflare R2</span><span class="detail-tag">TypeScript</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="detail-section">
+            <div class="detail-title">Profil recherché</div>
+            <ul class="detail-list">
+              <li><strong>3+ ans</strong> d'expérience backend, idéalement systèmes distribués</li>
+              <li>Maîtrise de <strong>Node.js</strong> et architecture REST/WebSocket</li>
+              <li>Expérience avec les systèmes de <strong>queue de messages</strong> (BullMQ, Redis Streams)</li>
+              <li>À l'aise avec <strong>Docker</strong> et les environnements containerisés</li>
+              <li>Compréhension des challenges de <strong>concurrence et reliability</strong></li>
+              <li>Intérêt réel pour la <strong>DePIN / Web3</strong></li>
+              <li>Capacité à travailler de manière <strong>autonome en remote</strong></li>
+            </ul>
+          </div>
+          <div class="detail-section">
+            <div class="detail-title">Ce qu'on offre</div>
+            <ul class="detail-list">
+              <li>Salaire <strong>€40K–€70K</strong> selon profil + allocation token ATH</li>
+              <li>Remote total, <strong>async-first</strong></li>
+              <li>Accès direct au founder et décisions techniques partagées</li>
+              <li>Stack moderne sans dette technique héritée</li>
+              <li><strong>Ground floor</strong> — tu façonnes l'architecture du réseau</li>
+            </ul>
+          </div>
+          <div class="detail-section">
+            <div class="detail-title">Process de recrutement</div>
+            <ul class="detail-list">
+              <li>Call découverte 30 min avec le founder</li>
+              <li>Mini-projet technique (4h max)</li>
+              <li>Call architecture avec l'équipe</li>
+              <li>Offre sous 7 jours</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="apply-row">
+        <div class="apply-note" data-i18n="jobs_apply_email">Candidature — <strong>jobs@revolution-network.fr</strong> · objet: [Backend Engineer]</div>
+        <a href="mailto:jobs@revolution-network.fr?subject=[Backend Engineer] Candidature" class="btn-apply" data-i18n="cta_apply">Postuler →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. NODE OPERATOR COMMUNITY LEAD -->
+  <div class="job-card" data-dept="ops" onclick="toggleJob(this)">
+    <div class="job-summary">
+      <div class="job-icon green">🌐</div>
+      <div class="job-main">
+        <div class="job-title">Node Operator Community Lead</div>
+        <div class="job-meta">
+          <span class="job-tag remote">Remote</span>
+          <span class="job-tag type">Full-time</span>
+          <span class="job-tag dept">Ops & Community</span>
+        </div>
+      </div>
+      <div class="job-right">
+        <div><div class="job-comp-val">€30K–€50K</div><div class="job-comp-type">+ token equity ATH</div></div>
+        <div class="job-arrow">▾</div>
+      </div>
+    </div>
+    <div class="job-detail">
+      <div class="job-detail-grid">
+        <div>
+          <div class="detail-section">
+            <div class="detail-title">Le rôle</div>
+            <p style="color:var(--muted);font-size:.9rem;line-height:1.7">Le réseau ne vaut rien sans ses opérateurs de nodes. Ton rôle est de faire en sorte qu'ils réussissent — onboarding, support technique, contenu éducatif, animation Discord. Tu es le pont entre le réseau et les milliers de personnes qui le font tourner.</p>
+          </div>
+          <div class="detail-section">
+            <div class="detail-title">Missions principales</div>
+            <ul class="detail-list">
+              <li>Onboarder et supporter les nouveaux opérateurs (setup, troubleshooting)</li>
+              <li>Animer le Discord — FAQ, threads techniques, channels dédiés opérateurs</li>
+              <li>Créer du contenu éducatif : guides, vidéos, tutoriels d'installation</li>
+              <li>Collecter les feedbacks terrain et les remonter à l'équipe produit</li>
+              <li>Mettre en place des programmes de récompenses communautaires</li>
+              <li>Suivre les métriques de santé du réseau (uptime, nodes actifs, distribution geo)</li>
+              <li>Identifier et former des ambassadeurs dans chaque région</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="detail-section">
+            <div class="detail-title">Profil recherché</div>
+            <ul class="detail-list">
+              <li>Expérience dans la <strong>gestion de communauté tech ou crypto</strong></li>
+              <li>À l'aise avec <strong>Discord</strong> (bots, rôles, modération à grande échelle)</li>
+              <li>Compréhension basique des <strong>systèmes Linux</strong> (lire un log, suivre un process)</li>
+              <li>Intérêt pour la <strong>DePIN / Web3 / crypto</strong> — idéalement toi-même opérateur de nodes</li>
+              <li>Capacité à écrire de la <strong>documentation claire</strong> et accessible</li>
+              <li>Bilingue <strong>FR/EN</strong> — communauté internationale</li>
+            </ul>
+          </div>
+          <div class="detail-section">
+            <div class="detail-title">Ce qu'on offre</div>
+            <ul class="detail-list">
+              <li>Salaire <strong>€30K–€50K</strong> + allocation token ATH significative</li>
+              <li>Remote total, horaires flexibles</li>
+              <li>Tu construis la communauté <strong>from zero to one</strong></li>
+              <li>Accès direct aux décisions produit via les feedbacks terrain</li>
+            </ul>
+          </div>
+          <div class="detail-section">
+            <div class="detail-title">Process de recrutement</div>
+            <ul class="detail-list">
+              <li>Call découverte 30 min</li>
+              <li>Exercice : plan d'onboarding pour les 100 premiers opérateurs</li>
+              <li>Call équipe</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="apply-row">
+        <div class="apply-note" data-i18n="jobs_apply_email">Candidature — <strong>jobs@revolution-network.fr</strong></div>
+        <a href="mailto:jobs@revolution-network.fr?subject=[Node Operator Community Lead] Candidature" class="btn-apply" data-i18n="cta_apply">Postuler →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. GROWTH / DEVREL -->
+  <div class="job-card" data-dept="growth" onclick="toggleJob(this)">
+    <div class="job-summary">
+      <div class="job-icon orange">📈</div>
+      <div class="job-main">
+        <div class="job-title">Growth Engineer / Developer Relations</div>
+        <div class="job-meta">
+          <span class="job-tag remote">Remote</span>
+          <span class="job-tag type">Full-time</span>
+          <span class="job-tag dept">Growth</span>
+          <span class="job-tag hot">🔥 Prioritaire</span>
+        </div>
+      </div>
+      <div class="job-right">
+        <div><div class="job-comp-val">€35K–€60K</div><div class="job-comp-type">+ token equity ATH</div></div>
+        <div class="job-arrow">▾</div>
+      </div>
+    </div>
+    <div class="job-detail">
+      <div class="job-detail-grid">
+        <div>
+          <div class="detail-section">
+            <div class="detail-title">Le rôle</div>
+            <p style="color:var(--muted);font-size:.9rem;line-height:1.7">Tu es à la frontière entre le produit et les développeurs qui vont l'utiliser. Tu construis les ponts — démos techniques, contenu dev.to / HN, présence sur RapidAPI. Tu parles le langage des devs parce que tu en es un, et tu sais transformer une feature technique en opportunité de croissance.</p>
+          </div>
+          <div class="detail-section">
+            <div class="detail-title">Missions principales</div>
+            <ul class="detail-list">
+              <li>Publier du contenu technique régulier (dev.to, HN, X/Twitter, LinkedIn)</li>
+              <li>Créer des démos, intégrations et exemples de code copy-pastables</li>
+              <li>Gérer la présence sur <strong>RapidAPI</strong> et les marketplaces d'API</li>
+              <li>Identifier et contacter des <strong>early adopters</strong> potentiels</li>
+              <li>Construire des partenariats avec des tooling makers (n8n, Make, Zapier)</li>
+              <li>Mesurer et optimiser le funnel dev signup → premier job → rétention</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="detail-section">
+            <div class="detail-title">Profil recherché</div>
+            <ul class="detail-list">
+              <li>Background <strong>technique</strong> — tu sais coder, lire de la doc API, écrire du curl</li>
+              <li>Expérience en <strong>developer marketing, DevRel, ou growth tech</strong></li>
+              <li>À l'aise avec la création de <strong>contenu technique long-form</strong></li>
+              <li>Connaissance de l'écosystème <strong>scraping / data engineering / API tooling</strong></li>
+              <li>Maîtrise de l'<strong>anglais</strong> — audience internationale</li>
+              <li>Capacité à <strong>mesurer ce qui marche</strong> et à doubler dessus</li>
+            </ul>
+          </div>
+          <div class="detail-section">
+            <div class="detail-title">Ce qu'on offre</div>
+            <ul class="detail-list">
+              <li>Salaire <strong>€35K–€60K</strong> + token equity ATH</li>
+              <li>Budget contenu et outreach dédié</li>
+              <li>Remote total, autonomie complète sur ta stratégie</li>
+              <li>Tu es le <strong>premier DevRel</strong> — tu définis les playbooks</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="apply-row">
+        <div class="apply-note" data-i18n="jobs_apply_email">Candidature — <strong>jobs@revolution-network.fr</strong></div>
+        <a href="mailto:jobs@revolution-network.fr?subject=[Growth Engineer DevRel] Candidature" class="btn-apply" data-i18n="cta_apply">Postuler →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. FRONTEND ENGINEER -->
+  <div class="job-card" data-dept="tech" onclick="toggleJob(this)">
+    <div class="job-summary">
+      <div class="job-icon purple">🎨</div>
+      <div class="job-main">
+        <div class="job-title">Frontend Engineer — Dashboard & Interface</div>
+        <div class="job-meta">
+          <span class="job-tag remote">Remote</span>
+          <span class="job-tag type">Full-time / Freelance</span>
+          <span class="job-tag dept">Engineering</span>
+        </div>
+      </div>
+      <div class="job-right">
+        <div><div class="job-comp-val">€35K–€60K</div><div class="job-comp-type">+ token equity ATH</div></div>
+        <div class="job-arrow">▾</div>
+      </div>
+    </div>
+    <div class="job-detail">
+      <div class="job-detail-grid">
+        <div>
+          <div class="detail-section">
+            <div class="detail-title">Le rôle</div>
+            <p style="color:var(--muted);font-size:.9rem;line-height:1.7">Tu vas construire les interfaces qui permettent aux développeurs et aux opérateurs de nodes d'interagir avec le réseau. Dashboard de monitoring, visualisation des jobs en temps réel, gestion API keys — des produits concrets qui réduisent le time-to-first-value à zéro.</p>
+          </div>
+          <div class="detail-section">
+            <div class="detail-title">Missions principales</div>
+            <ul class="detail-list">
+              <li>Développer et maintenir le <strong>dashboard utilisateur</strong> (jobs, usage, API keys)</li>
+              <li>Construire les <strong>visualisations temps réel</strong> (statut des nodes, jobs en cours)</li>
+              <li>Implémenter le <strong>dashboard opérateur</strong> (earnings ATH, uptime, performance)</li>
+              <li>Travailler la <strong>DX</strong> — onboarding, first-run experience</li>
+              <li>Contribuer à la <strong>landing page</strong> et aux pages marketing produit</li>
+              <li>Optimiser les performances et la responsivité mobile</li>
+            </ul>
+          </div>
+          <div class="detail-section">
+            <div class="detail-title">Stack technique</div>
+            <div class="detail-tags">
+              <span class="detail-tag a">Vanilla JS</span><span class="detail-tag a">HTML/CSS</span><span class="detail-tag">Chart.js / D3</span><span class="detail-tag">WebSocket</span><span class="detail-tag">REST APIs</span><span class="detail-tag">Git</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="detail-section">
+            <div class="detail-title">Profil recherché</div>
+            <ul class="detail-list">
+              <li><strong>2+ ans</strong> sur des interfaces web complexes</li>
+              <li>Maîtrise du <strong>CSS avancé</strong> — animations, layouts complexes, responsive</li>
+              <li>Expérience avec les <strong>données temps réel</strong> (WebSocket, polling, streams)</li>
+              <li>Sens du <strong>design et du détail</strong></li>
+              <li>Intérêt pour les <strong>dashboards de monitoring</strong> et la data viz</li>
+            </ul>
+          </div>
+          <div class="detail-section">
+            <div class="detail-title">Ce qu'on offre</div>
+            <ul class="detail-list">
+              <li>Salaire <strong>€35K–€60K</strong> ou TJM freelance selon profil</li>
+              <li>Token equity ATH + accès préférentiel au réseau</li>
+              <li>Remote total, stack moderne sans frameworks lourds</li>
+              <li>Liberté créative totale sur l'UI/UX</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="apply-row">
+        <div class="apply-note" data-i18n="jobs_apply_email">Candidature — <strong>jobs@revolution-network.fr</strong></div>
+        <a href="mailto:jobs@revolution-network.fr?subject=[Frontend Engineer] Candidature" class="btn-apply" data-i18n="cta_apply">Postuler →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. WEB3 PARTNERSHIPS -->
+  <div class="job-card" data-dept="growth" onclick="toggleJob(this)">
+    <div class="job-summary">
+      <div class="job-icon red">💎</div>
+      <div class="job-main">
+        <div class="job-title">Web3 Partnerships & Token Strategy</div>
+        <div class="job-meta">
+          <span class="job-tag remote">Remote</span>
+          <span class="job-tag type">Part-time / Advisor</span>
+          <span class="job-tag dept">Web3 & Biz Dev</span>
+        </div>
+      </div>
+      <div class="job-right">
+        <div><div class="job-comp-val">Token-based</div><div class="job-comp-type">ATH equity + commission</div></div>
+        <div class="job-arrow">▾</div>
+      </div>
+    </div>
+    <div class="job-detail">
+      <div class="job-detail-grid">
+        <div>
+          <div class="detail-section">
+            <div class="detail-title">Le rôle</div>
+            <p style="color:var(--muted);font-size:.9rem;line-height:1.7">Revolution Network prépare le TGE du token ATH et cherche quelqu'un qui a déjà navigué dans l'écosystème DePIN / Web3 pour accélérer les partenariats stratégiques, les listings et les relations avec les VCs et launchpads.</p>
+          </div>
+          <div class="detail-section">
+            <div class="detail-title">Missions principales</div>
+            <ul class="detail-list">
+              <li>Identifier et approcher des <strong>VCs spécialisés DePIN / infra</strong></li>
+              <li>Nouer des partenariats avec des <strong>launchpads et CEX/DEX</strong> pour le TGE ATH</li>
+              <li>Structurer les <strong>accords de liquidité et market making</strong></li>
+              <li>Conseiller sur la <strong>stratégie tokenomics</strong> et la distribution</li>
+              <li>Développer des <strong>intégrations</strong> avec d'autres protocoles DePIN</li>
+              <li>Représenter le projet dans des <strong>conférences et événements Web3</strong></li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="detail-section">
+            <div class="detail-title">Profil recherché</div>
+            <ul class="detail-list">
+              <li>Réseau établi dans l'écosystème <strong>Web3 / DePIN / infra crypto</strong></li>
+              <li>Expérience sur des <strong>TGE, IDO ou token launches</strong></li>
+              <li>Compréhension des mécanismes de <strong>tokenomics et vesting</strong></li>
+              <li>Connaissance des acteurs <strong>VC, launchpad, CEX / DEX</strong></li>
+              <li>Track record mesurable sur des deals <strong>biz dev Web3</strong></li>
+            </ul>
+          </div>
+          <div class="detail-section">
+            <div class="detail-title">Ce qu'on offre</div>
+            <ul class="detail-list">
+              <li><strong>Allocation token ATH</strong> significative avec vesting</li>
+              <li>Commission sur deals apportés</li>
+              <li>Positionnement <strong>advisor / co-founder associé</strong> possible</li>
+              <li>Liberté totale sur ton approche et ton agenda</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="apply-row">
+        <div class="apply-note" data-i18n="jobs_apply_email">Candidature — <strong>jobs@revolution-network.fr</strong></div>
+        <a href="mailto:jobs@revolution-network.fr?subject=[Web3 Partnerships] Candidature" class="btn-apply" data-i18n="cta_apply">Postuler →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPONTANEOUS -->
+  <div class="spontaneous">
+    <div class="sp-ico">💌</div>
+    <div class="sp-title" data-i18n="jobs_sp_title">Ton profil ne rentre dans aucune case ?</div>
+    <div class="sp-desc" data-i18n="jobs_sp_desc">On s'intéresse à des profils atypiques — si tu as des compétences utiles à une infra DePIN, envoie-nous un message.</div>
+    <a href="mailto:jobs@revolution-network.fr?subject=[Candidature spontanée]" class="btn-apply" data-i18n="jobs_sp_cta">Candidature spontanée →</a>
+  </div>
+
+</div>
+
+<!-- CULTURE -->
+<div class="culture-section" data-r>
+  <div class="lbl" data-i18n="jobs_c_label">Culture</div>
+  <h2 data-i18n="jobs_c_h2">Comment on travaille</h2>
+  <div class="culture-grid">
+    <div class="culture-card"><div class="culture-ico">🌍</div><div class="culture-title" data-i18n="jobs_c1_title">Remote-first, vraiment</div><div class="culture-desc" data-i18n="jobs_c1_desc">Pas de bureau, pas de pointage, pas de réunion inutile. On travaille en async, on documente, on ship.</div></div>
+    <div class="culture-card"><div class="culture-ico">⚡</div><div class="culture-title" data-i18n="jobs_c2_title">Stade early, impact direct</div><div class="culture-desc" data-i18n="jobs_c2_desc">Ce que tu fais la semaine prochaine est en prod. Les décisions se prennent vite.</div></div>
+    <div class="culture-card"><div class="culture-ico">🔒</div><div class="culture-title" data-i18n="jobs_c3_title">Equity token ATH</div><div class="culture-desc" data-i18n="jobs_c3_desc">Chaque membre de l'équipe reçoit une allocation ATH avec vesting. Tu construis quelque chose pour toi aussi.</div></div>
+    <div class="culture-card"><div class="culture-ico">🧠</div><div class="culture-title" data-i18n="jobs_c4_title">Problèmes difficiles</div><div class="culture-desc" data-i18n="jobs_c4_desc">Systèmes distribués, fiabilité sous charge, économie des tokens — des challenges non-triviaux.</div></div>
+    <div class="culture-card"><div class="culture-ico">🤝</div><div class="culture-title" data-i18n="jobs_c5_title">Transparence totale</div><div class="culture-desc" data-i18n="jobs_c5_desc">Métriques réseau, roadmap, décisions produit — tout est partagé avec l'équipe.</div></div>
+    <div class="culture-card"><div class="culture-ico">🚀</div><div class="culture-title" data-i18n="jobs_c6_title">Ground floor</div><div class="culture-desc" data-i18n="jobs_c6_desc">On est en Phase 1. La personne qui rejoint maintenant façonne l'ADN du réseau pour les années qui viennent.</div></div>
+  </div>
+</div>
+
+<footer>
+  <a class="ln-logo" href="/" style="text-decoration:none;color:var(--muted);font-size:.9rem;"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;margin-right:8px;"></span>Revolution Network</a>
+  <div class="flinks"><a href="/scrape.html">Scraping</a><a href="/ocr.html">OCR</a><a href="/code.html">Code</a><a href="/data.html">Data</a><a href="/content.html">Content</a><a href="/jobs.html">Jobs</a><a href="https://discord.gg/eadE7uK6ss" target="_blank">Discord</a></div>
+  <span class="fcopy" data-i18n="footer_copy">© 2025 Revolution Network</span>
+</footer>
+
+<script src="rn-i18n.js"></script>
+<script src="rn-translations.js"></script>
+<script src="grid-bg.js"></script>
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('vis');obs.unobserve(x.target);}});},{threshold:.1});
+document.querySelectorAll('[data-r]').forEach(el=>obs.observe(el));
+
+function toggleJob(card){
+  const isOpen=card.classList.contains('open-state');
+  document.querySelectorAll('.job-card.open-state').forEach(c=>c.classList.remove('open-state'));
+  if(!isOpen) card.classList.add('open-state');
+}
+
+function filterJobs(dept,pill){
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  pill.classList.add('active');
+  document.querySelectorAll('.job-card').forEach(card=>{
+    if(dept==='all'||card.dataset.dept===dept){card.style.display='';}
+    else{card.style.display='none';card.classList.remove('open-state');}
+  });
+}
+</script>
+</body>
+</html>
