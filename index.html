@@ -8137,7 +8137,16 @@ main();</code></pre>
             const btnDmg = document.getElementById('btn-download-dmg');
             const btnHowMac = document.getElementById('btn-howto-mac');
             
-            if (btnExe) btnExe.addEventListener('click', () => {
+            if (btnExe) btnExe.addEventListener('click', async () => {
+                try {
+                    const res = await fetch(`${API_BASE}/api/admin/settings/download-url`);
+                    const j = await res.json().catch(()=>({}));
+                    const dbUrl = j.url || '';
+                    if (dbUrl && /^https?:\/\//i.test(dbUrl)) {
+                        window.location.href = dbUrl;
+                        return;
+                    }
+                } catch (e) { /* fallback */ }
                 const direct = String(t('download.direct_link') || '');
                 const downloadUrl = /^https?:\/\//i.test(direct) ? direct : `${API_BASE}${direct}`;
                 window.location.href = downloadUrl;
@@ -9859,6 +9868,15 @@ function initializeShopPage() {
                             <div style="color:#94a3b8;font-size:0.9em;" id="airdrop-supply-hint">Chargement...</div>
                         </div>
                     </div>
+
+                    <div class="section-info-bubble" style="margin-bottom: 16px;">
+                        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                            <div style="font-weight:600;">🖥️ Lien téléchargement Windows (.exe)</div>
+                            <input id="windows-download-url" type="url" placeholder="https://github.com/.../Setup.exe" style="padding:8px;border-radius:6px;border:1px solid #334155;background:#1e293b;color:#fff;min-width:380px;flex:1;">
+                            <button class="profile-btn secondary" id="btn-save-windows-url">Enregistrer</button>
+                            <div style="color:#94a3b8;font-size:0.9em;" id="windows-url-hint">Chargement...</div>
+                        </div>
+                    </div>
                     
                     <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; gap: 8px; align-items: center;">
@@ -9949,7 +9967,10 @@ function initializeShopPage() {
             const inputSupply = document.getElementById('airdrop-circulating-supply');
             const btnSaveSupply = document.getElementById('btn-save-airdrop-supply');
             const supplyHint = document.getElementById('airdrop-supply-hint');
-            
+            const inputWindowsUrl = document.getElementById('windows-download-url');
+            const btnSaveWindowsUrl = document.getElementById('btn-save-windows-url');
+            const windowsUrlHint = document.getElementById('windows-url-hint');
+
             let currentSort = 'score';
             let currentOrder = 'desc';
             let participantsData = [];
@@ -10098,6 +10119,50 @@ function initializeShopPage() {
                     btnSaveSupply.textContent = 'Enregistrer';
                 }
             }
+
+            async function loadWindowsDownloadUrl() {
+                if (!inputWindowsUrl || !windowsUrlHint) return;
+                windowsUrlHint.textContent = 'Chargement...';
+                try {
+                    const res = await fetch(`${API_BASE}/api/admin/settings/download-url`, { headers: { 'Authorization': `Bearer ${token}` }});
+                    const j = await res.json().catch(()=>({}));
+                    if (!res.ok) throw new Error(j.error || `Erreur ${res.status}`);
+                    const url = j.url || '';
+                    inputWindowsUrl.value = url;
+                    windowsUrlHint.textContent = url ? '✅ URL enregistrée' : 'Aucune URL définie';
+                } catch (e) {
+                    windowsUrlHint.textContent = 'Erreur de chargement';
+                }
+            }
+
+            async function saveWindowsDownloadUrl() {
+                if (!inputWindowsUrl || !btnSaveWindowsUrl || !windowsUrlHint) return;
+                const url = inputWindowsUrl.value.trim();
+                if (!url || !/^https?:\/\//i.test(url)) {
+                    alert('Veuillez entrer une URL valide commençant par http:// ou https://');
+                    return;
+                }
+                btnSaveWindowsUrl.disabled = true;
+                btnSaveWindowsUrl.textContent = 'Enregistrement...';
+                try {
+                    const res = await fetch(`${API_BASE}/api/admin/settings/download-url`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                        body: JSON.stringify({ url })
+                    });
+                    const j = await res.json().catch(()=>({}));
+                    if (!res.ok) throw new Error(j.error || `Erreur ${res.status}`);
+                    windowsUrlHint.textContent = '✅ URL enregistrée';
+                } catch (e) {
+                    alert('Erreur: ' + (e.message || 'Inconnue'));
+                    windowsUrlHint.textContent = 'Erreur d\'enregistrement';
+                } finally {
+                    btnSaveWindowsUrl.disabled = false;
+                    btnSaveWindowsUrl.textContent = 'Enregistrer';
+                }
+            }
+
+            if (btnSaveWindowsUrl) btnSaveWindowsUrl.addEventListener('click', saveWindowsDownloadUrl);
 
             function updateWithdrawButton(enabled) {
                 btnWithdraw.textContent = enabled ? '? Retraits Activés' : '? Retraits Désactivés';
@@ -10336,6 +10401,7 @@ function initializeShopPage() {
 
             // Initial load
             loadAirdropSupply();
+            loadWindowsDownloadUrl();
             loadParticipants();
         }
         // Initialize on load
