@@ -90,10 +90,9 @@ footer{border-top:1px solid var(--border);padding:2rem;display:flex;align-items:
 .nav-dropdown-btn{background:none;border:none;color:var(--muted);font-size:.875rem;font-family:'DM Sans',sans-serif;cursor:pointer;padding:0;transition:color .2s;display:flex;align-items:center;gap:.35rem;}
 .nav-dropdown-btn::after{content:'▾';font-size:.65rem;opacity:.55;}
 .nav-dropdown-btn:hover,.nav-dropdown:hover .nav-dropdown-btn{color:var(--text);}
-.nav-dropdown-menu{visibility:hidden;opacity:0;transition:opacity .15s ease,visibility 0s linear .35s;position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:#0b111a;border:1px solid rgba(74,240,196,.18);border-radius:12px;padding:.5rem;min-width:260px;z-index:200;box-shadow:0 16px 48px rgba(0,0,0,.65);}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:#0b111a;border:1px solid rgba(74,240,196,.18);border-radius:12px;padding:.5rem;min-width:260px;z-index:200;box-shadow:0 16px 48px rgba(0,0,0,.65);}
 .nav-dropdown-menu::before{content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%);border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid rgba(74,240,196,.18);}
-.nav-dropdown-menu::after{content:'';position:absolute;top:-14px;left:0;right:0;height:14px;}
-.nav-dropdown:hover .nav-dropdown-menu{visibility:visible;opacity:1;transition:opacity .15s ease,visibility 0s;}
+.nav-dropdown-menu.open{display:block;}
 .dd-label{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;padding:.45rem .65rem .25rem;opacity:.7;}
 .dd-sep{height:1px;background:var(--border);margin:.35rem 0;}
 .dd-item{display:flex;align-items:center;gap:.75rem;padding:.55rem .65rem;border-radius:8px;text-decoration:none;color:var(--text);transition:background .15s;}
@@ -326,5 +325,21 @@ curl -X POST https://api.revolution-network.fr/api/enterprise/v1/jobs \
 <script src="rn-translations.js"></script>
 <script src="grid-bg.js"></script>
 <script>const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('vis');obs.unobserve(x.target);}});},{threshold:.1});document.querySelectorAll('[data-r]').forEach(el=>obs.observe(el));</script>
+
+<script>
+(function(){
+  document.querySelectorAll('.nav-dropdown').forEach(function(dd){
+    var menu = dd.querySelector('.nav-dropdown-menu');
+    var timer;
+    dd.addEventListener('mouseenter', function(){
+      clearTimeout(timer);
+      menu.classList.add('open');
+    });
+    dd.addEventListener('mouseleave', function(){
+      timer = setTimeout(function(){ menu.classList.remove('open'); }, 400);
+    });
+  });
+})();
+</script>
 </body>
 </html>
