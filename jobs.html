@@ -25,7 +25,7 @@ nav{position:sticky;top:0;z-index:100;padding:0 2rem;height:64px;display:flex;al
 .hero{padding:7rem 2rem 4rem;text-align:center;max-width:800px;margin:0 auto;}
 .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,240,196,.08);border:1px solid rgba(74,240,196,.2);padding:.375rem 1rem;border-radius:999px;font-size:.78rem;font-family:'DM Mono',monospace;color:var(--accent);margin-bottom:2rem;}
 .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.5s ease-in-out infinite;}
-h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.2rem,5vw,3.75rem);line-height:1.05;letter-spacing:-0.03em;margin-bottom:1.5rem;}
+h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2rem,4vw,3.2rem);line-height:1.05;letter-spacing:-0.03em;margin-bottom:1.5rem;}
 h1 span{color:var(--accent);}
 .hero-sub{font-size:1.05rem;color:var(--muted);max-width:520px;margin:0 auto;font-weight:300;line-height:1.7;}
 .stats-bar{display:flex;gap:2px;max-width:700px;margin:3rem auto 0;background:var(--border);border-radius:12px;overflow:hidden;border:1px solid var(--border);}
@@ -108,9 +108,9 @@ footer{border-top:1px solid var(--border);padding:2rem;display:flex;align-items:
 .nav-dropdown-btn{background:none;border:none;color:var(--muted);font-size:.875rem;font-family:'DM Sans',sans-serif;cursor:pointer;padding:0;transition:color .2s;display:flex;align-items:center;gap:.35rem;}
 .nav-dropdown-btn::after{content:'▾';font-size:.65rem;opacity:.55;}
 .nav-dropdown-btn:hover,.nav-dropdown:hover .nav-dropdown-btn{color:var(--text);}
-.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);background:#0b111a;border:1px solid rgba(74,240,196,.18);border-radius:12px;padding:.5rem;min-width:260px;z-index:200;box-shadow:0 16px 48px rgba(0,0,0,.65);}
+.nav-dropdown-menu{visibility:hidden;opacity:0;transition:opacity .15s ease,visibility 0s linear .35s;position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);background:#0b111a;border:1px solid rgba(74,240,196,.18);border-radius:12px;padding:.5rem;min-width:260px;z-index:200;box-shadow:0 16px 48px rgba(0,0,0,.65);}
 .nav-dropdown-menu::before{content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%);border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid rgba(74,240,196,.18);}
-.nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown-menu:hover{display:block;}
+.nav-dropdown:hover .nav-dropdown-menu{visibility:visible;opacity:1;transition:opacity .15s ease,visibility 0s;}
 .dd-label{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;padding:.45rem .65rem .25rem;opacity:.7;}
 .dd-sep{height:1px;background:var(--border);margin:.35rem 0;}
 .dd-item{display:flex;align-items:center;gap:.75rem;padding:.55rem .65rem;border-radius:8px;text-decoration:none;color:var(--text);transition:background .15s;}
@@ -179,7 +179,6 @@ footer{border-top:1px solid var(--border);padding:2rem;display:flex;align-items:
       </div>
     </div>
     <a href="/#node-operators" data-i18n="nav_operators">Opérateurs de nodes</a>
-    <a href="/jobs.html" data-i18n="nav_recruitment">Recrutement</a>
     <a href="https://discord.gg/eadE7uK6ss" target="_blank" data-i18n="nav_discord">Discord</a>
   </div>
   <div class="nav-right">
