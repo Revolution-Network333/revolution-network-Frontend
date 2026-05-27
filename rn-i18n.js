@@ -4,7 +4,7 @@
  * Inclure AVANT le script de traduction inline de chaque page
  */
 (function () {
-  const STORAGE_KEY = 'rn-lang';
+  const STORAGE_KEY = 'lang';
   const SUPPORTED = ['fr', 'en', 'es'];
 
   const RNLang = {

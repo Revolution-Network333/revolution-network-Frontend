@@ -102,15 +102,84 @@ footer{border-top:1px solid var(--border);padding:2rem;display:flex;align-items:
 .flinks{display:flex;gap:1.5rem;flex-wrap:wrap;}.flinks a{color:var(--muted);text-decoration:none;font-size:.85rem;}.flinks a:hover{color:var(--text);}
 .fcopy{color:#4a5568;font-size:.82rem;}
 [data-r]{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease;}[data-r].vis{opacity:1;transform:none;}
+
+/* === API Dropdown === */
+.nav-dropdown{position:relative;display:inline-flex;align-items:center;}
+.nav-dropdown-btn{background:none;border:none;color:var(--muted);font-size:.875rem;font-family:'DM Sans',sans-serif;cursor:pointer;padding:0;transition:color .2s;display:flex;align-items:center;gap:.35rem;}
+.nav-dropdown-btn::after{content:'▾';font-size:.65rem;opacity:.55;}
+.nav-dropdown-btn:hover,.nav-dropdown:hover .nav-dropdown-btn{color:var(--text);}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);background:#0b111a;border:1px solid rgba(74,240,196,.18);border-radius:12px;padding:.5rem;min-width:260px;z-index:200;box-shadow:0 16px 48px rgba(0,0,0,.65);}
+.nav-dropdown-menu::before{content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%);border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid rgba(74,240,196,.18);}
+.nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown-menu:hover{display:block;}
+.dd-label{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;padding:.45rem .65rem .25rem;opacity:.7;}
+.dd-sep{height:1px;background:var(--border);margin:.35rem 0;}
+.dd-item{display:flex;align-items:center;gap:.75rem;padding:.55rem .65rem;border-radius:8px;text-decoration:none;color:var(--text);transition:background .15s;}
+.dd-item:hover{background:rgba(74,240,196,.07);}
+.dd-icon{font-size:1rem;flex-shrink:0;width:22px;text-align:center;}
+.dd-name{font-family:'DM Mono',monospace;font-size:.78rem;color:var(--accent);}
+.dd-desc{font-size:.75rem;color:var(--muted);margin-top:.1rem;}
+@media(max-width:768px){.nav-dropdown-menu{left:auto;right:0;transform:none;}}
 </style>
 </head>
 <body>
 
 <nav>
   <a class="ln-logo" href="/"><span class="ln-dot"></span>Revolution Network</a>
-  <div class="nav-links">
-    <a href="/#jobs" data-i18n="nav_jobs_api">Jobs API</a>
+    <div class="nav-links">
+    <div class="nav-dropdown">
+      <button class="nav-dropdown-btn" data-i18n="nav_api">API</button>
+      <div class="nav-dropdown-menu">
+        <div class="dd-label" data-i18n="nav_dd_scraping">Scraping</div>
+        <a href="/scrape.html#scrape-get" class="dd-item">
+          <span class="dd-icon">🕷️</span>
+          <div><div class="dd-name">scrape_get</div><div class="dd-desc" data-i18n="job_scrape_get_desc">Scraping intelligent</div></div>
+        </a>
+        <a href="/scrape.html#http-get" class="dd-item">
+          <span class="dd-icon">🌐</span>
+          <div><div class="dd-name">http_get</div><div class="dd-desc" data-i18n="job_http_get_desc">Requête HTTP simple</div></div>
+        </a>
+        <div class="dd-sep"></div>
+        <div class="dd-label" data-i18n="nav_dd_extraction">Extraction</div>
+        <a href="/ocr.html" class="dd-item">
+          <span class="dd-icon">📄</span>
+          <div><div class="dd-name">ocr_pdf</div><div class="dd-desc" data-i18n="job_ocr_pdf_desc">OCR & Extraction PDF</div></div>
+        </a>
+        <div class="dd-sep"></div>
+        <div class="dd-label" data-i18n="nav_dd_compute">Compute</div>
+        <a href="/code.html" class="dd-item">
+          <span class="dd-icon">⚙️</span>
+          <div><div class="dd-name">code_run_js</div><div class="dd-desc" data-i18n="job_code_run_desc">Exécution JS sandbox</div></div>
+        </a>
+        <a href="/data.html#data-processing" class="dd-item">
+          <span class="dd-icon">🔄</span>
+          <div><div class="dd-name">data_processing</div><div class="dd-desc" data-i18n="job_data_proc_desc">Traitement de données</div></div>
+        </a>
+        <a href="/data.html#csv-stats" class="dd-item">
+          <span class="dd-icon">📊</span>
+          <div><div class="dd-name">csv_stats</div><div class="dd-desc" data-i18n="job_csv_stats_desc">Statistiques CSV</div></div>
+        </a>
+        <div class="dd-sep"></div>
+        <div class="dd-label" data-i18n="nav_dd_content">Contenu AI</div>
+        <a href="/content.html#text-transform" class="dd-item">
+          <span class="dd-icon">✏️</span>
+          <div><div class="dd-name">text_transform</div><div class="dd-desc" data-i18n="job_text_trans_desc">Transformation de texte</div></div>
+        </a>
+        <a href="/content.html#text-generate" class="dd-item">
+          <span class="dd-icon">📝</span>
+          <div><div class="dd-name">text_generate_template</div><div class="dd-desc" data-i18n="job_text_gen_desc">Génération de template</div></div>
+        </a>
+        <a href="/content.html#content-check" class="dd-item">
+          <span class="dd-icon">✅</span>
+          <div><div class="dd-name">content_check</div><div class="dd-desc" data-i18n="job_content_chk_desc">Vérification de contenu</div></div>
+        </a>
+        <a href="/content.html#svg-generate" class="dd-item">
+          <span class="dd-icon">🎨</span>
+          <div><div class="dd-name">image_svg_generate</div><div class="dd-desc" data-i18n="job_svg_gen_desc">Génération SVG</div></div>
+        </a>
+      </div>
+    </div>
     <a href="/#node-operators" data-i18n="nav_operators">Opérateurs de nodes</a>
+    <a href="/jobs.html" data-i18n="nav_recruitment">Recrutement</a>
     <a href="https://discord.gg/eadE7uK6ss" target="_blank" data-i18n="nav_discord">Discord</a>
   </div>
   <div class="nav-right">
