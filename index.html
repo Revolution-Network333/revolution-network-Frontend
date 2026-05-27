@@ -2183,6 +2183,15 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
             }, 50);
           };
 
+          /* Auto-open login if ?login=1 */
+          (function(){
+            if(new URLSearchParams(window.location.search).get('login') === '1'){
+              window.showLoginFromLanding();
+              // Clean URL without reload
+              history.replaceState(null,'',window.location.pathname);
+            }
+          })();
+
           /* ---------- LIVE STATS ---------- */
           function fmtNum(n) {
             if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
