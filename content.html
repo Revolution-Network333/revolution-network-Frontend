@@ -10,7 +10,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#080c12;--bg3:rgba(15,22,33,0.75);--accent:#4af0c4;--accent2:#4a9fff;--text:#e8edf5;--muted:#7a8799;--border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);}
 html{scroll-behavior:smooth;}body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;}
-nav{position:sticky;top:0;z-index:1000;isolation:isolate;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,12,18,0.6);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);gap:1rem;}
+nav{position:sticky;top:0;z-index:1000;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,12,18,0.6);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);gap:1rem;}
 .ln-logo{display:flex;align-items:center;gap:10px;font-size:1rem;color:var(--text);text-decoration:none;flex-shrink:0;}
 .ln-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 2s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
@@ -330,15 +330,45 @@ curl -X POST https://api.revolution-network.fr/api/enterprise/v1/jobs \
 <script>
 (function(){
   document.querySelectorAll('.nav-dropdown').forEach(function(dd){
+    var btn = dd.querySelector('.nav-dropdown-btn');
     var menu = dd.querySelector('.nav-dropdown-menu');
     var timer;
-    dd.addEventListener('mouseenter', function(){
+
+    // Portal: move menu to <body> to bypass all stacking contexts
+    menu.style.position = 'fixed';
+    menu.style.zIndex = '999999';
+    document.body.appendChild(menu);
+
+    function reposition(){
+      var r = btn.getBoundingClientRect();
+      var mw = menu.offsetWidth || 260;
+      var left = r.left + r.width / 2 - mw / 2;
+      // Keep inside viewport
+      left = Math.max(8, Math.min(left, window.innerWidth - mw - 8));
+      menu.style.top  = (r.bottom + 8) + 'px';
+      menu.style.left = left + 'px';
+      menu.style.transform = 'none';
+    }
+
+    function show(){
       clearTimeout(timer);
+      reposition();
       menu.classList.add('open');
-    });
-    dd.addEventListener('mouseleave', function(){
+    }
+    function hide(){
       timer = setTimeout(function(){ menu.classList.remove('open'); }, 400);
+    }
+
+    dd.addEventListener('mouseenter', show);
+    dd.addEventListener('mouseleave', hide);
+    menu.addEventListener('mouseenter', function(){ clearTimeout(timer); });
+    menu.addEventListener('mouseleave', hide);
+    // Mobile tap toggle
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      if(menu.classList.contains('open')){ menu.classList.remove('open'); } else { show(); }
     });
+    document.addEventListener('click', function(){ menu.classList.remove('open'); });
   });
 })();
 </script>
