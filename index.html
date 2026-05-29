@@ -2184,13 +2184,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
           };
 
           /* Auto-open login if ?login=1 */
-          (function(){
-            if(new URLSearchParams(window.location.search).get('login') === '1'){
-              window.__autoOpenLogin = true;
-              // Clean URL without reload
-              history.replaceState(null,'',window.location.pathname);
-            }
-          })();
+          window.__autoOpenLogin = (new URLSearchParams(window.location.search).get('login') === '1');
 
           /* ---------- LIVE STATS ---------- */
           function fmtNum(n) {
@@ -2324,6 +2318,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
             showApp();
           } else if (window.__autoOpenLogin) {
             // Vient d'une autre page via ?login=1 → ouvrir le login directement
+            history.replaceState(null,'',window.location.pathname);
             window.showLoginFromLanding();
           } else {
             document.addEventListener('DOMContentLoaded', showLanding);
