@@ -11640,6 +11640,154 @@ La aplicación es 100% segura. Si Windows SmartScreen muestra una alerta, haz cl
         }
 
     </script>
+<script>
+/**
+ * starfield.js — Revolution Network Landing
+ * Particules vertes flottantes + lignes de connexion + étoiles filantes
+ * Visible uniquement quand #landing-page est affiché (landing non connecté)
+ */
+(function () {
+  const canvas = document.createElement('canvas');
+  canvas.id = 'starfield-bg';
+  canvas.style.cssText = [
+    'position:fixed',
+    'top:0',
+    'left:0',
+    'width:100%',
+    'height:100%',
+    'z-index:1',
+    'pointer-events:none',
+    'display:block',
+  ].join(';');
+  document.body.insertBefore(canvas, document.body.firstChild);
+
+  const ctx = canvas.getContext('2d');
+  const COLOR = '#4af0c4';
+  const PARTICLE_COUNT = 90;
+  const CONNECTION_DIST = 150;
+  let W, H, particles = [], shootingStars = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function isLandingVisible() {
+    const lp = document.getElementById('landing-page');
+    return lp && lp.style.display !== 'none';
+  }
+
+  function Particle() {
+    this.reset = function () {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.vx = (Math.random() - 0.5) * 0.35;
+      this.vy = (Math.random() - 0.5) * 0.35;
+      this.r = Math.random() * 1.4 + 0.4;
+      this.alpha = Math.random() * 0.45 + 0.25;
+    };
+    this.reset();
+    this.update = function () {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0) this.x = W;
+      if (this.x > W) this.x = 0;
+      if (this.y < 0) this.y = H;
+      if (this.y > H) this.y = 0;
+    };
+    this.draw = function () {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = COLOR;
+      ctx.globalAlpha = this.alpha;
+      ctx.fill();
+    };
+  }
+
+  function ShootingStar() {
+    this.reset = function () {
+      this.x = Math.random() * W * 1.4 - W * 0.2;
+      this.y = Math.random() * H * 0.45;
+      const angle = Math.PI / 4 + (Math.random() - 0.5) * 0.55;
+      const speed = 7 + Math.random() * 9;
+      this.vx = Math.cos(angle) * speed;
+      this.vy = Math.sin(angle) * speed;
+      this.len = 55 + Math.random() * 90;
+      this.alpha = 1;
+      this.alive = true;
+    };
+    this.reset();
+    this.update = function () {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.alpha -= 0.022;
+      if (this.alpha <= 0) this.alive = false;
+    };
+    this.draw = function () {
+      const tailX = this.x - this.vx * (this.len / 10);
+      const tailY = this.y - this.vy * (this.len / 10);
+      const grad = ctx.createLinearGradient(tailX, tailY, this.x, this.y);
+      grad.addColorStop(0, 'rgba(74,240,196,0)');
+      grad.addColorStop(1, 'rgba(74,240,196,' + this.alpha + ')');
+      ctx.beginPath();
+      ctx.moveTo(tailX, tailY);
+      ctx.lineTo(this.x, this.y);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.5;
+      ctx.globalAlpha = this.alpha;
+      ctx.stroke();
+    };
+  }
+
+  resize();
+  particles = Array.from({ length: PARTICLE_COUNT }, function () { return new Particle(); });
+
+  setInterval(function () {
+    if (isLandingVisible() && shootingStars.length < 3) {
+      shootingStars.push(new ShootingStar());
+    }
+  }, 2800);
+
+  function loop() {
+    if (!isLandingVisible()) {
+      ctx.clearRect(0, 0, W, H);
+      requestAnimationFrame(loop);
+      return;
+    }
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalAlpha = 1;
+
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update();
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < CONNECTION_DIST) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = COLOR;
+          ctx.globalAlpha = (1 - dist / CONNECTION_DIST) * 0.18;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+      particles[i].draw();
+    }
+
+    shootingStars = shootingStars.filter(function (s) { return s.alive; });
+    shootingStars.forEach(function (s) { s.update(); s.draw(); });
+
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('resize', resize);
+  loop();
+})();
+</script>
 <script>/**
  * grid-bg.js — Revolution Network
  * Fond quadrillage rouge avec effet lumière souris
