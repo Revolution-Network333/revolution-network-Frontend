@@ -1168,8 +1168,9 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
     <div class="app">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
+            <div class="sidebar-header" style="position:relative;overflow:hidden;">
+                <canvas id="rn-logo-bg" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+                <div class="logo" style="position:relative;z-index:1;">
                     <div class="rn-sidebar-logo rn-glitch-logo" onclick="setPage('overview')">
                       <svg class="rn-gl-icon" width="42" height="42" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="22" cy="22" r="20" stroke="#0d3048" stroke-width="1.5"/>
@@ -1191,13 +1192,88 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                       </span>
                     </div>
                 </div>
-                <button class="mobile-close" onclick="toggleMobileMenu()">
+                <button class="mobile-close" style="position:relative;z-index:1;" onclick="toggleMobileMenu()">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                 </button>
             </div>
+<script>
+(function(){
+  var cv = document.getElementById('rn-logo-bg');
+  if(!cv) return;
+  var ctx = cv.getContext('2d');
+  var CELL = 28, RADIUS = 120, CONN = 90;
+  var pts = [], mouse = {x:-9999,y:-9999};
+  function resize(){
+    cv.width = cv.offsetWidth || 190;
+    cv.height = cv.offsetHeight || 120;
+    pts = [];
+    for(var i=0;i<28;i++){
+      pts.push({
+        x: Math.random()*cv.width,
+        y: Math.random()*cv.height,
+        vx:(Math.random()-.5)*.4,
+        vy:(Math.random()-.5)*.4,
+        r: Math.random()*.9+.3,
+        a: Math.random()*.35+.2
+      });
+    }
+  }
+  function draw(){
+    var W=cv.width, H=cv.height;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#0d1117';
+    ctx.fillRect(0,0,W,H);
+    var cols=Math.ceil(W/CELL)+1, rows=Math.ceil(H/CELL)+1;
+    for(var c=0;c<cols;c++){
+      for(var r=0;r<rows;r++){
+        var x=c*CELL, y=r*CELL;
+        var dx=x-mouse.x, dy=y-mouse.y;
+        var dist=Math.sqrt(dx*dx+dy*dy);
+        var inten=Math.max(0,1-dist/RADIUS);
+        var al=0.06+inten*0.7;
+        ctx.strokeStyle='rgba(210,25,25,'+al+')';
+        ctx.lineWidth=0.4+inten*0.7;
+        if(c<cols-1){ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+CELL,y);ctx.stroke();}
+        if(r<rows-1){ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y+CELL);ctx.stroke();}
+        if(inten>0.05){
+          ctx.beginPath();ctx.arc(x,y,1.5*inten,0,Math.PI*2);
+          ctx.fillStyle='rgba(255,70,70,'+(inten*.8)+')';ctx.fill();
+        }
+      }
+    }
+    for(var i=0;i<pts.length;i++){
+      var p=pts[i];
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      for(var j=i+1;j<pts.length;j++){
+        var q=pts[j];
+        var ddx=p.x-q.x, ddy=p.y-q.y;
+        var d=Math.sqrt(ddx*ddx+ddy*ddy);
+        if(d<CONN){
+          ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);
+          ctx.strokeStyle='rgba(74,240,196,'+(1-d/CONN)*.15+')';
+          ctx.lineWidth=0.5;ctx.stroke();
+        }
+      }
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='#4af0c4';ctx.globalAlpha=p.a;ctx.fill();ctx.globalAlpha=1;
+    }
+    requestAnimationFrame(draw);
+  }
+  cv.addEventListener('mousemove',function(e){
+    var r=cv.getBoundingClientRect();
+    mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top;
+  });
+  cv.addEventListener('mouseleave',function(){mouse.x=-9999;mouse.y=-9999;});
+  resize();
+  draw();
+  window.addEventListener('resize',resize);
+})();
+</script>
 
             <div class="menu-section">
                 <div class="menu-label" data-i18n="menu.label">MENU</div>
