@@ -45,7 +45,7 @@
   #landing-page nav{padding:0 1rem;height:56px;}
   #landing-page .ln-logo{font-size:.9rem;}
   #landing-page nav > div:last-child{gap:6px;}
-  #landing-page #ln-lang-switch{font-size:.75rem;padding:4px 6px;}
+  #landing-page #ln-lang-switch{gap:3px;}
   #landing-page .ln-cta-btn{padding:.45rem .9rem;font-size:.8rem;}
 
   /* HERO */
@@ -171,6 +171,10 @@
 @media(max-width:768px){#landing-page .ln-dropdown-menu{left:auto;right:0;transform:none;}}
 #landing-page .ln-cta-btn{background:#4af0c4;color:#080c12;padding:.5rem 1.25rem;border-radius:8px;font-weight:600;font-size:.875rem;text-decoration:none;cursor:pointer;border:none;transition:opacity .2s,transform .15s;}
 #landing-page .ln-cta-btn:hover{opacity:.9;transform:translateY(-1px)}
+/* ── Flag language buttons ─────────────────────────── */
+.ln-flag-btn,.app-flag-btn{background:none;border:2px solid transparent;border-radius:5px;padding:2px 4px;cursor:pointer;opacity:.5;display:inline-flex;align-items:center;transition:opacity .18s,border-color .18s,transform .15s;}
+.ln-flag-btn:hover,.app-flag-btn:hover{opacity:1;transform:scale(1.12);}
+.ln-flag-btn.active,.app-flag-btn.active{opacity:1;border-color:#4af0c4;box-shadow:0 0 7px rgba(74,240,196,.4);}
 #landing-page .ln-hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8rem 2rem 4rem;position:relative;overflow:hidden;text-align:center;}
 #landing-page .ln-hero-bg{display:none}
 #landing-page .ln-grid{display:none}
@@ -359,11 +363,11 @@
       <a href="https://discord.gg/eadE7uK6ss" target="_blank" data-ln="nav.discord" translate="no">Discord</a>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
-      <select id="ln-lang-switch" style="padding:5px 8px;border-radius:8px;background:#0d1219;color:#e8edf5;border:1px solid rgba(255,255,255,0.12);font-size:.82rem;cursor:pointer;">
-        <option value="fr" translate="no">FR</option>
-        <option value="en" translate="no">EN</option>
-        <option value="es" translate="no">ES</option>
-      </select>
+      <div id="ln-lang-switch" style="display:flex;align-items:center;gap:4px;" role="group" aria-label="Language">
+        <button class="ln-flag-btn" data-lang="fr" title="Français" onclick="setLnLang('fr')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="24" height="16" style="display:block;border-radius:3px;"><rect width="300" height="600" fill="#002395"/><rect x="300" width="300" height="600" fill="#EDEDED"/><rect x="600" width="300" height="600" fill="#ED2939"/></svg></button>
+        <button class="ln-flag-btn" data-lang="en" title="English" onclick="setLnLang('en')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="24" height="16" style="display:block;border-radius:3px;"><clipPath id="lns"><path d="M0 0v30h60V0z"/></clipPath><clipPath id="lnt"><path d="M30 15h30v15zv15H0zH0V0zV0h30z"/></clipPath><g clip-path="url(#lns)"><path d="M0 0v30h60V0z" fill="#012169"/><path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0l60 30m0-30L0 30" clip-path="url(#lnt)" stroke="#C8102E" stroke-width="4"/><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"/><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/></g></svg></button>
+        <button class="ln-flag-btn" data-lang="es" title="Español" onclick="setLnLang('es')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 500" width="24" height="16" style="display:block;border-radius:3px;"><rect width="750" height="500" fill="#c60b1e"/><rect y="125" width="750" height="250" fill="#ffc400"/></svg></button>
+      </div>
       <button class="ln-cta-btn" onclick="showLoginFromLanding()" id="ln-signin-btn">Se connecter</button>
     </div>
   </nav>
@@ -1353,11 +1357,11 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                       </div>
                     </div>
                     <button id="header-login-btn" class="profile-btn primary" style="display:none;" onclick="setPage('login')">Sign in</button>
-                    <select id="lang-switch" style="margin-left:10px;padding:6px 8px;border-radius:8px;background:#0b0f14;color:#fff;border:1px solid #1f2937;">
-                        <option value="fr" translate="no">FR</option>
-                        <option value="en" translate="no">EN</option>
-                        <option value="es" translate="no">ES</option>
-                    </select>
+                    <div id="lang-switch" style="display:flex;align-items:center;gap:3px;margin-left:10px;" role="group" aria-label="Language">
+                        <button class="app-flag-btn" data-lang="fr" title="Français" onclick="setAppLang('fr')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="26" height="18" style="display:block;border-radius:3px;"><rect width="300" height="600" fill="#002395"/><rect x="300" width="300" height="600" fill="#EDEDED"/><rect x="600" width="300" height="600" fill="#ED2939"/></svg></button>
+                        <button class="app-flag-btn" data-lang="en" title="English" onclick="setAppLang('en')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="26" height="18" style="display:block;border-radius:3px;"><clipPath id="ans"><path d="M0 0v30h60V0z"/></clipPath><clipPath id="ant"><path d="M30 15h30v15zv15H0zH0V0zV0h30z"/></clipPath><g clip-path="url(#ans)"><path d="M0 0v30h60V0z" fill="#012169"/><path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0l60 30m0-30L0 30" clip-path="url(#ant)" stroke="#C8102E" stroke-width="4"/><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"/><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/></g></svg></button>
+                        <button class="app-flag-btn" data-lang="es" title="Español" onclick="setAppLang('es')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 500" width="26" height="18" style="display:block;border-radius:3px;"><rect width="750" height="500" fill="#c60b1e"/><rect y="125" width="750" height="250" fill="#ffc400"/></svg></button>
+                    </div>
                     <button id="header-logout-btn" class="profile-btn danger" style="margin-left: 10px;" data-i18n="header.logout">Se déconnecter</button>
                 </div>
             </header>
@@ -2283,34 +2287,26 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
             });
           }
 
-          /* ---------- LANG SELECTOR (landing) ---------- */
-          document.addEventListener('DOMContentLoaded', () => {
-            const sel = document.getElementById('ln-lang-switch');
-            if (sel) {
-              sel.value = getLnLang();
-              sel.addEventListener('change', () => {
-                const lang = sel.value;
-                localStorage.setItem('lang', lang);
-                applyLandingLang(lang);
-                // Also sync the dashboard lang switch
-                const appSel = document.getElementById('lang-switch');
-                if (appSel) { appSel.value = lang; appSel.dispatchEvent(new Event('change')); }
-              });
-            }
-          });
-
-          /* ---------- SYNC LANG SWITCH FROM APP ---------- */
-          // When the app's lang switch fires, update the landing too
-          document.addEventListener('DOMContentLoaded', () => {
+          /* ---------- LANG SELECTOR (landing) — flag buttons ---------- */
+          function setLnLang(lang) {
+            localStorage.setItem('lang', lang);
+            applyLandingLang(lang);
+            // Highlight active button
+            document.querySelectorAll('.ln-flag-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+            // Sync dashboard
             const appSel = document.getElementById('lang-switch');
             if (appSel) {
-              appSel.addEventListener('change', () => {
-                const lang = appSel.value;
-                const lnSel = document.getElementById('ln-lang-switch');
-                if (lnSel) lnSel.value = lang;
-                applyLandingLang(lang);
-              });
+              document.querySelectorAll('.app-flag-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+              // fire change for app i18n
+              currentLang = lang;
+              localStorage.setItem('lang', lang);
+              applyTranslations();
             }
+          }
+          window.setLnLang = setLnLang;
+          document.addEventListener('DOMContentLoaded', () => {
+            const lang = getLnLang();
+            document.querySelectorAll('.ln-flag-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
           });
 
           /* ---------- ROUTING ---------- */
@@ -2576,6 +2572,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                 'enterprise.quickstart.step1': '1) Créer un job',
                 'enterprise.quickstart.step2': '2) Lister les jobs',
                 'enterprise.quickstart.step3': '3) Récupérer le résultat',
+                'enterprise.intro.desc': "L'API vous permet d'exécuter des <strong>jobs</strong> légers (monitoring, vérifications, traitement de base) via une <strong>clé API</strong> sécurisée. Créez un job, suivez son statut, puis récupérez le résultat quand il est prêt. L'authentification se fait via le header <code>x-api-key</code>.",
                 'enterprise.api_key.usage_hint': 'Utilisez cette clé dans le header x-api-key.',
                 'enterprise.scraping.title': 'Scraping Engine (scrape_get)',
                 'enterprise.scraping.modes_label': 'Modes',
@@ -3088,6 +3085,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                 'enterprise.quickstart.step1': '1) Create a job',
                 'enterprise.quickstart.step2': '2) List jobs',
                 'enterprise.quickstart.step3': '3) Get result',
+                'enterprise.intro.desc': 'The API lets you execute lightweight <strong>jobs</strong> (monitoring, checks, basic processing) using a secure <strong>API key</strong>. Create a job, track its status, then fetch the result when ready. Authentication is done via the <code>x-api-key</code> header.',
                 'enterprise.api_key.usage_hint': 'Use this key in the x-api-key header.',
                 'enterprise.scraping.title': 'Scraping Engine (scrape_get)',
                 'enterprise.scraping.modes_label': 'Modes',
@@ -3392,6 +3390,7 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
                 'enterprise.quickstart.step1': '1) Create a job',
                 'enterprise.quickstart.step2': '2) List jobs',
                 'enterprise.quickstart.step3': '3) Get result',
+                'enterprise.intro.desc': 'La API le permite ejecutar <strong>jobs</strong> ligeros (monitoreo, verificaciones, procesamiento básico) usando una <strong>clave API</strong> segura. Cree un job, siga su estado y obtenga el resultado cuando esté listo. La autenticación se realiza mediante el header <code>x-api-key</code>.',
                 'enterprise.api_key.usage_hint': 'Use this key in the x-api-key header.',
                 'enterprise.scraping.title': 'Scraping Engine (scrape_get)',
                 'enterprise.scraping.modes_label': 'Modes',
@@ -4162,17 +4161,19 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
             });
             currentLocale = LANGS[currentLang]?.locale || 'fr-FR';
         }
+        function setAppLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            applyTranslations();
+            renderPage();
+            // highlight active
+            document.querySelectorAll('.app-flag-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+            document.querySelectorAll('.ln-flag-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+            applyLandingLang(lang);
+        }
+        window.setAppLang = setAppLang;
         document.addEventListener('DOMContentLoaded', () => {
-            const sel = document.getElementById('lang-switch');
-            if (sel) {
-                sel.value = currentLang;
-                sel.addEventListener('change', () => {
-                    currentLang = sel.value;
-                    localStorage.setItem('lang', currentLang);
-                    applyTranslations();
-                    renderPage();
-                });
-            }
+            document.querySelectorAll('.app-flag-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
             applyTranslations();
         });
         
@@ -6749,8 +6750,7 @@ main();</code></pre>
                         <div class="api-card glass-card" style="margin:0;">
                             <h3 style="margin:0 0 10px 0;">${t('enterprise.intro')}</h3>
                             <div style="color:#9ca3af; line-height:1.6;">
-                                ${t('enterprise.title')} lets you execute lightweight <strong>jobs</strong> (monitoring, checks, basic processing) using a secure <strong>API key</strong>.
-                                Create a job, track its status, then fetch the result when ready. Authentication is done via the <code>x-api-key</code> header.
+                                ${t('enterprise.intro.desc')}
                             </div>
                             <div style="margin-top:12px; border-top:1px solid #1f2937; padding-top:12px;">
                                 <h4 style="margin:0 0 8px 0;">${t('enterprise.quickstart.title')}</h4>
