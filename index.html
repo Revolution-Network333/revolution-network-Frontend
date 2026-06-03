@@ -287,6 +287,27 @@
 .rn-bw-subrow-on{border-color:rgba(74,240,196,0.5)!important;background:rgba(74,240,196,0.05)!important;}
 #rn-bw-btn-cr:hover,#rn-bw-btn-sub:hover{opacity:.88;}
 #rn-bw-btn-cr:disabled,#rn-bw-btn-sub:disabled{opacity:.4;cursor:default;background:#4a5568;color:#9ca3af;}
+
+/* ===== GLITCH LOGO — Variante 3 Holographic Shift ===== */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+.rn-glitch-logo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer;}
+.rn-gl-icon{flex-shrink:0;animation:rn-ico-holo 5s infinite;}
+.rn-gl-text-block{line-height:1.2;display:flex;flex-direction:column;}
+.rn-gl-title{font-family:'Orbitron',monospace;font-weight:700;font-size:12px;letter-spacing:0.13em;color:#4af0c4;display:inline-block;position:relative;animation:rn-title-holo 5s infinite;}
+.rn-gl-title::before{content:attr(data-t);position:absolute;top:1px;left:-1px;color:#ff00ff;opacity:0;animation:rn-magenta 5s infinite;}
+.rn-gl-title::after{content:attr(data-t);position:absolute;top:-1px;left:1px;color:#00ffff;opacity:0;animation:rn-cyan 5s infinite;}
+.rn-gl-sub{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:0.42em;color:rgba(74,240,196,0.35);text-transform:uppercase;animation:rn-sub-holo 5s infinite;}
+@keyframes rn-title-holo{0%,60%,100%{letter-spacing:0.13em;color:#4af0c4;transform:none}61%{letter-spacing:0.19em;color:#fff}63%{letter-spacing:0.13em;color:#4af0c4}64%{transform:translateY(-1px)}65%{transform:none}}
+@keyframes rn-magenta{0%,60%,100%{opacity:0}61%{opacity:0.6}64%{opacity:0}}
+@keyframes rn-cyan{0%,60%,100%{opacity:0}61%{opacity:0.5}64%{opacity:0}}
+@keyframes rn-sub-holo{0%,60%,100%{letter-spacing:0.42em;color:rgba(74,240,196,0.35)}61%{letter-spacing:0.58em;color:rgba(74,240,196,0.7)}64%{letter-spacing:0.42em;color:rgba(74,240,196,0.35)}}
+@keyframes rn-ico-holo{0%,60%,100%{transform:none}61%{transform:scale(1.06) rotate(3deg)}63%{transform:rotate(-2deg)}65%{transform:none}}
+
+/* Sidebar dashboard glitch logo */
+.rn-sidebar-logo{display:flex;align-items:center;gap:10px;padding:0;cursor:pointer;}
+.rn-sidebar-logo .rn-gl-icon{width:42px;height:42px;}
+.rn-sidebar-logo .rn-gl-title{font-size:13px;}
+.rn-sidebar-logo .rn-gl-sub{font-size:7.5px;}
 </style>
 </head>
 <body class="dark-theme">
@@ -298,9 +319,25 @@
 
   <!-- NAV -->
   <nav>
-    <a class="ln-logo" href="#">
-      <span class="ln-dot"></span>
-      Revolution Network
+    <a class="ln-logo rn-glitch-logo" href="#">
+      <svg class="rn-gl-icon" width="36" height="36" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="22" cy="22" r="20" stroke="#0d3048" stroke-width="1.5"/>
+        <circle cx="22" cy="22" r="14" stroke="#4af0c4" stroke-width="1" opacity="0.4"/>
+        <circle cx="22" cy="22" r="8" stroke="#4af0c4" stroke-width="0.8" opacity="0.3"/>
+        <circle cx="22" cy="22" r="3" fill="#4af0c4"/>
+        <line x1="22" y1="3" x2="22" y2="8" stroke="#4af0c4" stroke-width="2"/>
+        <line x1="37" y1="9" x2="33" y2="13" stroke="#4af0c4" stroke-width="1.5"/>
+        <line x1="41" y1="22" x2="36" y2="22" stroke="#4af0c4" stroke-width="2"/>
+        <line x1="37" y1="35" x2="33" y2="31" stroke="#4af0c4" stroke-width="1.5"/>
+        <line x1="22" y1="41" x2="22" y2="36" stroke="#4af0c4" stroke-width="2"/>
+        <line x1="7" y1="35" x2="11" y2="31" stroke="#4af0c4" stroke-width="1.5"/>
+        <line x1="3" y1="22" x2="8" y2="22" stroke="#4af0c4" stroke-width="2"/>
+        <line x1="7" y1="9" x2="11" y2="13" stroke="#4af0c4" stroke-width="1.5"/>
+      </svg>
+      <span class="rn-gl-text-block">
+        <span class="rn-gl-title" data-t="RÉVOLUTION">RÉVOLUTION</span>
+        <span class="rn-gl-sub">network</span>
+      </span>
     </a>
     <div class="ln-links">
 
@@ -1133,7 +1170,26 @@ console.<span class="lf">log</span>(result.output) <span class="lc">// 👋</spa
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <img src="image__4_-removebg-preview.jpg" alt="Logo" class="logo-icon" onclick="setPage('overview')" style="cursor: pointer;">
+                    <div class="rn-sidebar-logo rn-glitch-logo" onclick="setPage('overview')">
+                      <svg class="rn-gl-icon" width="42" height="42" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="22" cy="22" r="20" stroke="#0d3048" stroke-width="1.5"/>
+                        <circle cx="22" cy="22" r="14" stroke="#4af0c4" stroke-width="1" opacity="0.4"/>
+                        <circle cx="22" cy="22" r="8" stroke="#4af0c4" stroke-width="0.8" opacity="0.3"/>
+                        <circle cx="22" cy="22" r="3" fill="#4af0c4"/>
+                        <line x1="22" y1="3" x2="22" y2="8" stroke="#4af0c4" stroke-width="2"/>
+                        <line x1="37" y1="9" x2="33" y2="13" stroke="#4af0c4" stroke-width="1.5"/>
+                        <line x1="41" y1="22" x2="36" y2="22" stroke="#4af0c4" stroke-width="2"/>
+                        <line x1="37" y1="35" x2="33" y2="31" stroke="#4af0c4" stroke-width="1.5"/>
+                        <line x1="22" y1="41" x2="22" y2="36" stroke="#4af0c4" stroke-width="2"/>
+                        <line x1="7" y1="35" x2="11" y2="31" stroke="#4af0c4" stroke-width="1.5"/>
+                        <line x1="3" y1="22" x2="8" y2="22" stroke="#4af0c4" stroke-width="2"/>
+                        <line x1="7" y1="9" x2="11" y2="13" stroke="#4af0c4" stroke-width="1.5"/>
+                      </svg>
+                      <span class="rn-gl-text-block">
+                        <span class="rn-gl-title" data-t="RÉVOLUTION">RÉVOLUTION</span>
+                        <span class="rn-gl-sub">network</span>
+                      </span>
+                    </div>
                 </div>
                 <button class="mobile-close" onclick="toggleMobileMenu()">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
