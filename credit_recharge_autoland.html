@@ -1,0 +1,189 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+:root{--teal:#4af0c4;--muted:#7a8799;--text:#e8edf5}
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{background:#0d1219;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1rem;max-width:340px;font-family:'DM Sans',sans-serif;color:var(--text)}
+.lbl-mono{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:.4rem}
+.sec-title{font-family:'Syne',sans-serif;font-weight:800;font-size:.78rem;letter-spacing:-0.01em;margin-bottom:.2rem}
+.sub{color:var(--muted);font-size:.65rem;margin-bottom:.75rem;font-weight:300;line-height:1.5}
+.tabs{display:flex;gap:.3rem;margin-bottom:.75rem}
+.tab{padding:.3rem .6rem;border-radius:5px;font-family:'DM Mono',monospace;font-size:.58rem;cursor:pointer;border:1px solid rgba(255,255,255,0.08);background:transparent;color:var(--muted);transition:all .2s}
+.tab.on{background:rgba(74,240,196,0.1);border-color:rgba(74,240,196,0.3);color:var(--teal)}
+.panel{display:none}.panel.on{display:block}
+.paliers{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:.75rem}
+.pcard{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:.45rem;text-align:center;cursor:pointer;transition:all .2s}
+.pcard:hover{border-color:rgba(74,240,196,0.3)}
+.pcard.on{border-color:rgba(74,240,196,0.5);background:rgba(74,240,196,0.05)}
+.p-gb{font-family:'Syne',sans-serif;font-weight:700;font-size:.65rem;margin-bottom:.15rem}
+.p-price{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--teal)}
+.p-save{font-family:'DM Mono',monospace;font-size:.52rem;color:#f59e0b;margin-top:.1rem;min-height:.65rem}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:3px;background:rgba(74,240,196,0.15);border-radius:2px;outline:none;cursor:pointer;margin:.5rem 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;background:var(--teal);border-radius:50%;cursor:pointer;box-shadow:0 0 0 3px rgba(74,240,196,0.15)}
+.slbls{display:flex;justify-content:space-between}
+.slbl{font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted);text-align:center;width:25%}
+.slbl.on{color:var(--teal)}
+.crow{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap}
+.clbl{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted);white-space:nowrap}
+.ciw{display:flex;align-items:center;border:1px solid rgba(255,255,255,0.1);border-radius:6px;overflow:hidden;background:rgba(255,255,255,0.03);flex:1;min-width:100px}
+.ciw:focus-within{border-color:rgba(74,240,196,0.4)}
+.ciw input{background:none;border:none;outline:none;color:#fff;font-family:'DM Mono',monospace;font-size:.7rem;padding:.35rem .5rem;width:100%}
+.ciw .unit{padding:.35rem .5rem;color:var(--teal);font-family:'DM Mono',monospace;font-size:.65rem;border-left:1px solid rgba(255,255,255,0.06)}
+.cpout{font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;color:var(--teal);white-space:nowrap}
+.prev{background:rgba(74,240,196,0.04);border:1px solid rgba(74,240,196,0.2);border-radius:7px;padding:.65rem .85rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.75rem;flex-wrap:wrap}
+.prev-gb{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:-0.01em}
+.prev-gb small{font-size:.6rem;font-weight:400;color:var(--muted);margin-left:3px;font-family:'DM Sans',sans-serif}
+.prev-eur{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--teal);letter-spacing:-0.01em}
+.prev-period{font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted);display:block;margin-top:1px;text-align:right}
+.prev-meta{width:100%;display:flex;gap:.4rem;flex-wrap:wrap}
+.pill{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:999px;font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted);padding:.15rem .5rem}
+.pill.gr{border-color:rgba(74,240,196,0.25);color:var(--teal)}
+.btn-ck{width:100%;padding:.55rem 1rem;border-radius:7px;font-weight:600;font-size:.72rem;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:var(--teal);color:#080808;transition:opacity .2s}
+.btn-ck:hover{opacity:.88}
+.btn-ck:disabled{opacity:.4;cursor:default;background:#4a5568;color:#9ca3af}
+.errmsg{font-family:'DM Mono',monospace;font-size:.6rem;color:#ff6b6b;text-align:center;margin-top:.4rem;min-height:.8rem}
+</style>
+
+<div class="wrap">
+  <span class="lbl-mono" id="lbl-s"></span>
+  <div class="sec-title" id="lbl-ti"></div>
+  <p class="sub" id="lbl-sb"></p>
+  <div class="tabs">
+    <button class="tab on" id="tab-palier" onclick="switchMode('palier',this)"></button>
+    <button class="tab" id="tab-slider" onclick="switchMode('slider',this)"></button>
+    <button class="tab" id="tab-custom" onclick="switchMode('custom',this)"></button>
+  </div>
+  <div id="panel-palier" class="panel on"><div class="paliers" id="pgrid"></div></div>
+  <div id="panel-slider" class="panel">
+    <div class="slbls" id="slbls"></div>
+    <input type="range" id="gb-sl" min="0" max="3" step="1" value="0" oninput="onSlider(this.value)">
+  </div>
+  <div id="panel-custom" class="panel">
+    <div class="crow">
+      <span class="clbl" id="lbl-cu"></span>
+      <div class="ciw"><input type="number" id="cginput" min="1" max="9999" value="50" oninput="onCustom(this.value)"><span class="unit">GB</span></div>
+      <span class="cpout" id="cpout">5,00 €</span>
+    </div>
+  </div>
+  <div class="prev">
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted);margin-bottom:.2rem" id="lbl-vl"></div>
+      <div class="prev-gb"><span id="out-gb">50</span><small>GB</small></div>
+    </div>
+    <div>
+      <div class="prev-eur" id="out-price">5,00 €</div>
+      <span class="prev-period" id="lbl-ot"></span>
+    </div>
+    <div class="prev-meta">
+      <span class="pill gr" id="out-sav" style="display:none"></span>
+      <span class="pill" id="out-pack"></span>
+    </div>
+  </div>
+  <button class="btn-ck" id="btn-cta" onclick="doCheckout()"></button>
+  <div class="errmsg" id="errmsg"></div>
+</div>
+
+<script>
+const PAL=[{id:'starter',gb:50,eur:5},{id:'standard',gb:200,eur:15},{id:'pro',gb:500,eur:30},{id:'expert',gb:1150,eur:60}];
+const SAV=[null,'25%','40%','48%'];
+const I18={
+  fr:{s:'// recharge de crédits',ti:'Recharge de bande passante',sb:'Sélectionne un palier ou saisis un volume — le prix s\'adapte.',tb:['Paliers','Curseur','Volume libre'],vl:'volume sélectionné',ot:'paiement unique',sv:'économies',pk:'Pack',cu:'Volume souhaité',ae:'Connectez-vous pour acheter.',ld:'Redirection...',er:'Erreur paiement.',bn:function(g,e){return 'Acheter '+g+' GB — '+e;},lc:'fr-FR'},
+  en:{s:'// credit recharge',ti:'Bandwidth Recharge',sb:'Select a tier or enter a custom volume — price adapts.',tb:['Tiers','Slider','Custom'],vl:'selected volume',ot:'one-time payment',sv:'savings',pk:'Pack',cu:'Desired volume',ae:'Please log in to purchase.',ld:'Redirecting...',er:'Payment error.',bn:function(g,e){return 'Buy '+g+' GB — '+e;},lc:'en-US'},
+  es:{s:'// recarga de créditos',ti:'Recarga de ancho de banda',sb:'Selecciona un nivel o escribe un volumen — el precio se adapta.',tb:['Niveles','Deslizador','Volumen libre'],vl:'volumen seleccionado',ot:'pago único',sv:'ahorro',pk:'Pack',cu:'Volumen deseado',ae:'Inicia sesión para comprar.',ld:'Redirigiendo...',er:'Error de pago.',bn:function(g,e){return 'Comprar '+g+' GB — '+e;},lc:'es-ES'}
+};
+
+function detectLang(){
+  var l=window.SITE_LANG||window.appLang||window.currentLang||localStorage.getItem('lang')||localStorage.getItem('language')||localStorage.getItem('lng')||localStorage.getItem('i18n_lang')||document.documentElement.lang||(navigator.language||'fr');
+  l=l.toLowerCase().substring(0,2);
+  return I18[l]?l:'fr';
+}
+
+var lang=detectLang();
+var curGb=50,curEur=5,curPack='starter',curMode='palier',curIdx=0;
+function fe(n){return n.toFixed(2).replace('.',',')+' \u20ac';}
+function cp(gb){if(gb<=50)return gb*(5/50);if(gb<=200)return 5+(gb-50)*(10/150);if(gb<=500)return 15+(gb-200)*(15/300);if(gb<=1150)return 30+(gb-500)*(30/650);return 60+(gb-1150)*0.052;}
+function el(id){return document.getElementById(id);}
+
+function upd(gb,eur,pid,idx){
+  curGb=gb;curEur=parseFloat(eur.toFixed(2));curPack=pid;
+  var t=I18[lang];
+  el('out-gb').textContent=gb.toLocaleString(t.lc);
+  el('out-price').textContent=fe(eur);
+  var sav=(typeof idx==='number'&&idx>0)?SAV[idx]:null;
+  if(sav){el('out-sav').textContent='-'+sav+' '+t.sv;el('out-sav').style.display='';}else el('out-sav').style.display='none';
+  el('out-pack').textContent=t.pk+' : '+pid.charAt(0).toUpperCase()+pid.slice(1);
+  el('btn-cta').textContent=t.bn(gb,fe(eur));
+  el('errmsg').textContent='';
+}
+
+function renderP(){
+  var g=el('pgrid');g.innerHTML='';
+  PAL.forEach(function(p,i){
+    var d=document.createElement('div');d.className='pcard'+(i===curIdx?' on':'');
+    d.innerHTML='<div class="p-gb">'+p.gb+' GB</div><div class="p-price">'+p.eur+' \u20ac</div><div class="p-save">'+(i>0?'-'+SAV[i]:'')+'</div>';
+    d.onclick=(function(pi,di){return function(){document.querySelectorAll('.pcard').forEach(function(c){c.classList.remove('on');});di.classList.add('on');curIdx=pi;upd(PAL[pi].gb,PAL[pi].eur,PAL[pi].id,pi);};})(i,d);
+    g.appendChild(d);
+  });
+}
+
+function renderSL(){
+  var s=el('slbls');s.innerHTML='';
+  PAL.forEach(function(p,i){var sp=document.createElement('span');sp.className='slbl'+(i===curIdx?' on':'');sp.textContent=p.gb+'GB';s.appendChild(sp);});
+}
+
+function applyLang(){
+  var t=I18[lang];
+  el('lbl-s').textContent=t.s;el('lbl-ti').textContent=t.ti;el('lbl-sb').textContent=t.sb;
+  el('lbl-vl').textContent=t.vl;el('lbl-ot').textContent=t.ot;el('lbl-cu').textContent=t.cu;
+  ['palier','slider','custom'].forEach(function(m,i){el('tab-'+m).textContent=t.tb[i];});
+}
+
+function switchMode(m,btn){
+  curMode=m;
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});btn.classList.add('on');
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});el('panel-'+m).classList.add('on');
+  if(m==='palier'){renderP();upd(PAL[curIdx].gb,PAL[curIdx].eur,PAL[curIdx].id,curIdx);}
+  else if(m==='slider'){renderSL();el('gb-sl').value=curIdx;onSlider(curIdx);}
+  else onCustom(el('cginput').value||50);
+}
+
+function onSlider(v){
+  var i=parseInt(v);curIdx=i;
+  document.querySelectorAll('.slbl').forEach(function(l,j){l.classList.toggle('on',j===i);});
+  upd(PAL[i].gb,PAL[i].eur,PAL[i].id,i);
+}
+
+function onCustom(v){
+  var gb=Math.max(1,Math.round(parseFloat(v)||1));
+  var eur=cp(gb);
+  el('cpout').textContent=fe(eur);
+  var pid='starter';
+  for(var i=PAL.length-1;i>=0;i--){if(gb>=PAL[i].gb){pid=PAL[i].id;break;}}
+  upd(gb,eur,pid,null);
+}
+
+async function doCheckout(){
+  var t=I18[lang];
+  var token=localStorage.getItem('token')||localStorage.getItem('authToken')||localStorage.getItem('jwt')||localStorage.getItem('accessToken');
+  if(!token){el('errmsg').textContent=t.ae;return;}
+  var btn=el('btn-cta');btn.disabled=true;btn.textContent=t.ld;
+  try{
+    var res=await fetch((window.API_BASE_URL||'')+'/api/billing/credits/checkout',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({pack_id:curPack,gb:curGb,amount_eur:curEur})});
+    var data=await res.json();
+    if(data.url)window.location.href=data.url;
+    else throw new Error(data.error||'no url');
+  }catch(e){
+    el('errmsg').textContent=t.er;
+    btn.disabled=false;btn.textContent=I18[lang].bn(curGb,fe(curEur));
+  }
+}
+
+applyLang();renderP();renderSL();upd(50,5,'starter',0);
+
+if(window.MutationObserver){
+  new MutationObserver(function(){
+    var nl=detectLang();
+    if(nl!==lang){lang=nl;applyLang();renderP();renderSL();upd(curGb,curEur,curPack,curIdx);}
+  }).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+}
+</script>
